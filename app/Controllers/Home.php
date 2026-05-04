@@ -1,0 +1,568 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\VisitCountModel;
+
+class Home extends BaseController
+{
+    public function __construct()
+    {
+        helper('asset_helper');
+    }
+
+    public function index()
+    {
+        $visitModel = new VisitCountModel();
+        $contentModel = new \App\Models\Content();
+        $mayor_m = new \App\Models\MayorContent();
+        $hotline_m = new \App\Models\Hotlines();
+        $about_m = new \App\Models\About();
+
+        $data['visit_count'] = $visitModel->getTodayVisitCount();
+        $data['announcements'] = $contentModel
+            ->where('status', 'ACTIVE')
+            ->where('category', 'anns')
+            ->orderBy('created_date', 'DESC')
+            ->findAll(3);
+
+        $data['news_events'] = $contentModel
+            ->where('status', 'ACTIVE')
+            ->where('category', 'news')
+            ->orderBy('created_date', 'DESC')
+            ->findAll(3);
+
+        $data['mayor_content'] = $mayor_m
+            ->where('status', 'ACTIVE')
+            ->where('section', 'Home Page')
+            ->asArray()
+            ->first();
+
+        $data['knowmore'] = $about_m
+            ->where('status', 'ACTIVE')
+            ->where('section', 'Home Page')
+            ->asArray()
+            ->first();
+
+        $data['hotlines'] = $hotline_m
+            ->where('status', 'ACTIVE')
+            ->where('section', 'Others')
+            ->findAll();
+
+        $data['emergency_hotlines'] = $about_m
+            ->where('status', 'ACTIVE')
+            ->where('section', 'Emergency Hotlines')
+            ->orderBy('created_date', 'ASC')
+            ->findAll();
+
+
+        return view('home_page', $data);
+    }
+
+    public function home_page()
+    {
+        $contentModel = new \App\Models\Content();
+        $mayor_m = new \App\Models\MayorContent();
+        $hotline_m = new \App\Models\Hotlines();
+        $about_m = new \App\Models\About();
+    
+        $data['announcements'] = $contentModel
+            ->where('status', 'ACTIVE')
+            ->where('category', 'anns')
+            ->orderBy('created_date', 'DESC')
+            ->findAll(3);
+        
+        $data['news_events'] = $contentModel
+            ->where('status', 'ACTIVE')
+            ->where('category', 'news')
+            ->orderBy('created_date', 'DESC')
+            ->findAll(3);
+
+        $data['mayor_content'] = $mayor_m
+            ->where('status', 'ACTIVE')
+            ->where('section', 'Home Page')
+            ->asArray()
+            ->first();
+
+        $data['knowmore'] = $about_m
+            ->where('status', 'ACTIVE')
+            ->where('section', 'Home Page')
+            ->asArray()
+            ->first();
+
+        $data['hotlines'] = $hotline_m
+            ->where('status', 'ACTIVE')
+            ->where('section', 'Others')
+            ->findAll();
+
+        $data['emergency_hotlines'] = $about_m
+            ->where('status', 'ACTIVE')
+            ->where('section', 'Emergency Hotlines')
+            ->orderBy('created_date', 'ASC')
+            ->findAll();
+            
+        return view('home_page', $data);
+    }
+    public function mayor()
+    {
+        $may_m = new \App\Models\MayorContent();
+        // Fetch all ACTIVE mayor content
+        $data['mayor'] = $may_m->where('status', 'ACTIVE')->findAll();
+
+        return view('mayor_page', $data);
+    }
+
+    public function barangay()
+    {
+        return view('barangay_page');
+    }
+
+    public function barangays()
+    {
+        $brgy_m = new \App\Models\Barangay();
+        $search = $this->request->getGet('search');
+        if ($search) {
+            $brgy_m->like('brgy_name', $search);
+        }
+        $data['brgys'] = $brgy_m
+            ->where('status', 'ACTIVE')
+            ->findAll();
+        return view('barangays_page', $data);
+    }
+
+    public function barangaycontent($id)
+    {
+        $brgy_m = new \App\Models\Barangay();
+        $serv_m = new \App\Models\Services();
+        $barangay = $brgy_m->find($id);
+
+        if ($barangay) {
+            $data['brgy'] = $barangay;
+            $data['services'] = $serv_m->where('status', 'ACTIVE')
+                ->where('brngy_cont_ID', $id)
+                ->findAll();
+            return view('barangaycontent_page', $data);
+        } else {
+            return view('barangay_page');
+        }
+    }
+    
+    public function department()
+    {
+        $dept_m = new \App\Models\Department();
+        $search = $this->request->getGet('search');
+        if ($search) {
+            $dept_m->like('dept_name', $search);
+        }
+        $data['depts'] = $dept_m
+            ->where('status', 'ACTIVE')
+            ->findAll();
+        return view('department_page', $data);
+    }
+
+    public function departmentcontent($id)
+    {
+        $dept_m = new \App\Models\Department();
+        $serv_m = new \App\Models\Services();
+        $department = $dept_m->find($id);
+
+        if ($department) {
+            $data['dept'] = $department;
+            $data['services'] = $serv_m->where('status', 'ACTIVE')
+                ->where('dept_cont_id', $id)
+                ->findAll();
+            return view('departmentcontent_page', $data);
+        } else {
+            return view('department_page');
+        }
+    }
+
+    public function services($entity_id = null)
+    {
+        return view('services_page');
+    }
+
+    public function servicescontent($id)
+    {
+        $serv_m = new \App\Models\Services();
+        $service = $serv_m->find($id);
+
+        if ($service) {
+            $data['serve'] = $service;
+            return view('servicescontent_page', $data);
+        } else {
+            return view('services_page');
+        }
+    }
+
+    public function about()
+    {
+        $about_m = new \App\Models\About();
+        // Fetch Header Content
+        $header_content = $about_m->where('status', 'ACTIVE')
+            ->where('section', 'Header')
+            ->first();
+
+        // Fetch Content Section
+        $content_sections = $about_m->where('status', 'ACTIVE')
+            ->where('section', 'Content')
+            ->findAll();
+
+        // Fetch Emergency Hotlines
+        $emergency_hotlines = $about_m->where('status', 'ACTIVE')
+            ->where('section', 'Emergency Hotlines')
+            ->orderBy('created_date', 'ASC')
+            ->findAll();
+
+        // Prepare data for view
+        $data['header_content'] = $header_content;
+        $data['content_sections'] = $content_sections;
+        $data['emergency_hotlines'] = $emergency_hotlines;
+        return view('about_page',  $data);
+    }
+
+    public function contact()
+    {
+        return view('contact_page');
+    }
+
+    public function career()
+    {
+        return view('career_page');
+    }
+
+    public function careers()
+    {
+        $career_m = new \App\Models\FileTbl();
+        $career_d = $career_m
+            ->where('status', 'ACTIVE')
+            ->findAll();
+
+        $data['careers'] = $career_d;
+        return view('careers_page', $data);
+    }
+
+    public function fulldisc()
+    {
+        $fdisc_m = new \App\Models\FileTbl();
+        $fdisc_d = $fdisc_m->where('status', 'ACTIVE')->findAll();
+
+        $data['fdiscol'] = $fdisc_d;
+        return view('fulldisc_page', $data);
+    }
+
+    public function jobs()
+    {
+        try {
+            $jobModel = new \App\Models\Job();
+            $search = $this->request->getGet('search');
+            $company = $this->request->getGet('company');
+            
+            $builder = $jobModel->where('status', 'ACTIVE');
+            
+            // Apply search filter
+            if ($search) {
+                $builder = $builder->groupStart()
+                    ->like('title', $search)
+                    ->orLike('description', $search)
+                    ->orLike('company', $search)
+                    ->groupEnd();
+            }
+            
+            // Apply company filter
+            if ($company) {
+                $builder = $builder->where('company', $company);
+            }
+            
+            $jobs = $builder->orderBy('publication_date', 'DESC')->findAll();
+            
+            $data['jobs'] = $jobs;
+            return view('jobs', $data);
+        } catch (\Exception $e) {
+            // If there's a database error, show a simple message
+            log_message('error', 'Jobs page error: ' . $e->getMessage());
+            $data['jobs'] = [];
+            $data['error'] = 'Unable to load jobs at the moment. Please try again later.';
+            return view('jobs', $data);
+        }
+    }
+
+    public function officials()
+    {
+        $cityo_m = new \App\Models\CityOfficial();
+        $cityo_d = $cityo_m->where('status', 'ACTIVE')->findAll();
+    
+        $data['cityoffi'] = $cityo_d;
+        return view('officials_page', $data);
+    }
+
+    public function cityofficials()
+    {
+        return view('cityofficials_page');
+    }
+
+    public function newsevents($page = 1)
+    {
+        $contentModel = new \App\Models\Content();
+        $perPage = 5; // Number of records per page
+        $offset = ($page - 1) * $perPage;
+
+        $search = $this->request->getGet('search');
+        $builder = $contentModel->where('status', 'ACTIVE')->where('category', 'news')->limit(5);
+        if ($search) {
+            $builder = $builder->groupStart()
+                ->like('title', $search)
+                ->orLike('description', $search)
+                ->orLike('author', $search)
+                ->groupEnd();
+        }
+        $totalRecords = $builder->countAllResults(false);
+        $news_events = $builder->orderBy('created_date', 'DESC')->findAll($perPage, $offset);
+
+        $data['news_events'] = $news_events;
+        $data['currentPage'] = $page;
+        $data['totalPages'] = ceil($totalRecords / $perPage);
+
+        return view('newsevents_page', $data);
+    }
+
+    public function announcements($page = 1)
+    {
+        $contentModel = new \App\Models\Content();
+        $perPage = 5; // Number of records per page
+        $offset = ($page - 1) * $perPage;
+
+        $search = $this->request->getGet('search');
+        $builder = $contentModel->where('status', 'ACTIVE')->where('category', 'anns');
+        if ($search) {
+            $builder = $builder->groupStart()
+    
+                ->like('title', $search)
+                ->orLike('description', $search)
+                ->orLike('author', $search)
+                ->groupEnd();
+        }
+    
+        $totalRecords = $builder->countAllResults(false);
+        $anns_cont = $builder->orderBy('created_date', 'DESC')->findAll($perPage, $offset);
+
+        $data['anns_cont'] = $anns_cont;
+        $data['currentPage'] = $page;
+        $data['totalPages'] = ceil($totalRecords / $perPage);
+
+        return view('announcements_page', $data);
+    }
+
+    public function newseventscontent($id)
+    {
+        $contentModel = new \App\Models\Content();
+        $news_event = $contentModel->find($id);
+
+        $data = [];
+
+        if ($news_event) {
+            $data['news_event'] = $news_event;
+
+            // Fetch all other news except the current one
+            $news_events = $contentModel
+                ->where('ID !=', $id)
+                ->where('status', 'ACTIVE')
+                ->where('category', 'news')
+                ->orderBy('created_date', 'DESC')
+                ->findAll();
+
+            $data['news_events'] = $news_events;
+        }
+
+        return view('newseventscontent_page', $data);
+    }
+
+
+   public function announcementcontent($id)
+    {
+        $contentModel = new \App\Models\Content();
+        $announcement = $contentModel->find($id);
+
+        $data = [
+            'anns' => $announcement,
+            'announcements' => $contentModel
+                ->where('status', 'ACTIVE')
+                ->where('ID !=', $id)
+                ->where('category', 'anns')
+                ->orderBy('created_date', 'DESC')
+                ->findAll(3)
+        ];
+
+        return view('annscontent', $data);
+    }
+
+
+    public function history()
+    {
+        $about_m = new \App\Models\About();
+        $about_d = $about_m->where('status', 'ACTIVE')
+                        ->where('section', 'History')
+                        ->findAll();
+    
+        $data['history_content'] = $about_d;
+        return view('history',  $data);
+    }
+
+    public function invest()
+    {
+        $inv_m = new \App\Models\FileTbl();
+        $inv_d = $inv_m->where('status', 'ACTIVE')
+                        ->where('category', 'INVEST')
+                        ->findAll();
+    
+        $data['investfiles'] = $inv_d;
+        return view('invest_page', $data);
+    }
+
+    public function investmentopp()
+    {
+        return view('investment_opp');
+    }
+
+    public function safetyseal()
+    {
+        return view('safetyseal');
+    }
+
+    public function safetysealprocess()
+    {
+        return view('safetysealprocess');
+    }
+
+    public function hotlines()
+    {
+        $hotline_m = new \App\Models\Hotlines();
+        $hotline_d = $hotline_m
+        ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
+        ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
+        ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left')
+        ->where('hotlines.status', 'ACTIVE')
+        ->findAll();
+    
+        $data['hotlines'] = $hotline_d;
+        return view('hotlines', $data);
+    }
+
+    public function login()
+    {
+        helper('asset');
+        return view('login_page');
+    }
+
+    public function jobpostings($page = 1)
+    {
+        $jobModel = new \App\Models\FileTbl();
+        $perPage = 10;
+        $offset = ($page - 1) * $perPage;
+        $search = $this->request->getGet('search');
+        $builder = $jobModel->where('status', 'ACTIVE')->where('category', 'JOBS');
+        if ($search) {
+            $builder = $builder->groupStart()
+                ->like('title', $search)
+                ->orLike('description', $search)
+                ->orLike('author', $search)
+                ->groupEnd();
+        }
+        $totalRecords = $builder->countAllResults(false);
+        $jobs = $builder->orderBy('created_date', 'DESC')->findAll($perPage, $offset);
+        $data['jobs'] = $jobs;
+        $data['currentPage'] = $page;
+        $data['totalPages'] = ceil($totalRecords / $perPage);
+        return view('jobpostings_page', $data);
+    }
+
+    public function getdepartments()
+    {
+        $dept_m = new \App\Models\Department();
+        $departments = $dept_m->where('status', 'ACTIVE')->findAll();
+        return $this->response->setJSON([
+            'status' => 1,
+            'data' => $departments
+        ]);
+    }
+
+    public function getAllJobs()
+    {
+        $jobModel = new \App\Models\Job();
+        $jobs = $jobModel->select('jobs.*, department_content.dept_name as company_name')
+                        ->join('department_content', 'department_content.ID = jobs.company', 'left')
+                        ->where('jobs.status', 'ACTIVE')
+                        ->orderBy('jobs.created_date', 'DESC')
+                        ->findAll();
+        
+        return $this->response->setJSON([
+            'status' => 1,
+            'data' => $jobs
+        ]);
+    }
+
+    public function jobDetails($id)
+    {
+        $jobModel = new \App\Models\Job();
+        $job = $jobModel->select('jobs.*, department_content.dept_name as company_name')
+                       ->join('department_content', 'department_content.ID = jobs.company', 'left')
+                       ->where('jobs.ID', $id)
+                       ->first();
+        
+        if ($job) {
+            return $this->response->setJSON([
+                'status' => 1,
+                'data' => $job
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 0,
+                'message' => 'Job not found'
+            ]);
+        }
+    }
+
+    public function test_jobs()
+    {
+        // Simple test to check if everything is working
+        try {
+            $jobModel = new \App\Models\Job();
+            $data['test_message'] = 'Job model loaded successfully';
+            $data['table_exists'] = 'Checking...';
+            
+            // Try to get table info
+            $db = \Config\Database::connect();
+            $tables = $db->listTables();
+            $data['table_exists'] = in_array('jobs', $tables) ? 'Jobs table exists' : 'Jobs table does not exist';
+            
+            return view('test_jobs', $data);
+        } catch (\Exception $e) {
+            $data['error'] = $e->getMessage();
+            return view('test_jobs', $data);
+
+        }
+        
+    }
+    public function make_dev()
+    {
+        $user_m = new \App\Models\UserAccount();
+        
+        $data = [
+            'fname' => 'Main',
+            'lname' => 'Developer',
+            'username' => 'superdev',
+            'pass' => password_hash('YourSecurePasswordHere!', PASSWORD_ARGON2ID), // Set your password here
+            'email' => 'admin@yourdomain.com',
+            'user_lvl' => 'DEVELOPER',
+            'dept' => 'IT',
+            'status' => 'ACTIVE',
+            'created_date' => date('Y-m-d H:i:s')
+        ];
+
+        if($user_m->insert($data)) {
+            echo "Developer account created successfully!";
+        } else {
+            echo "Failed to create account.";
+        }
+    }
+}
