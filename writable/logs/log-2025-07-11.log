@@ -1,0 +1,219 @@
+ERROR - 2025-07-11 09:47:37 --> mysqli_sql_exception: Unknown column 'jobs.office' in 'on clause' in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('SELECT `jobs`.*...', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `jobs`.*...')
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `jobs`.*...')
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\websitebinan\app\Controllers\Home.php(226): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Home->jobs()
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+#9 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2025-07-11 09:47:37 --> Unknown column 'jobs.office' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*, `department_content`.`dept_name` as `department_name`
+FROM `jobs`
+LEFT JOIN `department_content` ON `department_content`.`ID` = `jobs`.`office`
+WHERE `jobs`.`status` = :jobs.status:
+ORDER BY `jobs`.`publication_date` DESC', [...], false)
+ 2 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\Home.php(226): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->jobs()
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-11 09:47:39 --> mysqli_sql_exception: Unknown column 'jobs.office' in 'on clause' in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('SELECT `jobs`.*...', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `jobs`.*...')
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `jobs`.*...')
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\websitebinan\app\Controllers\Home.php(226): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Home->jobs()
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+#9 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2025-07-11 09:47:39 --> Unknown column 'jobs.office' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*, `department_content`.`dept_name` as `department_name`
+FROM `jobs`
+LEFT JOIN `department_content` ON `department_content`.`ID` = `jobs`.`office`
+WHERE `jobs`.`status` = :jobs.status:
+ORDER BY `jobs`.`publication_date` DESC', [...], false)
+ 2 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\Home.php(226): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->jobs()
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-11 09:47:44 --> mysqli_sql_exception: Unknown column 'jobs.office' in 'on clause' in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('SELECT `jobs`.*...', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `jobs`.*...')
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `jobs`.*...')
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2025-07-11 09:47:44 --> Unknown column 'jobs.office' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*, `department_content`.`dept_name` as `office_name`
+FROM `jobs`
+LEFT JOIN `department_content` ON `department_content`.`ID` = `jobs`.`office`
+ORDER BY `jobs`.`created_date` DESC', [], false)
+ 2 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-11 09:48:57 --> mysqli_sql_exception: Unknown column 'jobs.office' in 'on clause' in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('SELECT `jobs`.*...', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `jobs`.*...')
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `jobs`.*...')
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2025-07-11 09:48:57 --> Unknown column 'jobs.office' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*, `department_content`.`dept_name` as `office_name`
+FROM `jobs`
+LEFT JOIN `department_content` ON `department_content`.`ID` = `jobs`.`office`
+ORDER BY `jobs`.`created_date` DESC', [], false)
+ 2 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-11 09:51:45 --> mysqli_sql_exception: Unknown column 'jobs.office' in 'on clause' in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('SELECT `jobs`.*...', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `jobs`.*...')
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `jobs`.*...')
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2025-07-11 09:51:45 --> Unknown column 'jobs.office' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*, `department_content`.`dept_name` as `office_name`
+FROM `jobs`
+LEFT JOIN `department_content` ON `department_content`.`ID` = `jobs`.`office`
+ORDER BY `jobs`.`created_date` DESC', [], false)
+ 2 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-11 09:56:46 --> mysqli_sql_exception: Unknown column 'jobs.office' in 'on clause' in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('SELECT `jobs`.*...', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `jobs`.*...')
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `jobs`.*...')
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2025-07-11 09:56:46 --> Unknown column 'jobs.office' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*, `department_content`.`dept_name` as `office_name`
+FROM `jobs`
+LEFT JOIN `department_content` ON `department_content`.`ID` = `jobs`.`office`
+ORDER BY `jobs`.`created_date` DESC', [], false)
+ 2 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-11 09:56:55 --> mysqli_sql_exception: Unknown column 'jobs.office' in 'on clause' in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('SELECT `jobs`.*...', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `jobs`.*...')
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `jobs`.*...')
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\websitebinan\app\Controllers\Home.php(226): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Home->jobs()
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+#9 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2025-07-11 09:56:55 --> Unknown column 'jobs.office' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*, `department_content`.`dept_name` as `department_name`
+FROM `jobs`
+LEFT JOIN `department_content` ON `department_content`.`ID` = `jobs`.`office`
+WHERE `jobs`.`status` = :jobs.status:
+ORDER BY `jobs`.`publication_date` DESC', [...], false)
+ 2 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\Home.php(226): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->jobs()
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-11 10:01:11 --> mysqli_sql_exception: Unknown column 'jobs.office' in 'on clause' in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('SELECT `jobs`.*...', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `jobs`.*...')
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `jobs`.*...')
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2025-07-11 10:01:11 --> Unknown column 'jobs.office' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `jobs`.*, `department_content`.`dept_name` as `office_name`
+FROM `jobs`
+LEFT JOIN `department_content` ON `department_content`.`ID` = `jobs`.`office`
+ORDER BY `jobs`.`created_date` DESC', [], false)
+ 2 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\Admin.php(755): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_jobs')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

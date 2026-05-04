@@ -1,0 +1,320 @@
+CRITICAL - 2024-05-16 02:01:26 --> Undefined variable: users
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 35.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(35): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: users', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 35, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(79): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 04:31:03 --> Undefined variable: users
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 35.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(35): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: users', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 35, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(79): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 04:41:12 --> Undefined variable: users
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 35.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(35): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: users', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 35, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(79): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 04:41:12 --> Undefined variable: users
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 35.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(35): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: users', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 35, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(79): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 04:46:20 --> Undefined variable: users
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 35.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(35): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: users', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 35, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(79): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 06:15:28 --> Undefined variable: user
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 37.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(37): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: user', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 37, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(83): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 06:16:18 --> Undefined property: stdClass::$id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 38.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(38): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: stdClass::$id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 38, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(83): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 06:16:19 --> Undefined property: stdClass::$id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 38.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(38): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: stdClass::$id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 38, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(83): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 06:16:37 --> Undefined property: stdClass::$id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 38.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(38): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: stdClass::$id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 38, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(83): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 06:16:38 --> Undefined property: stdClass::$id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 38.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(38): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: stdClass::$id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 38, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(83): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+DEBUG - 2024-05-16 06:22:01 --> Users Data: Array
+(
+    [0] => stdClass Object
+        (
+            [ID] => 1
+            [fname] => Mapagmahal
+            [lname] => Pedro
+            [username] => pedrolangto
+            [pass] => sipedro
+            [email] => pedro@gmail.com
+            [user_lvl] => admin
+            [created_date] => 2024-05-09 14:16:49
+            [updated_date] => 2024-05-09 08:16:10
+            [dept] => ICTO
+            [status] => ACTIVE
+        )
+
+)
+
+CRITICAL - 2024-05-16 06:22:01 --> Undefined property: stdClass::$id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 38.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(38): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: stdClass::$id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 38, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(85): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-16 06:23:48 --> Undefined property: stdClass::$id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 38.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(38): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: stdClass::$id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 38, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(85): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+DEBUG - 2024-05-16 06:23:55 --> Users Data: Array
+(
+    [0] => stdClass Object
+        (
+            [ID] => 1
+            [fname] => Mapagmahal
+            [lname] => Pedro
+            [username] => pedrolangto
+            [pass] => sipedro
+            [email] => pedro@gmail.com
+            [user_lvl] => admin
+            [created_date] => 2024-05-09 14:16:49
+            [updated_date] => 2024-05-09 08:16:10
+            [dept] => ICTO
+            [status] => ACTIVE
+        )
+
+)
+
+CRITICAL - 2024-05-16 06:23:55 --> Undefined property: stdClass::$id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 38.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(38): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: stdClass::$id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 38, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(85): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+DEBUG - 2024-05-16 06:24:44 --> Users Data: Array
+(
+    [0] => stdClass Object
+        (
+            [ID] => 1
+            [fname] => Mapagmahal
+            [lname] => Pedro
+            [username] => pedrolangto
+            [pass] => sipedro
+            [email] => pedro@gmail.com
+            [user_lvl] => admin
+            [created_date] => 2024-05-09 14:16:49
+            [updated_date] => 2024-05-09 08:16:10
+            [dept] => ICTO
+            [status] => ACTIVE
+        )
+
+)
+
+CRITICAL - 2024-05-16 06:24:44 --> Undefined property: stdClass::$id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 48.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(48): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: stdClass::$id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 48, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(85): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+DEBUG - 2024-05-16 06:25:04 --> Users Data: Array
+(
+    [0] => stdClass Object
+        (
+            [ID] => 1
+            [fname] => Mapagmahal
+            [lname] => Pedro
+            [username] => pedrolangto
+            [pass] => sipedro
+            [email] => pedro@gmail.com
+            [user_lvl] => admin
+            [created_date] => 2024-05-09 14:16:49
+            [updated_date] => 2024-05-09 08:16:10
+            [dept] => ICTO
+            [status] => ACTIVE
+        )
+
+)
+
+DEBUG - 2024-05-16 06:26:00 --> Users Data: Array
+(
+    [0] => stdClass Object
+        (
+            [ID] => 1
+            [fname] => Mapagmahal
+            [lname] => Pedro
+            [username] => pedrolangto
+            [pass] => sipedro
+            [email] => pedro@gmail.com
+            [user_lvl] => admin
+            [created_date] => 2024-05-09 14:16:49
+            [updated_date] => 2024-05-09 08:16:10
+            [dept] => ICTO
+            [status] => ACTIVE
+        )
+
+)
+
+CRITICAL - 2024-05-16 06:38:40 --> Undefined variable: users
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 36.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(36): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: users', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 36, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(234): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(80): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

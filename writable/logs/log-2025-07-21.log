@@ -1,0 +1,169 @@
+ERROR - 2025-07-21 15:26:19 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_aba19b2ee0fb77b35bce.jpg
+ERROR - 2025-07-21 15:26:33 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_aba19b2ee0fb77b35bce.jpg
+ERROR - 2025-07-21 15:26:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_9ec882b89be293f8e0de.jpg
+ERROR - 2025-07-21 15:26:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_6453ef53a844ed0b4c71.jpg
+ERROR - 2025-07-21 15:26:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_aba19b2ee0fb77b35bce.jpg
+ERROR - 2025-07-21 15:26:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_4b1b0d503e66072bc48a.jpg
+ERROR - 2025-07-21 15:26:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_9ec882b89be293f8e0de.jpg
+ERROR - 2025-07-21 15:29:41 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_4b1b0d503e66072bc48a.jpg
+ERROR - 2025-07-21 15:29:41 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_6453ef53a844ed0b4c71.jpg
+ERROR - 2025-07-21 15:29:41 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_9ec882b89be293f8e0de.jpg
+ERROR - 2025-07-21 15:29:41 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_aba19b2ee0fb77b35bce.jpg
+ERROR - 2025-07-21 15:29:41 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_4b1b0d503e66072bc48a.jpg
+ERROR - 2025-07-21 15:29:54 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753082778_aba19b2ee0fb77b35bce.jpg
+ERROR - 2025-07-21 15:39:26 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:173
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(173): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'websitebinan', 3306, '', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#5 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+#6 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#3 C:\xampp\htdocs\websitebinan\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#4 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+#5 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+#6 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2025-07-21 15:39:26 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `officials_content`
+WHERE `off_position` = :off_position:', [...], false)
+ 3 SYSTEMPATH\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+ 4 APPPATH\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-21 15:39:37 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:173
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(173): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'websitebinan', 3306, '', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#5 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+#6 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#3 C:\xampp\htdocs\websitebinan\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#4 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+#5 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+#6 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2025-07-21 15:39:37 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `officials_content`
+WHERE `off_position` = :off_position:', [...], false)
+ 3 SYSTEMPATH\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+ 4 APPPATH\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-21 15:39:54 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:173
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(173): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'websitebinan', 3306, '', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#5 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+#6 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#3 C:\xampp\htdocs\websitebinan\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#4 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+#5 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+#6 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2025-07-21 15:39:54 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `officials_content`
+WHERE `off_position` = :off_position:', [...], false)
+ 3 SYSTEMPATH\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+ 4 APPPATH\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-07-21 15:40:30 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:173
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(173): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'websitebinan', 3306, '', 0)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#4 C:\xampp\htdocs\websitebinan\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#5 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+#6 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#3 C:\xampp\htdocs\websitebinan\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#4 C:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+#5 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+#6 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#7 C:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2025-07-21 15:40:30 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `officials_content`
+WHERE `off_position` = :off_position:', [...], false)
+ 3 SYSTEMPATH\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+ 4 APPPATH\Controllers\Admin.php(1199): CodeIgniter\Model->countAllResults()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('create_cityoff')
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

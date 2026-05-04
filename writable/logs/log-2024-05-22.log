@@ -1,0 +1,641 @@
+ERROR - 2024-05-22 01:05:43 --> mysqli_sql_exception: MySQL server has gone away in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(214): CodeIgniter\Model->update('3', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-22 01:05:43 --> MySQL server has gone away
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(214): CodeIgniter\Model->update('3', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:05:56 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:05:56 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:07:56 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:07:56 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:09:16 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:09:16 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:09:22 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:09:22 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:09:24 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:09:24 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:09:26 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:09:26 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(51): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('dept')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:13:45 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:13:45 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:19:34 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(189): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_dept')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(189): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_dept')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:19:34 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `department_content`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(189): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_dept')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:19:37 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(200): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(557): CodeIgniter\Model->doFind(true, '3')
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(124): CodeIgniter\BaseModel->find('3')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_user_detail...')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(200): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(557): CodeIgniter\Model->doFind(true, '3')
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(124): CodeIgniter\BaseModel->find('3')
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_user_detail...')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:19:37 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`
+WHERE `useradmin`.`id` = :useradmin.id:', [...], false)
+ 3 SYSTEMPATH\Model.php(200): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(557): CodeIgniter\Model->doFind(true, '3')
+ 5 APPPATH\Controllers\Admin.php(124): CodeIgniter\BaseModel->find('3')
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_user_details')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:19:38 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(189): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_dept')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(189): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_dept')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:19:38 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `department_content`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(189): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_dept')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 01:19:46 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#7 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2024-05-22 01:19:46 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(94): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 02:56:02 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(245): CodeIgniter\Model->update('3', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('reset_password')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-22 02:56:02 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `password` = :password:, `updated_date` = :updated_date:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(245): CodeIgniter\Model->update('3', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('reset_password')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 02:56:36 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(212): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-22 02:56:36 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(212): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-22 07:07:47 --> Call to undefined function pre_styles()
+in APPPATH\Views\admin\mod\login.php on line 11.
+ 1 SYSTEMPATH\View\View.php(213): include()
+ 2 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/login', [], true)
+ 4 APPPATH\Controllers\Home.php(120): view('admin/mod/login')
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->admin()
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-22 07:08:27 --> Call to undefined function pre_styles()
+in APPPATH\Views\admin\mod\login.php on line 11.
+ 1 SYSTEMPATH\View\View.php(213): include()
+ 2 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/login', [], true)
+ 4 APPPATH\Controllers\Home.php(120): view('admin/mod/login')
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->admin()
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-22 07:12:03 --> Invalid file: "admin/mod/login.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 33.
+ 1 SYSTEMPATH\View\View.php(201): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('admin/mod/login.php')
+ 2 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/login', [], true)
+ 3 APPPATH\Controllers\Home.php(120): view('admin/mod/login')
+ 4 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->admin()
+ 5 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 6 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-22 07:12:16 --> Invalid file: "admin/mod/login.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 33.
+ 1 SYSTEMPATH\View\View.php(201): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('admin/mod/login.php')
+ 2 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/login', [], true)
+ 3 APPPATH\Controllers\Home.php(120): view('admin/mod/login')
+ 4 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->admin()
+ 5 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 6 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-22 07:13:03 --> Call to undefined function pre_styles()
+in APPPATH\Views\admin\admin_login.php on line 11.
+ 1 SYSTEMPATH\View\View.php(213): include()
+ 2 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_login', [], true)
+ 4 APPPATH\Controllers\Home.php(120): view('admin/admin_login')
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->admin()
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-22 08:07:53 --> mysqli_sql_exception: Unknown column 'must_change_password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(248): CodeIgniter\Model->update('3', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('reset_password')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-22 08:07:53 --> Unknown column 'must_change_password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `pass` = :pass:, `updated_date` = :updated_date:, `must_change_password` = :must_change_password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(248): CodeIgniter\Model->update('3', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('reset_password')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

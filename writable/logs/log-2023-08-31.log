@@ -1,0 +1,9 @@
+CRITICAL - 2023-08-31 02:45:18 --> Invalid file: "announcements.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 33.
+ 1 SYSTEMPATH\View\View.php(201): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('announcements.php')
+ 2 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('announcements', [], true)
+ 3 APPPATH\Controllers\Home.php(116): view('announcements')
+ 4 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->announcements()
+ 5 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 6 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

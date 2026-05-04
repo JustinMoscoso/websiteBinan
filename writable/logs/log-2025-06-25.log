@@ -1,0 +1,6 @@
+CRITICAL - 2025-06-25 11:57:54 --> Cannot redeclare include_header() (previously declared in C:\xampp\htdocs\websitebinan\app\Views\header.php:2)
+in APPPATH\Views\header.php on line 253.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-06-25 11:57:56 --> Cannot redeclare include_header() (previously declared in C:\xampp\htdocs\websitebinan\app\Views\header.php:2)
+in APPPATH\Views\header.php on line 253.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()

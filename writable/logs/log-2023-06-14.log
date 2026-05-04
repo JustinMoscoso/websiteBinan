@@ -1,0 +1,9 @@
+CRITICAL - 2023-06-14 14:22:56 --> syntax error, unexpected token "<<", expecting end of file
+in APPPATH\Views\officials_page.php on line 3.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('officials_page', [], true)
+ 3 APPPATH\Controllers\Home.php(69): view('officials_page')
+ 4 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Home->officials()
+ 5 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 6 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()

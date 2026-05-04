@@ -1,0 +1,576 @@
+<<<<<<< HEAD
+INFO - 2024-05-21 07:34:16 --> Departments: 1
+INFO - 2024-05-21 07:34:16 --> Response: {"draw":0,"recordsTotal":1,"recordsFiltered":1,"data":[{"ID":"1","department":"Information Technology and Communications Office (ICTO)","desc":"ICT causes developing of transparency, government accountability and reducing corruption for the development of more efficient and more economical government.","img_loc":"","created_date":"2024-05-20 10:32:01","action":"<button type=\"button\" class=\"btn btn-primary btn-sm\" view-btn\"1\">View<\/button>"}]}
+=======
+INFO - 2024-05-21 00:42:02 --> Users fetched: 1
+INFO - 2024-05-21 00:42:02 --> Response data: {"draw":0,"recordsTotal":1,"recordsFiltered":1,"data":[{"ID":"1","fname":"Mapagmahal","lname":"Pedro","username":"pedrolangto","email":"pedro@gmail.com","user_lvl":"ADMIN","created_date":"2024-05-09 14:16:49","updated_date":"2024-05-09 08:16:10","status":"ACTIVE"}]}
+INFO - 2024-05-21 00:42:06 --> Users fetched: 1
+INFO - 2024-05-21 00:42:06 --> Response data: {"draw":0,"recordsTotal":1,"recordsFiltered":1,"data":[{"ID":"1","fname":"Mapagmahal","lname":"Pedro","username":"pedrolangto","email":"pedro@gmail.com","user_lvl":"ADMIN","created_date":"2024-05-09 14:16:49","updated_date":"2024-05-09 08:16:10","status":"ACTIVE"}]}
+INFO - 2024-05-21 00:42:18 --> Users fetched: 1
+INFO - 2024-05-21 00:42:18 --> Response data: {"draw":0,"recordsTotal":1,"recordsFiltered":1,"data":[{"ID":"1","fname":"Mapagmahal","lname":"Pedro","username":"pedrolangto","email":"pedro@gmail.com","user_lvl":"ADMIN","created_date":"2024-05-09 14:16:49","updated_date":"2024-05-09 08:16:10","status":"ACTIVE"}]}
+DEBUG - 2024-05-21 00:46:00 --> First Name: Pororo
+DEBUG - 2024-05-21 00:46:00 --> Last Name: sdgfsd
+INFO - 2024-05-21 00:46:01 --> Users fetched: 2
+INFO - 2024-05-21 00:46:01 --> Response data: {"draw":0,"recordsTotal":2,"recordsFiltered":2,"data":[{"ID":"1","fname":"Mapagmahal","lname":"Pedro","username":"pedrolangto","email":"pedro@gmail.com","user_lvl":"ADMIN","created_date":"2024-05-09 14:16:49","updated_date":"2024-05-09 08:16:10","status":"ACTIVE"},{"ID":"2","fname":"Pororo","lname":"sdgfsd","username":"tyj","email":"uyiy","user_lvl":"SUPERADMIN","created_date":"2024-05-21 08:46:00","updated_date":null,"status":"ACTIVE"}]}
+DEBUG - 2024-05-21 00:48:35 --> First Name: Nikki
+DEBUG - 2024-05-21 00:48:35 --> Last Name: Minaj
+INFO - 2024-05-21 00:48:35 --> Users fetched: 3
+INFO - 2024-05-21 00:48:35 --> Response data: {"draw":0,"recordsTotal":3,"recordsFiltered":3,"data":[{"ID":"1","fname":"Mapagmahal","lname":"Pedro","username":"pedrolangto","email":"pedro@gmail.com","user_lvl":"ADMIN","created_date":"2024-05-09 14:16:49","updated_date":"2024-05-09 08:16:10","status":"ACTIVE"},{"ID":"2","fname":"Pororo","lname":"sdgfsd","username":"tyj","email":"uyiy","user_lvl":"SUPERADMIN","created_date":"2024-05-21 08:46:00","updated_date":null,"status":"ACTIVE"},{"ID":"3","fname":"Nikki","lname":"Minaj","username":"starshipsaremeanttoFLYY","email":"nikkimin@gmail.com","user_lvl":"ADMIN","created_date":"2024-05-21 08:48:35","updated_date":null,"status":"ACTIVE"}]}
+<<<<<<< HEAD
+ERROR - 2024-05-21 01:38:50 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it.
+ in F:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:174
+Stack trace:
+#0 F:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(174): mysqli->real_connect('localhost', 'root', '', 'websitebinan', 3307, '', 0)
+#1 F:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 F:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#3 F:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 F:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#5 F:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#6 F:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(114): CodeIgniter\BaseModel->findAll()
+#7 F:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(92): App\Controllers\Admin->getUsers()
+#8 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#9 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 F:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it.
+ in F:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 F:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 F:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+#2 F:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 F:\xampp\htdocs\websitebinan\system\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+#4 F:\xampp\htdocs\websitebinan\system\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+#5 F:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(114): CodeIgniter\BaseModel->findAll()
+#6 F:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(92): App\Controllers\Admin->getUsers()
+#7 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+#8 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#9 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 F:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+CRITICAL - 2024-05-21 01:38:50 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it.
+
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(573): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `useradmin`', [], false)
+ 3 SYSTEMPATH\Model.php(241): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(618): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\Admin.php(114): CodeIgniter\BaseModel->findAll()
+ 6 APPPATH\Controllers\Admin.php(92): App\Controllers\Admin->getUsers()
+ 7 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 8 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 9 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:23:20 --> syntax error, unexpected '}', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$'
+in APPPATH\Controllers\Admin.php on line 108.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(289): CodeIgniter\Autoloader\Autoloader->includeFile('APPPATH\\Controllers\\Admin.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(267): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Admin')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Admin')
+ 4 [internal function]: spl_autoload_call('App\\Controllers\\Admin')
+ 5 SYSTEMPATH\CodeIgniter.php(892): class_exists('\\App\\Controllers\\Admin', true)
+ 6 SYSTEMPATH\CodeIgniter.php(486): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:28:27 --> Too few arguments to function App\Controllers\Admin::editUser(), 0 passed in F:\xampp\htdocs\websitebinan\app\Controllers\Admin.php on line 107 and exactly 1 expected
+in APPPATH\Controllers\Admin.php on line 214.
+ 1 APPPATH\Controllers\Admin.php(107): App\Controllers\Admin->editUser()
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:40:13 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:43:38 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:43:48 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:46:23 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:46:29 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:47:46 --> syntax error, unexpected '}'
+in APPPATH\Controllers\Admin.php on line 108.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(289): CodeIgniter\Autoloader\Autoloader->includeFile('APPPATH\\Controllers\\Admin.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(267): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Admin')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Admin')
+ 4 [internal function]: spl_autoload_call('App\\Controllers\\Admin')
+ 5 SYSTEMPATH\CodeIgniter.php(892): class_exists('\\App\\Controllers\\Admin', true)
+ 6 SYSTEMPATH\CodeIgniter.php(486): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:48:09 --> syntax error, unexpected '}'
+in APPPATH\Controllers\Admin.php on line 108.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(289): CodeIgniter\Autoloader\Autoloader->includeFile('APPPATH\\Controllers\\Admin.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(267): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Admin')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Admin')
+ 4 [internal function]: spl_autoload_call('App\\Controllers\\Admin')
+ 5 SYSTEMPATH\CodeIgniter.php(892): class_exists('\\App\\Controllers\\Admin', true)
+ 6 SYSTEMPATH\CodeIgniter.php(486): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 02:58:04 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 03:00:53 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 03:00:57 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 03:10:19 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 03:12:01 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 03:12:44 --> Undefined variable: userid
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userid', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 03:29:28 --> Undefined variable: id
+in APPPATH\Controllers\Admin.php on line 107.
+ 1 APPPATH\Controllers\Admin.php(107): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: id', 'APPPATH\\Controllers\\Admin.php', 107, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 03:42:32 --> mysqli_sql_exception: Column 'fname' cannot be null in F:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 F:\xampp\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `us...', 0)
+#1 F:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 F:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 F:\xampp\htdocs\websitebinan\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', Array, false)
+#4 F:\xampp\htdocs\websitebinan\system\Model.php(330): CodeIgniter\Database\BaseBuilder->insert()
+#5 F:\xampp\htdocs\websitebinan\system\BaseModel.php(782): CodeIgniter\Model->doInsert(Array)
+#6 F:\xampp\htdocs\websitebinan\system\Model.php(730): CodeIgniter\BaseModel->insert(Array, false)
+#7 F:\xampp\htdocs\websitebinan\system\BaseModel.php(692): CodeIgniter\Model->insert(Array, false)
+#8 F:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(238): CodeIgniter\BaseModel->save(Array)
+#9 F:\xampp\htdocs\websitebinan\app\Controllers\Admin.php(107): App\Controllers\Admin->editUser()
+#10 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+#11 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#12 F:\xampp\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#13 F:\xampp\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#14 {main}
+CRITICAL - 2024-05-21 03:42:32 --> Column 'fname' cannot be null
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `useradmin` (`id`, `fname`, `lname`, `username`, `pass`, `email`, `user_lvl`, `dept`, `status`) VALUES (:id:, :fname:, :lname:, :username:, :pass:, :email:, :user_lvl:, :dept:, :status:)', [...], false)
+ 2 SYSTEMPATH\Model.php(330): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH\BaseModel.php(782): CodeIgniter\Model->doInsert([...])
+ 4 SYSTEMPATH\Model.php(730): CodeIgniter\BaseModel->insert([...], false)
+ 5 SYSTEMPATH\BaseModel.php(692): CodeIgniter\Model->insert([...], false)
+ 6 APPPATH\Controllers\Admin.php(238): CodeIgniter\BaseModel->save([...])
+ 7 APPPATH\Controllers\Admin.php(107): App\Controllers\Admin->editUser()
+ 8 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 9 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+10 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 04:09:52 --> Undefined variable: user_id
+in APPPATH\Views\admin\mod\accounts_mgmt.php on line 108.
+ 1 APPPATH\Views\admin\mod\accounts_mgmt.php(108): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: user_id', 'APPPATH\\Views\\admin\\mod\\accounts_mgmt.php', 108, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\mod\\accounts_mgmt.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/mod/accounts_mgmt', [], true)
+ 5 APPPATH\Views\admin\admin_page.php(219): view('admin/mod/accounts_mgmt', [])
+ 6 SYSTEMPATH\View\View.php(213): include('APPPATH\\Views\\admin\\admin_page.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admin_page', [], true)
+ 9 APPPATH\Controllers\Admin.php(84): view('admin/admin_page', [...])
+10 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->mode('accounts_mgmt')
+11 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+12 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 04:51:49 --> Undefined property: App\Controllers\Admin::$session
+in APPPATH\Controllers\Admin.php on line 89.
+ 1 APPPATH\Controllers\Admin.php(89): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Admin::$session', 'APPPATH\\Controllers\\Admin.php', 89, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 04:58:33 --> Undefined property: App\Controllers\Admin::$session
+in APPPATH\Controllers\Admin.php on line 89.
+ 1 APPPATH\Controllers\Admin.php(89): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Admin::$session', 'APPPATH\\Controllers\\Admin.php', 89, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 04:59:15 --> Undefined property: App\Controllers\Admin::$session
+in APPPATH\Controllers\Admin.php on line 89.
+ 1 APPPATH\Controllers\Admin.php(89): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Admin::$session', 'APPPATH\\Controllers\\Admin.php', 89, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 04:59:44 --> Undefined property: App\Controllers\Admin::$session
+in APPPATH\Controllers\Admin.php on line 89.
+ 1 APPPATH\Controllers\Admin.php(89): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Admin::$session', 'APPPATH\\Controllers\\Admin.php', 89, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:00:18 --> Undefined property: App\Controllers\Admin::$session
+in APPPATH\Controllers\Admin.php on line 89.
+ 1 APPPATH\Controllers\Admin.php(89): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Admin::$session', 'APPPATH\\Controllers\\Admin.php', 89, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:02:05 --> Undefined property: App\Controllers\Admin::$session
+in APPPATH\Controllers\Admin.php on line 89.
+ 1 APPPATH\Controllers\Admin.php(89): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined property: App\\Controllers\\Admin::$session', 'APPPATH\\Controllers\\Admin.php', 89, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('get_users')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:06:25 --> Undefined variable: userId
+in APPPATH\Controllers\Admin.php on line 111.
+ 1 APPPATH\Controllers\Admin.php(111): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userId', 'APPPATH\\Controllers\\Admin.php', 111, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:06:44 --> Undefined variable: userId
+in APPPATH\Controllers\Admin.php on line 111.
+ 1 APPPATH\Controllers\Admin.php(111): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userId', 'APPPATH\\Controllers\\Admin.php', 111, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:07:16 --> Undefined variable: userId
+in APPPATH\Controllers\Admin.php on line 111.
+ 1 APPPATH\Controllers\Admin.php(111): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userId', 'APPPATH\\Controllers\\Admin.php', 111, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:07:29 --> Undefined variable: userId
+in APPPATH\Controllers\Admin.php on line 111.
+ 1 APPPATH\Controllers\Admin.php(111): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userId', 'APPPATH\\Controllers\\Admin.php', 111, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:08:55 --> Undefined variable: userId
+in APPPATH\Controllers\Admin.php on line 111.
+ 1 APPPATH\Controllers\Admin.php(111): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userId', 'APPPATH\\Controllers\\Admin.php', 111, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:10:57 --> Undefined variable: userId
+in APPPATH\Controllers\Admin.php on line 111.
+ 1 APPPATH\Controllers\Admin.php(111): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userId', 'APPPATH\\Controllers\\Admin.php', 111, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:12:10 --> Undefined variable: userId
+in APPPATH\Controllers\Admin.php on line 111.
+ 1 APPPATH\Controllers\Admin.php(111): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userId', 'APPPATH\\Controllers\\Admin.php', 111, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-05-21 05:14:00 --> Undefined variable: userId
+in APPPATH\Controllers\Admin.php on line 111.
+ 1 APPPATH\Controllers\Admin.php(111): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Undefined variable: userId', 'APPPATH\\Controllers\\Admin.php', 111, [...])
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('edit_user')
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+=======
+ERROR - 2024-05-21 07:20:56 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(213): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 07:20:56 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(213): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 07:21:12 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(213): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 07:21:12 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(213): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 07:31:08 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(213): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 07:31:08 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(213): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 07:32:47 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(213): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 07:32:47 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(213): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 07:32:53 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(213): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 07:32:53 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(213): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 07:35:01 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(213): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 07:35:01 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(213): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 07:35:09 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(213): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 07:35:09 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(213): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 08:19:24 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(214): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 08:19:24 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(214): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-05-21 08:19:26 --> mysqli_sql_exception: Unknown column 'password' in 'field list' in C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp_7_4\htdocs\websitebinan\system\Database\MySQLi\Connection.php(295): mysqli->query('UPDATE `useradm...', 0)
+#1 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(691): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `useradm...')
+#2 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseConnection.php(605): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `useradm...')
+#3 C:\xampp_7_4\htdocs\websitebinan\system\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradm...', Array, false)
+#4 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+#5 C:\xampp_7_4\htdocs\websitebinan\system\BaseModel.php(943): CodeIgniter\Model->doUpdate(Array, Array)
+#6 C:\xampp_7_4\htdocs\websitebinan\system\Model.php(756): CodeIgniter\BaseModel->update(Array, Array)
+#7 C:\xampp_7_4\htdocs\websitebinan\app\Controllers\Admin.php(214): CodeIgniter\Model->update('2', Array)
+#8 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+#9 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#10 C:\xampp_7_4\htdocs\websitebinan\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp_7_4\htdocs\websitebinan\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-05-21 08:19:26 --> Unknown column 'password' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 645.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2476): CodeIgniter\Database\BaseConnection->query('UPDATE `useradmin` SET `fname` = :fname:, `lname` = :lname:, `username` = :username:, `email` = :email:, `user_lvl` = :user_lvl:, `dept` = :dept:, `updated_date` = :updated_date:, `password` = :password:
+WHERE `useradmin`.`id` IN :useradmin.id:', [...], false)
+ 2 SYSTEMPATH\Model.php(396): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH\BaseModel.php(943): CodeIgniter\Model->doUpdate([...], [...])
+ 4 SYSTEMPATH\Model.php(756): CodeIgniter\BaseModel->update([...], [...])
+ 5 APPPATH\Controllers\Admin.php(214): CodeIgniter\Model->update('2', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->ajax('update_user')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+>>>>>>> a32a020ca6ba48a99e6c0d7abe6fe454a9eebf26
+>>>>>>> 8f2588a6ed998d2c0babb16ce5e834522c37f5ac
