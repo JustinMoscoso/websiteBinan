@@ -1067,9 +1067,13 @@ class Admin extends BaseController
                     'type' => $type,
                     'publication_date' => $publication_date,
                     'email' => $email,
-                    'status' => $status,
                     'updated_date' => date('Y-m-d H:i:s')
                 ];
+
+                // Only non-encoders and non-viewers can update the job status
+                if ($user->user_lvl !== 'ENCODER' && $user->user_lvl !== 'VIEWER' && !empty($status)) {
+                    $jobData['status'] = $status;
+                }
 
                 // Try to update the job with better error handling
                 try {
@@ -1132,8 +1136,8 @@ class Admin extends BaseController
             }
             case 'delete_job':
             {
-                if ($user->user_lvl === 'VIEWER') {
-                    $message = 'Viewers are not allowed to delete jobs';
+                if ($user->user_lvl === 'VIEWER' || $user->user_lvl === 'ENCODER') {
+                    $message = 'You are not authorized to delete jobs';
                     break;
                 }
                 $job_m = new \App\Models\Job();
@@ -3029,6 +3033,10 @@ class Admin extends BaseController
             }
             case 'set_status_job':
             {
+                if ($user->user_lvl === 'VIEWER' || $user->user_lvl === 'ENCODER') {
+                    $message = 'You are not authorized to change job status';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');

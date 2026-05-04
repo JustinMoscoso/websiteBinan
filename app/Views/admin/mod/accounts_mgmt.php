@@ -134,9 +134,6 @@
                               <label for="txtAccLevel" class="form-label">Account Level</label>
                               <select id="txtAccLevel" name="txtAccLevel" class="form-select" required>
                                   <option selected disabled>Select Level</option>
-                                  <?php if ($user->user_lvl === 'DEVELOPER'): ?>
-                                      <option value="DEVELOPER">Developer</option>
-                                  <?php endif; ?>
                                   <?php if ($user->user_lvl === 'DEVELOPER' || $user->user_lvl === 'SUPERADMIN'): ?>
                                       <option value="SUPERADMIN">Super admin</option>
                                   <?php endif; ?>
@@ -227,9 +224,6 @@
                                 <label for="editAccLevel" class="form-label">Account Level</label>
                                 <select id="editAccLevel" name="editAccLevel" class="form-select" required>
                                     <option selected disabled>Select Level</option>
-                                    <?php if ($user->user_lvl === 'DEVELOPER'): ?>
-                                        <option value="DEVELOPER">Developer</option>
-                                    <?php endif; ?>
                                     <?php if ($user->user_lvl === 'DEVELOPER' || $user->user_lvl === 'SUPERADMIN'): ?>
                                         <option value="SUPERADMIN">Super admin</option>
                                     <?php endif; ?>
