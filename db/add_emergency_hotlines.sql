@@ -1,0 +1,6 @@
+-- Add sample emergency hotlines to about_content table
+INSERT INTO `about_content` (`section`, `title`, `description`, `status`, `created_date`) VALUES
+('Emergency Hotlines', 'CDRRMO (City Disaster Risk Reduction and Management Office)', '<div class="mb-2"><strong>SMART:</strong> <strong>0908-891-9711</strong></div><div class="mb-2"><strong>GLOBE:</strong> <strong>0917-120-8911</strong></div><div class="mb-0"><strong>INTELCO:</strong> <strong>(049) 513-9111</strong></div>', 'ACTIVE', NOW()),
+('Emergency Hotlines', 'PNP Biñan (Philippine National Police Biñan)', '<div class="mb-2"><strong>SMART:</strong> <strong>0998-598-5631</strong></div><div class="mb-0"><strong>GLOBE:</strong> <strong>0916-261-9833</strong></div>', 'ACTIVE', NOW()),
+('Emergency Hotlines', 'BFP Biñan (Bureau of Fire Protection Biñan)', '<div class="mb-2"><strong>INTELCO:</strong> <strong>(049) 511-9111</strong></div><div class="mb-0"><strong>DITO:</strong> <strong>0992-419-3585</strong></div>', 'ACTIVE', NOW()),
+('Emergency Hotlines', 'CSWD Biñan (City Social Welfare and Development Biñan)', '<div class="mb-0"><strong>INTELCO:</strong> <strong>(049) 513-5040</strong></div>', 'ACTIVE', NOW()); 
