@@ -9,6 +9,7 @@
 </div><!-- End Page Title -->
 
 <!-- Search Filters UI Start -->
+<?php if ($user->user_lvl !== 'VIEWER'): ?>
 <div class="container-fluid py-3">
     <div class="card mb-4">
         <div class="card-body">
@@ -65,6 +66,7 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
 <!-- Search Filters UI End -->
 
 <section class="section">

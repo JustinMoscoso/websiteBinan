@@ -928,6 +928,10 @@ class Admin extends BaseController
             }
             case 'create_job':
             {
+                if ($user->user_lvl === 'VIEWER') {
+                    $message = 'Viewers are not allowed to create jobs';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $title = trim($this->request->getPost('title'));
                 $description = trim($this->request->getPost('description'));
@@ -1012,6 +1016,10 @@ class Admin extends BaseController
             }
             case 'update_job':
             {
+                if ($user->user_lvl === 'VIEWER') {
+                    $message = 'Viewers are not allowed to update jobs';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $title = trim($this->request->getPost('title'));
@@ -1084,6 +1092,10 @@ class Admin extends BaseController
             }
             case 'set_status_job':
             {
+                if ($user->user_lvl === 'VIEWER') {
+                    $message = 'Viewers are not allowed to change job status';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
@@ -1120,6 +1132,10 @@ class Admin extends BaseController
             }
             case 'delete_job':
             {
+                if ($user->user_lvl === 'VIEWER') {
+                    $message = 'Viewers are not allowed to delete jobs';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
 
