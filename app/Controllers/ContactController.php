@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Controller;
+use App\Models\ContactInquiryModel;
 
 class ContactController extends BaseController
 {
@@ -13,33 +13,71 @@ class ContactController extends BaseController
 
     public function send()
     {
-        $emailService = \Config\Services::email();
+        $model = new ContactInquiryModel();
 
-        $name = $this->request->getPost('name');
-        $emailFrom = $this->request->getPost('email');
-        $subject = $this->request->getPost('subject');
-        $message = $this->request->getPost('message');
+        $data = [
+            'name' => $this->request->getPost('name'),
+            'email' => $this->request->getPost('email'),
+            'subject' => $this->request->getPost('subject'),
+            'message' => $this->request->getPost('message'),
+        ];
 
-        $emailService->setFrom('nmah.business@gmail.com', 'information'); // Replace 'Your Name' with your actual name
-        $emailService->setTo('nmah.business@gmail.com'); // Replace with your email address
-        $emailService->setReplyTo($emailFrom, $name);
-        $emailService->setSubject($subject);
-        $emailService->setMessage($message);
+        // SAVE TO DATABASE
+        $model->save($data);
 
-        if ($emailService->send()) {
-            // Success response
-            $response = [
-                'status' => 'success',
-                'message' => 'Message sent successfully!'
-            ];
-        } else {
-            // Error response
-            $response = [
-                'status' => 'error',
-                'message' => 'Failed to send message. Please try again later.'
-            ];
-        }
+        // EMAIL SERVICE
+        $email = \Config\Services::email();
 
-        return $this->response->setJSON($response);
+        // SEND TO ADMIN
+        $email->setTo('websiteBinan@gmail.com');
+
+        $email->setFrom(
+            $data['email'],
+            $data['name']
+        );
+
+        $email->setSubject(
+            'New Contact Inquiry: ' . $data['subject']
+        );
+
+        $email->setMessage("
+            Name: {$data['name']}
+            
+            Email: {$data['email']}
+            
+            Subject: {$data['subject']}
+            
+            Message:
+            {$data['message']}
+        ");
+
+        $email->send();
+
+        // OPTIONAL CONFIRMATION EMAIL
+        $email->clear();
+
+        $email->setTo($data['email']);
+
+        $email->setFrom(
+            'websiteBinan@gmail.com',
+            'Website Support'
+        );
+
+        $email->setSubject('We received your inquiry');
+
+        $email->setMessage("
+            Hello {$data['name']},
+
+            Thank you for contacting us.
+
+            We received your inquiry and will respond soon.
+        ");
+
+        $email->send();
+
+        return redirect()->back()->with(
+            'success',
+            'Message sent successfully!'
+        );
     }
-} 
+}
