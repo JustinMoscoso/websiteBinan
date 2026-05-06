@@ -432,7 +432,18 @@
                 "dataSrc": function (json) {
                     return json.data;
                 }
+                
             },
+            initComplete: function() {
+            var searchInput = $('#tblfdp_filter input[type="search"]');
+            searchInput.attr('placeholder', 'Search Category...');
+            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.css({
+                'width': '350px',           // Make it wider
+                'border': '2px solid #388e3c', // Distinct brand-green border
+                'margin-left': '10px'       // Add space from the "Search:" label
+            });
+        },
             columns: [
                 { "title": "User ID", "data": "ID", "visible": false },
                 { "title": "username", "data": "username"},
@@ -505,24 +516,25 @@
             sltdRow = tbl.row(this).data();
     });
 
-    // Search button click handler
-    $('#searchBtn').click(function() {
-        tbl.ajax.reload();
-    });
+// Attach a submit handler to the form
+$('#userSearchForm').on('submit', function(e) {
+    e.preventDefault(); // stop page reload
+    tbl.ajax.reload();  // unified reload logic
+});
 
-    // Clear filters handler
-    $('button[type="reset"]').click(function() {
-        $('#searchUser').val('');
-        $('#searchStatus').val('');
-        $('#searchUserLevel').val('');
-        tbl.ajax.reload();
-    });
+// Clear Filters button
+$('#userSearchForm button[type="reset"]').on('click', function() {
+    // reset form fields
+    $('#userSearchForm')[0].reset();
 
-    // Optional: Trigger search on Enter key in search fields
-    $('#searchUser').keypress(function(e) {
-        if(e.which == 13) {
-            tbl.ajax.reload();
-        }
-    });
+    // also clear individual inputs if needed
+    $('#searchUser').val('');
+    $('#searchStatus').val('');
+    $('#searchUserLevel').val('');
+
+    // reload table back to default
+    tbl.ajax.reload();
+});
+
 
 </script>
