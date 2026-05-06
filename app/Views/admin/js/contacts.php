@@ -1,4 +1,4 @@
-<script>    
+<script>
     const userLevel = '<?= $user->user_lvl ?>'; // Get user level from backend
 
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
@@ -91,7 +91,7 @@
     }
 
     // Show/hide department or barangay dropdowns based on category selection
-    $('#category').on('change', function() {
+    $('#category').on('change', function () {
         var selectedCategory = $(this).val();
         if (selectedCategory === 'DEPT') {
             $('#deptGroup').show();
@@ -113,7 +113,7 @@
     });
 
     // Same for edit modal
-    $('#editcategory').on('change', function() {
+    $('#editcategory').on('change', function () {
         var selectedCategory = $(this).val();
         if (selectedCategory === 'DEPT') {
             $('#editdeptGroup').show();
@@ -129,7 +129,7 @@
             $('#editdeptGroup').hide();
             $('#editbrgyGroup').hide();
             $('#editothersGrp').show();
-        } 
+        }
         else {
             $('#editdeptGroup, #editbrgyGroup').hide();
         }
@@ -146,7 +146,7 @@
     });
 
     // Save new hotlines
-    $('#btnAdd').on('click', function() {
+    $('#btnAdd').on('click', function () {
         let form = $('#addForm')[0];
         let formData = new FormData(form);
 
@@ -191,7 +191,7 @@
         // Validate contact fields (xxx-xxxx for landline, xxxx-xxx-xxxx for mobile, or single hyphen)
         const landlinePattern = /^(\d{3}-\d{4}|-)$/;
         const mobilePattern = /^(\d{4}-\d{3}-\d{4}|-)$/;
-        
+
         // Check PLDT and Intelco (landline format)
         if (!landlinePattern.test(formData.get('telco')) || !landlinePattern.test(formData.get('contact'))) {
             Swal.fire({
@@ -201,7 +201,7 @@
             });
             return;
         }
-        
+
         // Check Smart and Globe (mobile format)
         if (!mobilePattern.test(formData.get('smart')) || !mobilePattern.test(formData.get('globe'))) {
             Swal.fire({
@@ -211,7 +211,7 @@
             });
             return;
         }
-        
+
         Swal.fire({
             title: 'Please wait...',
             showConfirmButton: false,
@@ -230,11 +230,11 @@
             data: formData,
             contentType: false,
             processData: false,
-            success: function(result) {
+            success: function (result) {
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
-                    $('#txtDept')[0].selectize.clear(); 
-                    $('#txtBrgy')[0].selectize.clear(); 
+                    $('#txtDept')[0].selectize.clear();
+                    $('#txtBrgy')[0].selectize.clear();
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
@@ -251,7 +251,7 @@
                     tbl.ajax.reload(null, false);
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -318,7 +318,7 @@
         });
     }
 
-        
+
     $('#btnEdit').click(function () {
         let form = $('#editForm')[0];
         let formData = new FormData(form);
@@ -363,7 +363,7 @@
         // Validate contact fields (xxx-xxxx for landline, xxxx-xxx-xxxx for mobile, or single hyphen)
         const landlinePattern = /^(\d{3}-\d{4}|-)$/;
         const mobilePattern = /^(\d{4}-\d{3}-\d{4}|-)$/;
-        
+
         // Check PLDT and Intelco (landline format)
         if (!landlinePattern.test(formData.get('editTelco')) || !landlinePattern.test(formData.get('editContact'))) {
             Swal.fire({
@@ -373,7 +373,7 @@
             });
             return;
         }
-        
+
         // Check Smart and Globe (mobile format)
         if (!mobilePattern.test(formData.get('editSmart')) || !mobilePattern.test(formData.get('editGlobe'))) {
             Swal.fire({
@@ -443,7 +443,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_contact') ?>",
-                    {id: hot_id, 'status': 'ACTIVE'},
+                    { id: hot_id, 'status': 'ACTIVE' },
                     function (result) {
                         if (result.status == 1) {
                             $('.modal').modal('hide');
@@ -489,7 +489,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_contact') ?>",
-                    {id: hot_id, 'status': 'INACTIVE'},
+                    { id: hot_id, 'status': 'INACTIVE' },
                     function (result) {
                         if (result.status == 1) {
                             $('.modal').modal('hide');
@@ -536,25 +536,26 @@
                     return formatDate(date);
                 }
             },*/
-            { "title": "Office", "data": "office", width: '25%',
+            {
+                "title": "Office", "data": "office", width: '25%',
                 "render": function (data, type, row) {
                     if (row.brgy_name) {
                         return row.brgy_name;
                     } else if (row.dept_name) {
                         return row.dept_name;
-                    } else if(row.section == 'Others') {
+                    } else if (row.section == 'Others') {
                         return row.content_ref_id;
                     } else {
                         return '-';
                     }
                 }
-             },
+            },
             { "title": "PLDT LOCAL ", "data": "number" },
             { "title": "SMART", "data": "smart" },
             { "title": "GLOBE", "data": "globe" },
-            { "title": "INTELCO", "data": "telco"},
-            { 
-                "title": "Status", 
+            { "title": "INTELCO", "data": "telco" },
+            {
+                "title": "Status",
                 "data": "status",
                 "render": function (data, type, row) {
                     var status = data;
@@ -572,12 +573,12 @@
                 "data": "ID",
                 "render": function (data, type, row) {
                     if (userLevel !== 'VIEWER') {
-                    var acter = '<div class="btn-group">' +
-                        '<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">' +
-                        'Actions' +
-                        '</button>' +
-                        '<ul class="dropdown-menu">' +
-                        '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>'; 
+                        var acter = '<div class="btn-group">' +
+                            '<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">' +
+                            'Actions' +
+                            '</button>' +
+                            '<ul class="dropdown-menu">' +
+                            '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>';
                         if (userLevel !== 'ENCODER') {
                             // Add Activate and Deactivate buttons for all levels except ENCODER
                             acter += '<li><button type="button" class="dropdown-item" onclick="activate(' + row.ID + ')"><i class="fa-solid fa-check"></i> Activate</button></li>' +
@@ -585,7 +586,7 @@
                         }
                         acter += '</ul>' +
                             '</div>';
-                    return acter;
+                        return acter;
                     } else {
                         return '-'; // Return blank for VIEWER level users
                     }
@@ -595,7 +596,7 @@
     });
     var sltdRow = null;
 
-        $('#tblhotlines tbody').on('mouseover', 'tr', function () {
-            sltdRow = tbl.row(this).data();
+    $('#tblhotlines tbody').on('mouseover', 'tr', function () {
+        sltdRow = tbl.row(this).data();
     });
 </script>
