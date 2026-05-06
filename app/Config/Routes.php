@@ -40,7 +40,9 @@ $routes->get('/departmentcontent/(:num)', 'Home::departmentcontent/$1');
 $routes->get('/services', 'Home::services');
 $routes->get('/servicescontent', 'Home::servicescontent');
 $routes->get('/about', 'Home::about');
-$routes->get('/contact', 'Home::contact');
+$routes->get('contact', 'Home::contact');
+
+$routes->post('contact/send', 'Home::send');
 $routes->get('/fulldisc', 'Home::fulldisc');
 // $routes->get('/jobs', 'Home::jobs');
 // $routes->get('/jobdetails/(:num)', 'Home::jobDetails/$1');
@@ -107,8 +109,8 @@ $routes->group('admin', function ($routes) {
     $routes->get('about', 'Admin::mode/about');
 
     $routes->get('map', 'Admin::mode/map');
-    
-    $routes->get('getUserCount', 'Admin::getUserCount'); 
+
+    $routes->get('getUserCount', 'Admin::getUserCount');
     $routes->get('getRecentNews', 'Admin::getRecentNews');
     $routes->get('getRecentAnns', 'Admin::getRecentAnns');
 

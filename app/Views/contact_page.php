@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-<meta charset="utf-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Contact</title>
@@ -10,7 +10,7 @@
     <!-- Favicons -->
     <link href="<?= base_url('assets/img/binanlogo.png'); ?>" rel="icon" type="image/png">
     <link href="<?= base_url('assets/img/binanlogo.png'); ?>" rel="apple-touch-icon">
- 
+
 </head>
 
 
@@ -53,10 +53,12 @@
                             <p>(049) 523-5400</p>
                         </div>
                     </div>
-                    
+
                     <div class="mapouter mt-4">
                         <div class="gmap_canvas">
-                            <iframe width="100%" height="100%" id="gmap_canvas" src="https://maps.google.com/maps?q=binan city hall&t=&z=10&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                            <iframe width="100%" height="100%" id="gmap_canvas"
+                                src="https://maps.google.com/maps?q=binan city hall&t=&z=10&ie=UTF8&iwloc=&output=embed"
+                                frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
                         </div>
                     </div>
                 </div>
@@ -64,23 +66,27 @@
                 <!-- Right Column: Contact Form -->
                 <div class="col-lg-7 contact-form-col">
                     <h3>Send us a message</h3>
-                    <form id="contactForm" action="<?= base_url('contact/send') ?>" method="post" role="form">
+                    <form id="contactForm" action="<?= base_url('contact/send') ?>" method="POST">
                         <div class="row">
                             <div class="col-md-6 form-floating mb-3">
-                                <input type="text" name="name" class="form-control" id="name" required placeholder="Your Name">
+                                <input type="text" name="name" class="form-control" id="name" required
+                                    placeholder="Your Name">
                                 <label for="name" class="ms-2">Your Name</label>
                             </div>
                             <div class="col-md-6 form-floating mb-3">
-                                <input type="email" class="form-control" name="email" id="email" required placeholder="Your Email">
+                                <input type="email" class="form-control" name="email" id="email" required
+                                    placeholder="Your Email">
                                 <label for="email" class="ms-2">Your Email</label>
                             </div>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="subject" id="subject" required placeholder="Subject">
+                            <input type="text" class="form-control" name="subject" id="subject" required
+                                placeholder="Subject">
                             <label for="subject">Subject</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" name="message" id="message" required placeholder="Enter your message" style="height: 150px;"></textarea>
+                            <textarea class="form-control" name="message" id="message" required
+                                placeholder="Enter your message" style="height: 150px;"></textarea>
                             <label for="message">Message</label>
                         </div>
                         <div class="my-3">
@@ -88,6 +94,7 @@
                             <div class="error-message"></div>
                             <div class="sent-message">Your message has been sent. Thank you!</div>
                         </div>
+
                         <div class="text-center">
                             <button type="submit" id="submitBtn" class="btn-submit">Send Message</button>
                         </div>
@@ -112,4 +119,5 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 </body>
+
 </html>

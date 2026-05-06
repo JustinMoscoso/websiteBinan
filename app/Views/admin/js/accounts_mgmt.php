@@ -15,7 +15,7 @@
         $('.btn-close').prop('disabled', false); // Allow closing modals
     }
 
-    
+
 
     // Initialize selectize for all selects
     $('#txtDept, #editDept').selectize({
@@ -35,7 +35,7 @@
                     let selectizeControl = selectElement[0].selectize;
                     selectizeControl.clearOptions();
                     response.data.forEach(function (department) {
-                        selectizeControl.addOption({value: department.dept_name, text: department.dept_name});
+                        selectizeControl.addOption({ value: department.dept_name, text: department.dept_name });
                     });
                     selectizeControl.refreshOptions(false); // Refresh the options in the selectize control
                 } else {
@@ -71,13 +71,21 @@
         let formData = new FormData(form);
 
         // Form validation
-        if (!formData.get('txtFirstName') || !formData.get('txtLastName') || !formData.get('txtUsername') || !formData.get('txtEmail') || !formData.get('txtPassword') || !formData.get('txtAccLevel') || !formData.get('txtDept')) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return; 
+        const fields = [
+            { name: 'txtFirstName', label: 'First Name' },
+            { name: 'txtLastName', label: 'Last Name' },
+            { name: 'txtUsername', label: 'Username' },
+            { name: 'txtEmail', label: 'Email' },
+            { name: 'txtPassword', label: 'Password' },
+            { name: 'txtAccLevel', label: 'Account level' },
+            { name: 'txtDept', label: 'Department' }
+        ];
+
+        for (let field of fields) {
+            if (!formData.get(field.name)) {
+                Swal.fire('Validation Error', `${field.label} is required`, 'warning');
+                return;
+            }
         }
 
         Swal.fire({
@@ -130,14 +138,14 @@
 
     // Function to open the edit user modal and populate data
     function edit(userId) {
-        
+
         $.ajax({
             url: '<?php echo site_url('admin/ajax/get_users'); ?>',
             method: 'POST',
             data: { id: userId },
             success: function (response) {
                 if (response.data) {
-                    let res = response.data; 
+                    let res = response.data;
                     $('#editUserId').val(res.ID);
                     $('#editFirstName').val(res.fname);
                     $('#editLastName').val(res.lname);
@@ -173,23 +181,32 @@
         let formData = new FormData(form);
 
         // Form validation
-        if (!formData.get('editFirstName') || !formData.get('editLastName') || !formData.get('editUsername') || !formData.get('editEmail') || !formData.get('editAccLevel') || !formData.get('editDept')) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return; 
+        const fields = [
+            { name: 'editFirstName', Label: 'First Name' },
+            { name: 'editLastName', Label: 'Last Name' },
+            { name: 'editUsername', Label: 'Username' },
+            { name: 'editEmail', Label: 'Email' },
+            { name: 'editAccLevel', Label: 'Account Level' },
+            { name: 'editDept', Label: 'Department' }
+        ];
+
+        for (let field of fields) {
+            if (!formData.get(field.name)) {
+                Swal.fire('Validation Error', `${field.Label} is required`, 'warning');
+                return;
+            }
         }
+
+
 
         $.ajax({
             url: '<?php echo site_url('admin/ajax/update_user'); ?>',
             method: 'POST',
             data: formData,
-            processData: false, 
-            contentType: false, 
+            processData: false,
+            contentType: false,
             success: function (response) {
-                
+
                 if (response.status === 1) {
                     Swal.fire({
                         icon: 'success',
@@ -241,7 +258,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_user') ?>",
-                    {id: userId, 'status': 'INACTIVE'},
+                    { id: userId, 'status': 'INACTIVE' },
                     function (result) {
                         if (result.status == 1) {
                             $('.modal').modal('hide');
@@ -288,7 +305,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_user') ?>",
-                    {id: userId, 'status': 'ACTIVE'},
+                    { id: userId, 'status': 'ACTIVE' },
                     function (result) {
                         if (result.status == 1) {
                             $('.modal').modal('hide');
@@ -388,7 +405,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_user') ?>",
-                    {id: userId, 'status': 'ARCHIVED'},
+                    { id: userId, 'status': 'ARCHIVED' },
                     function (result) {
                         if (result.status == 1) {
                             $('.modal').modal('hide');
@@ -413,24 +430,36 @@
 
     // Datatable
     var tbl = $('#tbluser').DataTable({
-            select: false,
-            searching: true,
-            ordering: true,
-            "order": [],
-            pageLength: 10,
-            processing: true,
-            ajax: {
-                "url": "<?php echo base_url('admin/ajax/get_users'); ?>",
-                "type": "POST",
-                "data": function (d) {
-                    return {
-                        searchUser: $('#searchUser').val(),
-                        searchStatus: $('#searchStatus').val(),
-                        searchUserLevel: $('#searchUserLevel').val()
-                    };
-                },
-                "dataSrc": function (json) {
-                    return json.data;
+        select: false,
+        searching: true,
+        ordering: true,
+        "order": [],
+        pageLength: 10,
+        processing: true,
+        ajax: {
+            "url": "<?php echo base_url('admin/ajax/get_users'); ?>",
+            "type": "POST",
+            "data": function (d) {
+                return {
+                    searchUser: $('#searchUser').val(),
+                    searchStatus: $('#searchStatus').val(),
+                    searchUserLevel: $('#searchUserLevel').val()
+                };
+            },
+            "dataSrc": function (json) {
+                return json.data;
+            }
+        },
+        columns: [
+            { "title": "User ID", "data": "ID", "visible": false },
+            { "title": "username", "data": "username" },
+            {
+                "title": "Name",
+                "data": "fname",
+                "className": "dt-head-center dt-body-justify",
+                width: '15%',
+                "render": function (data, type, row) {
+                    return row.fname + " " + row.lname;
                 }
                 
             },
@@ -479,41 +508,42 @@
                             return '<span class="badge bg-secondary">Archived</span>';
                         }
                     }
-                },
-                {
-                    "title": "Actions",
-                    "data": "ID",
-                    "className": "dt-center",
-                    "render": function (data, type, row) {
-                        if (userLevel !== 'VIEWER') {
+                }
+            },
+            {
+                "title": "Actions",
+                "data": "ID",
+                "className": "dt-center",
+                "render": function (data, type, row) {
+                    if (userLevel !== 'VIEWER') {
                         var acter = '<div class="btn-group">' +
                             '<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">' +
                             'Actions' +
                             '</button>' +
                             '<ul class="dropdown-menu">' +
                             '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>';
-                            if (userLevel !== 'ENCODER') {
+                        if (userLevel !== 'ENCODER') {
                             // Add buttons for all levels except ENCODER
                             acter += '<li><button type="button" class="dropdown-item" onclick="activate(' + row.ID + ')"><i class="fa-solid fa-check"></i> Activate</button></li>' +
                                 '<li><button type="button" class="dropdown-item" onclick="deactivate(' + row.ID + ')"><i class="fa-solid fa-xmark"></i> Deactivate</button></li>' +
                                 '<li><button type="button" class="dropdown-item" onclick="reset_password(' + row.ID + ')"><i class="fa-solid fa-lock"></i> Reset password</button></li>' +
                                 '<li><button type="button" class="dropdown-item" onclick="del(' + row.ID + ')"><i class="fa-solid fa-trash"></i> Delete user</button></li>';
-                            }
-                            
-                            acter += '</ul>' +
+                        }
+
+                        acter += '</ul>' +
                             '</div>';
                         return acter;
-                        } else {
-                            return '-'; // Return blank for VIEWER level users
-                        }
+                    } else {
+                        return '-'; // Return blank for VIEWER level users
                     }
-                },
-            ]
-        });
-        var sltdRow = null;
+                }
+            },
+        ]
+    });
+    var sltdRow = null;
 
-        $('#tbluser tbody').on('mouseover', 'tr', function () {
-            sltdRow = tbl.row(this).data();
+    $('#tbluser tbody').on('mouseover', 'tr', function () {
+        sltdRow = tbl.row(this).data();
     });
 
 // Attach a submit handler to the form
