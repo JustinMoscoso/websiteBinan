@@ -1,9 +1,0 @@
-CRITICAL - 2024-05-08 08:42:19 --> Invalid file: "admin/admn_news_events.php"
-in SYSTEMPATH\Exceptions\FrameworkException.php on line 33.
- 1 SYSTEMPATH\View\View.php(201): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('admin/admn_news_events.php')
- 2 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/admn_news_events', [], true)
- 3 APPPATH\Controllers\Admin.php(18): view('admin/admn_news_events')
- 4 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->admn_news_events()
- 5 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
- 6 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
- 7 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
