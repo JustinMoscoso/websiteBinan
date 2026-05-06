@@ -259,6 +259,16 @@
             "url": "<?php echo base_url('admin/ajax/get_career'); ?>",
             "type": "POST"
         },
+                initComplete: function() {
+            var searchInput = $('#tblcareer_filter input[type="search"]');
+            searchInput.attr('placeholder', 'Search Category...');
+            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.css({
+                'width': '350px',           // Make it wider
+                'border': '2px solid #388e3c', // Distinct brand-green border
+                'margin-left': '10px'       // Add space from the "Search:" label
+            });
+        },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
             { "title": "Level", "data": "level",
