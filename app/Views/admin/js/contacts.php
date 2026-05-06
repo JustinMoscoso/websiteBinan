@@ -523,9 +523,24 @@
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_contact'); ?>",
             "type": "POST",
+            "data": function (d) {
+                d.query = $('#searchContact').val();
+                d.category = $('[name="contactCategory"]').val();
+                d.status = $('[name="contactStatus"]').val();
+            },
             "dataSrc": function (json) {
                 return json.data;
             }
+        },
+        initComplete: function() {
+            var searchInput = $('#tblhotlines_filter input[type="search"]');
+            searchInput.attr('placeholder', 'Search Category...');
+            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.css({
+                'width': '350px',           // Make it wider
+                'border': '2px solid #388e3c', // Distinct brand-green border
+                'margin-left': '10px'       // Add space from the "Search:" label
+            });
         },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
@@ -598,4 +613,34 @@
         $('#tblhotlines tbody').on('mouseover', 'tr', function () {
             sltdRow = tbl.row(this).data();
     });
+
+    // Attach a submit handler to the Contact form
+$('#contactSearchForm').on('submit', function(e) {
+    e.preventDefault(); // stop page reload
+
+    // Grab values
+    const query   = $('#searchContact').val().trim();
+    const category = $('[name="contactCategory"]').val();
+    const status   = $('[name="contactStatus"]').val();
+
+    console.log("Searching for:", query, "Category:", category, "Status:", status);
+
+    // Example: reload your DataTable with filters
+    tbl.ajax.reload();
+});
+
+// Clear Filters button
+$('#contactSearchForm button[type="reset"]').on('click', function() {
+    // reset form fields
+    $('#contactSearchForm')[0].reset();
+
+    // also clear individual inputs if needed
+    $('#searchContact').val('');
+    $('[name="contactCategory"]').val('');
+    $('[name="contactStatus"]').val('');
+
+    // reload table back to default
+    tbl.ajax.reload();
+});
+
 </script>

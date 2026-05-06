@@ -376,6 +376,16 @@
                 }
             }
         },
+        initComplete: function() {
+            var searchInput = $('#tblmayor_filter input[type="search"]');
+            searchInput.attr('placeholder', 'Search Category...');
+            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.css({
+                'width': '350px',           // Make it wider
+                'border': '2px solid #388e3c', // Distinct brand-green border
+                'margin-left': '10px'       // Add space from the "Search:" label
+            });
+        },
         columns: [
             { "title": "ID", "data": "ID", "className": "dt-center", width: '20%', "visible": false },
             { "title": "Section", "data": "section", "className": "dt-body-justify", width: '10%' },

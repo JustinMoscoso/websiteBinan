@@ -7,17 +7,28 @@
     </ol>
   </nav>
 </div><!-- End Page Title -->
-
+<style>
+    /* Standout styling for the DataTables search box */
+    .dataTables_filter input[type="search"] {
+        width: 350px !important;
+        border: 2px solid #388e3c !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
+        font-size: 1rem !important;
+        margin-left: 10px !important;
+    }
+</style>
 <!-- Search Filters UI Start -->
 <div class="container-fluid py-3">
     <div class="card mb-4">
         <div class="card-body">
             <form id="contactSearchForm">
                 <div class="row g-2 align-items-end">
-                    <div class="col-md-6">
+                <!-- Reduced from col-lg-6 to col-lg-5 -->
+                <div class="col-lg-6 col-md-12">
                         <input type="text" class="form-control" id="searchContact" placeholder="Search Contact / Office...">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-lg-2 col-md-6">
                         <select class="form-select" name="contactCategory">
                             <option selected value="">- Category -</option>
                             <option value="BRGY">Barangay</option>
@@ -25,7 +36,7 @@
                             <option value="Others">Others</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-lg-2 col-md-6">
                         <select class="form-select" name="contactStatus">
                             <option selected value="">- Status -</option>
                             <option value="ACTIVE">Active</option>
@@ -33,12 +44,14 @@
                             <option value="ARCHIVED">Archived</option>
                         </select>
                     </div>
-                    <div class="col-md-1">
-                        <button type="reset" class="btn btn-danger w-100">Clear Filters</button>
-                    </div>
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-primary w-100" id="searchContactBtn">Search</button>
-                    </div>
+                    <div class="col-lg-2 col-md-12 d-flex gap-2">
+                <button type="reset" class="btn btn-danger text-nowrap" style="height:38px; width: 60%; font-size: 14px; padding: 0 5px;">
+                    Clear Filters
+                </button>
+                <button type="submit" class="btn btn-primary text-nowrap" id="searchBtn" style="height:38px; width: 40%; font-size: 14px; padding: 0 5px;">
+                    Search
+                </button>
+                </div>
                 </div>
             </form>
         </div>
