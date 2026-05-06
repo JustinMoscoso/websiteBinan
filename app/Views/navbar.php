@@ -82,8 +82,7 @@ if (strpos($currentURL, '/home') == true) {
                 <li class="nav-item"><a class="navi nav-link fw-bold <?= ($currentpage == 'careers') ? 'active' : ''; ?>" href="<?= base_url('/careers') ?>">CAREERS</a></li>
                 <li class="nav-item"><a class="navi nav-link fw-bold" href="<?= base_url('/jobs') ?>">JOBS</a></li>
                 <li class="nav-item"><a class="navi nav-link fw-bold <?= ($currentpage == 'invest') ? 'active' : ''; ?>" href="<?= base_url('/invest') ?>">INVEST</a></li>
-                <!--<li class="nav-item"><a class="navi nav-link fw-bold <?php /*= ($currentpage == 'contact') ? 'active' : ''; */?>" href="<?php /*= base_url('/contact') */?>">CONTACT</a></li>-->
-                <li class="nav-item"><a class="navi nav-link fw-bold <?= ($currentpage == 'contact') ? 'active' : ''; ?>" href="#">CONTACT</a></li>
+                <li class="nav-item"><a class="navi nav-link fw-bold <?= ($currentpage == 'contact') ? 'active' : ''; ?>" href="<?= base_url('/contact') ?>">CONTACT</a></li>
             </ul>
         </div>
     </div>
