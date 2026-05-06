@@ -249,7 +249,7 @@ $('#jobModal').on('hidden.bs.modal', function () {
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 740px) {
     .input-group {
         margin-bottom: 10px;
     }

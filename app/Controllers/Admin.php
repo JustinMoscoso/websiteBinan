@@ -761,12 +761,36 @@ public function getVisitCount()
                     }
                     
                 } else {
-                    $hotline_d = $hot_m
+                    $query_param = $this->request->getPost('query');
+                    $category_param = $this->request->getPost('category');
+                    $status_param = $this->request->getPost('status');
+
+                    $builder = $hot_m
                             ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
                             ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
-                            ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left')
-                            ->orderBy('hotlines.created_date', 'desc') 
-                            ->findAll();
+                            ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left');
+
+                    if (!empty($query_param)) {
+                        $builder->groupStart()
+                                ->like('barangay_content.brgy_name', $query_param)
+                                ->orLike('department_content.dept_name', $query_param)
+                                ->orLike('hotlines.content_ref_id', $query_param)
+                                ->orLike('hotlines.number', $query_param)
+                                ->groupEnd();
+                    }
+
+                    if (!empty($category_param)) {
+                        $section_map = ['BRGY' => 'Barangay', 'DEPT' => 'Department', 'Others' => 'Others'];
+                        $section = $section_map[$category_param] ?? $category_param;
+                        $builder->where('hotlines.section', $section);
+                    }
+
+                    if (!empty($status_param)) {
+                        $builder->where('hotlines.status', $status_param);
+                    }
+
+                    $hotline_d = $builder->orderBy('hotlines.created_date', 'desc')->findAll();
+
                     foreach ($hotline_d as $hotl) {
                         $data[] = $hotl;
                     }
