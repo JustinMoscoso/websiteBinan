@@ -7,7 +7,17 @@
         </ol>
     </nav>
 </div><!-- End Page Title -->
-
+<style>
+    /* Standout styling for the DataTables search box */
+    .dataTables_filter input[type="search"] {
+        width: 350px !important;
+        border: 2px solid #388e3c !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
+        font-size: 1rem !important;
+        margin-left: 10px !important;
+    }
+</style>
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
