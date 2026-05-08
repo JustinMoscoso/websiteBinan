@@ -12,7 +12,7 @@
     <?php pre_styles('home'); ?>
 </head>
 
-<body>
+
 <?php include "navbar.php"; ?>
 <?php include "header.php"; ?>
 <?php include_header('Mission & Vision', null, [
