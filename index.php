@@ -1,6 +1,5 @@
 <?php
 
-/*phpinfo();*/
-header("Location: public/");
+phpinfo();
 
 ?>

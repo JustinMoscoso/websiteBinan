@@ -66,7 +66,7 @@
                 <!-- Right Column: Contact Form -->
                 <div class="col-lg-7 contact-form-col">
                     <h3>Send us a message</h3>
-                    <form action="<?= base_url('contact/send') ?>" method="POST">
+                    <form id="contactForm" action="<?= base_url('contact/send') ?>" method="POST">
                         <div class="row">
                             <div class="col-md-6 form-floating mb-3">
                                 <input type="text" name="name" class="form-control" id="name" required

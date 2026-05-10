@@ -21,10 +21,9 @@ function pre_styles($mode = 'default')
             site_url("assets/admin/vendor/quill/quill.snow.css"),
             site_url("assets/admin/vendor/quill/quill.bubble.css"),
             site_url("assets/css/stylesheet.css?v=2"),
-            //site_url("assets/css/hotlines.css?v=2"),
+            site_url("assets/css/hotlines.css?v=2"),
             site_url("assets/css/contact_page.css?v=" . time()),
             site_url("assets/css/fulldisc_page.css?v=" . time()),
-            site_url("assets/css/custom.css"),
         );
     } elseif ($mode == 'admin') {
         $css = array(
@@ -76,7 +75,7 @@ function pre_scripts($mode = 'default')
             site_url("assets/admin/vendor/quill/quill.min.js"),
             site_url("assets/js/main.js"),
             site_url("assets/js/contact_page.js?v=" . time()),
-            /*site_url("assets/js/fulldisc_page.js?v=" . time()),*/
+            site_url("assets/js/fulldisc_page.js?v=" . time()),
             /*
             site_url("assets/vendor/aos/aos.js"),
             site_url("assets/vendor/glightbox/js/glightbox.min.js"),

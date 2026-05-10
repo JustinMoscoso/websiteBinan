@@ -63,6 +63,16 @@ $(document).ready(function() {
                 }
             }
         },
+                initComplete: function() {
+            var searchInput = $('#tbljobs_filter input[type="search"]');
+            searchInput.attr('placeholder', 'Search Category...');
+            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.css({
+                'width': '350px',           // Make it wider
+                'border': '2px solid #388e3c', // Distinct brand-green border
+                'margin-left': '10px'       // Add space from the "Search:" label
+            });
+        },
         "columns": [
             {
                 "title": "Job Title",
@@ -118,35 +128,20 @@ $(document).ready(function() {
                 "data": null,
                 "orderable": false,
                 "render": function(data, type, row) {
-                    let actions = `
+                    return `
                         <div class="dropdown">
                           <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu">
                             <li><a class="dropdown-item view-job" href="#" data-id="${row.ID}"><i class="bi bi-eye me-1"></i>View Details</a></li>
-                    `;
-
-                    if (userLevel !== 'VIEWER') {
-                        actions += `
                             <li><a class="dropdown-item edit-job" href="#" data-id="${row.ID}"><i class="bi bi-pencil me-1"></i>Edit</a></li>
-                        `;
-
-                        // Only add status and delete for roles higher than ENCODER
-                        if (userLevel !== 'ENCODER') {
-                            actions += `
-                                <li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}"><i class="bi bi-toggle-${row.status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${row.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger delete-job" href="#" data-id="${row.ID}"><i class="bi bi-trash me-1"></i>Delete</a></li>
-                            `;
-                        }
-                    }
-
-                    actions += `
+                            <li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}"><i class="bi bi-toggle-${row.status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${row.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger delete-job" href="#" data-id="${row.ID}"><i class="bi bi-trash me-1"></i>Delete</a></li>
                           </ul>
                         </div>
                     `;
-                    return actions;
                 }
             }
         ],

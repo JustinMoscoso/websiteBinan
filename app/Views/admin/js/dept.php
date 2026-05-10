@@ -524,6 +524,16 @@
             return json.data || [];
         }
     },
+    initComplete: function() {
+            var searchInput = $('#tbldept_filter input[type="search"]');
+            searchInput.attr('placeholder', 'Search Category...');
+            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.css({
+                'width': '350px',           // Make it wider
+                'border': '2px solid #388e3c', // Distinct brand-green border
+                'margin-left': '10px'       // Add space from the "Search:" label
+            });
+        },
     columns: [
         { "title": "Department ID", "data": "ID", "visible": false },
         { "title": "Dept. Name", "data": "dept_name", width: '30%' },
@@ -583,17 +593,21 @@
         sltdRow = deptTable.row(this).data();
     });
 
-    // Search button click handler
-$('#searchDeptBtn').click(function() {
-    applyDeptFilters();
+// Attach a submit handler to the form
+$('#departmentSearchForm').on('submit', function(e) {
+    e.preventDefault(); // stop page reload
+    applyDeptFilters(); // run your search logic
 });
 
-// Enter key in search fields
-$('#searchDept').keypress(function(e) {
-    if (e.which === 13) { // Enter key
-        applyDeptFilters();
-    }
+// Optional: Clear Filters button
+$('button[type="reset"]').on('click', function() {
+    // reset form fields
+    $('#departmentSearchForm')[0].reset();
+
+    // also reset your table or search results
+    // $('#tblDept').DataTable().search('').draw();
 });
+
 
 function applyDeptFilters() {
     var searchTerm = $('#searchDept').val().trim().toLowerCase();

@@ -366,6 +366,16 @@
                 d.status = $('select[name="status"]').val();
             }
         },
+        initComplete: function() {
+            var searchInput = $('#tblfdp_filter input[type="search"]');
+            searchInput.attr('placeholder', 'Search Category...');
+            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.css({
+                'width': '350px',           // Make it wider
+                'border': '2px solid #388e3c', // Distinct brand-green border
+                'margin-left': '10px'       // Add space from the "Search:" label
+            });
+        },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
             /*{ "title": "Created", "data": "created_date", 
@@ -434,16 +444,36 @@
         sltdRow = tbl.row(this).data();
     });
 
-    // Search form submit: reload table with filters
-    $('#docSearchForm').on('submit', function(e) {
-        e.preventDefault();
-        tbl.ajax.reload();
-    });
-    // Clear filters: reload table
-    $('#docSearchForm').on('reset', function() {
-        setTimeout(function() {
-            tbl.ajax.reload();
-        }, 0);
-    });
+    // Attach a submit handler to the Document form
+$('#docSearchForm').on('submit', function(e) {
+    e.preventDefault(); // stop page reload
+
+    // Grab values
+    const query      = $('[name="search"]').val().trim();
+    const frequency  = $('[name="frequency"]').val();
+    const category   = $('[name="file_category"]').val();
+    const status     = $('[name="status"]').val();
+
+    console.log("Searching for:", query, "Frequency:", frequency, "Category:", category, "Status:", status);
+
+    // Example: reload your DataTable with filters
+    tbl.ajax.reload();
+});
+
+// Clear Filters button
+$('#docSearchForm button[type="reset"]').on('click', function() {
+    // reset form fields
+    $('#docSearchForm')[0].reset();
+
+    // also clear individual inputs if needed
+    $('[name="search"]').val('');
+    $('[name="frequency"]').val('');
+    $('[name="file_category"]').val('');
+    $('[name="status"]').val('');
+
+    // reload table back to default
+    tbl.ajax.reload();
+});
+
 
 </script>

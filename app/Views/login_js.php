@@ -51,9 +51,6 @@ $(document).ready(function () {
         }, function (result) {
             Swal.close();
 
-            console.log(result.status);
-            console.log(result.message);
-
             if (result.status !== 1) {
                 Swal.fire({
                     icon: 'warning',
@@ -66,11 +63,6 @@ $(document).ready(function () {
                 location.href = param ?? '<?php echo base_url('admin/dashboard'); ?>';
             }
         }).fail(function (e) {
-            if (e.status === 0) {
-                return;
-            }
-            console.log("Error: " + e.status);
-            console.log("Status: " + e.statusText);
             Swal.fire({
                 icon: 'error',
                 title: e.status + ' ' + e.statusText,

@@ -57,26 +57,28 @@ class Auther extends BaseController
             $username = $this->request->getPost('usern');
             $password = $this->request->getPost('passw');
 
+            $status = 0;
+            $message = 'Invalid login credentials.';
+
             if (empty($username) || empty($password)) {
                 $message = 'Username and password are required.';
             }
-            else{
-                $user = $userAccountModel->where('username', $username)
-                    ->orWhere('email', $username)
-                    ->first();
 
-                if ($user && password_verify($password, $user->pass)) {
-                    if ($user->status !== 'ACTIVE') {
-                        $message = 'User account is not active.';
-                    } else {
-                        // Set session
-                        $this->session->set('user', $user);
-                        $status = 1;
-                        $message = 'Login successful.';
-                    }
+            $user = $userAccountModel->where('username', $username)
+                                     ->orWhere('email', $username)
+                                     ->first();
+
+            if ($user && password_verify($password, $user->pass)) {
+                if ($user->status !== 'ACTIVE') {
+                    $message = 'User account is not active.';
                 } else {
-                    $message = 'Invalid username or password.';
+                    // Set session
+                    $this->session->set('user', $user);
+                    $status = 1;
+                    $message = 'Login successful.';
                 }
+            } else {
+                $message = 'Invalid username or password.';
             }
         }
 

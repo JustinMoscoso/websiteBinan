@@ -27,8 +27,6 @@ $routes->set404Override();
  * --------------------------------------------------------------------
  */
 
-$routes->get('test', 'Home::test');
-
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
@@ -42,7 +40,9 @@ $routes->get('/departmentcontent/(:num)', 'Home::departmentcontent/$1');
 $routes->get('/services', 'Home::services');
 $routes->get('/servicescontent', 'Home::servicescontent');
 $routes->get('/about', 'Home::about');
-$routes->get('/contact', 'Home::contact');
+$routes->get('contact', 'Home::contact');
+
+$routes->post('contact/send', 'Home::send');
 $routes->get('/fulldisc', 'Home::fulldisc');
 // $routes->get('/jobs', 'Home::jobs');
 // $routes->get('/jobdetails/(:num)', 'Home::jobDetails/$1');
@@ -65,7 +65,6 @@ $routes->get('/investmentopp', 'Home::investmentopp');
 $routes->get('/safetyseal', 'Home::safetyseal');
 $routes->get('/safetysealprocess', 'Home::safetysealprocess');
 $routes->get('/login', 'Auther::login');
-$routes->get('/admin', 'Auther::login');
 $routes->get('/logout', 'Auther::logout');
 $routes->get('/history', 'Home::history');
 $routes->get('/hotlines', 'Home::hotlines');
@@ -110,8 +109,8 @@ $routes->group('admin', function ($routes) {
     $routes->get('about', 'Admin::mode/about');
 
     $routes->get('map', 'Admin::mode/map');
-    
-    $routes->get('getUserCount', 'Admin::getUserCount'); 
+
+    $routes->get('getUserCount', 'Admin::getUserCount');
     $routes->get('getRecentNews', 'Admin::getRecentNews');
     $routes->get('getRecentAnns', 'Admin::getRecentAnns');
 
