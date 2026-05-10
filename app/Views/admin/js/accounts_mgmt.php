@@ -433,112 +433,207 @@
         select: false,
         searching: true,
         ordering: true,
-        "order": [],
+        order: [],
         pageLength: 10,
         processing: true,
+
         ajax: {
-            "url": "<?php echo base_url('admin/ajax/get_users'); ?>",
-            "type": "POST",
-            "data": function (d) {
+            url: "<?php echo base_url('admin/ajax/get_users'); ?>",
+            type: "POST",
+            data: function (d) {
                 return {
                     searchUser: $('#searchUser').val(),
                     searchStatus: $('#searchStatus').val(),
                     searchUserLevel: $('#searchUserLevel').val()
                 };
             },
-            "dataSrc": function (json) {
+            dataSrc: function (json) {
                 return json.data;
             }
         },
+
         columns: [
-            { "title": "User ID", "data": "ID", "visible": false },
-            { "title": "username", "data": "username" },
             {
-                "title": "Name",
-                "data": "fname",
-                "className": "dt-head-center dt-body-justify",
+                title: "User ID",
+                data: "ID",
+                visible: false
+            },
+
+            {
+                title: "Username",
+                data: "username"
+            },
+
+            {
+                title: "Name",
+                data: "fname",
+                className: "dt-head-center dt-body-justify",
                 width: '15%',
-                "render": function (data, type, row) {
+                render: function (data, type, row) {
                     return row.fname + " " + row.lname;
                 }
-                
             },
-            initComplete: function() {
-            var searchInput = $('#tblfdp_filter input[type="search"]');
-            searchInput.attr('placeholder', 'Search Category...');
-            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
-            searchInput.css({
-                'width': '350px',           // Make it wider
-                'border': '2px solid #388e3c', // Distinct brand-green border
-                'margin-left': '10px'       // Add space from the "Search:" label
-            });
-        },
-            columns: [
-                { "title": "User ID", "data": "ID", "visible": false },
-                { "title": "username", "data": "username"},
-                { 
-                    "title": "Name", 
-                    "data": "fname",
-                    "className": "dt-head-center dt-body-justify",
-                    width: '15%',
-                    "render": function (data, type, row) {
-                        return row.fname + " " + row.lname;
-                    }
-                },
-                { 
-                    "title": "Department", 
-                    "data": "dept",
-                    "className": "dt-head-center dt-body-justify",
-                    width: '30%',
-                },
-                { "title": "Email", "data": "email" },
-                { "title": "User level", "data": "user_lvl" },
-                { 
-                    "title": "Status", 
-                    "data": "status",
-                    "className": "dt-center", 
-                    width: '10%',
-                    "render": function (data, type, row) {
-                        var status = data;
-                        if (status == 'ACTIVE') {
-                            return '<span class="badge bg-success">Active</span>';
-                        } else if (status == 'INACTIVE') {
-                            return '<span class="badge bg-danger">Inactive</span>';
-                        } else {
-                            return '<span class="badge bg-secondary">Archived</span>';
-                        }
-                    }
-                }
-            },
-            {
-                "title": "Actions",
-                "data": "ID",
-                "className": "dt-center",
-                "render": function (data, type, row) {
-                    if (userLevel !== 'VIEWER') {
-                        var acter = '<div class="btn-group">' +
-                            '<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">' +
-                            'Actions' +
-                            '</button>' +
-                            '<ul class="dropdown-menu">' +
-                            '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>';
-                        if (userLevel !== 'ENCODER') {
-                            // Add buttons for all levels except ENCODER
-                            acter += '<li><button type="button" class="dropdown-item" onclick="activate(' + row.ID + ')"><i class="fa-solid fa-check"></i> Activate</button></li>' +
-                                '<li><button type="button" class="dropdown-item" onclick="deactivate(' + row.ID + ')"><i class="fa-solid fa-xmark"></i> Deactivate</button></li>' +
-                                '<li><button type="button" class="dropdown-item" onclick="reset_password(' + row.ID + ')"><i class="fa-solid fa-lock"></i> Reset password</button></li>' +
-                                '<li><button type="button" class="dropdown-item" onclick="del(' + row.ID + ')"><i class="fa-solid fa-trash"></i> Delete user</button></li>';
-                        }
 
-                        acter += '</ul>' +
-                            '</div>';
-                        return acter;
-                    } else {
-                        return '-'; // Return blank for VIEWER level users
+            {
+                title: "Department",
+                data: "dept",
+                className: "dt-head-center dt-body-justify",
+                width: '20%'
+            },
+
+            {
+                title: "Email",
+                data: "email"
+            },
+
+            {
+                title: "User Level",
+                data: "user_lvl"
+            },
+
+            {
+                title: "Status",
+                data: "status",
+                className: "dt-center",
+                width: '10%',
+                render: function (data, type, row) {
+
+                    if (data === 'ACTIVE') {
+                        return '<span class="badge bg-success">Active</span>';
                     }
+
+                    if (data === 'INACTIVE') {
+                        return '<span class="badge bg-danger">Inactive</span>';
+                    }
+
+                    return '<span class="badge bg-secondary">Archived</span>';
                 }
             },
-        ]
+
+            {
+                title: "Actions",
+                data: "ID",
+                className: "dt-center",
+
+                render: function (data, type, row) {
+
+                    if (userLevel === 'VIEWER') {
+                        return '-';
+                    }
+
+                    let acter = `
+                    <div class="btn-group">
+                        <button type="button"
+                                class="btn btn-primary dropdown-toggle btn-sm"
+                                data-bs-toggle="dropdown">
+                            Actions
+                        </button>
+
+                        <ul class="dropdown-menu">
+
+                            <li>
+                                <button type="button"
+                                        class="dropdown-item"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal"
+                                        onclick="edit(${row.ID})">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    Manage
+                                </button>
+                            </li>
+                `;
+
+                    if (userLevel !== 'ENCODER') {
+
+                        acter += `
+                        <li>
+                            <button type="button"
+                                    class="dropdown-item"
+                                    onclick="activate(${row.ID})">
+                                <i class="fa-solid fa-check"></i>
+                                Activate
+                            </button>
+                        </li>
+
+                        <li>
+                            <button type="button"
+                                    class="dropdown-item"
+                                    onclick="deactivate(${row.ID})">
+                                <i class="fa-solid fa-xmark"></i>
+                                Deactivate
+                            </button>
+                        </li>
+
+                        <li>
+                            <button type="button"
+                                    class="dropdown-item"
+                                    onclick="reset_password(${row.ID})">
+                                <i class="fa-solid fa-lock"></i>
+                                Reset Password
+                            </button>
+                        </li>
+
+                        <li>
+                            <button type="button"
+                                    class="dropdown-item"
+                                    onclick="del(${row.ID})">
+                                <i class="fa-solid fa-trash"></i>
+                                Delete User
+                            </button>
+                        </li>
+                    `;
+                    }
+
+                    acter += `
+                        </ul>
+                    </div>
+                `;
+
+                    return acter;
+                }
+            }
+        ],
+
+        initComplete: function () {
+
+            var searchInput = $('#tbluser_filter input[type="search"]');
+
+            searchInput.attr('placeholder', 'Search User...');
+
+            searchInput.removeClass('form-control-sm');
+
+            searchInput.css({
+                width: '350px',
+                border: '2px solid #388e3c',
+                marginLeft: '10px'
+            });
+        }
+    });
+
+    var sltdRow = null;
+
+    $('#tbluser tbody').on('mouseover', 'tr', function () {
+        sltdRow = tbl.row(this).data();
+    });
+
+    // Search Form Submit
+    $('#userSearchForm').on('submit', function (e) {
+
+        e.preventDefault();
+
+        tbl.ajax.reload();
+    });
+
+    // Clear Filters
+    $('#userSearchForm button[type="reset"]').on('click', function () {
+
+        $('#userSearchForm')[0].reset();
+
+        $('#searchUser').val('');
+        $('#searchStatus').val('');
+        $('#searchUserLevel').val('');
+
+        tbl.ajax.reload();
     });
     var sltdRow = null;
 
@@ -546,25 +641,25 @@
         sltdRow = tbl.row(this).data();
     });
 
-// Attach a submit handler to the form
-$('#userSearchForm').on('submit', function(e) {
-    e.preventDefault(); // stop page reload
-    tbl.ajax.reload();  // unified reload logic
-});
+    // Attach a submit handler to the form
+    $('#userSearchForm').on('submit', function (e) {
+        e.preventDefault(); // stop page reload
+        tbl.ajax.reload();  // unified reload logic
+    });
 
-// Clear Filters button
-$('#userSearchForm button[type="reset"]').on('click', function() {
-    // reset form fields
-    $('#userSearchForm')[0].reset();
+    // Clear Filters button
+    $('#userSearchForm button[type="reset"]').on('click', function () {
+        // reset form fields
+        $('#userSearchForm')[0].reset();
 
-    // also clear individual inputs if needed
-    $('#searchUser').val('');
-    $('#searchStatus').val('');
-    $('#searchUserLevel').val('');
+        // also clear individual inputs if needed
+        $('#searchUser').val('');
+        $('#searchStatus').val('');
+        $('#searchUserLevel').val('');
 
-    // reload table back to default
-    tbl.ajax.reload();
-});
+        // reload table back to default
+        tbl.ajax.reload();
+    });
 
 
 </script>
