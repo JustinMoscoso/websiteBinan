@@ -664,6 +664,16 @@ var tbl = $('#tblbrgy').DataTable({
             return json.data || [];
         }
     },
+    initComplete: function() {
+            var searchInput = $('#tblbrgy_filter input[type="search"]');
+            searchInput.attr('placeholder', 'Search Category...');
+            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.css({
+                'width': '350px',           // Make it wider
+                'border': '2px solid #388e3c', // Distinct brand-green border
+                'margin-left': '10px'       // Add space from the "Search:" label
+            });
+        },
     columns: [
         { "title": "Barangay ID", "data": "ID", "visible": false },
         { "title": "Barangay", "data": "brgy_name", width: '18%' },
@@ -748,16 +758,10 @@ $('#tblbrgy tbody').on('mouseover', 'tr', function () {
     sltdRow = tbl.row(this).data();
 });
 
-// Search button click handler
-$('#searchBtn').click(function() {
+// Handle Search Form Submission (Enables Enter key support)
+$('#barangaySearchForm').on('submit', function(e) {
+    e.preventDefault();
     applyFilters();
-});
-
-// Enter key in search fields
-$('#searchBrgy').keypress(function(e) {
-    if (e.which === 13) { // Enter key
-        applyFilters();
-    }
 });
 
 // Enhanced filtering with combined search
@@ -799,7 +803,7 @@ function applyFilters() {
 }
 
 // Clear filters
-$('button[type="reset"]').click(function() {
+$('#barangaySearchForm button[type="reset"]').click(function() {
     $('#barangaySearchForm')[0].reset();
     tbl.search('').columns().search('').draw();
 });

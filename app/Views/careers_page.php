@@ -33,7 +33,7 @@
                                 <div class="col-md-6 col-12 mb-2 mb-md-0">
                                     <div class="input-group">
                                         <span class="input-group-text bg-white"><i class="fas fa-calendar-alt"></i></span>
-                                        <input type="month" id="searchInput" class="form-control" placeholder="Enter Year and Month (yyyy-mm)">
+                                        <input type="month" id="searchInput" class="form-control" placeholder="Select month and year to filter...">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
@@ -41,9 +41,8 @@
                                         <span class="input-group-text bg-white"><i class="fas fa-layer-group"></i></span>
                                         <select id="levelFilter" class="form-select">
                                             <option value="all">Show All Levels</option>
-                                            <option value="1">Level 1</option>
-                                            <option value="2">Level 2</option>
-                                            <option value="4">Level 1 & 2</option>
+                                            <option value="1">Level 1 Only</option>
+                                            <option value="2">Level 2 Only</option>
                                         </select>
                                     </div>
                                 </div>
@@ -78,24 +77,17 @@
                                     <?php if (!empty($careers)): ?>
                                         <?php foreach ($careers as $career): ?>
                                             <?php if (!empty($career->publication_date)): ?>
-                                                <tr data-pubmonth="<?= date('Y-m', strtotime($career->publication_date)) ?>" data-level="<?= $career->level; ?>">
+                                                <tr data-pubmonth="<?= date('Y-m', strtotime($career->publication_date)) ?>">
                                                     <td class="date-cell" data-order="<?= strtotime($career->publication_date) ?>" data-label="Vacancy Date">
                                                         <span class="date-main"><?= date('F j, Y', strtotime($career->publication_date)) ?></span>
                                                         <span class="date-sub"><?= date('l', strtotime($career->publication_date)) ?></span>
                                                     </td>
                                                     <td data-label="Level">
-                                                        <?php
-                                                            $level = '-';
-                                                            switch ($career->level) {
-                                                                case '1':
-                                                                    $level = 'Level 1'; break;
-                                                                case '2':
-                                                                    $level = 'Level 2'; break;
-                                                                case '4':
-                                                                    $level = 'Level 1 & 2'; break;
-                                                            }
-                                                            echo $level;
-                                                        ?>
+                                                        <?php if (isset($career->level) && $career->level): ?>
+                                                            Level <?= htmlspecialchars($career->level) ?>
+                                                        <?php else: ?>
+                                                            -
+                                                        <?php endif; ?>
                                                     </td>
                                                     <td data-label="Preview">
                                                         <div class="action-buttons">
@@ -137,8 +129,7 @@
             </div>
         </div>
     </div>
-
-    <!-- File Preview Modal -->
+        <!-- File Preview Modal -->
     <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
@@ -160,28 +151,21 @@
     <script src="<?= base_url('assets/js/careers.js'); ?>"></script>
     <script>
 // Level filter logic
-/*const levelFilter = document.getElementById('levelFilter');
+const levelFilter = document.getElementById('levelFilter');
 if (levelFilter) {
     levelFilter.addEventListener('change', function() {
-        const selected = this.value; // This is "1", "2", "4", or "all"
+        const selected = this.value;
         const rows = document.querySelectorAll('#careersTable tbody tr');
-
         rows.forEach(row => {
             const levelCell = row.querySelector('td[data-label="Level"]');
             if (!levelCell) return;
-
             const text = levelCell.textContent.trim();
-
             if (selected === 'all') {
                 row.style.display = '';
-            }
-            // New logic: Match "Level 1" and "Level 2"
-            else if (selected === '1' || selected === '2') {
-                row.style.display = (text === `Level ${selected}`) ? '' : 'none';
-            }
-            // Specific logic for your combined level
-            else if (selected === '4') {
-                row.style.display = (text === 'Level 1 & 2') ? '' : 'none';
+            } else if (text === `Level ${selected}`) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
             }
         });
     });
@@ -200,7 +184,7 @@ document.getElementById('dateSortHeader').addEventListener('click', function() {
     rows.forEach(row => tbody.appendChild(row));
     dateSortAsc = !dateSortAsc;
     document.getElementById('dateSortIcon').innerHTML = dateSortAsc ? '<i class="fas fa-sort-amount-down"></i>' : '<i class="fas fa-sort-amount-up"></i>';
-});*/
+});
 </script>
 </body>
 </html>

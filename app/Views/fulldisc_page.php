@@ -341,6 +341,5 @@
     </div>
   </div>
 </div>
-<script src="<?= base_url('assets/js/fulldisc_page.js') ?>"></script>
 </body>
 </html>

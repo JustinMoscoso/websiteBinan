@@ -2,25 +2,25 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission & Vision</title>
-    <!-- Favicons -->
-    <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="icon">
-    <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="apple-touch-icon">
-    <?php pre_styles('home'); ?>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission & Vision</title>
+  <!-- Favicons -->
+  <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="icon">
+  <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="apple-touch-icon">
+  <?php pre_styles('home'); ?>
 </head>
 
-<body><?=  pre_style('admin') ?>
+<body>
 <?php include "navbar.php"; ?>
 <?php include "header.php"; ?>
-<?php include_header('Mission & Vision', null, [
+<?php include_header('Mission & Vision',null,[
     'layout' => 'side',
     'bg_color' => '#388e3c']); ?>
 
 
-<!-- Page Content Start-->
+  <!-- Page Content Start-->
 <section data-aos="fade-up" id="about" class="my-3">
     <div class="container-fluid px-4">
         <div class="row rounded">
@@ -61,9 +61,9 @@
     </div>
 </section>
 
-<!-- Page Content End -->
-<!-- Footer -->
-<?php include "footer.php"; ?>
-<?php pre_scripts('home'); ?>
+  <!-- Page Content End -->
+  <!-- Footer -->
+  <?php include "footer.php"; ?>
+	<?php pre_scripts('home'); ?>    
 </body>
 </html>

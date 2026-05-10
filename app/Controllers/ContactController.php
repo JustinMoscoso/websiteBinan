@@ -2,8 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\ContactInquiry;
-use CodeIgniter\Controller;
+use App\Models\ContactInquiryModel;
 
 class ContactController extends BaseController
 {
@@ -14,58 +13,71 @@ class ContactController extends BaseController
 
     public function send()
     {
-        if (!$this->request->isAJAX()) {
-            return redirect()->to(base_url('contact'));
-        }
+        $model = new ContactInquiryModel();
 
-        $model = new ContactInquiry();
-        
         $data = [
-            'name'    => $this->request->getPost('name'),
-            'email'   => $this->request->getPost('email'),
+            'name' => $this->request->getPost('name'),
+            'email' => $this->request->getPost('email'),
             'subject' => $this->request->getPost('subject'),
             'message' => $this->request->getPost('message'),
         ];
 
-        // 1. Validate and Save to Database
-        if (!$model->save($data)) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'message' => implode('<br>', $model->errors())
-            ]);
-        }
+        // SAVE TO DATABASE
+        $model->save($data);
 
-        // 2. Send Email
-        $emailService = \Config\Services::email();
-        $emailConfig = config('Email');
+        // EMAIL SERVICE
+        $email = \Config\Services::email();
 
-        $emailService->setFrom($emailConfig->fromEmail, $emailConfig->fromName);
-        $emailService->setTo($emailConfig->fromEmail); // Sending to admin
-        $emailService->setReplyTo($data['email'], $data['name']);
-        $emailService->setSubject("Contact Inquiry: " . $data['subject']);
-        
-        $emailBody = "You have received a new contact inquiry.\n\n"
-                   . "Name: " . $data['name'] . "\n"
-                   . "Email: " . $data['email'] . "\n"
-                   . "Subject: " . $data['subject'] . "\n\n"
-                   . "Message:\n" . $data['message'];
-                   
-        $emailService->setMessage($emailBody);
+        // SEND TO ADMIN
+        $email->setTo('websiteBinan@gmail.com');
 
-        if ($emailService->send()) {
-            return $this->response->setJSON([
-                'status'  => 'success',
-                'message' => 'Your message has been sent successfully!'
-            ]);
-        } else {
-            // Even if email fails, we return success because it's saved in DB
-            // But we might want to log the email failure
-            log_message('error', 'Failed to send contact email: ' . $emailService->printDebugger(['headers']));
+        $email->setFrom(
+            $data['email'],
+            $data['name']
+        );
+
+        $email->setSubject(
+            'New Contact Inquiry: ' . $data['subject']
+        );
+
+        $email->setMessage("
+            Name: {$data['name']}
             
-            return $this->response->setJSON([
-                'status'  => 'success',
-                'message' => 'Your message was saved, but we had trouble sending the email notification. Our team will still check your message!'
-            ]);
-        }
+            Email: {$data['email']}
+            
+            Subject: {$data['subject']}
+            
+            Message:
+            {$data['message']}
+        ");
+
+        $email->send();
+
+        // OPTIONAL CONFIRMATION EMAIL
+        $email->clear();
+
+        $email->setTo($data['email']);
+
+        $email->setFrom(
+            'websiteBinan@gmail.com',
+            'Website Support'
+        );
+
+        $email->setSubject('We received your inquiry');
+
+        $email->setMessage("
+            Hello {$data['name']},
+
+            Thank you for contacting us.
+
+            We received your inquiry and will respond soon.
+        ");
+
+        $email->send();
+
+        return redirect()->back()->with(
+            'success',
+            'Message sent successfully!'
+        );
     }
-} 
+}

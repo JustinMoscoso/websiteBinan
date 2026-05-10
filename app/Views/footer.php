@@ -4,7 +4,7 @@
             text-decoration: underline !important;
         }
     </style>
-    <div class="container-fluid text-light pt-2 wow fadeIn footer-bg">
+    <div class="container-fluid text-light pt-2 wow fadeIn" style="background:linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent), url('<?= base_url('assets/img/footer3.jpg'); ?>') !important; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
         <div class="container pt-5">
             <div class="row g-5">
                 <!-- Logo -->

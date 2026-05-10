@@ -7,7 +7,17 @@
     </ol>
   </nav>
 </div><!-- End Page Title -->
-
+<style>
+    /* Standout styling for the DataTables search box */
+    .dataTables_filter input[type="search"] {
+        width: 350px !important;
+        border: 2px solid #388e3c !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
+        font-size: 1rem !important;
+        margin-left: 10px !important;
+    }
+</style>
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
@@ -133,15 +143,13 @@
                 <div id="editQuillDescription" class="quill-editor-full" style="height: 120px;"></div>
                 <input type="hidden" id="editDescription" name="description" required>
                         </div>
-                        <?php if ($user->user_lvl !== 'ENCODER' && $user->user_lvl !== 'VIEWER'): ?>
                         <div class="col-md-6 mb-3">
-                            <label for="editStatus" class="form-label">Status</label>
-                            <select class="form-select" id="editStatus" name="status">
+                <label for="editStatus" class="form-label">Status</label>
+                <select class="form-select" id="editStatus" name="status">
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
                             </select>
                         </div>
-                        <?php endif; ?>
                     </div>
       </div> <!-- Modal body End -->
       <div class="modal-footer">

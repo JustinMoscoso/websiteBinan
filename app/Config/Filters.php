@@ -33,7 +33,5 @@ class Filters extends BaseConfig
 
     public array $methods = [];
 
-    public array $filters = [
-        'honeypot' => ['before' => ['contact/send']],
-    ];
+    public array $filters = [];
 }

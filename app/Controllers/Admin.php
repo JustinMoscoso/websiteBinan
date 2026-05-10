@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\VisitCountModel;
+use App\Models\VisitCountModel; 
 use App\Models\UserAccount;
 use App\Models\Content;
 use App\Models\Job;
@@ -21,7 +21,6 @@ class Admin extends BaseController
 
         $this->userAccount = new UserAccount();
     }
-
     public function getOfficialDetails($id)
     {
         $model = new \App\Models\CityOfficial();
@@ -33,240 +32,190 @@ class Admin extends BaseController
             return $this->response->setJSON(['error' => 'Official not found'], 404);
         }
     }
-
-    public function mode($mode = 'dashboard')
-    {
+    public function mode($mode = 'dashboard'){
         $user = $this->session->get('user');
 
-        if (empty($user)) {
+        if(empty($user)){
             return redirect()->to(base_url('login'));
         }
 
         $data['user'] = $user;
         $data['mode'] = $mode;
 
-        if ($mode == 'audit' || $mode == 'accounts_mgmt'){
-           /* echo "<pre>";
-            var_dump($mode);*/
-            if ($user->user_lvl != 'SUPERADMIN' && $user->user_lvl != 'DEVELOPER') {
-                //var_dump($user->user_lvl);
-                //var_dump($mode);/
-                $mode = 'dashboard';
-                $data['mode'] = $mode;
-                echo "<script>alert('You don\'t have access to this module');</script>";
-            }
+        if ($mode === 'dashboard') {
+            $visitCountModel = new \App\Models\VisitCountModel();
+            $data['visit_count'] = $visitCountModel->getTodayVisitCount();
+
+            $visitDataModel = new \App\Models\VisitDataModel();
+            $filter = $this->request->getGet('filter') ?? 'today';
+            $data['filter'] = $filter;
+            $pages = [
+                '/websitebinan/public/home',              // Page 1: Home
+                '/websitebinan/public/about',             // Page 1: Mission & Vision
+                '/websitebinan/public/officials',         // Page 1: City Officials
+                '/websitebinan/public/history',           // Page 1: History
+                '/websitebinan/public/barangays',         // Page 1: Barangays
+                '/websitebinan/public/jobs',              // Page 1: Jobs
+                
+
+                '/websitebinan/public/invest',            // Page 2: Invest
+                '/websitebinan/public/contact',           // Page 2: Contact
+                '/websitebinan/public/department',        // Page 2: Departments
+                '/websitebinan/public/map',               // Page 2: Maps
+                '/websitebinan/public/fulldisc',          // Page 2: Full Disclosure Policy
+                '/websitebinan/public/careers',           // Page 2: Careers
+            ];
+
+            $visit_data = $visitDataModel->getVisitCounts($filter, $pages);
+            $data['visit_counts'] = array_map('intval', $visit_data['data']); // Force integers
+            $data['visit_labels'] = $visit_data['categories'];
+
+            // Add the top page data for the week
+            $topPage = $visitDataModel->getTopPageByWeek();
+            $data['topPage'] = $topPage;
         }
-        /*var_dump($user->user_lvl);
-        die;*/
 
         switch ($mode) {
-            case 'dashboard':
-                $data['title'] = 'Dashboard';
-
-                $visitCountModel = new \App\Models\VisitCountModel();
-                $data['visit_count'] = $visitCountModel->getTodayVisitCount();
-
-                $visitDataModel = new \App\Models\VisitDataModel();
-                $filter = $this->request->getGet('filter') ?? 'today';
-                $data['filter'] = $filter;
-                $pages = [
-                    '/websitebinan/public/home',              // Page 1: Home
-                    '/websitebinan/public/about',             // Page 1: Mission & Vision
-                    '/websitebinan/public/officials',         // Page 1: City Officials
-                    '/websitebinan/public/history',           // Page 1: History
-                    '/websitebinan/public/barangays',         // Page 1: Barangays
-                    '/websitebinan/public/jobs',              // Page 1: Jobs
-                    '/websitebinan/public/invest',            // Page 2: Invest
-                    '/websitebinan/public/contact',           // Page 2: Contact
-                    '/websitebinan/public/department',        // Page 2: Departments
-                    '/websitebinan/public/map',               // Page 2: Maps
-                    '/websitebinan/public/fulldisc',          // Page 2: Full Disclosure Policy
-                    '/websitebinan/public/careers',           // Page 2: Careers
-                ];
-
-                $visit_data = $visitDataModel->getVisitCounts($filter, $pages);
-                $data['visit_counts'] = array_map('intval', $visit_data['data']); // Force integers
-                $data['visit_labels'] = $visit_data['categories'];
-
-                // Add the top page data for the week
-                $topPage = $visitDataModel->getTopPageByWeek();
-                $data['topPage'] = $topPage;
-                break;
-            case 'contacts':
-                $data['title'] = 'Contacts';
-                break;
-            case 'accounts_mgmt':
-                $data['title'] = 'Accounts Management';
-                break;
-            case 'postcontent':
-                $data['title'] = 'Post Content';
-                break;
-            case 'mayor':
-                $data['title'] = 'Mayor\'s Content';
-                break;
-            case 'about':
-                $data['title'] = 'About';
-                break;
-            case 'brgy':
-                $data['title'] = 'Barangay';
-                break;
-            case 'services':
-                $data['title'] = 'Services';
-                break;
-            case 'dept':
-                $data['title'] = 'Department';
-                break;
-            case 'cityOff':
-                $data['title'] = 'City Officials';
-                break;
-            case 'fullDisc':
-                $data['title'] = 'Full Disclosure Policy';
-                break;
-            case 'careers':
-                $data['title'] = 'Careers';
-                break;
-            case 'jobs':
-                $data['title'] = 'Job Management';
+            case 'dashboard': $data['title'] = 'Dashboard'; break;
+            case 'contacts': $data['title'] = 'Contacts'; break;
+            case 'accounts_mgmt': $data['title'] = 'Accounts Management'; break;
+            case 'postcontent': $data['title'] = 'Post Content'; break;
+            case 'mayor': $data['title'] = 'Mayor\'s Content'; break;
+            case 'about': $data['title'] = 'About'; break;
+            case 'brgy': $data['title'] = 'Barangay'; break;
+            case 'services': $data['title'] = 'Services'; break;
+            case 'dept': $data['title'] = 'Department'; break;
+            case 'cityOff': $data['title'] = 'City Officials'; break;
+            case 'fullDisc': $data['title'] = 'Full Disclosure Policy'; break;
+            case 'careers': $data['title'] = 'Careers'; break;
+            case 'jobs': 
+                $data['title'] = 'Job Management'; 
                 // Load departments for job form
                 $deptModel = new \App\Models\Department();
                 $data['departments'] = $deptModel->where('status', 'ACTIVE')->findAll();
                 break;
-            case 'invest':
-                $data['title'] = 'Invest';
-                break;
-            case 'profile':
-                $data['title'] = 'My Profile';
-                break;
-            case 'audit':
-                $data['title'] = 'System Logs';
-                /*echo "<pre>";
-                var_dump($data);*/
-                break;
-            case 'map':
-                $data['title'] = 'Map Management';
-                break;
-            default:
-                $data['title'] = 'Unknown';
-                break;
+            case 'invest': $data['title'] = 'Invest'; break;
+            case 'profile': $data['title'] = 'My Profile'; break;
+            case 'audit': $data['title'] = 'System Logs'; break;
+            case 'map': $data['title'] = 'Map Management'; break;
+            default: $data['title'] = 'Unknown'; break;
         }
 
-        /*die;*/
         return view('admin/admin_page', $data);
     }
-
-    public function logVisit($page_url)
+        public function logVisit($page_url)
     {
         $this->logPageVisit(); // Use the base controller method
     }
 
     public function getUserCount()
-    {
-        $selectedLevel = $this->request->getGet('level');
+{
+    $selectedLevel = $this->request->getGet('level');
 
-        if ($selectedLevel && $selectedLevel !== 'ALL') {
-            $userCount = $this->userAccount
-                ->where('user_lvl', $selectedLevel)
-                ->where('status', 'Active')
-                ->countAllResults();
-        } else {
-            // Fetch all users when "ALL" is selected
-            $userCount = $this->userAccount
-                //->where('status', 'Active')
-                ->countAllResults();
-        }
-
-        $totalActiveUsers = $this->userAccount
+    if ($selectedLevel && $selectedLevel !== 'ALL') {
+        $userCount = $this->userAccount
+            ->where('user_lvl', $selectedLevel)
             ->where('status', 'Active')
             ->countAllResults();
-
-        return $this->response->setJSON([
-            'count' => $userCount,
-            'active_users' => $totalActiveUsers
-        ]);
+    } else {
+        // Fetch all users when "ALL" is selected
+        $userCount = $this->userAccount
+            //->where('status', 'Active')
+            ->countAllResults();
     }
 
-    public function getRecentNews()
-    {
-        // Corrected: Match the request key with frontend data-filter attribute
-        $filter = $this->request->getGet('filter'); // "Today", "This Month", "This Year"
-        $contentModel = new Content();
+    $totalActiveUsers = $this->userAccount
+        ->where('status', 'Active')
+        ->countAllResults();
 
-        // Ensure filter has a valid value
-        if (!$filter) {
-            $filter = "Today"; // Default to Today
-        }
+    return $this->response->setJSON([
+        'count' => $userCount,
+        'active_users' => $totalActiveUsers
+    ]);
+}
 
-        // Initialize query
-        $query = $contentModel->select('title, created_date')
-            ->where('category', 'NEWS')
-            ->where('status', 'ACTIVE')
-            ->orderBy('created_date', 'DESC');
+public function getRecentNews()
+{
+    // Corrected: Match the request key with frontend data-filter attribute
+    $filter = $this->request->getGet('filter'); // "Today", "This Month", "This Year"
+    $contentModel = new Content();
 
-        // Apply filters based on the selection
-        if ($filter === "Today") {
-            $query->where('DATE(created_date)', date('Y-m-d'));
-        } elseif ($filter === "This Month") {
-            $query->where('MONTH(created_date)', date('m'))
-                ->where('YEAR(created_date)', date('Y'));
-        } elseif ($filter === "This Year") {
-            $query->where('YEAR(created_date)', date('Y'));
-        }
-
-        // Debugging step: Print SQL query for review
-        error_log($query->getLastQuery());
-
-        return $this->response->setJSON($query->findAll());
+    // Ensure filter has a valid value
+    if (!$filter) {
+        $filter = "Today"; // Default to Today
     }
 
-    public function getRecentAnns()
-    {
-        // Corrected: Match the request key with frontend data-filter attribute
-        $filter = $this->request->getGet('filter'); // "Today", "This Month", "This Year"
-        $contentModel = new Content();
+    // Initialize query
+    $query = $contentModel->select('title, created_date')
+                          ->where('category', 'NEWS')
+                          ->where('status', 'ACTIVE')
+                          ->orderBy('created_date', 'DESC');
 
-        // Ensure filter has a valid value
-        if (!$filter) {
-            $filter = "Today"; // Default to Today
-        }
-
-        // Initialize query
-        $query = $contentModel->select('title, created_date')
-            ->where('category', 'ANNS')
-            ->where('status', 'ACTIVE')
-            ->orderBy('created_date', 'DESC');
-
-        // Apply filters based on the selection
-        if ($filter === "Today") {
-            $query->where('DATE(created_date)', date('Y-m-d'));
-        } elseif ($filter === "This Month") {
-            $query->where('MONTH(created_date)', date('m'))
-                ->where('YEAR(created_date)', date('Y'));
-        } elseif ($filter === "This Year") {
-            $query->where('YEAR(created_date)', date('Y'));
-        }
-
-        // Debugging step: Print SQL query for review
-        error_log($query->getLastQuery());
-
-        return $this->response->setJSON($query->findAll());
+    // Apply filters based on the selection
+    if ($filter === "Today") {
+        $query->where('DATE(created_date)', date('Y-m-d'));
+    } elseif ($filter === "This Month") {
+        $query->where('MONTH(created_date)', date('m'))
+              ->where('YEAR(created_date)', date('Y'));
+    } elseif ($filter === "This Year") {
+        $query->where('YEAR(created_date)', date('Y'));
     }
 
-    public function getVisitCount()
-    {
-        $filter = $this->request->getGet('filter');
-        $visitModel = new VisitCountModel();
+    // Debugging step: Print SQL query for review
+    error_log($query->getLastQuery());
 
-        if (!$filter) {
-            return $this->response->setContentType('application/json')->setJSON(['error' => 'Filter missing']);
-        }
+    return $this->response->setJSON($query->findAll());
+}
 
-        $visitCount = $visitModel->getVisitCountByFilter($filter);
+public function getRecentAnns()
+{
+    // Corrected: Match the request key with frontend data-filter attribute
+    $filter = $this->request->getGet('filter'); // "Today", "This Month", "This Year"
+    $contentModel = new Content();
 
-        return $this->response->setContentType('application/json')->setJSON(['visit_count' => $visitCount]);
+    // Ensure filter has a valid value
+    if (!$filter) {
+        $filter = "Today"; // Default to Today
     }
 
+    // Initialize query
+    $query = $contentModel->select('title, created_date')
+                          ->where('category', 'ANNS')
+                          ->where('status', 'ACTIVE')
+                          ->orderBy('created_date', 'DESC');
 
-    public function ajax($mode)
+    // Apply filters based on the selection
+    if ($filter === "Today") {
+        $query->where('DATE(created_date)', date('Y-m-d'));
+    } elseif ($filter === "This Month") {
+        $query->where('MONTH(created_date)', date('m'))
+              ->where('YEAR(created_date)', date('Y'));
+    } elseif ($filter === "This Year") {
+        $query->where('YEAR(created_date)', date('Y'));
+    }
+
+    // Debugging step: Print SQL query for review
+    error_log($query->getLastQuery());
+
+    return $this->response->setJSON($query->findAll());
+}
+
+public function getVisitCount()
+{
+    $filter = $this->request->getGet('filter');
+    $visitModel = new VisitCountModel();
+
+    if (!$filter) {
+        return $this->response->setContentType('application/json')->setJSON(['error' => 'Filter missing']);
+    }
+
+    $visitCount = $visitModel->getVisitCountByFilter($filter);
+
+    return $this->response->setContentType('application/json')->setJSON(['visit_count' => $visitCount]);
+}
+
+
+    public function ajax($mode) 
     {
         if (!$this->request->isAJAX()) {
             exit;
@@ -296,49 +245,33 @@ class Admin extends BaseController
             |
             ------------------- */
 
-            case 'get_users':
-            {
+            case 'get_users': {
                 $userId = $this->request->getPost('id');
                 $searchUser = $this->request->getPost('searchUser');
                 $searchStatus = $this->request->getPost('searchStatus');
                 $searchUserLevel = $this->request->getPost('searchUserLevel');
-
+                
                 $user_m = new \App\Models\UserAccount();
 
                 // Fetch details of a specific user if ID is provided
                 if ($userId) {
-                    $targetUser = $user_m->find($userId);
-                    if ($targetUser) {
-                        // Check if logged-in user can see this user
-                        if ($user->user_lvl !== 'DEVELOPER' && $targetUser->user_lvl === 'DEVELOPER') {
-                            $message = 'Unauthorized to view this user.';
-                        } elseif ($user->user_lvl !== 'DEVELOPER' && $user->user_lvl !== 'SUPERADMIN' && $targetUser->user_lvl === 'SUPERADMIN') {
-                            $message = 'Unauthorized to view this user.';
-                        } else {
-                            $data = $targetUser;
-                            $status = 1;
-                        }
+                    $user = $user_m->find($userId);
+                    if ($user) {
+                        $data = $user;
+                        $status = 1;
                     } else {
                         $message = 'User not found';
                     }
                 } else {
                     $builder = $user_m->orderBy('created_date', 'desc');
-
-                    // Filter based on logged-in user's level
-                    if ($user->user_lvl !== 'DEVELOPER') {
-                        $builder->where('user_lvl !=', 'DEVELOPER');
-                        if ($user->user_lvl !== 'SUPERADMIN') {
-                            $builder->where('user_lvl !=', 'SUPERADMIN');
-                        }
-                    }
-
+                    
                     // Add search filters if provided
                     if (!empty($searchUser)) {
                         $builder->groupStart()
-                            ->like('username', $searchUser)
-                            ->orLike('fname', $searchUser)
-                            ->orLike('lname', $searchUser)
-                            ->groupEnd();
+                                ->like('username', $searchUser)
+                                ->orLike('fname', $searchUser)
+                                ->orLike('lname', $searchUser)
+                                ->groupEnd();
                     }
                     if (!empty($searchStatus)) {
                         $builder->where('status', $searchStatus);
@@ -346,7 +279,7 @@ class Admin extends BaseController
                     if (!empty($searchUserLevel)) {
                         $builder->where('user_lvl', $searchUserLevel);
                     }
-
+                    
                     $users_d = $builder->findAll();
                     foreach ($users_d as $user) {
                         $data[] = $user;
@@ -355,47 +288,47 @@ class Admin extends BaseController
                 }
                 break;
             }
-
+            
             case 'get_barangay':
-            {
-                $brgyId = $this->request->getPost('id');
-                $searchBrgy = $this->request->getPost('searchBrgy');
-                $searchCapt = $this->request->getPost('searchCapt');
-                $status = $this->request->getPost('status');
-
-                $brgy_m = new \App\Models\Barangay();
-
-                if ($brgyId) {
-                    $barangay = $brgy_m->find($brgyId);
-                    if ($barangay) {
-                        $data = $barangay;
-                        $status = 1;
+                {
+                    $brgyId = $this->request->getPost('id');
+                    $searchBrgy = $this->request->getPost('searchBrgy');
+                    $searchCapt = $this->request->getPost('searchCapt');
+                    $status = $this->request->getPost('status');
+                    
+                    $brgy_m = new \App\Models\Barangay();
+    
+                    if ($brgyId) {
+                        $barangay = $brgy_m->find($brgyId);
+                        if ($barangay) {
+                            $data = $barangay;
+                            $status = 1;
+                        } else {
+                            $message = 'Barangay not found';
+                        }
                     } else {
-                        $message = 'Barangay not found';
+                        $builder = $brgy_m->orderBy('created_date', 'desc');
+                        
+                        // Add partial match filters if provided
+                        if (!empty($searchBrgy)) {
+                            $builder->like('LOWER(brgy_name)', strtolower($searchBrgy));
+                        }
+                        if (!empty($searchCapt)) {
+                            $builder->like('LOWER(brngy_capt)', strtolower($searchCapt));
+                        }
+                        if (!empty($status)) {
+                            $builder->where('status', $status);
+                        }
+                        
+                        $brgy_d = $builder->findAll();
+                        
+                        foreach ($brgy_d as $brgy) {
+                            $data[] = $brgy;
+                        }
+                        $status = 1;
                     }
-                } else {
-                    $builder = $brgy_m->orderBy('created_date', 'desc');
-
-                    // Add partial match filters if provided
-                    if (!empty($searchBrgy)) {
-                        $builder->like('LOWER(brgy_name)', strtolower($searchBrgy));
-                    }
-                    if (!empty($searchCapt)) {
-                        $builder->like('LOWER(brngy_capt)', strtolower($searchCapt));
-                    }
-                    if (!empty($status)) {
-                        $builder->where('status', $status);
-                    }
-
-                    $brgy_d = $builder->findAll();
-
-                    foreach ($brgy_d as $brgy) {
-                        $data[] = $brgy;
-                    }
-                    $status = 1;
-                }
-                break;
-            }
+                    break;
+                }   
 
             case 'get_dept':
             {
@@ -404,15 +337,15 @@ class Admin extends BaseController
                 if ($deptId) {
                     $department = $dept_m->find($deptId);
                     if ($department) {
-                        $data = (array)$department;
+                        $data = (array) $department;
                         $status = 1;
                     } else {
                         $message = 'Department not found';
                     }
                 } else {
                     $dept_d = $dept_m
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                            ->orderBy('created_date', 'desc') 
+                            ->findAll();
                     foreach ($dept_d as $dept) {
                         $data[] = $dept;
                     }
@@ -421,45 +354,45 @@ class Admin extends BaseController
                 break;
             }
             case 'get_departments':
-            {
-                $deptId = $this->request->getPost('id');
-                $searchDept = $this->request->getPost('searchDept');
-                $searchOfficer = $this->request->getPost('searchOfficer');
-                $status = $this->request->getPost('status');
-
-                $dept_m = new \App\Models\Department();
-
-                if ($deptId) {
-                    $department = $dept_m->find($deptId);
-                    if ($department) {
-                        $data = $department;
-                        $status = 1;
+                {
+                    $deptId = $this->request->getPost('id');
+                    $searchDept = $this->request->getPost('searchDept');
+                    $searchOfficer = $this->request->getPost('searchOfficer');
+                    $status = $this->request->getPost('status');
+                    
+                    $dept_m = new \App\Models\Department();
+    
+                    if ($deptId) {
+                        $department = $dept_m->find($deptId);
+                        if ($department) {
+                            $data = $department;
+                            $status = 1;
+                        } else {
+                            $message = 'Department not found';
+                        }
                     } else {
-                        $message = 'Department not found';
+                        $builder = $dept_m->orderBy('created_date', 'desc');
+                        
+                        // Add partial match filters if provided
+                        if (!empty($searchDept)) {
+                            $builder->like('LOWER(dept_name)', strtolower($searchDept));
+                        }
+                        if (!empty($searchOfficer)) {
+                            $builder->like('LOWER(officer_in_charge)', strtolower($searchOfficer));
+                        }
+                        if (!empty($status)) {
+                            $builder->where('status', $status);
+                        }
+                        
+                        $deptData = $builder->findAll();
+                        
+                        foreach ($deptData as $dept) {
+                            $data[] = $dept;
+                        }
+                        $status = 1;
                     }
-                } else {
-                    $builder = $dept_m->orderBy('created_date', 'desc');
-
-                    // Add partial match filters if provided
-                    if (!empty($searchDept)) {
-                        $builder->like('LOWER(dept_name)', strtolower($searchDept));
-                    }
-                    if (!empty($searchOfficer)) {
-                        $builder->like('LOWER(officer_in_charge)', strtolower($searchOfficer));
-                    }
-                    if (!empty($status)) {
-                        $builder->where('status', $status);
-                    }
-
-                    $deptData = $builder->findAll();
-
-                    foreach ($deptData as $dept) {
-                        $data[] = $dept;
-                    }
-                    $status = 1;
+                    break;
                 }
-                break;
-            }
             case 'get_cityoff':
             {
                 $coId = $this->request->getPost('id');
@@ -482,7 +415,7 @@ class Admin extends BaseController
                 }
                 break;
             }
-
+        
             case 'get_postcontent':
             {
                 $conId = $this->request->getPost('id');
@@ -501,15 +434,15 @@ class Admin extends BaseController
                     $search = $this->request->getPost('search');
                     $category = $this->request->getPost('category');
                     $status_filter = $this->request->getPost('status');
-
+                
                     $query = $con_m;
-
+                
                     if (!empty($search)) {
                         $query = $query->groupStart()
-                            ->like('title', $search)
-                            ->orLike('author', $search)
-                            ->orWhere('YEAR(created_date)', $search)
-                            ->groupEnd();
+                                      ->like('title', $search)
+                                      ->orLike('author', $search)
+                                      ->orWhere('YEAR(created_date)', $search)
+                                      ->groupEnd();
                     }
                     if (!empty($category)) {
                         $query = $query->where('category', $category);
@@ -517,7 +450,7 @@ class Admin extends BaseController
                     if (!empty($status_filter)) {
                         $query = $query->where('status', $status_filter);
                     }
-
+                
                     $con_d = $query->orderBy('created_date', 'desc')->findAll();
                     foreach ($con_d as $pol) {
                         $data[] = $pol;
@@ -526,16 +459,15 @@ class Admin extends BaseController
                 }
                 break;
             }
-            case 'get_audit':
-            {
+            case 'get_audit': {
                 $log_m = new \App\Models\Audit();
                 $user_m = new \App\Models\UserAccount();
-
+                
                 // Build query with user information using correct table names
                 $query = $log_m->select('audit_trails.*, useradmin.fname, useradmin.lname')
-                    ->join('useradmin', 'useradmin.ID = audit_trails.userID', 'left')
-                    ->orderBy('audit_trails.created_date', 'desc');
-
+                              ->join('useradmin', 'useradmin.ID = audit_trails.userID', 'left')
+                              ->orderBy('audit_trails.created_date', 'desc');
+                
                 $searchAction = $this->request->getPost('searchAction');
                 $searchDate = $this->request->getPost('searchDate');
                 $isSearching = false;
@@ -544,14 +476,14 @@ class Admin extends BaseController
                     $query->like('audit_trails.action', $searchAction);
                     $isSearching = true;
                 }
-
+                
                 if (!empty($searchDate)) {
                     $query->where('DATE(audit_trails.created_date)', $searchDate);
                     $isSearching = true;
                 }
 
                 if (!$isSearching) {
-                    $query->limit(200);
+                    $query->limit(200);  
                 }
 
                 $log_d = $query->find();
@@ -564,7 +496,7 @@ class Admin extends BaseController
                     } elseif ($logs->userID) {
                         $userName = 'User ID: ' . $logs->userID;
                     }
-
+                    
                     // Create the data object with user name
                     $data[] = [
                         'ID' => $logs->ID,
@@ -594,8 +526,8 @@ class Admin extends BaseController
                     }
                 } else {
                     $may_d = $may_m
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                            ->orderBy('created_date', 'desc') 
+                            ->findAll();
                     foreach ($may_d as $mayorc) {
                         $data[] = $mayorc;
                     }
@@ -607,7 +539,7 @@ class Admin extends BaseController
             {
                 $policyId = $this->request->getPost('id');
                 $policy_m = new \App\Models\FileTbl();
-
+            
                 if ($policyId) {
                     $policies = $policy_m->find($policyId);
                     if ($policies) {
@@ -622,18 +554,18 @@ class Admin extends BaseController
                     $frequency = $this->request->getPost('frequency');
                     $file_category = $this->request->getPost('file_category');
                     $status_filter = $this->request->getPost('status');
-
+            
                     // Build the query with filters
                     $query = $policy_m->where('category', 'FULLDISC');
-
+                    
                     // Apply combined search filter
                     if (!empty($search)) {
                         $query = $query->groupStart()
-                            ->like('file_name', $search)
-                            ->orWhere('year', $search)
-                            ->groupEnd();
+                                      ->like('file_name', $search)
+                                      ->orWhere('year', $search)
+                                      ->groupEnd();
                     }
-
+                    
                     // Apply frequency filter
                     if (!empty($frequency)) {
                         if ($frequency === 'ANNUAL') {
@@ -662,16 +594,16 @@ class Admin extends BaseController
                             $query = $query->whereIn('file_category', $quarterly_categories);
                         }
                     }
-
+                    
                     // Apply filters if they are provided and not empty
                     if (!empty($file_category) && $file_category !== '- File Category -') {
                         $query = $query->where('file_category', $file_category);
                     }
-
+                    
                     if (!empty($status_filter) && $status_filter !== '- Status -') {
                         $query = $query->where('status', $status_filter);
                     }
-
+            
                     $policy_d = $query->orderBy('created_date', 'desc')->findAll();
                     foreach ($policy_d as $pol) {
                         $data[] = $pol;
@@ -695,9 +627,9 @@ class Admin extends BaseController
                     }
                 } else {
                     $career_d = $career_m
-                        ->where('category', 'CAREER')
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                            ->where('category', 'CAREER')
+                            ->orderBy('created_date', 'desc') 
+                            ->findAll();
                     foreach ($career_d as $car) {
                         $data[] = $car;
                     }
@@ -720,9 +652,9 @@ class Admin extends BaseController
                     }
                 } else {
                     $inv_d = $invest_m
-                        ->where('category', 'INVEST')
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                            ->where('category', 'INVEST')
+                            ->orderBy('created_date', 'desc') 
+                            ->findAll();
                     foreach ($inv_d as $inv) {
                         $data[] = $inv;
                     }
@@ -731,82 +663,83 @@ class Admin extends BaseController
                 break;
             }
             case 'get_services':
-            {
-                $servId = $this->request->getPost('id');
-                $serv_m = new \App\Models\Services();
-
-                if ($servId) {
-                    // Existing single service lookup
-                    $serv_d = $serv_m
-                        ->select('service_content.*, barangay_content.brgy_name, department_content.dept_name')
-                        ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
-                        ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left')
-                        ->where('service_content.ID', $servId)
-                        ->first();
-
-                    if ($serv_d) {
-                        $data = $serv_d;
-                        $status = 1;
+                {
+                    $servId = $this->request->getPost('id');
+                    $serv_m = new \App\Models\Services();
+    
+                    if ($servId) {
+                        // Existing single service lookup
+                        $serv_d = $serv_m
+                            ->select('service_content.*, barangay_content.brgy_name, department_content.dept_name')
+                            ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
+                            ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left')
+                            ->where('service_content.ID', $servId)
+                            ->first();
+                        
+                        if ($serv_d) {
+                            $data = $serv_d;
+                            $status = 1;
+                        } else {
+                            $message = 'Service not found';
+                        }
                     } else {
-                        $message = 'Service not found';
-                    }
-                } else {
-                    // Build the filtered query
-                    $builder = $serv_m
-                        ->select('service_content.*, barangay_content.brgy_name, department_content.dept_name')
-                        ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
-                        ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left');
-
-                    // Service Name filter
-                    if ($this->request->getPost('service_name')) {
-                        $builder->like('service_content.serv_name', $this->request->getPost('service_name'));
-                    }
-
-                    // Category filter (Barangay/Department)
-                    if ($this->request->getPost('category')) {
-                        $category = $this->request->getPost('category');
-
-                        if ($category === 'BARANGAY') {
-                            if ($this->request->getPost('brgy')) {
-                                $builder->where('service_content.brngy_cont_ID', $this->request->getPost('brgy'));
-                            } else {
-                                $builder->where('service_content.brngy_cont_ID IS NOT NULL');
-                            }
-                        } elseif ($category === 'DEPARTMENT') {
-                            if ($this->request->getPost('dept')) {
-                                $builder->where('service_content.dept_cont_ID', $this->request->getPost('dept'));
-                            } else {
-                                $builder->where('service_content.dept_cont_ID IS NOT NULL');
+                        // Build the filtered query
+                        $builder = $serv_m
+                            ->select('service_content.*, barangay_content.brgy_name, department_content.dept_name')
+                            ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
+                            ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left');
+    
+                        // Service Name filter
+                        if ($this->request->getPost('service_name')) {
+                            $builder->like('service_content.serv_name', $this->request->getPost('service_name'));
+                        }
+    
+                        // Category filter (Barangay/Department)
+                        if ($this->request->getPost('category')) {
+                            $category = $this->request->getPost('category');
+                            
+                            if ($category === 'BARANGAY') {
+                                if ($this->request->getPost('brgy')) {
+                                    $builder->where('service_content.brngy_cont_ID', $this->request->getPost('brgy'));
+                                } else {
+                                    $builder->where('service_content.brngy_cont_ID IS NOT NULL');
+                                }
+                            } 
+                            elseif ($category === 'DEPARTMENT') {
+                                if ($this->request->getPost('dept')) {
+                                    $builder->where('service_content.dept_cont_ID', $this->request->getPost('dept'));
+                                } else {
+                                    $builder->where('service_content.dept_cont_ID IS NOT NULL');
+                                }
                             }
                         }
+    
+                        // Status filter
+                        if ($this->request->getPost('status')) {
+                            $builder->where('service_content.status', $this->request->getPost('status'));
+                        }
+    
+                        // Order by creation date
+                        $builder->orderBy('service_content.created_date', 'desc');
+    
+                        // Get results
+                        $results = $builder->findAll();
+                        
+                        $data = [];
+                        foreach ($results as $row) {
+                            $data[] = $row;
+                        }
+                        $status = 1;
                     }
-
-                    // Status filter
-                    if ($this->request->getPost('status')) {
-                        $builder->where('service_content.status', $this->request->getPost('status'));
-                    }
-
-                    // Order by creation date
-                    $builder->orderBy('service_content.created_date', 'desc');
-
-                    // Get results
-                    $results = $builder->findAll();
-
-                    $data = [];
-                    foreach ($results as $row) {
-                        $data[] = $row;
-                    }
-                    $status = 1;
+                    
+                    // Return response
+                    return $this->response->setJSON([
+                        'status' => $status ?? 0,
+                        'message' => $message ?? '',
+                        'data' => $data ?? []
+                    ]);
+                    break;
                 }
-
-                // Return response
-                return $this->response->setJSON([
-                    'status' => $status ?? 0,
-                    'message' => $message ?? '',
-                    'data' => $data ?? []
-                ]);
-                break;
-            }
             case 'get_contact':
             {
                 $hotlineId = $this->request->getPost('id');
@@ -814,11 +747,11 @@ class Admin extends BaseController
 
                 if ($hotlineId) {
                     $hotline_d = $hot_m
-                        ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
-                        ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
-                        ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left')
-                        ->where('hotlines.ID', $hotlineId)
-                        ->first();
+                    ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
+                    ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
+                    ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left')
+                    ->where('hotlines.ID', $hotlineId)
+                    ->first();
 
                     if ($hotline_d) {
                         $data = $hotline_d;
@@ -826,14 +759,38 @@ class Admin extends BaseController
                     } else {
                         $message = 'Hotline not found';
                     }
-
+                    
                 } else {
-                    $hotline_d = $hot_m
-                        ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
-                        ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
-                        ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left')
-                        ->orderBy('hotlines.created_date', 'desc')
-                        ->findAll();
+                    $query_param = $this->request->getPost('query');
+                    $category_param = $this->request->getPost('category');
+                    $status_param = $this->request->getPost('status');
+
+                    $builder = $hot_m
+                            ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
+                            ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
+                            ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left');
+
+                    if (!empty($query_param)) {
+                        $builder->groupStart()
+                                ->like('barangay_content.brgy_name', $query_param)
+                                ->orLike('department_content.dept_name', $query_param)
+                                ->orLike('hotlines.content_ref_id', $query_param)
+                                ->orLike('hotlines.number', $query_param)
+                                ->groupEnd();
+                    }
+
+                    if (!empty($category_param)) {
+                        $section_map = ['BRGY' => 'Barangay', 'DEPT' => 'Department', 'Others' => 'Others'];
+                        $section = $section_map[$category_param] ?? $category_param;
+                        $builder->where('hotlines.section', $section);
+                    }
+
+                    if (!empty($status_param)) {
+                        $builder->where('hotlines.status', $status_param);
+                    }
+
+                    $hotline_d = $builder->orderBy('hotlines.created_date', 'desc')->findAll();
+
                     foreach ($hotline_d as $hotl) {
                         $data[] = $hotl;
                     }
@@ -856,9 +813,9 @@ class Admin extends BaseController
                     }
                 } else {
                     $career_d = $career_m
-                        ->where('category', 'CAREER')
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                            ->where('category', 'CAREER')
+                            ->orderBy('created_date', 'desc') 
+                            ->findAll();
                     foreach ($career_d as $car) {
                         $data[] = $car;
                     }
@@ -881,8 +838,8 @@ class Admin extends BaseController
                     }
                 } else {
                     $abt_d = $about_m
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                            ->orderBy('created_date', 'desc') 
+                            ->findAll();
                     foreach ($abt_d as $inv) {
                         $data[] = $inv;
                     }
@@ -895,7 +852,7 @@ class Admin extends BaseController
                 $job_m = new \App\Models\Job();
                 $jobs = $job_m->orderBy('created_date', 'desc')->findAll();
                 // Ensure each job has an 'ID' field (uppercase)
-                $jobs = array_map(function ($job) {
+                $jobs = array_map(function($job) {
                     if (isset($job['ID'])) return $job;
                     if (isset($job['id'])) {
                         $job['ID'] = $job['id'];
@@ -911,12 +868,12 @@ class Admin extends BaseController
             {
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
-
+                
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-
+                
                 $job = $job_m->where('ID', $id)->first();
                 if ($job) {
                     $data = $job;
@@ -928,10 +885,6 @@ class Admin extends BaseController
             }
             case 'create_job':
             {
-                if ($user->user_lvl === 'VIEWER') {
-                    $message = 'Viewers are not allowed to create jobs';
-                    break;
-                }
                 $job_m = new \App\Models\Job();
                 $title = trim($this->request->getPost('title'));
                 $description = trim($this->request->getPost('description'));
@@ -939,41 +892,41 @@ class Admin extends BaseController
                 $type = trim($this->request->getPost('type'));
                 $publication_date = $this->request->getPost('publication_date');
                 $email = trim($this->request->getPost('email'));
-
+                
                 // Debug: Log the received data
                 log_message('debug', 'Create Job - Received data: ' . json_encode([
-                        'title' => $title,
-                        'description' => $description,
-                        'company' => $company,
-                        'type' => $type,
-                        'publication_date' => $publication_date,
-                        'email' => $email
-                    ]));
-
+                    'title' => $title,
+                    'description' => $description,
+                    'company' => $company,
+                    'type' => $type,
+                    'publication_date' => $publication_date,
+                    'email' => $email
+                ]));
+                
                 // Basic validation
                 if (empty($title) || empty($description) || empty($company) || empty($type) || empty($publication_date) || empty($email)) {
                     $message = 'All fields are required';
                     break;
                 }
-
+                
                 // Validate job type
                 if (!in_array($type, ['Full Time', 'Part Time'])) {
                     $message = 'Please select a valid job type';
                     break;
                 }
-
+                
                 // Validate email format
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Please enter a valid email address';
                     break;
                 }
-
+                
                 // Check if publication date is not in the future
                 if (strtotime($publication_date) > time()) {
                     $message = 'Publication date cannot be in the future';
                     break;
                 }
-
+                
                 $jobData = [
                     'title' => $title,
                     'description' => $description,
@@ -983,16 +936,16 @@ class Admin extends BaseController
                     'email' => $email,
                     'status' => 'ACTIVE'
                 ];
-
+                
                 // Debug: Log the data being inserted
                 log_message('debug', 'Create Job - Data to insert: ' . json_encode($jobData));
-
+                
                 // Try to create the job with better error handling
                 try {
                     // Try direct database insert first
                     $db = \Config\Database::connect();
                     $result = $db->table('jobs')->insert($jobData);
-
+                    
                     if ($result) {
                         $status = 1;
                         $message = 'Job created successfully';
@@ -1016,10 +969,6 @@ class Admin extends BaseController
             }
             case 'update_job':
             {
-                if ($user->user_lvl === 'VIEWER') {
-                    $message = 'Viewers are not allowed to update jobs';
-                    break;
-                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $title = trim($this->request->getPost('title'));
@@ -1029,37 +978,37 @@ class Admin extends BaseController
                 $publication_date = $this->request->getPost('publication_date');
                 $email = trim($this->request->getPost('email'));
                 $status = $this->request->getPost('status');
-
+                
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-
+                
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-
+                
                 // Basic validation
                 if (empty($title) || empty($description) || empty($company) || empty($publication_date) || empty($email)) {
                     $message = 'All fields are required';
                     break;
                 }
-
+                
                 // Validate email format
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Please enter a valid email address';
                     break;
                 }
-
+                
                 // Check if publication date is not in the future
                 if (strtotime($publication_date) > time()) {
                     $message = 'Publication date cannot be in the future';
                     break;
                 }
-
+                
                 $jobData = [
                     'title' => $title,
                     'description' => $description,
@@ -1067,14 +1016,10 @@ class Admin extends BaseController
                     'type' => $type,
                     'publication_date' => $publication_date,
                     'email' => $email,
+                    'status' => $status,
                     'updated_date' => date('Y-m-d H:i:s')
                 ];
-
-                // Only non-encoders and non-viewers can update the job status
-                if ($user->user_lvl !== 'ENCODER' && $user->user_lvl !== 'VIEWER' && !empty($status)) {
-                    $jobData['status'] = $status;
-                }
-
+                
                 // Try to update the job with better error handling
                 try {
                     if ($job_m->update($id, $jobData)) {
@@ -1096,36 +1041,32 @@ class Admin extends BaseController
             }
             case 'set_status_job':
             {
-                if ($user->user_lvl === 'VIEWER') {
-                    $message = 'Viewers are not allowed to change job status';
-                    break;
-                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
-
+                
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-
+                
                 if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'])) {
                     $message = 'Invalid status value';
                     break;
                 }
-
+                
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-
+                
                 $data = [
                     'status' => $statusVal,
                     'updated_date' => date('Y-m-d H:i:s'),
                 ];
-
+                
                 if ($job_m->update($id, $data)) {
                     $status = 1;
                     $message = 'Job status updated successfully';
@@ -1136,25 +1077,21 @@ class Admin extends BaseController
             }
             case 'delete_job':
             {
-                if ($user->user_lvl === 'VIEWER' || $user->user_lvl === 'ENCODER') {
-                    $message = 'You are not authorized to delete jobs';
-                    break;
-                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
-
+                
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-
+                
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-
+                
                 if ($job_m->delete($id)) {
                     $status = 1;
                     $message = 'Job deleted successfully';
@@ -1179,12 +1116,8 @@ class Admin extends BaseController
                 $passw = $this->request->getPost('txtPassword');
                 $acclvl = $this->request->getPost('txtAccLevel');
                 $dept = $this->request->getPost('txtDept');
-
-                if ($acclvl === 'DEVELOPER' && $user->user_lvl !== 'DEVELOPER') {
-                    $message = 'Unauthorized to assign DEVELOPER role.';
-                } elseif ($acclvl === 'SUPERADMIN' && $user->user_lvl !== 'DEVELOPER' && $user->user_lvl !== 'SUPERADMIN') {
-                    $message = 'Unauthorized to assign SUPERADMIN role.';
-                } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Invalid email address.';
                 } elseif ($user_m->where('username', $usern)->orWhere('email', $email)->countAllResults() > 0) {
                     $message = 'Username or email already exists.';
@@ -1227,7 +1160,7 @@ class Admin extends BaseController
 
                 // Check if the department name already exists
                 $existing_brgy = $brgy_m->where('brgy_name', $brgy_name)->first();
-
+                    
                 if ($existing_brgy) {
                     $message = 'Barangay name already exists.';
                 } else {
@@ -1242,14 +1175,14 @@ class Admin extends BaseController
                         $data = [
                             'brgy_name' => $brgy_name,
                             'brngy_capt' => $brngy_capt,
-                            'mission' => $mission,
+                            'mission' =>$mission,
                             'vision' => $vision,
                             'about' => $about,
                             'contact' => $contact,
                             'barangay_staff' => $barangay_staff,
                             'img_logo' => $logoName,
                             // 'img_capt' => $captName, // Captain image - commented out as not needed
-                            'status' => 'ACTIVE',
+                            'status' => 'ACTIVE',  
                             'created_date' => date('Y-m-d H:i:s')
                         ];
 
@@ -1257,7 +1190,7 @@ class Admin extends BaseController
                             $status = 1;
                             $message = 'Barangay created successfully';
                             $brgy_id = $brgy_m->getInsertID();
-                            $log_c['processDetails'] = 'BRGY_ID: ' . $brgy_id . ' ' . $brgy_name;
+                            $log_c['processDetails'] = 'BRGY_ID: ' .$brgy_id . ' ' . $brgy_name;
                         } else {
                             $message = 'Failed to save data';
                             return;
@@ -1285,7 +1218,7 @@ class Admin extends BaseController
 
                 // Check if the department name already exists
                 $existing_dept = $dept_m->where('dept_name', $dept_name)->first();
-
+                    
                 if ($existing_dept) {
                     $message = 'Department name already exists.';
                 } else {
@@ -1300,15 +1233,15 @@ class Admin extends BaseController
                         $data = [
                             'dept_name' => $dept_name,
                             'head' => $head,
-                            'post_title' => $post_title,
-                            'mission' => $mission,
+                            'post_title' =>$post_title,
+                            'mission' =>$mission,
                             'vision' => $vision,
                             'img_logo' => $logoName,
                             'org_chart_img' => $orgChartName,
                             'quality_policy' => $quality_policy,
                             'about' => $about,
                             'contact' => $contact,
-                            'status' => 'ACTIVE',
+                            'status' => 'ACTIVE',  
                             'created_date' => date('Y-m-d H:i:s')
                         ];
 
@@ -1404,7 +1337,7 @@ class Admin extends BaseController
                 }
                 break;
             }
-
+            
             case 'create_postcontent':
             {
                 $con_m = new \App\Models\Content();
@@ -1413,11 +1346,11 @@ class Admin extends BaseController
                 $desc = $this->request->getPost('desc');
                 $imgLogo = $this->request->getFile('newsImg');
                 $category = $this->request->getPost('content_category');
-
+            
                 $logoName = $imgLogo->getRandomName();
                 $file_category = 'POSTCONTENT';
                 $path = WRITEPATH . 'uploads/' . $file_category;
-
+        
                 if ($imgLogo->move($path, $logoName)) {
                     // Save other form data to the database
                     $data = [
@@ -1429,7 +1362,7 @@ class Admin extends BaseController
                         'status' => 'ACTIVE',
                         'created_date' => date('Y-m-d H:i:s')
                     ];
-
+        
                     if ($con_m->insert($data)) {
                         $status = 1;
                         $message = 'Post Content created successfully';
@@ -1450,10 +1383,10 @@ class Admin extends BaseController
                 $mayor_name = $this->request->getPost('myrname');
                 $section = $this->request->getPost('content_category');
                 $content = $this->request->getPost('perdata');
-
+            
                 // Check if the section already exists
                 $existing_section = $may_m->where('section', $section)->first();
-
+            
                 if ($existing_section) {
                     $message = 'Only one entry per section';
                 } else {
@@ -1465,10 +1398,10 @@ class Admin extends BaseController
                         'status' => 'ACTIVE',
                         'created_date' => date('Y-m-d H:i:s')
                     ];
-
+            
                     $file_category = 'MAYOR';
                     $path = WRITEPATH . 'uploads/' . $file_category;
-
+            
                     // Handle file upload
                     $mayor_img = $this->request->getFileMultiple('mayorimg');
                     if ($mayor_img) {
@@ -1480,7 +1413,7 @@ class Admin extends BaseController
                         }
                         $data['mayor_img'] = json_encode($uploaded_files); // Store as JSON
                     }
-
+            
                     // Insert data into the database
                     try {
                         if ($may_m->insert($data)) {
@@ -1497,14 +1430,14 @@ class Admin extends BaseController
                 }
                 break;
             }
-
+                          
             case 'create_fulldiscpol':
             {
                 $policy_m = new \App\Models\FileTbl();
                 $fc = $this->request->getPost('fileCategory');
                 $yr = $this->request->getPost('yr');
                 $qtr = $this->request->getPost('qtr');
-                $policyFile = $this->request->getFile('policyFile');
+                $policyFile =  $this->request->getFile('policyFile');
 
                 // Validate the file
                 if ($policyFile->isValid() && !$policyFile->hasMoved()) {
@@ -1516,14 +1449,14 @@ class Admin extends BaseController
                     $message = 'Failed to upload the file. Please try again.';
                     return;
                 }
-
+                
                 $data = [
-                    'file_name' => $fileName,
+                    'file_name' =>$fileName,
                     'file_category' => $fc,
                     'category' => $file_category,
                     'created_date' => date('Y-m-d H:i:s'),
                     'quarter' => $qtr,
-                    'status' => 'ACTIVE',
+                    'status' => 'ACTIVE',  
                     'year ' => $yr,
                 ];
                 try {
@@ -1538,12 +1471,12 @@ class Admin extends BaseController
                 }
                 break;
             }
-
+                
             case 'create_career':
             {
                 $career_m = new \App\Models\FileTbl();
                 $publication = $this->request->getPost('publication');
-                $careerFile = $this->request->getFile('careerFile');
+                $careerFile =  $this->request->getFile('careerFile');
                 $level = $this->request->getPost('level'); // Get level from POST
 
                 // Validate the file
@@ -1556,9 +1489,9 @@ class Admin extends BaseController
                     $message = 'Failed to upload the file. Please try again.';
                     return;
                 }
-
+                
                 $data = [
-                    'file_name' => $fileName,
+                    'file_name' =>$fileName,
                     'category' => 'CAREER',
                     'created_date' => date('Y-m-d H:i:s'),
                     'publication_date' => $publication,
@@ -1577,20 +1510,21 @@ class Admin extends BaseController
                 }
                 break;
             }
-
-
+    
+                
             case 'create_invest':
             {
                 $invest_m = new \App\Models\FileTbl();
                 $fc = $this->request->getPost('fileCategory');
-                $investFile = $this->request->getFile('investFile');
+                $investFile =  $this->request->getFile('investFile');
 
                 $existing_inv = $invest_m->where('file_category', $fc)->first();
 
                 if ($existing_inv) {
                     $status = 0;
                     $message = 'File category already exists.';
-                } else {
+                }
+                else {
                     if ($investFile->isValid() && !$investFile->hasMoved()) {
                         $fileName = $investFile->getRandomName();
                         $file_category = 'INVEST';
@@ -1602,7 +1536,7 @@ class Admin extends BaseController
                     }
 
                     $data = [
-                        'file_name' => $fileName,
+                        'file_name' =>$fileName,
                         'file_category' => $fc,
                         'category' => $file_category,
                         'created_date' => date('Y-m-d H:i:s'),
@@ -1619,7 +1553,7 @@ class Admin extends BaseController
                         $message = 'An error occurred while saving the data.';
                     }
                 }
-
+                
                 break;
             }
             case 'create_services':
@@ -1629,11 +1563,11 @@ class Admin extends BaseController
                 $content = $this->request->getPost('content');
                 $dept_cont_ID = $this->request->getPost('txtDept');
                 $brngy_cont_ID = $this->request->getPost('txtBrgy');
-
+            
                 $data = [
                     'serv_name' => $serv_name,
                     'content' => $content,
-                    'status' => 'ACTIVE',
+                    'status' => 'ACTIVE',  
                     'created_date' => date('Y-m-d H:i:s'),
                 ];
 
@@ -1666,29 +1600,29 @@ class Admin extends BaseController
                 $dept_cont_ID = $this->request->getPost('txtDept');
                 $brngy_cont_ID = $this->request->getPost('txtBrgy');
                 $others_cont_ID = $this->request->getPost('txtOthers');
-
+            
                 if ($dept_cont_ID) {
                     $content_ref_id = $dept_cont_ID;
                     $section = 'Department';
                 } else if ($brngy_cont_ID) {
                     $content_ref_id = $brngy_cont_ID;
                     $section = 'Barangay';
-                } else if ($others_cont_ID) {
+                } else if($others_cont_ID) {
                     $content_ref_id = $others_cont_ID;
                     $section = 'Others';
                 }
-
+            
                 // Check for existing hotline with the same content_ref_id and section
                 $existingHotline = $hot_m->where('section', $section)
-                    ->where('content_ref_id', $content_ref_id)
-                    ->first();
-
+                                            ->where('content_ref_id', $content_ref_id)
+                                            ->first();
+            
                 if ($existingHotline) {
                     $status = 0;
                     $message = 'A hotline for this ' . strtolower($section) . ' already exists.';
                     break;
                 }
-
+            
                 $data = [
                     'telco' => $telco,
                     'number' => $number,
@@ -1699,7 +1633,7 @@ class Admin extends BaseController
                     'content_ref_id' => $content_ref_id,
                     'created_date' => date('Y-m-d H:i:s'),
                 ];
-
+            
                 try {
                     $hot_m->save($data);
                     $status = 1;
@@ -1760,7 +1694,7 @@ class Admin extends BaseController
                 }
                 break;
             }
-
+        
             /* -------------------
             |
             | UPDATE
@@ -1779,20 +1713,16 @@ class Admin extends BaseController
                 $dept = $this->request->getPost('editDept');
                 $passw = $this->request->getPost('editPassword');
 
-                if ($acclvl === 'DEVELOPER' && $user->user_lvl !== 'DEVELOPER') {
-                    $message = 'Unauthorized to assign DEVELOPER role.';
-                } elseif ($acclvl === 'SUPERADMIN' && $user->user_lvl !== 'DEVELOPER' && $user->user_lvl !== 'SUPERADMIN') {
-                    $message = 'Unauthorized to assign SUPERADMIN role.';
-                } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Invalid email address.';
                 } else {
                     // Check for unique username or email, excluding the current user
                     $existingUser = $user_m->where('id !=', $id)
-                        ->groupStart()
-                        ->where('username', $usern)
-                        ->orWhere('email', $email)
-                        ->groupEnd()
-                        ->first();
+                    ->groupStart()
+                    ->where('username', $usern)
+                    ->orWhere('email', $email)
+                    ->groupEnd()
+                    ->first();
 
                     if ($existingUser) {
                         $message = 'Username or email already exists.';
@@ -1819,100 +1749,100 @@ class Admin extends BaseController
                             $message = 'User updated successfully.';
                             // Log activity
                             $log_c['processDetails'] = 'ACCOUNT_ID: ' . $id;
-
+                            
                         } catch (\Exception $e) {
                             $message = 'An error occurred while updating the user data.';
                             return;
                         }
-                    }
+                    }                    
                 }
                 break;
             }
             case "update_barangay":
-            {
-                $brgy_m = new \App\Models\Barangay();
-                $id = $this->request->getPost('id');
-                $barangay = $brgy_m->find($id);
-
-                if (!$barangay) {
-                    $message = "Barangay not found.";
+                {
+                    $brgy_m = new \App\Models\Barangay();
+                    $id = $this->request->getPost('id');
+                    $barangay = $brgy_m->find($id);
+                
+                    if (!$barangay) {
+                        $message = "Barangay not found.";
+                        break;
+                    }
+                    
+                    $brgy_contact = $this->request->getPost('editContact');
+                    $brgy_about = $this->request->getPost('editAbout');
+                    $brgy_name = $this->request->getPost('editBrgy');
+                    $brngy_capt = $this->request->getPost('editCapt');
+                    $mission = $this->request->getPost('editMission');
+                    $vision = $this->request->getPost('editVision');
+                    $barangay_staff = $this->request->getPost('editStaff');
+                
+                    // Check if the barangay name already exists for other records
+                    $existing_brgy = $brgy_m->where('brgy_name', $brgy_name)->where('id !=', $id)->first();
+                
+                    if ($existing_brgy) {
+                        $message = 'Barangay name already exists.';
+                        break;
+                    }
+                
+                    $data = [
+                        'contact' => $brgy_contact,
+                        'about'=> $brgy_about,
+                        'brgy_name' => $brgy_name,
+                        'brngy_capt' => $brngy_capt,
+                        'mission' => $mission,
+                        'vision' => $vision,
+                        'barangay_staff' => $barangay_staff,
+                        'updated_date' => date('Y-m-d H:i:s'),
+                    ];
+                
+                    $maxmb = 4;
+                    $file_category = 'BARANGAY';
+                
+                    // Handle file uploads for barangay logo
+                    $imgLogo = $this->request->getFile('editbrgyImg');
+                    if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
+                        $logoName = $imgLogo->getRandomName();
+                        $path = WRITEPATH . 'uploads/' . $file_category;
+                
+                        if ($imgLogo->move($path, $logoName)) {
+                            $data['img_logo'] = $logoName;
+                        }
+                    }
+                
+                    // Captain image upload handling - commented out as not needed
+                    /*
+                    // Handle file uploads for captain image
+                    $imgCapt = $this->request->getFile('editbrgyImgCapt');
+                    if ($imgCapt && $imgCapt->isValid() && $imgCapt->getSize() < ($maxmb * 1024 * 1024)) {
+                        $captName = $imgCapt->getRandomName();
+                        $path = WRITEPATH . 'uploads/' . $file_category;
+                
+                        if ($imgCapt->move($path, $captName)) {
+                            $data['img_capt'] = $captName;
+                        }
+                    }
+                    */
+                
+                    // Update barangay data
+                    try {
+                        $brgy_m->update($id, $data);
+                        $status = 1;
+                        $message = 'Content updated successfully.';
+                        $log_c['processDetails'] = 'BRGY_ID: ' . $id;
+                    } catch (\Exception $e) {
+                        $message = 'An error occurred while updating.';
+                    }
+                
                     break;
                 }
-
-                $brgy_contact = $this->request->getPost('editContact');
-                $brgy_about = $this->request->getPost('editAbout');
-                $brgy_name = $this->request->getPost('editBrgy');
-                $brngy_capt = $this->request->getPost('editCapt');
-                $mission = $this->request->getPost('editMission');
-                $vision = $this->request->getPost('editVision');
-                $barangay_staff = $this->request->getPost('editStaff');
-
-                // Check if the barangay name already exists for other records
-                $existing_brgy = $brgy_m->where('brgy_name', $brgy_name)->where('id !=', $id)->first();
-
-                if ($existing_brgy) {
-                    $message = 'Barangay name already exists.';
-                    break;
-                }
-
-                $data = [
-                    'contact' => $brgy_contact,
-                    'about' => $brgy_about,
-                    'brgy_name' => $brgy_name,
-                    'brngy_capt' => $brngy_capt,
-                    'mission' => $mission,
-                    'vision' => $vision,
-                    'barangay_staff' => $barangay_staff,
-                    'updated_date' => date('Y-m-d H:i:s'),
-                ];
-
-                $maxmb = 10;
-                $file_category = 'BARANGAY';
-
-                // Handle file uploads for barangay logo
-                $imgLogo = $this->request->getFile('editbrgyImg');
-                if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
-                    $logoName = $imgLogo->getRandomName();
-                    $path = WRITEPATH . 'uploads/' . $file_category;
-
-                    if ($imgLogo->move($path, $logoName)) {
-                        $data['img_logo'] = $logoName;
-                    }
-                }
-
-                // Captain image upload handling - commented out as not needed
-                /*
-                // Handle file uploads for captain image
-                $imgCapt = $this->request->getFile('editbrgyImgCapt');
-                if ($imgCapt && $imgCapt->isValid() && $imgCapt->getSize() < ($maxmb * 1024 * 1024)) {
-                    $captName = $imgCapt->getRandomName();
-                    $path = WRITEPATH . 'uploads/' . $file_category;
-
-                    if ($imgCapt->move($path, $captName)) {
-                        $data['img_capt'] = $captName;
-                    }
-                }
-                */
-
-                // Update barangay data
-                try {
-                    $brgy_m->update($id, $data);
-                    $status = 1;
-                    $message = 'Content updated successfully.';
-                    $log_c['processDetails'] = 'BRGY_ID: ' . $id;
-                } catch (\Exception $e) {
-                    $message = 'An error occurred while updating.';
-                }
-
-                break;
-            }
-
+                
             case "update_dept":
             {
                 $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
                 $department = $dept_m->find($id);
-
+    
                 if ($department) {
                     $dept_name = $this->request->getPost('editDept');
                     $head = $this->request->getPost('editHead');
@@ -1922,10 +1852,10 @@ class Admin extends BaseController
                     $quality_policy = $this->request->getPost('editPolicy');
                     $about = $this->request->getPost('editAbout');
                     $contact = $this->request->getPost('editContact');
-
+            
                     // Check if the department name already exists, excluding the current department
                     $existing_dept = $dept_m->where('dept_name', $dept_name)->where('id !=', $id)->first();
-
+                        
                     if ($existing_dept) {
                         $message = 'Department name already exists.';
                     } else {
@@ -1933,20 +1863,20 @@ class Admin extends BaseController
                         $data = [
                             'dept_name' => $dept_name,
                             'head' => $head,
-                            'post_title' => $post_title,
-                            'mission' => $mission,
+                            'post_title' =>$post_title,
+                            'mission' =>$mission,
                             'vision' => $vision,
                             'quality_policy' => $quality_policy,
                             'about' => $about,
                             'contact' => $contact,
                             'updated_date' => date('Y-m-d H:i:s')
                         ];
-
+            
                         $maxmb = 4;
                         $file_category = 'DEPT';
-
+            
                         $logoName = null;
-
+            
                         // Handle file uploads for dept logo
                         $imgLogo = $this->request->getFile('editdeptImg');
                         if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
@@ -1955,9 +1885,9 @@ class Admin extends BaseController
 
                             if (!$imgLogo->hasMoved() && $imgLogo->move($path, $logoName)) {
                                 $data['img_logo'] = $logoName;
-                            }
+                            } 
                         }
-
+                        
                         // Handle file uploads for org chart
                         $imgOrgChart = $this->request->getFile('editdeptOrgChart');
                         if ($imgOrgChart && $imgOrgChart->isValid() && $imgOrgChart->getSize() < ($maxmb * 1024 * 1024)) {
@@ -1966,7 +1896,7 @@ class Admin extends BaseController
 
                             if (!$imgOrgChart->hasMoved() && $imgOrgChart->move($path, $orgChartName)) {
                                 $data['org_chart_img'] = $orgChartName;
-                            }
+                            } 
                         }
                         // Update department data
                         try {
@@ -1987,10 +1917,10 @@ class Admin extends BaseController
             case "update_cityoff":
             {
                 $cityofficialmodel = new \App\Models\CityOfficial();
-
+                
                 $id = $this->request->getPost('id');
                 $cityofficial = $cityofficialmodel->find($id);
-
+                
                 if ($cityofficial) {
                     $off_name = $this->request->getPost('editoffname');
                     $off_position = $this->request->getPost('editoffpos');
@@ -2026,7 +1956,7 @@ class Admin extends BaseController
                         'updated_date' => date('Y-m-d H:i:s'),
                     ];
 
-                    $maxmb = 10;
+                    $maxmb = 4;
                     $file_category = 'CITYOFFICIAL';
                     $upload_path = WRITEPATH . 'uploads/CITYOFFICIAL/';
 
@@ -2037,48 +1967,18 @@ class Admin extends BaseController
 
                     // Handle the main image (img_loc)
                     $logoName = null;
-                    /*$imgLogo = $this->request->getFile('editoffimg');
+                    $imgLogo = $this->request->getFile('editoffimg');
                     if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
                         $logoName = $imgLogo->getRandomName();
                         if (!$imgLogo->hasMoved() && $imgLogo->move($upload_path, $logoName)) {
                             $data['img_loc'] = $logoName;
-                        }
-                    }*/
-                    // Handle the main image (img_loc)
-                    $imgLogo = $this->request->getFile('editoffimg');
-
-                    // Check if a new file was actually uploaded
-                    if ($imgLogo && $imgLogo->isValid() && !$imgLogo->hasMoved()) {
-
-                        // Validate size (using your $maxmb variable)
-                        if ($imgLogo->getSize() <= ($maxmb * 1024 * 1024)) {
-
-                            $logoName = $imgLogo->getRandomName();
-
-                            if ($imgLogo->move($upload_path, $logoName)) {
-                                // 1. Delete the OLD image from the server if it exists
-                                if (!empty($cityofficial->img_loc)) {
-                                    $oldFile = $upload_path . $cityofficial->img_loc;
-                                    if (is_file($oldFile)) {
-                                        unlink($oldFile);
-                                    }
-                                }
-
-                                // 2. Prepare new name for database update
-                                $data['img_loc'] = $logoName;
-                            }
-                        } else {
-                            // Optional: Handle file too large error
-                            $status = 0;
-                            $message = 'The image is too large. Max size is ' . $maxmb . 'MB';
-                            break;
                         }
                     }
 
                     // Handle carousel images (editoffcaroimg[])
                     $carousel_filenames = [];
                     $existing_images = [];
-
+                    
                     // Get existing images from the form or database
                     $existing_images_input = $this->request->getPost('existing_images');
                     if (!empty($existing_images_input)) {
@@ -2151,7 +2051,7 @@ class Admin extends BaseController
                 ob_start();
 
                 $cityofficialmodel = new \App\Models\CityOfficial();
-
+                
                 $id = $this->request->getPost('id');
                 $imageName = $this->request->getPost('image');
                 $cityofficial = $cityofficialmodel->find($id);
@@ -2226,13 +2126,13 @@ class Admin extends BaseController
                 $con_m = new \App\Models\Content();
                 $id = $this->request->getPost('id');
                 $ne_dt = $con_m->find($id);
-
+            
                 if ($ne_dt) {
                     $title = $this->request->getPost('editTitle');
                     $author = $user->fname . ' ' . $user->lname; // Automatically set author from session
                     $desc = $this->request->getPost('editDesc');
                     $category = $this->request->getPost('edit_content_category');
-
+            
                     $data = [
                         'title' => $title,
                         'author' => $author,
@@ -2240,21 +2140,21 @@ class Admin extends BaseController
                         'category' => $category,
                         'updated_date' => date('Y-m-d H:i:s')
                     ];
-
+            
                     $maxSize = 4 * 1024 * 1024; // 4MB
                     $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
                     $file_category = 'POSTCONTENT';
                     $imgLogo = $this->request->getFile('editNewsImg');
-
+            
                     if ($imgLogo && $imgLogo->isValid() && in_array($imgLogo->getMimeType(), $allowedTypes) && $imgLogo->getSize() <= $maxSize) {
                         $logoName = $imgLogo->getRandomName();
                         $path = WRITEPATH . 'uploads/' . $file_category;
-
+            
                         if (!$imgLogo->hasMoved() && $imgLogo->move($path, $logoName)) {
                             $data['file_loc'] = $logoName;
                         }
                     }
-
+            
                     try {
                         $con_m->update($id, $data);
                         $status = 1;
@@ -2275,17 +2175,18 @@ class Admin extends BaseController
                 $may_m = new \App\Models\MayorContent();
                 $id = $this->request->getPost('id');
                 $mayorcontent = $may_m->find($id);
-
+                
                 if ($mayorcontent) {
-                    $mayor_name = $this->request->getPost('editmyrname');
+                    $mayor_name = $this->request->getPost('editmyrname'); 
                     $section = $this->request->getPost('edit_content_category');
                     $content = $this->request->getPost('editperdata');
-
+                    
                     // Check if the section already exists
                     $existing_section = $may_m->where('section', $section)->where('id !=', $id)->first();
                     if ($existing_section) {
                         $message = 'Section already exists.';
-                    } else {
+                    }
+                    else {
                         // Prepare data for saving
                         $data = [
                             'mayor_name' => $mayor_name,
@@ -2293,11 +2194,11 @@ class Admin extends BaseController
                             'content' => $content,
                             'updated_date' => date('Y-m-d H:i:s')
                         ];
-
+                
                         $maxmb = 4;
                         $file_category = 'MAYOR';
                         $path = WRITEPATH . 'uploads/' . $file_category;
-
+                        
                         // Handle file uploads for mayor image if new files are selected
                         $mayor_img = $this->request->getFileMultiple('editmayorimg');
                         if ($mayor_img) {
@@ -2312,7 +2213,7 @@ class Admin extends BaseController
                             // If no new files are uploaded, retain the existing mayor_img value
                             $data['mayor_img'] = $mayorcontent['mayor_img'];
                         }
-
+                
                         // Update mayor data
                         try {
                             $may_m->update($id, $data);
@@ -2334,7 +2235,7 @@ class Admin extends BaseController
                 $id = $this->request->getPost('id');
                 $policy = $policy_m->find($id);
 
-                if ($policy) {
+                if ($policy){
                     $fc = $this->request->getPost('editFileCategory');
                     $yr = $this->request->getPost('edityr');
                     $qtr = $this->request->getPost('editqtr');
@@ -2347,7 +2248,7 @@ class Admin extends BaseController
                     ];
 
                     $file_category = 'FULLDISC';
-                    $policyFile = $this->request->getFile('editpolicyFile');
+                    $policyFile =  $this->request->getFile('editpolicyFile');
 
                     if ($policyFile && $policyFile->isValid()) {
                         $fileName = $policyFile->getRandomName();
@@ -2356,8 +2257,8 @@ class Admin extends BaseController
                         if ($policyFile->hasMoved() && $policyFile->move($path, $fileName)) {
                             $data['file_name'] = $fileName;
                         }
-                    }
-
+                    } 
+                
                     try {
                         $policy_m->update($id, $data);
                         $status = 1;
@@ -2375,10 +2276,9 @@ class Admin extends BaseController
             {
                 // Initialize Map model
                 $map_m = new \App\Models\Map();
-
+            
                 // Validate percentage input for top_loc and left_loc
-                function validatePercentage($value, $fieldName)
-                {
+                function validatePercentage($value, $fieldName) {
                     $cleanValue = trim($value);
                     if (empty($cleanValue) || strpos($cleanValue, '%') === false) {
                         return ['status' => 0, 'message' => "$fieldName must include a percentage ('%')."];
@@ -2389,7 +2289,7 @@ class Admin extends BaseController
                     }
                     return ['status' => 1, 'value' => $cleanValue . '%'];
                 }
-
+            
                 // Validate top_loc and left_loc inputs
                 $top_loc_result = validatePercentage($this->request->getPost('top_loc'), 'Top Location');
                 if ($top_loc_result['status'] === 0) {
@@ -2399,7 +2299,7 @@ class Admin extends BaseController
                 if ($left_loc_result['status'] === 0) {
                     return $this->response->setJSON($left_loc_result);
                 }
-
+            
                 // Prepare data for insertion
                 $data = [
                     'brgy_name' => $this->request->getPost('brgy_name'),
@@ -2408,15 +2308,15 @@ class Admin extends BaseController
                     'details' => $this->request->getPost('details'),
                     'status' => 'Active'
                 ];
-
+            
                 // Log data to be inserted
                 error_log("Attempting to create map record with data: " . json_encode($data));
-
+            
                 // Perform the insertion using the Map model
                 try {
                     $insertResult = $map_m->insert($data);
                     error_log("Model insert result: " . var_export($insertResult, true) . ". Last query: " . $map_m->getLastQuery());
-
+            
                     if ($insertResult) {
                         return $this->response->setJSON(['status' => 1, 'message' => 'Map record created']);
                     } else {
@@ -2433,7 +2333,7 @@ class Admin extends BaseController
             {
                 $mapId = $this->request->getPost('id');
                 $map_m = new \App\Models\Map(); // Adjust model name if needed
-
+            
                 if ($mapId) {
                     $map_d = $map_m->find($mapId);
                     if ($map_d) {
@@ -2444,8 +2344,8 @@ class Admin extends BaseController
                     }
                 } else {
                     $map_d = $map_m
-                        ->orderBy('brgy_name', 'desc')
-                        ->findAll();
+                            ->orderBy('brgy_name', 'desc') 
+                            ->findAll();
                     foreach ($map_d as $map) {
                         $data[] = $map;
                     }
@@ -2461,7 +2361,7 @@ class Admin extends BaseController
 
                 $data = [
                     'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s')
+                    'updated_date' => date('Y-m-d H:i:s') 
                 ];
 
                 $map_m->update($id, $data);
@@ -2476,11 +2376,11 @@ class Admin extends BaseController
                 // Initialize Map model
                 $map_m = new \App\Models\Map();
                 $id = $this->request->getPost('id', FILTER_SANITIZE_STRING);
-
+            
                 // Log received ID and form data for debugging
                 error_log("Received ID for update: " . var_export($id, true));
                 error_log("Received POST data: " . json_encode($_POST));
-
+            
                 // Check if record exists
                 $map_d = $map_m->find($id);
                 if (!$map_d) {
@@ -2488,10 +2388,9 @@ class Admin extends BaseController
                     echo json_encode(['status' => 0, 'msg' => 'Record not found for ID: ' . $id]);
                     exit;
                 }
-
+            
                 // Validate percentage input for top_loc and left_loc
-                function validatePercentage($value, $fieldName)
-                {
+                function validatePercentage($value, $fieldName) {
                     $cleanValue = trim($value);
                     if (empty($cleanValue) || strpos($cleanValue, '%') === false) {
                         echo json_encode(['status' => 0, 'msg' => "$fieldName must include a percentage ('%')."]);
@@ -2504,11 +2403,11 @@ class Admin extends BaseController
                     }
                     return $cleanValue . '%';
                 }
-
+            
                 // Validate top_loc and left_loc inputs
                 $top_loc = validatePercentage($this->request->getPost('top_loc', FILTER_SANITIZE_STRING), 'Top Location');
                 $left_loc = validatePercentage($this->request->getPost('left_loc', FILTER_SANITIZE_STRING), 'Left Location');
-
+            
                 // Prepare data for update
                 $data = [
                     'brgy_name' => $this->request->getPost('brgy_name', FILTER_SANITIZE_STRING),
@@ -2516,15 +2415,15 @@ class Admin extends BaseController
                     'left_loc' => $left_loc,
                     'details' => $this->request->getPost('details', FILTER_SANITIZE_STRING)
                 ];
-
+            
                 // Log data to be updated with ID
                 error_log("Attempting to update record with ID: $id and data: " . json_encode($data));
-
+            
                 // Perform the update using the Map model
                 try {
                     $update = $map_m->update($id, $data);
                     error_log("Model update result: " . var_export($update, true) . ". Last query: " . $map_m->getLastQuery());
-
+            
                     if ($update) {
                         echo json_encode(['status' => 1, 'msg' => 'Record updated successfully!']);
                     } else {
@@ -2535,17 +2434,17 @@ class Admin extends BaseController
                     error_log("Model update error for ID $id: " . $e->getMessage() . ". Data: " . json_encode($data) . ". Last query: " . $map_m->getLastQuery());
                     echo json_encode(['status' => 0, 'msg' => 'An error occurred while updating the record. Check server logs: ' . $e->getMessage()]);
                 }
-
+            
                 exit;
             }
             case 'get_map_details':
             {
                 $map_m = new \App\Models\Map();
                 $id = $this->request->getPost('id');
-
+            
                 if ($id) {
                     $record = $map_m->where('ID', $id)->first(); // ✅ Fetches only one record
-
+                    
                     if ($record) {
                         $response = [
                             'status' => 1,
@@ -2564,7 +2463,7 @@ class Admin extends BaseController
                         'msg' => 'Invalid request. Missing ID.'
                     ];
                 }
-
+            
                 echo json_encode($response);
                 exit;
             }
@@ -2573,10 +2472,9 @@ class Admin extends BaseController
             {
                 $career_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
-                $careerFile = $this->request->getFile('editCareerFile');
                 $career = $career_m->find($id);
 
-                if ($career) {
+                if ($career){
                     $editpublication = $this->request->getPost('editpublication');
                     $editlevel = $this->request->getPost('editlevel'); // Get editlevel from POST
 
@@ -2586,39 +2484,18 @@ class Admin extends BaseController
                         'level' => $editlevel // Update level
                     ];
 
-                    //$careerFile = $this->request->getFile('editCareerFile');
+                    $file_category = 'CAREERS';
+                    $careerFile =  $this->request->getFile('editCareerFile');
 
-                    /*if ($careerFile && $careerFile->isValid()) {
+                    if ($careerFile && $careerFile->isValid()) {
                         $fileName = $careerFile->getRandomName();
                         $path = WRITEPATH . 'uploads/' . $file_category;
 
                         if ($careerFile->hasMoved() && $careerFile->move($path, $fileName)) {
                             $data['file_name'] = $fileName;
                         }
-                    }*/
-
-                    if ($careerFile && $careerFile->isValid() && !$careerFile->hasMoved()) {
-                        $path = WRITEPATH . 'uploads/CAREERS/';
-
-                        // 1. Generate new name and move the file
-                        $newFileName = $careerFile->getRandomName();
-
-                        if ($careerFile->move($path, $newFileName)) {
-
-                            // 2. Remove the old file if it exists
-                            if (!empty($career->file_name)) {
-                                $oldFilePath = $path . $career->file_name;
-
-                                if (is_file($oldFilePath)) {
-                                    unlink($oldFilePath);
-                                }
-                            }
-
-                            // 3. Update the data array with the new name
-                            $data['file_name'] = $newFileName;
-                        }
-                    }
-
+                    } 
+                
                     try {
                         $career_m->update($id, $data);
                         $status = 1;
@@ -2637,7 +2514,7 @@ class Admin extends BaseController
                 $id = $this->request->getPost('id');
                 $inv_d = $invest_m->find($id);
 
-                if ($inv_d) {
+                if ($inv_d){
                     $fc = $this->request->getPost('editFileCategory');
 
                     $data = [
@@ -2646,7 +2523,7 @@ class Admin extends BaseController
                     ];
 
                     $file_category = 'INVEST';
-                    $invFile = $this->request->getFile('editInvestFile');
+                    $invFile =  $this->request->getFile('editInvestFile');
 
                     if ($invFile && $invFile->isValid() && !$invFile->hasMoved()) {
                         $fileName = $invFile->getRandomName();
@@ -2659,8 +2536,8 @@ class Admin extends BaseController
                             $message = 'Failed to upload the new file.';
                             break;
                         }
-                    }
-
+                    } 
+                
                     try {
                         $invest_m->update($id, $data);
                         $status = 1;
@@ -2682,7 +2559,7 @@ class Admin extends BaseController
                 $id = $this->request->getPost('id');
                 $serv = $serv_m->find($id);
 
-                if ($serv) {
+                if ($serv){
                     $serv_name = $this->request->getPost('editServiceName');
                     $content = $this->request->getPost('editContent');
                     $dept_cont_ID = $this->request->getPost('editDept');
@@ -2722,7 +2599,7 @@ class Admin extends BaseController
                 $id = $this->request->getPost('id');
                 $hot = $hot_m->find($id);
 
-                if ($hot) {
+                if ($hot){
                     $telco = $this->request->getPost('editTelco');
                     $number = $this->request->getPost('editContact');
                     $smart = $this->request->getPost('editSmart');
@@ -2736,7 +2613,7 @@ class Admin extends BaseController
                     } else if ($brngy_cont_ID) {
                         $content_ref_id = $brngy_cont_ID;
                         $section = 'Barangay';
-                    } else if ($others_cont_ID) {
+                    } else if($others_cont_ID) {
                         $content_ref_id = $others_cont_ID;
                         $section = 'Others';
                     }
@@ -2768,31 +2645,31 @@ class Admin extends BaseController
                 $about_m = new \App\Models\About();
                 $id = $this->request->getPost('id');
                 $about = $about_m->find($id);
-
+            
                 if (!$about) {
                     $message = "Content not found.";
                     break;
                 }
-
+            
                 $section = $this->request->getPost('edit_content_category');
                 $title = $this->request->getPost('EditTxtTitle');
                 $description = $this->request->getPost('EditTxtDesc');
-
+                    
                 $data = [
                     'section' => $section,
                     'title' => $title,
                     'description' => $description,
                     'updated_date' => date('Y-m-d H:i:s'),
                 ];
-
+            
                 $maxmb = 4;
                 $file_category = 'ABOUT';
-
+            
                 $imgLogo = $this->request->getFile('EditAboutImg');
                 if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
                     $logoName = $imgLogo->getRandomName();
                     $path = WRITEPATH . 'uploads/' . $file_category;
-
+            
                     if ($imgLogo->move($path, $logoName)) {
                         $data['about_img'] = $logoName;
                     }
@@ -2805,13 +2682,13 @@ class Admin extends BaseController
                 } catch (\Exception $e) {
                     $message = 'An error occurred while updating.';
                 }
-
+            
                 break;
             }
-
+                
             case 'reset_password':
             {
-                $user_m = new \App\Models\UserAccount();
+                $user_m = new \App\Models\UserAccount(); 
                 $id = $this->request->getPost('id');
                 $temporaryCode = bin2hex(random_bytes(4)); // Generates an 8-character temporary code    
                 $data = [
@@ -2845,7 +2722,7 @@ class Admin extends BaseController
                 $status = 1;
                 break;
             }
-
+            
             case 'set_status_barangay':
             {
                 $brgy_m = new \App\Models\Barangay();
@@ -2896,7 +2773,7 @@ class Admin extends BaseController
             {
                 $cityofficialmodel = new \App\Models\CityOfficial();
                 $id = $this->request->getPost('id');
-
+                
                 // Check if the record exists
                 if ($cityofficialmodel->find($id)) {
                     $cityofficialmodel->delete($id);
@@ -3017,52 +2894,48 @@ class Admin extends BaseController
                 break;
             }
             case 'set_status_contact':
-            {
-                $invest_m = new \App\Models\Hotlines();
-                $id = $this->request->getPost('id');
-                $status = $this->request->getPost('status');
-                $data = [
-                    'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s')
-                ];
-                $invest_m->update($id, $data);
-                $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'CONTACT_ID: ' . $id . ' - ' . $status;
-                $status = 1;
-                break;
-            }
-            case 'set_status_job':
-            {
-                if ($user->user_lvl === 'VIEWER' || $user->user_lvl === 'ENCODER') {
-                    $message = 'You are not authorized to change job status';
+                {
+                    $invest_m = new \App\Models\Hotlines();
+                    $id = $this->request->getPost('id');
+                    $status = $this->request->getPost('status');
+                    $data = [
+                        'status' => $status,
+                        'updated_date' => date('Y-m-d H:i:s')
+                    ];
+                    $invest_m->update($id, $data);
+                    $message = 'Content status updated successfully.';
+                    $log_c['processDetails'] = 'CONTACT_ID: ' . $id . ' - ' . $status;
+                    $status = 1;
                     break;
                 }
+            case 'set_status_job':
+            {
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
-
+                
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-
+                
                 if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'])) {
                     $message = 'Invalid status value';
                     break;
                 }
-
+                
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-
+                
                 $data = [
                     'status' => $statusVal,
                     'updated_date' => date('Y-m-d H:i:s'),
                 ];
-
+                
                 if ($job_m->update($id, $data)) {
                     $status = 1;
                     $message = 'Job status updated successfully';
@@ -3075,19 +2948,19 @@ class Admin extends BaseController
             {
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
-
+                
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-
+                
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-
+                
                 if ($job_m->delete($id)) {
                     $status = 1;
                     $message = 'Job deleted successfully';
@@ -3096,7 +2969,7 @@ class Admin extends BaseController
                 }
                 break;
             }
-
+            
             default:
                 $message = 'Invalid request';
                 break;
@@ -3133,13 +3006,13 @@ class Admin extends BaseController
         }
     }
 
-    public function preview_file($category, $filename)
+    public function preview_file($category, $filename) 
     {
         $filePath = WRITEPATH . 'uploads' . DIRECTORY_SEPARATOR . $category . DIRECTORY_SEPARATOR . $filename;
-
+    
         if (file_exists($filePath)) {
             $fileType = mime_content_type($filePath);
-
+    
             header("Content-Type: $fileType");
             readfile($filePath);
             exit;
