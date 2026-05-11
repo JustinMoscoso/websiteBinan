@@ -1,7 +1,8 @@
 <script src="<?= base_url('assets/admin/js/quill-init.js') ?>"></script>
 <script>
 $(document).ready(function() {
-    const userLevel = '<?= $user->user_lvl ?>'; // Get user level from backend
+    const userLevel = '<?= $user->user_lvl ?>'.toUpperCase(); // Get user level from backend and force uppercase
+    console.log("Current User Role:", userLevel);
 
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
         $('.button-32').show();
@@ -130,16 +131,17 @@ $(document).ready(function() {
                 "render": function(data, type, row) {
                     let actionHtml = `
                         <div class="dropdown">
-                          <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                             <i class="bi bi-list"></i> Actions
                           </button>
-                          <ul class="dropdown-menu">
+                          <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item view-job" href="#" data-id="${row.ID}"><i class="bi bi-eye me-1"></i>View Details</a></li>`;
 
                     if (userLevel !== 'VIEWER') {
                         actionHtml += `<li><a class="dropdown-item edit-job" href="#" data-id="${row.ID}"><i class="bi bi-pencil me-1"></i>Edit</a></li>`;
 
-                        if (userLevel !== 'ENCODER') {
+                        // Developer, Superadmin, and Admin can Deactivate and Delete
+                        if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
                             actionHtml += `
                                 <li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}"><i class="bi bi-toggle-${row.status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${row.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>
                                 <li><hr class="dropdown-divider"></li>

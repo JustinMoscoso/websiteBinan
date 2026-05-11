@@ -1,5 +1,6 @@
 <script>
-    const userLevel = '<?= $user->user_lvl ?>'; // Get user level from backend
+    const userLevel = '<?= $user->user_lvl ?>'.toUpperCase(); // Get user level from backend and force uppercase
+    console.log("Current User Role:", userLevel);
 
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
         $('.button-32').show();
@@ -13,9 +14,110 @@
         $('.btn-close').prop('disabled', false); // Allow closing modals
     }
 
+    // Toggle Status function
+    function toggleStatus(id, currentStatus) {
+        var newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+        var actionText = newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
+
+        Swal.fire({
+            heightAuto: false,
+            title: (newStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') + ' Career',
+            text: "Are you sure you want to " + actionText + " this career?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#27ae60',
+            cancelButtonColor: '#c0392b',
+            confirmButtonText: 'Yes',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Please wait...',
+                    showConfirmButton: false,
+                    backdrop: true,
+                    scrollbarPadding: false,
+                    allowEscapeKey: () => !Swal.isLoading(),
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                $.post("<?php echo site_url('admin/ajax/set_status_career') ?>",
+                    {id: id, 'status': newStatus},
+                    function (result) {
+                        if (result.status == 1) {
+                            tbl.ajax.reload(null, false);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Career ' + actionText + 'd successfully'
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: result.msg,
+                            });
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+    // Delete function
+    function deleteCareer(id) {
+        Swal.fire({
+            heightAuto: false,
+            title: 'Delete Career',
+            text: "Are you sure you want to delete this career? This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#c0392b',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Delete',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deleting...',
+                    showConfirmButton: false,
+                    backdrop: true,
+                    scrollbarPadding: false,
+                    allowEscapeKey: () => !Swal.isLoading(),
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                $.post("<?php echo site_url('admin/ajax/delete_careers') ?>",
+                    {id: id},
+                    function (result) {
+                        if (result.status == 1) {
+                            tbl.ajax.reload(null, false);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted',
+                                text: 'Career deleted successfully'
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: result.message || 'Failed to delete career',
+                            });
+                        }
+                    }
+                );
+            }
+        });
+    }
+
     // Set maximum date for input
-    publication.max = new Date().toISOString().split("T")[0];
-    editpublication.max = new Date().toISOString().split("T")[0];
+    if (document.getElementById('publication')) {
+        publication.max = new Date().toISOString().split("T")[0];
+    }
+    if (document.getElementById('editpublication')) {
+        editpublication.max = new Date().toISOString().split("T")[0];
+    }
 
     $('#btnAdd').on('click', function () {
         let form = $('#addForm')[0];
@@ -152,102 +254,6 @@
         });
     });
 
-    // Deactivate function
-    function deactivate(id) {
-        Swal.fire({
-            heightAuto: false,
-            title: 'Deactivate Content',
-            text: "Are you sure you want to deactivate this content? This will not be displayed in the Careers section.",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#27ae60',
-            cancelButtonColor: '#c0392b',
-            confirmButtonText: 'Yes',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Please wait...',
-                    showConfirmButton: false,
-                    backdrop: true,
-                    scrollbarPadding: false,
-                    allowEscapeKey: () => !Swal.isLoading(),
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                $.post("<?php echo site_url('admin/ajax/set_status_career') ?>",
-                    {id: id, 'status': 'INACTIVE'},
-                    function (result) {
-                        if (result.status == 1) {
-                            $('.modal').modal('hide');
-                            tbl.ajax.reload(null, false);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Content deactivated successfully'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: result.msg,
-                            });
-                        }
-                    }
-                );
-            }
-        });
-    }
-
-    // Activate function
-    function activate(id) {
-        Swal.fire({
-            heightAuto: false,
-            title: 'Activate Content',
-            text: "Are you sure you want to activate this content? This will be displayed in the Careers section.",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#27ae60',
-            cancelButtonColor: '#c0392b',
-            confirmButtonText: 'Yes',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Please wait...',
-                    showConfirmButton: false,
-                    backdrop: true,
-                    scrollbarPadding: false,
-                    allowEscapeKey: () => !Swal.isLoading(),
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                $.post("<?php echo site_url('admin/ajax/set_status_career') ?>",
-                    {id: id, 'status': 'ACTIVE'},
-                    function (result) {
-                        if (result.status == 1) {
-                            $('.modal').modal('hide');
-                            tbl.ajax.reload(null, false);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Content activated successfully'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: result.msg,
-                            });
-                        }
-                    }
-                );
-            }
-        });
-    }
-    
     var tbl = $('#tblcareer').DataTable({
         select: false,
         searching: true,
@@ -312,22 +318,28 @@
                 "className": "dt-center",
                 "render": function (data, type, row) {
                     if (userLevel !== 'VIEWER') {
-                    var acter = '<div class="btn-group">' +
-                        '<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">' +
-                        'Actions' +
-                        '</button>' +
-                        '<ul class="dropdown-menu">' +
-                        '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>'; 
-                        if (userLevel !== 'ENCODER') {
-                            // Add Activate and Deactivate buttons for all levels except ENCODER
-                            acter += '<li><button type="button" class="dropdown-item" onclick="activate(' + row.ID + ')"><i class="fa-solid fa-check"></i> Activate</button></li>' +
-                                '<li><button type="button" class="dropdown-item" onclick="deactivate(' + row.ID + ')"><i class="fa-solid fa-xmark"></i> Deactivate</button></li>';
+                        let actionHtml = `
+                            <div class="dropdown">
+                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                                <i class="bi bi-list"></i> Actions
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+
+                        if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
+                            var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
+                            var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
+                            
+                            actionHtml += `
+                                <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteCareer(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
                         }
-                        acter += '</ul>' +
-                            '</div>';
-                    return acter;
+                        
+                        actionHtml += `</ul></div>`;
+                        return actionHtml;
                     } else {
-                        return '-'; // Return blank for VIEWER level users
+                        return '-';
                     }
                 }
             }
