@@ -1021,9 +1021,12 @@ public function getVisitCount()
                     'type' => $type,
                     'publication_date' => $publication_date,
                     'email' => $email,
-                    'status' => $status,
                     'updated_date' => date('Y-m-d H:i:s')
                 ];
+
+                if ($status !== null) {
+                    $jobData['status'] = $status;
+                }
                 
                 // Try to update the job with better error handling
                 try {
