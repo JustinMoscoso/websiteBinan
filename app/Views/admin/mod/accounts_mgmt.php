@@ -168,7 +168,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="txtDept" class="form-label">Department</label>
-                                <select id="txtDept" name="txtDept" class="form-select" required>
+                                <select id="txtDept" name="txtDept" required>
                                     <option selected disabled>Select Department</option>
                                     <!-- Get depts -->
                                 </select>
@@ -262,7 +262,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="editDept" class="form-label">Department</label>
-                                <select id="editDept" name="editDept" class="form-select" required>
+                                <select id="editDept" name="editDept" required>
                                     <option selected disabled>Select Department</option>
                                     <!-- Options will be populated via AJAX -->
                                 </select>
