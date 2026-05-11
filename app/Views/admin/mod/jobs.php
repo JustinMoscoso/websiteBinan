@@ -143,6 +143,7 @@
                 <div id="editQuillDescription" class="quill-editor-full" style="height: 120px;"></div>
                 <input type="hidden" id="editDescription" name="description" required>
                         </div>
+                        <?php if (!in_array($user->user_lvl, ['ENCODER', 'VIEWER'])): ?>
                         <div class="col-md-6 mb-3">
                 <label for="editStatus" class="form-label">Status</label>
                 <select class="form-select" id="editStatus" name="status">
@@ -150,6 +151,7 @@
                                 <option value="INACTIVE">Inactive</option>
                             </select>
                         </div>
+                        <?php endif; ?>
                     </div>
       </div> <!-- Modal body End -->
       <div class="modal-footer">
