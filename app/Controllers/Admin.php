@@ -39,6 +39,11 @@ class Admin extends BaseController
             return redirect()->to(base_url('login'));
         }
 
+        // Restrict accounts_mgmt access
+        if ($mode === 'accounts_mgmt' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+
         $data['user'] = $user;
         $data['mode'] = $mode;
 
