@@ -10,7 +10,8 @@
         // });
     });
 
-    const userLevel = '<?= $user->user_lvl ?>'; // Get user level from backend
+    const userLevel = '<?= $user->user_lvl ?>'.toUpperCase(); // Get user level from backend and force uppercase
+    console.log("Current User Role:", userLevel);
 
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
         $('.button-32').show();
@@ -390,11 +391,15 @@
             }
         });
     }
-    function deactivate(servId) {
+    // Toggle Status function
+    function toggleStatus(id, currentStatus) {
+        var newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+        var actionText = newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
+
         Swal.fire({
             heightAuto: false,
-            title: 'Deactivate Service',
-            text: "Are you sure you want to deactivate this service? ",
+            title: (newStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') + ' Service',
+            text: "Are you sure you want to " + actionText + " this service?",
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#27ae60',
@@ -414,15 +419,14 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_services') ?>",
-                    {id: servId, 'status': 'INACTIVE'},
+                    {id: id, 'status': newStatus},
                     function (result) {
                         if (result.status == 1) {
-                            $('.modal').modal('hide');
                             tbl.ajax.reload(null, false);
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
-                                text: 'Service deactivated successfully'
+                                text: 'Service ' + actionText + 'd successfully'
                             });
                         } else {
                             Swal.fire({
@@ -437,9 +441,56 @@
         });
     }
 
+    function deleteService(id) {
+        Swal.fire({
+            heightAuto: false,
+            title: 'Delete Service',
+            text: "Are you sure you want to delete this service? This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#c0392b',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Delete',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deleting...',
+                    showConfirmButton: false,
+                    backdrop: true,
+                    scrollbarPadding: false,
+                    allowEscapeKey: () => !Swal.isLoading(),
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                $.post("<?php echo site_url('admin/ajax/delete_services') ?>",
+                    {id: id},
+                    function (result) {
+                        if (result.status == 1) {
+                            tbl.ajax.reload(null, false);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted',
+                                text: 'Service deleted successfully'
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: result.message || 'Failed to delete service',
+                            });
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+
     //datatable
     // Initialize DataTable (keep your existing configuration)
-var tbl = $('#tblservice').DataTable({
+    var tbl = $('#tblservice').DataTable({
     select: false,
     searching: true,
     ordering: true,
@@ -510,22 +561,32 @@ var tbl = $('#tblservice').DataTable({
                 "data": "ID",
                 "render": function (data, type, row) {
                     if (userLevel !== 'VIEWER') {
-                    var acter = '<div class="btn-group">' +
-                        '<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">' +
-                        'Actions' +
-                        '</button>' +
-                        '<ul class="dropdown-menu">' +
-                        '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>'; 
-                        if (userLevel !== 'ENCODER') {
-                            // Add Activate and Deactivate buttons for all levels except ENCODER
-                            acter += '<li><button type="button" class="dropdown-item" onclick="activate(' + row.ID + ')"><i class="fa-solid fa-check"></i> Activate</button></li>' +
-                                '<li><button type="button" class="dropdown-item" onclick="deactivate(' + row.ID + ')"><i class="fa-solid fa-xmark"></i> Deactivate</button></li>';
+                        let actionHtml = `
+                            <div class="dropdown">
+                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                                <i class="bi bi-list"></i> Actions
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+
+                        if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
+                            var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
+                            var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
+
+                            actionHtml += `
+                                <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
-                        acter += '</ul>' +
-                            '</div>';
-                    return acter;
+
+                        if (userLevel === 'DEVELOPER') {
+                             actionHtml += `
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteService(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
+                        }
+
+                        actionHtml += `</ul></div>`;
+                        return actionHtml;
                     } else {
-                        return '-'; // Return blank for VIEWER level users
+                        return '-';
                     }
                 }
             }

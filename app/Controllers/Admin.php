@@ -2845,6 +2845,155 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
+
+            case 'delete_fulldiscpol':
+            {
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                    $message = 'Unauthorized access. You do not have permission to delete content.';
+                    $status = 0;
+                    break;
+                }
+
+                $fulldisc_m = new \App\Models\FileTbl();
+                $id = $this->request->getPost('id');
+
+                if ($fulldisc_m->find($id)) {
+                    $fulldisc_m->delete($id);
+                    $message = 'Content deleted successfully.';
+                    $log_c['processDetails'] = 'FULLDISC_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Content not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_contacts':
+            {
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+                $hot_m = new \App\Models\Hotlines();
+                $id = $this->request->getPost('id');
+                if ($hot_m->find($id)) {
+                    $hot_m->delete($id);
+                    $message = 'Contact deleted successfully.';
+                    $log_c['processDetails'] = 'CONTACT_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Contact not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_invest':
+            {
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+                $invest_m = new \App\Models\FileTbl();
+                $id = $this->request->getPost('id');
+                if ($invest_m->find($id)) {
+                    $invest_m->delete($id);
+                    $message = 'Investment content deleted successfully.';
+                    $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Content not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_careers':
+            {
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+                $career_m = new \App\Models\FileTbl();
+                $id = $this->request->getPost('id');
+                if ($career_m->find($id)) {
+                    $career_m->delete($id);
+                    $message = 'Career deleted successfully.';
+                    $log_c['processDetails'] = 'CAREER_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Career not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_dept':
+            {
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+                $dept_m = new \App\Models\Department();
+                $id = $this->request->getPost('id');
+                if ($dept_m->find($id)) {
+                    $dept_m->delete($id);
+                    $message = 'Department deleted successfully.';
+                    $log_c['processDetails'] = 'DEPT_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Department not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_mayor':
+            {
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+                $may_m = new \App\Models\MayorContent();
+                $id = $this->request->getPost('id');
+                if ($may_m->find($id)) {
+                    $may_m->delete($id);
+                    $message = "Mayor's content deleted successfully.";
+                    $log_c['processDetails'] = 'MAYOR_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Content not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_postcontent':
+            {
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+                $con_m = new \App\Models\Content();
+                $id = $this->request->getPost('id');
+                if ($con_m->find($id)) {
+                    $con_m->delete($id);
+                    $message = 'Post content deleted successfully.';
+                    $log_c['processDetails'] = 'POSTCONTENT_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Content not found.';
+                    $status = 0;
+                }
+                break;
+            }
             case 'set_status_career':
             {
                 $career_m = new \App\Models\FileTbl();

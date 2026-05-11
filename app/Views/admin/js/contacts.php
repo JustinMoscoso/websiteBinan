@@ -1,5 +1,6 @@
 <script>
-    const userLevel = '<?= $user->user_lvl ?>'; // Get user level from backend
+    const userLevel = '<?= $user->user_lvl ?>'.toUpperCase(); // Get user level from backend and force uppercase
+    console.log("Current User Role:", userLevel);
 
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
         $('.button-32').show();
@@ -19,6 +20,102 @@
         allowClear: true
     });
 
+    // Toggle Status function
+    function toggleStatus(id, currentStatus) {
+        var newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+        var actionText = newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
+
+        Swal.fire({
+            heightAuto: false,
+            title: (newStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') + ' Contact',
+            text: "Are you sure you want to " + actionText + " this contact?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#27ae60',
+            cancelButtonColor: '#c0392b',
+            confirmButtonText: 'Yes',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Please wait...',
+                    showConfirmButton: false,
+                    backdrop: true,
+                    scrollbarPadding: false,
+                    allowEscapeKey: () => !Swal.isLoading(),
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                $.post("<?php echo site_url('admin/ajax/set_status_contact') ?>",
+                    {id: id, 'status': newStatus},
+                    function (result) {
+                        if (result.status == 1) {
+                            tbl.ajax.reload(null, false);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Contact ' + actionText + 'd successfully'
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: result.msg,
+                            });
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+    // Delete function
+    function deleteContact(id) {
+        Swal.fire({
+            heightAuto: false,
+            title: 'Delete Contact',
+            text: "Are you sure you want to delete this contact? This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#c0392b',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Delete',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deleting...',
+                    showConfirmButton: false,
+                    backdrop: true,
+                    scrollbarPadding: false,
+                    allowEscapeKey: () => !Swal.isLoading(),
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                $.post("<?php echo site_url('admin/ajax/delete_contacts') ?>",
+                    {id: id},
+                    function (result) {
+                        if (result.status == 1) {
+                            tbl.ajax.reload(null, false);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted',
+                                text: 'Contact deleted successfully'
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: result.message || 'Failed to delete contact',
+                            });
+                        }
+                    }
+                );
+            }
+        });
+    }
 
     // Function to populate departments dropdown
     function populateDepartmentDropdown(selectElement, selectedValue = null) {
@@ -418,101 +515,7 @@
         });
     });
 
-
-    function activate(hot_id) {
-        Swal.fire({
-            heightAuto: false,
-            title: 'Activate Hotline',
-            text: "Are you sure you want to activate this hotline?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#27ae60',
-            cancelButtonColor: '#c0392b',
-            confirmButtonText: 'Yes',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Please wait...',
-                    showConfirmButton: false,
-                    backdrop: true,
-                    scrollbarPadding: false,
-                    allowEscapeKey: () => !Swal.isLoading(),
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                $.post("<?php echo site_url('admin/ajax/set_status_contact') ?>",
-                    { id: hot_id, 'status': 'ACTIVE' },
-                    function (result) {
-                        if (result.status == 1) {
-                            $('.modal').modal('hide');
-                            tbl.ajax.reload(null, false);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Hotline activated successfully'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: result.msg,
-                            });
-                        }
-                    }
-                );
-            }
-        });
-    }
-    function deactivate(hot_id) {
-        Swal.fire({
-            heightAuto: false,
-            title: 'Deactivate Hotline',
-            text: "Are you sure you want to deactivate this hotline? ",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#27ae60',
-            cancelButtonColor: '#c0392b',
-            confirmButtonText: 'Yes',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Please wait...',
-                    showConfirmButton: false,
-                    backdrop: true,
-                    scrollbarPadding: false,
-                    allowEscapeKey: () => !Swal.isLoading(),
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                $.post("<?php echo site_url('admin/ajax/set_status_contact') ?>",
-                    { id: hot_id, 'status': 'INACTIVE' },
-                    function (result) {
-                        if (result.status == 1) {
-                            $('.modal').modal('hide');
-                            tbl.ajax.reload(null, false);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Hotline deactivated successfully'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: result.msg,
-                            });
-                        }
-                    }
-                );
-            }
-        });
-    }
-
-    //datatable
+    // datatable init
     var tbl = $('#tblhotlines').DataTable({
         select: false,
         searching: true,
@@ -544,13 +547,6 @@
         },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
-            /*{ 
-                "title": "Date Created", "data": "created_date",
-                "render": function (data, type, row) {
-                    var date = new Date(data);
-                    return formatDate(date);
-                }
-            },*/
             {
                 "title": "Office", "data": "office", width: '25%',
                 "render": function (data, type, row) {
@@ -586,24 +582,31 @@
             {
                 "title": "Actions",
                 "data": "ID",
+                "className": "dt-center",
                 "render": function (data, type, row) {
                     if (userLevel !== 'VIEWER') {
-                        var acter = '<div class="btn-group">' +
-                            '<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">' +
-                            'Actions' +
-                            '</button>' +
-                            '<ul class="dropdown-menu">' +
-                            '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>';
-                        if (userLevel !== 'ENCODER') {
-                            // Add Activate and Deactivate buttons for all levels except ENCODER
-                            acter += '<li><button type="button" class="dropdown-item" onclick="activate(' + row.ID + ')"><i class="fa-solid fa-check"></i> Activate</button></li>' +
-                                '<li><button type="button" class="dropdown-item" onclick="deactivate(' + row.ID + ')"><i class="fa-solid fa-xmark"></i> Deactivate</button></li>';
+                        let actionHtml = `
+                            <div class="dropdown">
+                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                                <i class="bi bi-list"></i> Actions
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+
+                        if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
+                            var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
+                            var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
+                            
+                            actionHtml += `
+                                <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteContact(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
                         }
-                        acter += '</ul>' +
-                            '</div>';
-                        return acter;
+                        
+                        actionHtml += `</ul></div>`;
+                        return actionHtml;
                     } else {
-                        return '-'; // Return blank for VIEWER level users
+                        return '-';
                     }
                 }
             }
