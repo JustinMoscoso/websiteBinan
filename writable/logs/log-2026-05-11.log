@@ -5366,3 +5366,43 @@ INFO - 2026-05-11 15:24:27 --> Session: Class initialized using 'CodeIgniter\Ses
 INFO - 2026-05-11 15:24:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 INFO - 2026-05-11 15:24:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 INFO - 2026-05-11 15:24:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 15:53:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 15:53:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 15:55:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 15:55:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 15:55:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-11 15:55:17 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 203.
+ 1 APPPATH\Controllers\Admin.php(203): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentAnns()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-11 15:55:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-11 15:55:17 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 170.
+ 1 APPPATH\Controllers\Admin.php(170): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentNews()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-11 15:55:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 15:55:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 15:58:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 15:58:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 20:32:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 20:32:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 20:32:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-11 20:32:06 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 203.
+ 1 APPPATH\Controllers\Admin.php(203): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentAnns()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-11 20:32:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-11 20:32:06 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 170.
+ 1 APPPATH\Controllers\Admin.php(170): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentNews()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-11 20:32:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-11 20:32:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
