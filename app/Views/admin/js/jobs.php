@@ -128,20 +128,27 @@ $(document).ready(function() {
                 "data": null,
                 "orderable": false,
                 "render": function(data, type, row) {
-                    return `
+                    let actionHtml = `
                         <div class="dropdown">
                           <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu">
-                            <li><a class="dropdown-item view-job" href="#" data-id="${row.ID}"><i class="bi bi-eye me-1"></i>View Details</a></li>
+                            <li><a class="dropdown-item view-job" href="#" data-id="${row.ID}"><i class="bi bi-eye me-1"></i>View Details</a></li>`;
+
+                    if (userLevel !== 'VIEWER') {
+                        actionHtml += `
                             <li><a class="dropdown-item edit-job" href="#" data-id="${row.ID}"><i class="bi bi-pencil me-1"></i>Edit</a></li>
                             <li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}"><i class="bi bi-toggle-${row.status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${row.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger delete-job" href="#" data-id="${row.ID}"><i class="bi bi-trash me-1"></i>Delete</a></li>
+                            <li><a class="dropdown-item text-danger delete-job" href="#" data-id="${row.ID}"><i class="bi bi-trash me-1"></i>Delete</a></li>`;
+                    }
+
+                    actionHtml += `
                           </ul>
                         </div>
                     `;
+                    return actionHtml;
                 }
             }
         ],
