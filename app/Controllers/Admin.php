@@ -544,6 +544,7 @@ public function getVisitCount()
             {
                 $policyId = $this->request->getPost('id');
                 $policy_m = new \App\Models\FileTbl();
+                $data = []; // Explicitly initialize
             
                 if ($policyId) {
                     $policies = $policy_m->find($policyId);
@@ -556,6 +557,9 @@ public function getVisitCount()
                 } else {
                     // Get filter parameters from the search form
                     $search = $this->request->getPost('search');
+                    if (is_array($search)) {
+                        $search = $search['value'] ?? '';
+                    }
                     $frequency = $this->request->getPost('frequency');
                     $file_category = $this->request->getPost('file_category');
                     $status_filter = $this->request->getPost('status');
@@ -1465,7 +1469,7 @@ public function getVisitCount()
                     'created_date' => date('Y-m-d H:i:s'),
                     'quarter' => $qtr,
                     'status' => 'ACTIVE',  
-                    'year ' => $yr,
+                    'year' => $yr,
                 ];
                 try {
                     $policy_m->save($data);
@@ -2252,7 +2256,7 @@ public function getVisitCount()
                         'file_category' => $fc,
                         'updated_date' => date('Y-m-d H:i:s'),
                         'quarter' => $qtr,
-                        'year ' => $yr,
+                        'year' => $yr,
                     ];
 
                     $file_category = 'FULLDISC';
