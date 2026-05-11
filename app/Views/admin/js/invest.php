@@ -313,6 +313,7 @@
                 "title": "Actions",
                 "data": "ID",
                 "className": "dt-center",
+                "visible": userLevel !== 'VIEWER',
                 "render": function (data, type, row) {
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `

@@ -418,6 +418,7 @@
                 "title": "Actions",
                 "data": "ID",
                 "className": "dt-center",
+                "visible": userLevel !== 'VIEWER',
                 "render": function (data, type, row) {
                     console.log("Rendering actions for row:", row.ID, "detected userLevel:", userLevel);
                     if (userLevel !== 'VIEWER') {
