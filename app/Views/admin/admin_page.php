@@ -212,6 +212,7 @@
         </a>
       </li><!-- End COntacts Nav -->
 
+      <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])): ?>
       <li class="nav-heading">Admin</li>
 
       <li class="nav-item">
@@ -220,6 +221,7 @@
           <span>Account Management</span>
         </a>
       </li><!-- End Profile Page Nav -->
+      <?php endif; ?>
       <?php if ($user->user_lvl == 'SUPERADMIN') { ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'admin' ? '' : 'collapsed' ?>" href="<?= $mode == 'audit' ? '#' : site_url('admin/audit') ?>">
