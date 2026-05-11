@@ -203,3 +203,280 @@ ERROR - 2026-05-08 13:01:46 --> File not found: C:\xampp\htdocs\websitebinan\wri
 INFO - 2026-05-08 13:01:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 INFO - 2026-05-08 13:01:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 INFO - 2026-05-08 13:01:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:10:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:10:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:10:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:10:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-08 17:10:51 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 249.
+ 1 APPPATH\Controllers\Admin.php(249): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentAnns()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-08 17:10:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-08 17:10:51 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 216.
+ 1 APPPATH\Controllers\Admin.php(216): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentNews()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-08 17:14:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-08 17:14:03 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 249.
+ 1 APPPATH\Controllers\Admin.php(249): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentAnns()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-08 17:14:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-08 17:14:03 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 216.
+ 1 APPPATH\Controllers\Admin.php(216): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentNews()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-08 17:14:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-08 17:14:09 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 249.
+ 1 APPPATH\Controllers\Admin.php(249): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentAnns()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-08 17:14:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2026-05-08 17:14:10 --> [DEPRECATED] error_log(): Passing null to parameter #1 ($message) of type string is deprecated in APPPATH\Controllers\Admin.php on line 216.
+ 1 APPPATH\Controllers\Admin.php(216): error_log(null)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Admin->getRecentNews()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2026-05-08 17:14:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:14:12 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752736418_1ff67fd278268a7aaae6.png
+INFO - 2026-05-08 17:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:14:12 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_f7c514e3b71ad925591b.jpg
+INFO - 2026-05-08 17:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:14:12 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752560720_0dff09b7b49027edfdc8.png
+INFO - 2026-05-08 17:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:14:12 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_cc5d2e194bb2c24a824e.jpg
+INFO - 2026-05-08 17:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:14:12 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_461564b96f4fa7ceb020.jpg
+INFO - 2026-05-08 17:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:14:12 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_ea1d0a840cec5bba9fd2.jpg
+INFO - 2026-05-08 17:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:14:12 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_fa6c311f39c9c860e58d.jpg
+INFO - 2026-05-08 17:15:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753083396_fbe1c39b9f3ce1c4ec9d.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753922986_227ce8d1fc7ea674144d.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753083832_24114289cdde9c5b51b5.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753084663_e3bcd5569e63bcd451b2.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753083853_93342f658f89fef63002.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753921912_9e57c1101fbbccab6d7f.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753083427_5a98d81117130135ac4c.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753084385_62ff234d1d2cc3c05801.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753084422_665d5e3c85baeb3cc9f1.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753084776_3d821a873245fc3d81b5.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753084869_cc840c6063e319ab309b.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753250487_b24d55b36693b3d8f404.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753084959_0c206bfa3a652b57150f.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753085061_072a45447b58c46f586b.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753085167_697f94732f91231b879c.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:35 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1753085240_c5990f3ad94929fed814.jpg
+INFO - 2026-05-08 17:15:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:36 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\CITYOFFICIAL\1770878916_b1e08558c720ec018823.jpg
+INFO - 2026-05-08 17:15:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493797_a17591d9450b08847544.jpg
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493763_b4739bc9be0e7364cbb4.png
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493664_521483aab78778549f9b.png
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493628_80de4c38a77700df1c98.jpg
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493596_f80b80acd47a60526ea1.jpg
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493697_2216f8246d7bc3cb6ed7.jpg
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493454_03a1554c7ac16dddb3b3.jpg
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493565_192d11daee811eb306d0.png
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694580_df3c9e2021446c1996d7.png
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:45 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493485_d021d3661891ca43fa84.png
+INFO - 2026-05-08 17:15:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:46 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493414_0ab99f8fb99cc2f07b32.jpg
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:46 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694473_074eb3d7f000b3f9aec2.png
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:46 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752560720_0dff09b7b49027edfdc8.png
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:46 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752736418_1ff67fd278268a7aaae6.png
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:46 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_f7c514e3b71ad925591b.jpg
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:46 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_461564b96f4fa7ceb020.jpg
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:46 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_cc5d2e194bb2c24a824e.jpg
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:46 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_ea1d0a840cec5bba9fd2.jpg
+INFO - 2026-05-08 17:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:47 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\MAYOR\1752539275_fa6c311f39c9c860e58d.jpg
+INFO - 2026-05-08 17:15:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:48 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1777448876_38d74746b997d39f9516.jpg
+INFO - 2026-05-08 17:15:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:48 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1752491553_1116c5425920ad29a5ef.jpg
+INFO - 2026-05-08 17:15:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:48 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1752491363_8033f5cc6a160faa4e39.jpg
+INFO - 2026-05-08 17:15:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:48 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1752491708_2ee68cad8c2a4fcee755.jpg
+INFO - 2026-05-08 17:15:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:48 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1749458662_5e2738b875dbcdfb152a.jpg
+INFO - 2026-05-08 17:15:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:48 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1752491896_d4d17bc7bae7db6cdfbc.jpg
+INFO - 2026-05-08 17:15:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:48 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1749107815_451ea82bd13fd8daaaf5.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1749107636_44d9a126ab1d74a75ec5.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1749103302_e4a3d36d571f864f0bbc.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1747411497_cea8a53f64afbeefcbae.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1722579567_4a3e4ea0c8331bc2fdb6.png
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1721955128_5d76fdbca58bff6d5dc9.png
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1721913938_82175b7a5e6b73f925ed.png
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1720763939_cf51e8ed5c67487d9cf0.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1720161861_89876e3080f71f3530d9.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1720161770_63f9a885543e83732987.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1720087135_ac9f05f68ecc2ca866ac.jpeg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1720087062_efe59c8828331f22a116.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:49 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\POSTCONTENT\1720086681_6f24b94f33ed5e27c3c4.jpg
+INFO - 2026-05-08 17:15:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493797_a17591d9450b08847544.jpg
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493763_b4739bc9be0e7364cbb4.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493697_2216f8246d7bc3cb6ed7.jpg
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493664_521483aab78778549f9b.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493628_80de4c38a77700df1c98.jpg
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493596_f80b80acd47a60526ea1.jpg
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493565_192d11daee811eb306d0.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694580_df3c9e2021446c1996d7.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493454_03a1554c7ac16dddb3b3.jpg
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493485_d021d3661891ca43fa84.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493414_0ab99f8fb99cc2f07b32.jpg
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694473_074eb3d7f000b3f9aec2.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694453_441d660a1ecc67941dd2.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493328_5e9892869eb5e34b7cd4.jpg
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694371_50dc21d5d8efb1979322.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746751862_221f8b213cd14210fc29.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694308_f19713915d3d95fb3bd8.png
+INFO - 2026-05-08 17:15:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:50 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493234_5b776d067998c3b32df7.jpg
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493184_d6ef7e644e8bd0947fc8.jpg
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493173_3a59c3890d425dbc2f39.jpg
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694200_e52bd0c90958226b4302.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752493079_0491d53f1789d43babd8.jpg
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752492832_70d44c33781e71535e0d.jpg
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752492798_34d27f26d189ac17030a.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694030_f0ac067557794e3b6207.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746694000_42b645da94a45fca3c83.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746693973_53a34be9d670476ca31b.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746693943_8612f1c58a4b7df23bfb.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752492728_ee88d9d8fd43533ad745.jpg
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752492610_92b1d22ecdf8969e5f50.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1722558540_de580ab0ad320b7baf69.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1722558178_0b4ab22d9354be04ebad.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1722558145_70bcc7e13f384aa90f4c.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1722558113_2ee80a489b72fff98b1b.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746751881_526eb50aa268d0f3fe3a.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1752492415_c8d09f8d244bfc0f69dc.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1720746999_6835045fb9c07acb4ff7.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1720746916_6b888a2c0b0f5897144f.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1746751909_baa4eb3e3328fcf034b9.png
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1717037797_da555380fddbcebb80b6.webp
+INFO - 2026-05-08 17:15:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-05-08 17:15:51 --> File not found: C:\xampp\htdocs\websitebinan\writable\uploads\DEPT\1753324249_c677850577c6604233ed.jpg
