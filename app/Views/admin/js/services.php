@@ -559,6 +559,7 @@
             {
                 "title": "Actions",
                 "data": "ID",
+                "visible": userLevel !== 'VIEWER',
                 "render": function (data, type, row) {
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `

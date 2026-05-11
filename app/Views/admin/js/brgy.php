@@ -729,6 +729,7 @@ var tbl = $('#tblbrgy').DataTable({
                 "title": "Actions",
                 "data": "ID",
                 "className": "dt-center",
+                "visible": userLevel !== 'VIEWER',
                 width: '15%',
                 "render": function (data, type, row) {
                     if (userLevel !== 'VIEWER') {
