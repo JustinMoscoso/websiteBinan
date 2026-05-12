@@ -53,9 +53,10 @@ class Email extends BaseConfig
 
     public int $SMTPPort = 587;
 
-    public int $SMTPTimeout = 30;
+    public int $SMTPTimeout = 60;
 
-    public bool $SMTPKeepAlive = false;
+    // Keep the SMTP connection open across multiple sends in a batch (used by EmailQueue).
+    public bool $SMTPKeepAlive = true;
 
     /**
      * tls or ssl
