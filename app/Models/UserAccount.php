@@ -12,7 +12,7 @@ class UserAccount extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = false;
-    protected $allowedFields    = ['fname', 'lname', 'username', 'pass', 'email', 'user_lvl', 'updated_date', 'created_date', 'dept', 'status'];
+    protected $allowedFields    = ['fname', 'lname', 'username', 'pass', 'email', 'user_lvl', 'updated_date', 'created_date', 'dept', 'status', 'force_pass_reset'];
 
     protected bool $allowEmptyInserts = false;
 

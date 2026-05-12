@@ -71,6 +71,10 @@ class Auther extends BaseController
             if ($user && password_verify($password, $user->pass)) {
                 if ($user->status !== 'ACTIVE') {
                     $message = 'User account is not active.';
+                } else if ($user->force_pass_reset == 1) {
+                    $status = 2; // Signal for forced password change
+                    $message = 'Temporary password detected. Please change your password.';
+                    $data = ['userId' => $user->ID];
                 } else {
                     // Set session
                     $this->session->set('user', $user);
@@ -79,6 +83,31 @@ class Auther extends BaseController
                 }
             } else {
                 $message = 'Invalid username or password.';
+            }
+        }
+
+        if ($mode == 'change_temp_password') {
+            $userId = $this->request->getPost('userId');
+            $newPassword = $this->request->getPost('newPassword');
+
+            if (empty($userId) || empty($newPassword)) {
+                $message = 'Invalid request.';
+            } else {
+                $userAccountModel = new UserAccount();
+                $updateData = [
+                    'pass' => password_hash($newPassword, PASSWORD_DEFAULT),
+                    'force_pass_reset' => 0,
+                    'updated_date' => date('Y-m-d H:i:s')
+                ];
+
+                if ($userAccountModel->update($userId, $updateData)) {
+                    $user = $userAccountModel->find($userId);
+                    $this->session->set('user', $user);
+                    $status = 1;
+                    $message = 'Password updated successfully. Logging in...';
+                } else {
+                    $message = 'Failed to update password.';
+                }
             }
         }
 

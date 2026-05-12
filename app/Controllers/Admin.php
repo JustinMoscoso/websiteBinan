@@ -2713,7 +2713,8 @@ public function getVisitCount()
                 $temporaryCode = bin2hex(random_bytes(4)); // Generates an 8-character temporary code    
                 $data = [
                     'pass' => password_hash($temporaryCode, PASSWORD_DEFAULT),
-                    'updated_date' => date('Y-m-d H:i:s')
+                    'updated_date' => date('Y-m-d H:i:s'),
+                    'force_pass_reset' => 1
                 ];
                 
                 if ($user_m->update($id, $data)) {
