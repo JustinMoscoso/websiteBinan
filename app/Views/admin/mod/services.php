@@ -134,27 +134,28 @@
                         </div>
                     </div>
                 </div>
-                <!-- Department/Barangay Selection -->
+                <!-- Department/Barangay Selection – same column, toggled by category -->
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <div class="form-group" id="deptGroup" style="display: none; height: 38px;">
+                        <!-- shown when DEPT is selected -->
+                        <div class="form-group" id="deptGroup" style="display:none;">
                             <label for="txtDept" class="form-label">Department</label>
-                            <select id="txtDept" name="txtDept" class="form-select" placeholder="Choose a department" required>
+                            <select id="txtDept" name="txtDept" class="form-select" placeholder="Choose a department">
                                 <option selected disabled>Choose a department</option>
                                 <!-- Get depts -->
                             </select>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" id="brgyGroup" style="display: none; height: 38px;">
+                        <!-- shown when BRGY is selected -->
+                        <div class="form-group" id="brgyGroup" style="display:none;">
                             <label for="txtBrgy" class="form-label">Barangay</label>
-                            <select id="txtBrgy" name="txtBrgy" class="form-select" placeholder="Choose a barangay" required>
+                            <select id="txtBrgy" name="txtBrgy" class="form-select" placeholder="Choose a barangay">
                                 <option selected disabled>Choose a barangay</option>
                                 <!-- Get barangay -->
                             </select>
                         </div>
                     </div>
                 </div>
+
                 <!-- Content Field in Add Modal -->
                 <div class="row mb-3">
                     <div class="col-12">
@@ -197,19 +198,20 @@
                     </select>
                 </div>
 
-                <div class="form-group" id="editdeptGroup" style="display: none;">
+                <!-- Entity dropdowns – same position, toggled by editcategory -->
+                <div id="editdeptGroup" style="display:none;" class="form-group">
                     <label for="editDept" class="form-label">Department</label>
-                    <select id="editDept" name="editDept" class="form-select" placeholder="Choose a department" required>
+                    <select id="editDept" name="editDept" class="form-select" placeholder="Choose a department">
                         <!-- Get depts -->
                     </select>
                 </div>
-
-                <div class="form-group" id="editbrgyGroup" style="display: none;">
+                <div id="editbrgyGroup" style="display:none;" class="form-group">
                     <label for="editBrgy" class="form-label">Barangay</label>
-                    <select id="editBrgy" name="editBrgy" class="form-select" placeholder="Choose a barangay" required>
+                    <select id="editBrgy" name="editBrgy" class="form-select" placeholder="Choose a barangay">
                         <!-- Get barangay -->
                     </select>
                 </div>
+
 
 
                 <div class="form-group">

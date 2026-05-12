@@ -7,8 +7,15 @@
     <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="icon">
     <?php pre_styles('admin'); ?>
     <style>
-        body { background-color: #f6f8fc; }
-        .compose-container { max-width: 600px; margin: 50px auto; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); overflow: hidden; }
+        body { 
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<?= site_url('assets/admin/img/Binan_CityHall_Bg.jpg'); ?>') no-repeat center center fixed; 
+            background-size: cover; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .compose-container { width: 100%; max-width: 600px; background: #fff; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); overflow: hidden; }
         .compose-header { background: #f2f6fc; padding: 10px 15px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; }
         .compose-header h6 { margin: 0; color: #444; font-weight: 500; }
         .compose-body { padding: 20px; }

@@ -42,12 +42,13 @@
                     <div class="col-lg-2 col-md-6">
                         <select class="form-select" id="searchUserLevel">
                             <option selected value="">- User Level -</option>
+                            <?php if ($user->user_lvl === 'DEVELOPER'): ?>
                             <option value="DEVELOPER">Developer</option>
+                            <?php endif; ?>
                             <option value="SUPERADMIN">Super Admin</option>
                             <option value="ADMIN">Admin</option>
                             <option value="ENCODER">Encoder</option>
                             <option value="VIEWER">Viewer</option>
-                            <!-- ... options ... -->
                         </select>
                     </div>
 
@@ -152,31 +153,44 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Account Level and Department in one row -->
+                    <!-- Account Level -->  
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="txtAccLevel" class="form-label">Account Level</label>
                                 <select id="txtAccLevel" name="txtAccLevel" class="form-select" required>
-                                    <option selected disabled>Select Level</option>
-                                    <option value="DEVELOPER">Developer</option>
-                                    <option value="SUPERADMIN">Super admin</option>
+                                    <option selected disabled value="">Select Level</option>
+                                    <option value="SUPERADMIN">Super Admin</option>
                                     <option value="ADMIN">Admin</option>
                                     <option value="ENCODER">Encoder</option>
                                     <option value="VIEWER">Viewer</option>
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <!-- Account Type + Linked Entity (#25) – hidden for high-privilege roles via JS -->
+                    <div class="row mb-3" id="accountTypeRow">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="txtDept" class="form-label">Department</label>
-                                <select id="txtDept" name="txtDept" required>
-                                    <option selected disabled>Select Department</option>
-                                    <!-- Get depts -->
+                                <label for="txtAccountType" class="form-label">Account Type</label>
+                                <select id="txtAccountType" name="txtAccountType" class="form-select">
+                                    <option value="DEPARTMENT">Department Account</option>
+                                    <option value="BARANGAY">Barangay Account</option>
                                 </select>
+                                <small class="text-muted">Restricted to their own entity only.</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="entityRefGroup">
+                            <div class="form-group">
+                                <label for="txtEntityRef" class="form-label">Linked Entity <span class="text-danger">*</span></label>
+                                <select id="txtEntityRef" name="txtEntityRef" class="form-select">
+                                    <option value="" disabled selected>— Select entity —</option>
+                                </select>
+                                <small class="text-muted" id="entityRefHint"></small>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div> <!-- Modal body End -->
             <div class="modal-footer">
@@ -186,6 +200,8 @@
         </div>
     </form>
 </div> <!-- Add User End -->
+
+
 
 
 <!-- Edit User Start -->
@@ -246,31 +262,43 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Account Level and Department in one row -->
+                    <!-- Account Level -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="editAccLevel" class="form-label">Account Level</label>
                                 <select id="editAccLevel" name="editAccLevel" class="form-select" required>
-                                    <option selected disabled>Select Level</option>
-                                    <option value="DEVELOPER">Developer</option>
-                                    <option value="SUPERADMIN">Super admin</option>
+                                    <option selected disabled value="">Select Level</option>
+                                    <option value="SUPERADMIN">Super Admin</option>
                                     <option value="ADMIN">Admin</option>
                                     <option value="ENCODER">Encoder</option>
                                     <option value="VIEWER">Viewer</option>
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <!-- Account Type + Linked Entity – hidden for high-privilege roles via JS -->
+                    <div class="row mb-3" id="editAccountTypeRow">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="editDept" class="form-label">Department</label>
-                                <select id="editDept" name="editDept" required>
-                                    <option selected disabled>Select Department</option>
-                                    <!-- Options will be populated via AJAX -->
+                                <label for="editAccountType" class="form-label">Account Type</label>
+                                <select id="editAccountType" name="editAccountType" class="form-select">
+                                    <option value="DEPARTMENT">Department Account</option>
+                                    <option value="BARANGAY">Barangay Account</option>
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6" id="editEntityRefGroup">
+                            <div class="form-group">
+                                <label for="editEntityRef" class="form-label">Linked Entity <span class="text-danger">*</span></label>
+                                <select id="editEntityRef" name="editEntityRef" class="form-select">
+                                    <option value="" disabled selected>— Select entity —</option>
+                                </select>
+                                <small class="text-muted" id="editEntityRefHint"></small>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div> <!-- Modal body End -->
 
@@ -280,4 +308,4 @@
             </div>
         </div>
     </form>
-</div> <!-- Edit User End -->
+</div> <!-- Edit User End -->

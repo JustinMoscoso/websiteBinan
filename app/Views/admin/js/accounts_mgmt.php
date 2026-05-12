@@ -1,103 +1,186 @@
 <!-- js/accounts_mgmt.php -->
 <script>
-    const userLevel = '<?= $user->user_lvl ?>'.toUpperCase(); // Get user level from backend and force uppercase
+    const userLevel  = "<?= $user->user_lvl ?>".toUpperCase();
+    const phpAccType = "<?= $user->account_type ?? '' ?>".toUpperCase();
 
-    if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN') {
-        // Developer and Super Admin can see the add user button
+    // ── Show/hide Add button ───────────────────────────────────────────────
+    if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
         $('.button-32').show();
     } else {
         $('.button-32').hide();
     }
 
     if (userLevel === 'VIEWER') {
-        // Viewer can only read
         $('input, select, button').prop('disabled', true);
-        $('.btn-close').prop('disabled', false); // Allow closing modals
+        $('.btn-close').prop('disabled', false);
     }
 
+    // ── Roles that never need Account Type ──────────────────────────────
+    const HIGH_PRIV = ['DEVELOPER', 'SUPERADMIN'];
 
+    /**
+     * Toggle the Account Type row visibility based on selected role.
+     * @param {string} role - selected user_lvl value
+     * @param {string} rowId - '#accountTypeRow' or '#editAccountTypeRow'
+     */
+    function toggleAccountTypeRow(role, rowId) {
+        if (HIGH_PRIV.includes(role.toUpperCase())) {
+            $(rowId).hide();
+        } else {
+            $(rowId).show();
+        }
+    }
 
-    // Initialize selectize for all selects
-    $('#txtDept, #editDept').selectize({
-        sortField: 'text',
-        placeholder: 'Choose a department',
-        allowClear: true
+    // ── Add modal: hide/show Account Type row when role changes ─────────
+    $('#txtAccLevel').on('change', function () {
+        toggleAccountTypeRow($(this).val(), '#accountTypeRow');
+        // When shown, trigger a load of the currently selected type
+        if (!HIGH_PRIV.includes($(this).val().toUpperCase())) {
+            loadEntityOptions($('#txtAccountType').val(), '#txtEntityRef', '#entityRefHint', null);
+        }
     });
 
-    // Function to populate departments dropdown
-    function populateDepartmentDropdown(selectElement) {
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/get_dept'); ?>',
-            method: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                if (response.status === 1 && Array.isArray(response.data)) {
-                    let selectizeControl = selectElement[0].selectize;
-                    selectizeControl.clearOptions();
-                    response.data.forEach(function (department) {
-                        selectizeControl.addOption({ value: department.dept_name, text: department.dept_name });
-                    });
-                    selectizeControl.refreshOptions(false); // Refresh the options in the selectize control
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Unexpected response format.'
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to fetch departments. Please try again later.'
+    // ── Edit modal: hide/show Account Type row when role changes ────────
+    $('#editAccLevel').on('change', function () {
+        toggleAccountTypeRow($(this).val(), '#editAccountTypeRow');
+    });
+
+    // ── Entity Ref helpers (with Selectize autofill) ─────────────────────
+    /**
+     * Populate the entity dropdown and initialise Selectize with search.
+     */
+    function loadEntityOptions(type, selectId, hintId, currentVal) {
+        var $raw  = $(selectId);
+        var $hint = $(hintId);
+
+        // Destroy existing Selectize before rebuilding
+        if ($raw[0] && $raw[0].selectize) {
+            $raw[0].selectize.destroy();
+        }
+
+        $raw.empty().append('<option value="" disabled selected>Loading\u2026</option>');
+
+        var url, labelKey;
+        if (type === 'DEPARTMENT') {
+            url      = '<?= site_url('admin/ajax/get_dept') ?>';
+            labelKey = 'dept_name';
+            if ($hint && $hint.length) $hint.text('Select the department this account manages.');
+        } else if (type === 'BARANGAY') {
+            url      = '<?= site_url('admin/ajax/get_barangay') ?>';
+            labelKey = 'brgy_name';
+            if ($hint && $hint.length) $hint.text('Select the barangay this account manages.');
+        } else {
+            return;
+        }
+
+        // Use $.post — controller reads getPost(), GET would return nothing
+        $.post(url, {}, function (res) {
+            $raw.empty();
+            var items = (res.status === 1 && Array.isArray(res.data)) ? res.data : [];
+
+            if (items.length === 0) {
+                $raw.append('<option value="" disabled>No records found</option>');
+            } else {
+                items.forEach(function (item) {
+                    $raw.append(new Option(item[labelKey], item.ID));
                 });
             }
+
+            // Init Selectize with search
+            $raw.selectize({
+                sortField:    'text',
+                searchField:  'text',
+                placeholder:  '\u2014 Type to search \u2014',
+                allowClear:   true,
+                onInitialize: function () {
+                    if (currentVal) { this.setValue(String(currentVal)); }
+                }
+            });
+        }, 'json').fail(function () {
+            $raw.empty().append('<option value="" disabled>Failed to load. Please retry.</option>');
         });
     }
 
-    // Populate departments dropdown
-    $('#addModal').on('show.bs.modal', function (e) {
-        populateDepartmentDropdown($('#txtDept'));
+    // ── Add modal: Account Type change ──────────────────────────────────
+    $('#txtAccountType').on('change', function () {
+        loadEntityOptions($(this).val(), '#txtEntityRef', '#entityRefHint', null);
     });
 
-    $('#editModal').on('show.bs.modal', function (e) {
-        populateDepartmentDropdown($('#editDept'));
+    // ── Edit modal: Account Type change ────────────────────────────────
+    $('#editAccountType').on('change', function () {
+        loadEntityOptions($(this).val(), '#editEntityRef', '#editEntityRefHint', null);
     });
 
-    // Handle form submission for adding a user
+    // ── Initialise on Add modal open ────────────────────────────────────
+    $('#addModal').on('show.bs.modal', function () {
+        // Reset form
+        $('#addForm')[0].reset();
+
+        // Filter Account Level options based on who is logged in
+        var $lvl = $('#txtAccLevel');
+        $lvl.empty();
+        $lvl.append('<option value="" selected disabled>Select Level</option>');
+
+        if (userLevel === 'DEVELOPER') {
+            $lvl.append('<option value="SUPERADMIN">Super Admin</option>');
+        }
+        if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN') {
+            $lvl.append('<option value="ADMIN">Admin</option>');
+        }
+        $lvl.append('<option value="ENCODER">Encoder</option>');
+        $lvl.append('<option value="VIEWER">Viewer</option>');
+
+        // For ADMIN: hide Account Type row (entity auto-assigned server-side)
+        if (userLevel === 'ADMIN') {
+            $('#accountTypeRow').hide();
+        } else {
+            // Default to DEPARTMENT and load options
+            $('#txtAccountType').val('DEPARTMENT');
+            loadEntityOptions('DEPARTMENT', '#txtEntityRef', '#entityRefHint', null);
+            $('#accountTypeRow').show();
+        }
+    });
+
+    // ── Handle form submission for adding a user ─────────────────────────
     $('#btnAdd').on('click', function () {
-        let form = $('#addForm')[0];
+        let form     = $('#addForm')[0];
         let formData = new FormData(form);
 
-        // Form validation
-        const fields = [
+        // Basic required fields
+        const basicFields = [
             { name: 'txtFirstName', label: 'First Name' },
-            { name: 'txtLastName', label: 'Last Name' },
-            { name: 'txtUsername', label: 'Username' },
-            { name: 'txtEmail', label: 'Email' },
-            { name: 'txtPassword', label: 'Password' },
-            { name: 'txtAccLevel', label: 'Account level' },
-            { name: 'txtDept', label: 'Department' }
+            { name: 'txtLastName',  label: 'Last Name'  },
+            { name: 'txtUsername',  label: 'Username'   },
+            { name: 'txtEmail',     label: 'Email'      },
+            { name: 'txtPassword',  label: 'Password'   },
+            { name: 'txtAccLevel',  label: 'Account Level' }
         ];
-
-        for (let field of fields) {
-            if (!formData.get(field.name)) {
-                Swal.fire('Validation Error', `${field.label} is required`, 'warning');
+        for (let f of basicFields) {
+            if (!formData.get(f.name)) {
+                Swal.fire('Validation Error', `${f.label} is required`, 'warning');
                 return;
             }
         }
 
+        // Entity required for DEPT/BRGY account types, but only when Account Type row is visible
+        const acctType = formData.get('txtAccountType');
+        const acctLevel = formData.get('txtAccLevel') || '';
+        const needsEntity = !HIGH_PRIV.includes(acctLevel.toUpperCase())
+                            && userLevel !== 'ADMIN'
+                            && ['DEPARTMENT', 'BARANGAY'].includes(acctType);
+        if (needsEntity && !formData.get('txtEntityRef')) {
+            Swal.fire('Validation Error', 'Please select a Linked Entity.', 'warning');
+            return;
+        }
+
         Swal.fire({
-            title: 'Please wait...',
+            title: 'Please wait\u2026',
             showConfirmButton: false,
             backdrop: true,
             scrollbarPadding: false,
-            allowEscapeKey: () => !Swal.isLoading(),
+            allowEscapeKey:    () => !Swal.isLoading(),
             allowOutsideClick: () => !Swal.isLoading(),
-            willOpen: () => {
-                Swal.showLoading();
-            }
+            willOpen: () => { Swal.showLoading(); }
         });
 
         $.ajax({
@@ -109,95 +192,103 @@
             success: function (result) {
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
-                    $('#txtDept')[0].selectize.clear(); // Clear the selectize control
                     $('#addModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Department data saved!'
-                    });
+                    Swal.fire({ icon: 'success', title: 'Success', text: 'User account created!' });
                     tbl.ajax.reload(null, false);
                 } else {
-                    Swal.fire({
-                        icon: 'warning' || 'error',
-                        title: 'Error',
-                        text: result.message || 'Data not created. Refresh the page or try logging in again.',
-                    });
-                    tbl.ajax.reload(null, false);
+                    Swal.fire({ icon: 'error', title: 'Error', text: result.message || 'Could not create user.' });
                 }
             },
             error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while processing your request. Please try again.'
-                });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred. Please try again.' });
             }
         });
     });
 
-    // Function to open the edit user modal and populate data
+    // ── Open edit modal and populate data ──────────────────────────────
     function edit(userId) {
-
         $.ajax({
             url: '<?php echo site_url('admin/ajax/get_users'); ?>',
             method: 'POST',
             data: { id: userId },
             success: function (response) {
                 if (response.data) {
-                    let res = response.data;
+                    let res     = response.data;
+                    let accType = res.account_type || '';
+
                     $('#editUserId').val(res.ID);
                     $('#editFirstName').val(res.fname);
                     $('#editLastName').val(res.lname);
                     $('#editUsername').val(res.username);
                     $('#editEmail').val(res.email);
-                    $('#editAccLevel').val(res.user_lvl);
-                    $('#editDept')[0].selectize.setValue(res.dept); // Set the value for selectize
                     $('#editPassword').val('');
-                    $('#editUserModal').modal('show');
 
+                    // Set role and toggle account type row
+                    var targetRole = (res.user_lvl || '').toUpperCase();
+
+                    // Filter edit Account Level dropdown
+                    var $editLvl = $('#editAccLevel');
+                    $editLvl.empty();
+                    $editLvl.append('<option value="" disabled>Select Level</option>');
+                    if (userLevel === 'DEVELOPER') {
+                        $editLvl.append('<option value="SUPERADMIN">Super Admin</option>');
+                    }
+                    if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN') {
+                        $editLvl.append('<option value="ADMIN">Admin</option>');
+                    }
+                    $editLvl.append('<option value="ENCODER">Encoder</option>');
+                    $editLvl.append('<option value="VIEWER">Viewer</option>');
+                    $editLvl.val(res.user_lvl);
+
+                    // Account Type row visibility:
+                    // Admin editing another Admin → hide; SuperAdmin/Dev → always show; Admin editing Enc/Viewer → show
+                    var canEditAccountType = (userLevel === 'SUPERADMIN' || userLevel === 'DEVELOPER')
+                        || (userLevel === 'ADMIN' && !['ADMIN', 'SUPERADMIN', 'DEVELOPER'].includes(targetRole));
+
+                    if (canEditAccountType && !HIGH_PRIV.includes(targetRole)) {
+                        var dispType = accType || 'DEPARTMENT';
+                        $('#editAccountType').val(dispType);
+                        loadEntityOptions(dispType, '#editEntityRef', '#editEntityRefHint', res.entity_ref_id);
+                        $('#editAccountTypeRow').show();
+                    } else {
+                        $('#editAccountTypeRow').hide();
+                    }
+
+                    $('#editModal').modal('show');
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'User not found.'
-                    });
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'User not found.' });
                 }
             },
             error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to fetch user details. Please try again later.'
-                });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to fetch user details.' });
             }
         });
     }
 
-
-    // Function to submit the edit user form
+    // ── Submit edit user form ────────────────────────────────────────────
     $('#btnEdit').click(function () {
-        let form = $('#editForm')[0];
+        let form     = $('#editForm')[0];
         let formData = new FormData(form);
 
-        // Form validation
-        const fields = [
-            { name: 'editFirstName', Label: 'First Name' },
-            { name: 'editLastName', Label: 'Last Name' },
-            { name: 'editUsername', Label: 'Username' },
-            { name: 'editEmail', Label: 'Email' },
-            { name: 'editAccLevel', Label: 'Account Level' },
-            { name: 'editDept', Label: 'Department' }
+        const basicFields = [
+            { name: 'editFirstName', label: 'First Name'    },
+            { name: 'editLastName',  label: 'Last Name'     },
+            { name: 'editUsername',  label: 'Username'      },
+            { name: 'editEmail',     label: 'Email'         },
+            { name: 'editAccLevel',  label: 'Account Level' }
         ];
-
-        for (let field of fields) {
-            if (!formData.get(field.name)) {
-                Swal.fire('Validation Error', `${field.Label} is required`, 'warning');
+        for (let f of basicFields) {
+            if (!formData.get(f.name)) {
+                Swal.fire('Validation Error', `${f.label} is required`, 'warning');
                 return;
             }
         }
 
-
+        const acctType = formData.get('editAccountType');
+        if (['DEPARTMENT', 'BARANGAY'].includes(acctType) && !formData.get('editEntityRef')) {
+            Swal.fire('Validation Error', 'Please select a Linked Entity.', 'warning');
+            return;
+        }
 
         $.ajax({
             url: '<?php echo site_url('admin/ajax/update_user'); ?>',
@@ -206,78 +297,46 @@
             processData: false,
             contentType: false,
             success: function (response) {
-
                 if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        tbl.ajax.reload();
-                    });
+                    Swal.fire({ icon: 'success', title: 'Success', text: response.message })
+                        .then(() => {
+                            $('#editModal').modal('hide');
+                            tbl.ajax.reload();
+                        });
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
+                    Swal.fire({ icon: 'error', title: 'Error', text: response.message });
                 }
             },
             error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update user. Please try again later.'
-                });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred. Please try again.' });
             }
         });
     });
 
     function toggleStatus(userId, currentStatus) {
-        var newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+        var newStatus  = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
         var actionText = newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
-        var confirmText = newStatus === 'ACTIVE' ? 'This user will be able to log in.' : 'This user will fail at log in.';
 
         Swal.fire({
             heightAuto: false,
             title: (newStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') + ' User',
-            text: "Are you sure you want to " + actionText + " this user? " + confirmText,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#27ae60',
-            cancelButtonColor: '#c0392b',
-            confirmButtonText: 'Yes',
+            text:  'Are you sure you want to ' + actionText + ' this user?',
+            icon:  'question',
+            showCancelButton:    true,
+            confirmButtonColor:  '#27ae60',
+            cancelButtonColor:   '#c0392b',
+            confirmButtonText:   'Yes',
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Please wait...',
-                    showConfirmButton: false,
-                    backdrop: true,
-                    scrollbarPadding: false,
-                    allowEscapeKey: () => !Swal.isLoading(),
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                $.post("<?php echo site_url('admin/ajax/set_status_user') ?>",
-                    { id: userId, 'status': newStatus },
+                Swal.fire({ title: 'Please wait\u2026', showConfirmButton: false, willOpen: () => Swal.showLoading() });
+                $.post('<?php echo site_url('admin/ajax/set_status_user') ?>',
+                    { id: userId, status: newStatus },
                     function (result) {
                         if (result.status == 1) {
-                            $('.modal').modal('hide');
                             tbl.ajax.reload(null, false);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'User ' + actionText + 'd successfully'
-                            });
+                            Swal.fire({ icon: 'success', title: 'Done', text: 'User ' + actionText + 'd.' });
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: result.msg,
-                            });
+                            Swal.fire({ icon: 'error', title: 'Error', text: result.message });
                         }
                     }
                 );
@@ -285,99 +344,53 @@
         });
     }
 
-    function reset_password(userId, userName) {
+    function reset_password(userId, fullName) {
         Swal.fire({
-            title: 'Reset Password',
-            text: `Are you sure you want to reset the password for ${userName}?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Reset Password',
-            confirmButtonColor: '#27ae60',
-            cancelButtonColor: '#c0392b'
+            title:             'Reset Password',
+            text:              `Reset password for ${fullName}?`,
+            icon:              'warning',
+            showCancelButton:  true,
+            confirmButtonText: 'Yes, reset',
+            confirmButtonColor:'#e67e22',
+            cancelButtonColor: '#7f8c8d',
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Please wait...',
-                    showConfirmButton: false,
-                    backdrop: true,
-                    scrollbarPadding: false,
-                    allowEscapeKey: () => !Swal.isLoading(),
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                $.post("<?php echo site_url('admin/ajax/reset_password') ?>",
+                Swal.fire({ title: 'Please wait\u2026', showConfirmButton: false, willOpen: () => Swal.showLoading() });
+                $.post('<?php echo site_url('admin/ajax/reset_password') ?>',
                     { id: userId },
                     function (result) {
-                        if (result.status === 1) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: `Password for ${userName} reset successfully. Temporary password: ${result.message}`
-                            }).then(() => {
-                                tbl.ajax.reload(null, false);
-                            });
+                        if (result.status == 1) {
+                            tbl.ajax.reload(null, false);
+                            Swal.fire({ icon: 'success', title: 'Reset', html: result.message });
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: result.message || 'An error occurred. Please try again.'
-                            });
+                            Swal.fire({ icon: 'error', title: 'Error', text: result.message });
                         }
                     }
-                ).fail(function () {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Unable to process your request. Please try again later.'
-                    });
-                });
+                );
             }
         });
     }
-
 
     function del(userId) {
         Swal.fire({
-            heightAuto: false,
-            title: 'Delete User',
-            text: "Are you sure you want to delete this user?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#27ae60',
-            cancelButtonColor: '#c0392b',
-            confirmButtonText: 'Yes',
+            title:             'Delete User',
+            text:              'This will permanently delete the user account.',
+            icon:              'warning',
+            showCancelButton:  true,
+            confirmButtonColor:'#c0392b',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Delete',
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Please wait...',
-                    showConfirmButton: false,
-                    backdrop: true,
-                    scrollbarPadding: false,
-                    allowEscapeKey: () => !Swal.isLoading(),
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                $.post("<?php echo site_url('admin/ajax/set_status_user') ?>",
-                    { id: userId, 'status': 'ARCHIVED' },
+                Swal.fire({ title: 'Deleting\u2026', showConfirmButton: false, willOpen: () => Swal.showLoading() });
+                $.post('<?php echo site_url('admin/ajax/set_status_user') ?>',
+                    { id: userId, status: 'DELETED' },
                     function (result) {
                         if (result.status == 1) {
-                            $('.modal').modal('hide');
                             tbl.ajax.reload(null, false);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'User deleted successfully'
-                            });
+                            Swal.fire({ icon: 'success', title: 'Deleted', text: 'User account deleted.' });
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: result.msg,
-                            });
+                            Swal.fire({ icon: 'error', title: 'Error', text: result.message });
                         }
                     }
                 );
@@ -385,189 +398,120 @@
         });
     }
 
-    // Datatable
+    // ── DataTable ────────────────────────────────────────────────────────
     var tbl = $('#tbluser').DataTable({
-        select: false,
+        select:    false,
         searching: true,
-        ordering: true,
-        order: [],
+        ordering:  true,
+        order:     [],
         pageLength: 10,
         processing: true,
-
         ajax: {
-            url: "<?php echo base_url('admin/ajax/get_users'); ?>",
-            type: "POST",
+            url:  '<?php echo base_url('admin/ajax/get_users'); ?>',
+            type: 'POST',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            },
             data: function (d) {
-                return {
-                    searchUser: $('#searchUser').val(),
-                    searchStatus: $('#searchStatus').val(),
-                    searchUserLevel: $('#searchUserLevel').val()
-                };
+                d.searchUser      = $('#searchUser').val();
+                d.searchStatus    = $('#searchStatus').val();
+                d.searchUserLevel = $('#searchUserLevel').val();
             },
             dataSrc: function (json) {
-                return json.data;
+                if (json.status === 1 && Array.isArray(json.data)) return json.data;
+                return [];
             }
         },
-
         columns: [
+            { title: 'ID', data: 'ID', visible: false },
+            { title: 'Username', data: 'username' },
             {
-                title: "User ID",
-                data: "ID",
-                visible: false
+                title: 'Name', data: 'fname',
+                className: 'dt-head-center dt-body-justify', width: '15%',
+                render: function (data, type, row) { return row.fname + ' ' + row.lname; }
             },
-
+            { title: 'Email', data: 'email' },
+            { title: 'User Level', data: 'user_lvl' },
             {
-                title: "Username",
-                data: "username"
-            },
-
-            {
-                title: "Name",
-                data: "fname",
-                className: "dt-head-center dt-body-justify",
-                width: '15%',
-                render: function (data, type, row) {
-                    return row.fname + " " + row.lname;
+                title: 'Account Type', data: 'account_type', className: 'dt-center',
+                render: function (data) {
+                    if (data === 'DEPARTMENT') return '<span class="badge bg-primary">Department</span>';
+                    if (data === 'BARANGAY')   return '<span class="badge bg-info text-dark">Barangay</span>';
+                    if (!data) return '<span class="badge bg-secondary">System</span>';
                 }
             },
-
             {
-                title: "Department",
-                data: "dept",
-                className: "dt-head-center dt-body-justify",
-                width: '20%'
-            },
-
-            {
-                title: "Email",
-                data: "email"
-            },
-
-            {
-                title: "User Level",
-                data: "user_lvl"
-            },
-
-            {
-                title: "Status",
-                data: "status",
-                className: "dt-center",
-                width: '10%',
-                render: function (data, type, row) {
-
-                    if (data === 'ACTIVE') {
-                        return '<span class="badge bg-success">Active</span>';
-                    }
-
-                    if (data === 'INACTIVE') {
-                        return '<span class="badge bg-danger">Inactive</span>';
-                    }
-
+                title: 'Status', data: 'status', className: 'dt-center', width: '10%',
+                render: function (data) {
+                    if (data === 'ACTIVE')   return '<span class="badge bg-success">Active</span>';
+                    if (data === 'INACTIVE') return '<span class="badge bg-danger">Inactive</span>';
                     return '<span class="badge bg-secondary">Archived</span>';
                 }
             },
-
             {
-                title: "Actions",
-                data: "ID",
-                className: "dt-center",
+                title: 'Actions', data: 'ID', className: 'dt-center',
                 visible: userLevel !== 'VIEWER',
                 render: function (data, type, row) {
-                    if (userLevel === 'VIEWER') {
-                        return '-';
-                    }
+                    if (userLevel === 'VIEWER') return '-';
 
-                    let actionHtml = `
+                    let html = `
                     <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                             <i class="bi bi-list"></i> Actions
                         </button>
-
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
-                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})">
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#editModal" onclick="edit(${row.ID})">
                                     <i class="bi bi-pencil me-1"></i> Edit
                                 </a>
-                            </li>
-                    `;
+                            </li>`;
 
                     if (userLevel !== 'ENCODER') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                         var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-
-                        actionHtml += `
-                        <li>
-                            <a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')">
-                                <i class="bi ${statusIcon} me-1"></i> ${statusText}
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="#" onclick="reset_password(${row.ID}, \`${row.fname} ${row.lname}\`)">
-                                <i class="bi bi-shield-lock me-1"></i> Reset Password
-                            </a>
-                        </li>
-
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item text-danger" href="#" onclick="del(${row.ID})">
-                                <i class="bi bi-trash me-1"></i> Delete User
-                            </a>
-                        </li>
-                    `;
+                        html += `
+                            <li>
+                                <a class="dropdown-item" href="#"
+                                    onclick="toggleStatus(${row.ID}, '${row.status}')">
+                                    <i class="bi ${statusIcon} me-1"></i> ${statusText}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"
+                                    onclick="reset_password(${row.ID}, \`${row.fname} ${row.lname}\`)">
+                                    <i class="bi bi-shield-lock me-1"></i> Reset Password
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" onclick="del(${row.ID})">
+                                    <i class="bi bi-trash me-1"></i> Delete User
+                                </a>
+                            </li>`;
                     }
 
-                    actionHtml += `
-                        </ul>
-                    </div>
-                `;
-
-                    return actionHtml;
+                    html += `</ul></div>`;
+                    return html;
                 }
             }
         ],
-
         initComplete: function () {
-
             var searchInput = $('#tbluser_filter input[type="search"]');
-
-            searchInput.attr('placeholder', 'Search User...');
-
+            searchInput.attr('placeholder', 'Search User\u2026');
             searchInput.removeClass('form-control-sm');
-
-            searchInput.css({
-                width: '350px',
-                border: '2px solid #388e3c',
-                marginLeft: '10px'
-            });
+            searchInput.css({ width: '350px', border: '2px solid #388e3c', marginLeft: '10px' });
         }
     });
 
     var sltdRow = null;
+    $('#tbluser tbody').on('mouseover', 'tr', function () { sltdRow = tbl.row(this).data(); });
 
-    $('#tbluser tbody').on('mouseover', 'tr', function () {
-        sltdRow = tbl.row(this).data();
-    });
-
-    // Attach a submit handler to the form
-    $('#userSearchForm').on('submit', function (e) {
-        e.preventDefault(); // stop page reload
-        tbl.ajax.reload();  // unified reload logic
-    });
-
-    // Clear Filters button
+    $('#userSearchForm').on('submit', function (e) { e.preventDefault(); tbl.ajax.reload(); });
     $('#userSearchForm button[type="reset"]').on('click', function () {
-        // reset form fields
         $('#userSearchForm')[0].reset();
-
-        // also clear individual inputs if needed
-        $('#searchUser').val('');
-        $('#searchStatus').val('');
-        $('#searchUserLevel').val('');
-
-        // reload table back to default
         tbl.ajax.reload();
     });
-
 
 </script>

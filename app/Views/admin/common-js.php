@@ -37,7 +37,7 @@
 
     // Support Ticket Logic
     function fetchTickets() {
-        $.post("<?= site_url('admin/ajax/get_tickets') ?>", function(result) {
+        $.post("<?= site_url('admin/ajax/get_tickets') ?>", {}, function(result) {
             if (result.status === 1) {
                 let tickets = result.data;
                 let totalCount = tickets.length;
@@ -91,7 +91,7 @@
                 }
                 $('#ticketItems').html(html);
             }
-        });
+        }, 'json');
     }
 
     function takeTicket(id) {
@@ -108,7 +108,7 @@
             } else {
                 Swal.fire('Error', result.message, 'error');
             }
-        });
+        }, 'json');
     }
 
     function resolveTicket(id) {
@@ -138,7 +138,7 @@
                     } else {
                         Swal.fire('Error', res.message, 'error');
                     }
-                });
+                }, 'json');
             }
         });
     }
@@ -148,7 +148,7 @@
         const userLvl = "<?= $user->user_lvl ?>";
         if (["DEVELOPER", "SUPERADMIN", "ADMIN"].includes(userLvl)) {
             fetchTickets();
-            setInterval(fetchTickets, 30000); // Refresh every 30 seconds
+            setInterval(fetchTickets, 5000); // Refresh every 5 seconds (real-time)
         }
     });
 </script>
