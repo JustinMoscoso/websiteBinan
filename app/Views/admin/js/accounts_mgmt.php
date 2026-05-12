@@ -285,10 +285,10 @@
         });
     }
 
-    function reset_password(userId) {
+    function reset_password(userId, userName) {
         Swal.fire({
             title: 'Reset Password',
-            text: "Are you sure you want to reset the password for this user?",
+            text: `Are you sure you want to reset the password for ${userName}?`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Reset Password',
@@ -314,7 +314,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
-                                text: `Password reset successfully. Temporary password: ${result.message}`
+                                text: `Password for ${userName} reset successfully. Temporary password: ${result.message}`
                             }).then(() => {
                                 tbl.ajax.reload(null, false);
                             });
@@ -503,7 +503,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item" href="#" onclick="reset_password(${row.ID})">
+                            <a class="dropdown-item" href="#" onclick="reset_password(${row.ID}, \`${row.fname} ${row.lname}\`)">
                                 <i class="bi bi-shield-lock me-1"></i> Reset Password
                             </a>
                         </li>

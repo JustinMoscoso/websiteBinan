@@ -2702,15 +2702,43 @@ public function getVisitCount()
             {
                 $user_m = new \App\Models\UserAccount(); 
                 $id = $this->request->getPost('id');
+                
+                $userData = $user_m->find($id);
+                if (!$userData) {
+                    $status = 0;
+                    $message = 'User not found.';
+                    break;
+                }
+
                 $temporaryCode = bin2hex(random_bytes(4)); // Generates an 8-character temporary code    
                 $data = [
                     'pass' => password_hash($temporaryCode, PASSWORD_DEFAULT),
                     'updated_date' => date('Y-m-d H:i:s')
                 ];
-                $user_m->update($id, $data);
-                $log_c['processDetails'] = 'ACCOUNT_ID: ' . $id . ' PASSWORD RESET';
-                $status = 1;
-                $message = $temporaryCode;
+                
+                if ($user_m->update($id, $data)) {
+                    // EMAIL SERVICE
+                    $emailService = \Config\Services::email();
+                    $emailService->setTo($userData->email);
+                    $emailService->setFrom('websiteBinan@gmail.com', 'Website Support');
+                    $emailService->setSubject('Password Reset');
+                    $emailService->setMessage("
+                        Hello {$userData->fname},
+
+                        Your password has been successfully reset.
+                        Your temporary password is: {$temporaryCode}
+
+                        Please log in and change your password immediately.
+                    ");
+                    $emailService->send();
+
+                    $log_c['processDetails'] = 'ACCOUNT_ID: ' . $id . ' PASSWORD RESET & EMAIL SENT';
+                    $status = 1;
+                    $message = $temporaryCode;
+                } else {
+                    $status = 0;
+                    $message = 'Failed to reset password.';
+                }
                 break;
             }
 
