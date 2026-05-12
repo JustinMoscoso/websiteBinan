@@ -51,7 +51,7 @@
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" style="min-width: 300px; max-height: 400px; overflow-y: auto;" id="notificationList">
             <li class="dropdown-header">
               You have <span id="ticketCountText">0</span> open tickets
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+              <a href="<?= site_url('admin/tickets') ?>"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -63,13 +63,6 @@
                     <div class="p-3 text-center text-muted">No new tickets</div>
                 </li>
             </div>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
-            </li>
 
           </ul><!-- End Notification Dropdown Items -->
 
@@ -147,9 +140,22 @@
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
+      <?php
+        // Privileged roles always see the full sidebar regardless of account_type
+        $privilegedRoles = ['DEVELOPER', 'SUPERADMIN', 'ADMIN'];
+        $isEntityAccount = !in_array($user->user_lvl, $privilegedRoles)
+                           && in_array($user->account_type ?? '', ['DEPARTMENT', 'BARANGAY']);
+        $showBrgy        = !in_array($user->user_lvl, $privilegedRoles)
+                           ? ($user->account_type ?? '') !== 'DEPARTMENT'
+                           : true;
+        $showDept        = !in_array($user->user_lvl, $privilegedRoles)
+                           ? ($user->account_type ?? '') !== 'BARANGAY'
+                           : true;
+      ?>
 
       <li class="nav-heading">Content Management</li>
 
+      <?php if (!$isEntityAccount): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'postcontent' ? '' : 'collapsed' ?>" href="<?= $mode == 'postcontent' ? '#' : site_url('admin/postcontent') ?>">
         <i class="bi bi-newspaper"></i>
@@ -170,28 +176,34 @@
           <span>About / Homepage</span>
         </a>
       </li><!-- End About Nav -->
+      <?php endif; ?>
 
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'services' ? '' : 'collapsed' ?>" href="<?= $mode == 'services' ? '#' : site_url('admin/services') ?>">
           <i class="bi bi-patch-check"></i>
           <span>Services</span>
         </a>
-      </li><!-- End Mayor's Corner Nav -->
+      </li><!-- End Services Nav -->
 
+      <?php if ($showBrgy): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'brgy' ? '' : 'collapsed' ?>" href="<?= $mode == 'brgy' ? '#' : site_url('admin/brgy') ?>">
           <i class="bi bi-houses"></i>
           <span>Barangay</span>
         </a>
       </li><!-- End barangay Nav -->
+      <?php endif; ?>
 
+      <?php if ($showDept): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'dept' ? '' : 'collapsed' ?>" href="<?= $mode == 'dept' ? '#' : site_url('admin/dept') ?>">
           <i class="bi bi-bank"></i>
           <span>Departments</span>
         </a>
       </li><!-- End department Nav -->
+      <?php endif; ?>
 
+      <?php if (!$isEntityAccount): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'cityOff' ? '' : 'collapsed' ?>" href="<?= $mode == 'cityOff' ? '#' : site_url('admin/cityOff') ?>">
           <i class="bi bi-people"></i>
@@ -239,7 +251,10 @@
           <i class="bi bi-telephone"></i>
           <span>Contacts</span>
         </a>
-      </li><!-- End COntacts Nav -->
+      </li><!-- End Contacts Nav -->
+      <?php endif; ?>
+
+
 
       <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])): ?>
       <li class="nav-heading">Admin</li>
@@ -251,14 +266,23 @@
         </a>
       </li><!-- End Profile Page Nav -->
       <?php endif; ?>
-      <?php if ($user->user_lvl == 'SUPERADMIN') { ?>
+      <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'])): ?>
       <li class="nav-item">
-        <a class="nav-link <?= $mode == 'admin' ? '' : 'collapsed' ?>" href="<?= $mode == 'audit' ? '#' : site_url('admin/audit') ?>">
+        <a class="nav-link <?= $mode == 'audit' ? '' : 'collapsed' ?>" href="<?= $mode == 'audit' ? '#' : site_url('admin/audit') ?>">
           <i class="bi bi-shield-shaded"></i>
           <span>System Logs</span>
         </a>
       </li>
-      <?php } ?>
+      <?php endif; ?>
+      <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])): ?>
+      <li class="nav-item">
+        <a class="nav-link <?= $mode == 'tickets' ? '' : 'collapsed' ?>" href="<?= $mode == 'tickets' ? '#' : site_url('admin/tickets') ?>">
+          <i class="bi bi-ticket-perforated"></i>
+          <span>Support Tickets</span>
+        </a>
+      </li>
+      <?php endif; ?>
+
       
       <!-- End Login Page Nav -->
     </ul>
@@ -297,8 +321,10 @@
   $jsfile = APPPATH . 'Views' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . $mode . '.php';
 
   if (file_exists($jsfile)) {
-  //    echo view('admin' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . $mode, ['user' => $user]);
-      echo view('admin' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . $mode, []);
+      // Pass only the known view variables explicitly — get_defined_vars() can leak
+      // CI4 internal renderer variables and corrupt the sub-view render cycle.
+      $jsViewData = ['user' => $user, 'mode' => $mode, 'title' => $title ?? ''];
+      echo view('admin' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . $mode, $jsViewData);
   }
 
 ?>

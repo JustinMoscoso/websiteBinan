@@ -44,6 +44,16 @@ class Admin extends BaseController
             return redirect()->to(base_url('admin/dashboard'));
         }
 
+        // Restrict audit (System Logs) to DEVELOPER and SUPERADMIN only
+        if ($mode === 'audit' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'])) {
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+
+        // Restrict tickets page to DEVELOPER, SUPERADMIN, ADMIN
+        if ($mode === 'tickets' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+
         $data['user'] = $user;
         $data['mode'] = $mode;
 
@@ -101,8 +111,9 @@ class Admin extends BaseController
                 break;
             case 'invest': $data['title'] = 'Invest'; break;
             case 'profile': $data['title'] = 'My Profile'; break;
-            case 'audit': $data['title'] = 'System Logs'; break;
-            case 'map': $data['title'] = 'Map Management'; break;
+            case 'audit':   $data['title'] = 'System Logs'; break;
+            case 'map':     $data['title'] = 'Map Management'; break;
+            case 'tickets': $data['title'] = 'Support Tickets'; break;
             default: $data['title'] = 'Unknown'; break;
         }
 
@@ -235,6 +246,16 @@ public function getVisitCount()
         $data = array();
 
         $user = $this->session->get('user');
+        
+        if (!$user) {
+            echo json_encode([
+                'status' => 0,
+                'data' => [],
+                'message' => 'Session expired or unauthorized',
+            ]);
+            exit;
+        }
+
         $log_m = new \App\Models\Audit();
         $log_c = [
             'ipaddress' => $this->request->getIPAddress(),
@@ -251,26 +272,33 @@ public function getVisitCount()
             ------------------- */
 
             case 'get_users': {
-                $userId = $this->request->getPost('id');
-                $searchUser = $this->request->getPost('searchUser');
-                $searchStatus = $this->request->getPost('searchStatus');
+                $userId          = $this->request->getPost('id');
+                $searchUser      = $this->request->getPost('searchUser');
+                $searchStatus    = $this->request->getPost('searchStatus');
                 $searchUserLevel = $this->request->getPost('searchUserLevel');
-                
+
                 $user_m = new \App\Models\UserAccount();
 
                 // Fetch details of a specific user if ID is provided
                 if ($userId) {
-                    $user = $user_m->find($userId);
-                    if ($user) {
-                        $data = $user;
+                    $target = $user_m->find($userId);
+                    // Non-developers cannot see developer accounts
+                    if ($target && $target->user_lvl === 'DEVELOPER' && $user->user_lvl !== 'DEVELOPER') {
+                        $message = 'User not found';
+                    } elseif ($target) {
+                        $data   = $target;
                         $status = 1;
                     } else {
                         $message = 'User not found';
                     }
                 } else {
                     $builder = $user_m->orderBy('created_date', 'desc');
-                    
-                    // Add search filters if provided
+
+                    // Non-developers never see DEVELOPER accounts
+                    if ($user->user_lvl !== 'DEVELOPER') {
+                        $builder->where('user_lvl !=', 'DEVELOPER');
+                    }
+
                     if (!empty($searchUser)) {
                         $builder->groupStart()
                                 ->like('username', $searchUser)
@@ -282,12 +310,15 @@ public function getVisitCount()
                         $builder->where('status', $searchStatus);
                     }
                     if (!empty($searchUserLevel)) {
-                        $builder->where('user_lvl', $searchUserLevel);
+                        // Guard: non-developers can't filter by DEVELOPER
+                        if ($searchUserLevel !== 'DEVELOPER' || $user->user_lvl === 'DEVELOPER') {
+                            $builder->where('user_lvl', $searchUserLevel);
+                        }
                     }
-                    
+
                     $users_d = $builder->findAll();
-                    foreach ($users_d as $user) {
-                        $data[] = $user;
+                    foreach ($users_d as $u) {
+                        $data[] = $u;
                     }
                     $status = 1;
                 }
@@ -877,14 +908,65 @@ public function getVisitCount()
             case 'get_tickets':
             {
                 $ticket_m = new \App\Models\TicketModel();
-                // Join with useradmin to get admin name if ticket is in progress
-                $tickets = $ticket_m->select('support_tickets.*, useradmin.fname as admin_fname, useradmin.lname as admin_lname')
-                                   ->join('useradmin', 'useradmin.ID = support_tickets.assigned_admin_id', 'left')
-                                   ->whereIn('support_tickets.status', ['OPEN', 'IN_PROGRESS'])
-                                   ->orderBy('support_tickets.created_at', 'DESC')
-                                   ->findAll();
-                $data = $tickets;
-                $status = 1;
+                $singleId = $this->request->getPost('id');
+
+                if ($singleId) {
+                    // Single ticket detail for the view modal
+                    $ticket = $ticket_m->select('support_tickets.*, useradmin.fname as admin_fname, useradmin.lname as admin_lname')
+                                       ->join('useradmin', 'useradmin.ID = support_tickets.assigned_admin_id', 'left')
+                                       ->find($singleId);
+                    if ($ticket) {
+                        $data   = $ticket;
+                        $status = 1;
+                    } else {
+                        $message = 'Ticket not found';
+                    }
+                } else {
+                    // List view — support filters from tickets page
+                    $searchConcern = $this->request->getPost('searchConcern');
+                    $searchStatus  = $this->request->getPost('searchStatus');
+                    $dateFrom      = $this->request->getPost('dateFrom');
+                    $dateTo        = $this->request->getPost('dateTo');
+                    $searchAdmin   = $this->request->getPost('searchAdmin');
+
+                    $builder = $ticket_m->select('support_tickets.*, useradmin.fname as admin_fname, useradmin.lname as admin_lname')
+                                        ->join('useradmin', 'useradmin.ID = support_tickets.assigned_admin_id', 'left')
+                                        ->orderBy('support_tickets.created_at', 'DESC');
+
+                    // Default: notification bell only shows open/in_progress tickets. DataTable shows all.
+                    $is_datatable = $this->request->getPost('is_datatable');
+
+                    if (!empty($searchStatus)) {
+                        $builder->where('support_tickets.status', $searchStatus);
+                    } else if (!$is_datatable) {
+                        // Bell call (no status filter) — only open/in-progress
+                        $builder->whereIn('support_tickets.status', ['OPEN', 'IN_PROGRESS']);
+                    }
+
+                    if (!empty($searchConcern)) {
+                        $builder->groupStart()
+                                ->like('support_tickets.concern', $searchConcern)
+                                ->orLike('support_tickets.ticket_number', $searchConcern)
+                                ->orLike('support_tickets.username', $searchConcern)
+                                ->groupEnd();
+                    }
+                    if (!empty($dateFrom)) {
+                        $builder->where('DATE(support_tickets.created_at) >=', $dateFrom);
+                    }
+                    if (!empty($dateTo)) {
+                        $builder->where('DATE(support_tickets.created_at) <=', $dateTo);
+                    }
+                    if (!empty($searchAdmin)) {
+                        $builder->groupStart()
+                                ->like('useradmin.fname', $searchAdmin)
+                                ->orLike('useradmin.lname', $searchAdmin)
+                                ->groupEnd();
+                    }
+
+                    $tickets = $builder->findAll();
+                    $data    = $tickets;
+                    $status  = 1;
+                }
                 break;
             }
 
@@ -1205,35 +1287,79 @@ public function getVisitCount()
             case 'create_user':
             {
                 $user_m = new \App\Models\UserAccount();
-                $fname = $this->request->getPost('txtFirstName');
-                $lname = $this->request->getPost('txtLastName');
-                $usern = $this->request->getPost('txtUsername');
-                $email = $this->request->getPost('txtEmail');
-                $passw = $this->request->getPost('txtPassword');
-                $acclvl = $this->request->getPost('txtAccLevel');
-                $dept = $this->request->getPost('txtDept');
-                
+                $fname       = $this->request->getPost('txtFirstName');
+                $lname       = $this->request->getPost('txtLastName');
+                $usern       = $this->request->getPost('txtUsername');
+                $email       = $this->request->getPost('txtEmail');
+                $passw       = $this->request->getPost('txtPassword');
+                $acclvl      = $this->request->getPost('txtAccLevel');
+                $dept        = $this->request->getPost('txtDept') ?: '';
+                // #25 – account type & linked entity
+                $acct_type   = $this->request->getPost('txtAccountType') ?: null;
+                $entity_ref  = $this->request->getPost('txtEntityRef')   ?: null;
+
+                // Nobody can create a DEVELOPER account
+                if ($acclvl === 'DEVELOPER') {
+                    $message = 'Creating additional Developer accounts is not allowed.';
+                    break;
+                }
+
+                // Only DEVELOPER can create SUPERADMIN accounts
+                if ($acclvl === 'SUPERADMIN' && $user->user_lvl !== 'DEVELOPER') {
+                    $message = 'Only Developers can create Super Admin accounts.';
+                    break;
+                }
+
+                // ADMIN can only create ENCODER or VIEWER accounts
+                if ($user->user_lvl === 'ADMIN' && !in_array($acclvl, ['ENCODER', 'VIEWER'])) {
+                    $message = 'Admin accounts can only create Encoder or Viewer accounts.';
+                    break;
+                }
+
+                // Validate account type — DEPT/BRGY need a linked entity
+                $valid_types = ['DEPARTMENT', 'BARANGAY'];
+                if (!in_array($acct_type, $valid_types)) {
+                    $acct_type = '';
+                }
+                // For high-privilege roles the account_type should be empty string
+                if (in_array($acclvl, ['SUPERADMIN'])) {
+                    $acct_type  = '';
+                    $entity_ref = null;
+                }
+                // ADMIN: auto-assign their own entity_ref_id; they cannot set a different one
+                if ($user->user_lvl === 'ADMIN') {
+                    $acct_type  = $user->account_type  ?? '';
+                    $entity_ref = $user->entity_ref_id ?? null;
+                }
+                // DEPARTMENT / BARANGAY accounts MUST have an entity
+                if (in_array($acct_type, ['DEPARTMENT','BARANGAY']) && empty($entity_ref)) {
+                    $message = 'A Department or Barangay account must be linked to an entity.';
+                    break;
+                }
+
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Invalid email address.';
                 } elseif ($user_m->where('username', $usern)->orWhere('email', $email)->countAllResults() > 0) {
                     $message = 'Username or email already exists.';
                 } else {
                     $userData = [
-                        'fname' => $fname,
-                        'lname' => $lname,
-                        'username' => $usern,
-                        'pass' => password_hash($passw, PASSWORD_ARGON2ID),
-                        'email' => $email,
-                        'user_lvl' => $acclvl,
-                        'dept' => $dept,
-                        'status' => 'ACTIVE',
+                        'fname'          => $fname,
+                        'lname'          => $lname,
+                        'username'       => $usern,
+                        'pass'           => password_hash($passw, PASSWORD_ARGON2ID),
+                        'email'          => $email,
+                        'user_lvl'       => $acclvl,
+                        'dept'           => $dept,
+                        'account_type'   => $acct_type,
+                        'entity_ref_id'  => $entity_ref ? (int)$entity_ref : null,
+                        'status'         => 'ACTIVE',
                     ];
                     try {
                         $user_m->save($userData);
                         $status = 1;
                         $message = 'User created successfully.';
                         $useracc_id = $user_m->getInsertID();
-                        $log_c['processDetails'] = 'ACCOUNT_ID: ' . $useracc_id . ' ' . $lname;
+                        $log_c['processDetails'] = 'ACCOUNT_ID: ' . $useracc_id . ' ' . $lname . ' [' . $acct_type . ']';
                     } catch (\Exception $e) {
                         $message = 'An error occurred while saving the user data.';
                         return;
@@ -1243,6 +1369,11 @@ public function getVisitCount()
             }
             case 'create_barangay':
             {
+                // #24b – BARANGAY accounts cannot create new barangays
+                if ($user->account_type === 'BARANGAY') {
+                    $message = 'Barangay accounts cannot create new Barangays.';
+                    break;
+                }
                 $brgy_m = new \App\Models\Barangay();
                 $brgy_name = $this->request->getPost('txtBrgy');
                 $brngy_capt = $this->request->getPost('txtCapt');
@@ -1300,6 +1431,11 @@ public function getVisitCount()
             }
             case 'create_dept':
             {
+                // #23b – DEPARTMENT accounts cannot create new departments
+                if ($user->account_type === 'DEPARTMENT') {
+                    $message = 'Department accounts cannot create new Departments.';
+                    break;
+                }
                 $dept_m = new \App\Models\Department();
                 $dept_name = $this->request->getPost('txtDept');
                 $head = $this->request->getPost('txtHead');
@@ -1654,26 +1790,35 @@ public function getVisitCount()
             }
             case 'create_services':
             {
-                $serv_m = new \App\Models\Services();
-                $serv_name = $this->request->getPost('serviceName');
-                $content = $this->request->getPost('content');
-                $dept_cont_ID = $this->request->getPost('txtDept');
+                $serv_m        = new \App\Models\Services();
+                $serv_name     = $this->request->getPost('serviceName');
+                $content       = $this->request->getPost('content');
+                $dept_cont_ID  = $this->request->getPost('txtDept');
                 $brngy_cont_ID = $this->request->getPost('txtBrgy');
-            
+
+                // #23/#24 – DEPARTMENT/BARANGAY accounts can only create
+                // services linked to their OWN entity.
+                if ($user->account_type === 'DEPARTMENT') {
+                    $dept_cont_ID  = $user->entity_ref_id;
+                    $brngy_cont_ID = null;
+                } elseif ($user->account_type === 'BARANGAY') {
+                    $brngy_cont_ID = $user->entity_ref_id;
+                    $dept_cont_ID  = null;
+                }
+
                 $data = [
-                    'serv_name' => $serv_name,
-                    'content' => $content,
-                    'status' => 'ACTIVE',  
+                    'serv_name'    => $serv_name,
+                    'content'      => $content,
+                    'status'       => 'ACTIVE',
                     'created_date' => date('Y-m-d H:i:s'),
                 ];
 
                 if ($dept_cont_ID) {
                     $data['dept_cont_ID'] = $dept_cont_ID;
-                } else if ($brngy_cont_ID) {
+                } elseif ($brngy_cont_ID) {
                     $data['brngy_cont_ID'] = $brngy_cont_ID;
                 }
 
-                //log_message('debug', 'Received data: ' . print_r($data, true));
                 try {
                     $serv_m->save($data);
                     $status = 1;
@@ -1799,42 +1944,89 @@ public function getVisitCount()
 
             case 'update_user':
             {
-                $user_m = new \App\Models\UserAccount();
-                $id = $this->request->getPost('id');
-                $fname = $this->request->getPost('editFirstName');
-                $lname = $this->request->getPost('editLastName');
-                $usern = $this->request->getPost('editUsername');
-                $email = $this->request->getPost('editEmail');
-                $acclvl = $this->request->getPost('editAccLevel');
-                $dept = $this->request->getPost('editDept');
-                $passw = $this->request->getPost('editPassword');
+                $user_m     = new \App\Models\UserAccount();
+                $id         = $this->request->getPost('id');
+                $fname      = $this->request->getPost('editFirstName');
+                $lname      = $this->request->getPost('editLastName');
+                $usern      = $this->request->getPost('editUsername');
+                $email      = $this->request->getPost('editEmail');
+                $acclvl     = $this->request->getPost('editAccLevel');
+                $dept       = $this->request->getPost('editDept') ?: '';
+                $passw      = $this->request->getPost('editPassword');
+                // #25 – account type & linked entity
+                $acct_type  = $this->request->getPost('editAccountType') ?: null;
+                $entity_ref = $this->request->getPost('editEntityRef')   ?: null;
+
+                // Nobody can promote an account to DEVELOPER
+                if ($acclvl === 'DEVELOPER') {
+                    $message = 'Cannot set account level to Developer.';
+                    break;
+                }
+
+                // Only DEVELOPER can promote/set an account to SUPERADMIN
+                if ($acclvl === 'SUPERADMIN' && $user->user_lvl !== 'DEVELOPER') {
+                    $message = 'Only Developers can set an account to Super Admin.';
+                    break;
+                }
+
+                // ADMIN scope rules
+                if ($user->user_lvl === 'ADMIN') {
+                    $target = $user_m->find($id);
+                    // Admin cannot edit other Admin-level or higher accounts
+                    if ($target && in_array($target->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])
+                        && (int)$target->ID !== (int)$user->ID) {
+                        $message = 'You do not have permission to edit this account.';
+                        break;
+                    }
+                    // Admin can only assign ENCODER or VIEWER
+                    if (!in_array($acclvl, ['ENCODER', 'VIEWER'])) {
+                        $message = 'Admin accounts can only set Encoder or Viewer level.';
+                        break;
+                    }
+                    // Admin cannot change entity — force their own
+                    $acct_type  = $user->account_type  ?? '';
+                    $entity_ref = $user->entity_ref_id ?? null;
+                }
+
+                $valid_types = ['DEPARTMENT', 'BARANGAY'];
+                if (!in_array($acct_type, $valid_types)) {
+                    $acct_type = '';
+                }
+                // For high-privilege roles, clear entity binding
+                if (in_array($acclvl, ['SUPERADMIN'])) {
+                    $acct_type  = '';
+                    $entity_ref = null;
+                }
+                if (in_array($acct_type, ['DEPARTMENT','BARANGAY']) && empty($entity_ref)) {
+                    $message = 'A Department or Barangay account must be linked to an entity.';
+                    break;
+                }
 
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Invalid email address.';
                 } else {
-                    // Check for unique username or email, excluding the current user
                     $existingUser = $user_m->where('id !=', $id)
-                    ->groupStart()
-                    ->where('username', $usern)
-                    ->orWhere('email', $email)
-                    ->groupEnd()
-                    ->first();
+                        ->groupStart()
+                        ->where('username', $usern)
+                        ->orWhere('email', $email)
+                        ->groupEnd()
+                        ->first();
 
                     if ($existingUser) {
                         $message = 'Username or email already exists.';
                     } else {
-                        // Prepare data for saving
                         $data = [
-                            'fname' => $fname,
-                            'lname' => $lname,
-                            'username' => $usern,
-                            'email' => $email,
-                            'user_lvl' => $acclvl,
-                            'dept' => $dept,
-                            'updated_date' => date('Y-m-d H:i:s'),
+                            'fname'         => $fname,
+                            'lname'         => $lname,
+                            'username'      => $usern,
+                            'email'         => $email,
+                            'user_lvl'      => $acclvl,
+                            'dept'          => $dept,
+                            'account_type'  => $acct_type,
+                            'entity_ref_id' => $entity_ref ? (int)$entity_ref : null,
+                            'updated_date'  => date('Y-m-d H:i:s'),
                         ];
 
-                        // Only update password if it is provided
                         if (!empty($passw)) {
                             $data['pass'] = password_hash($passw, PASSWORD_ARGON2ID);
                         }
@@ -1843,14 +2035,12 @@ public function getVisitCount()
                             $user_m->update($id, $data);
                             $status = 1;
                             $message = 'User updated successfully.';
-                            // Log activity
-                            $log_c['processDetails'] = 'ACCOUNT_ID: ' . $id;
-                            
+                            $log_c['processDetails'] = 'ACCOUNT_ID: ' . $id . ' [' . $acct_type . ']';
                         } catch (\Exception $e) {
                             $message = 'An error occurred while updating the user data.';
                             return;
                         }
-                    }                    
+                    }
                 }
                 break;
             }
@@ -1862,6 +2052,13 @@ public function getVisitCount()
                 
                     if (!$barangay) {
                         $message = "Barangay not found.";
+                        break;
+                    }
+
+                    // #24 – BARANGAY accounts can only update THEIR OWN barangay
+                    if ($user->account_type === 'BARANGAY' &&
+                        (int)$user->entity_ref_id !== (int)$id) {
+                        $message = 'You can only update your own Barangay.';
                         break;
                     }
                     
@@ -1938,7 +2135,19 @@ public function getVisitCount()
                 $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
                 $department = $dept_m->find($id);
-    
+
+                if (!$department) {
+                    $message = 'Department not found.';
+                    break;
+                }
+
+                // #23 – DEPARTMENT accounts can only update THEIR OWN department
+                if ($user->account_type === 'DEPARTMENT' &&
+                    (int)$user->entity_ref_id !== (int)$id) {
+                    $message = 'You can only update your own Department.';
+                    break;
+                }
+
                 if ($department) {
                     $dept_name = $this->request->getPost('editDept');
                     $head = $this->request->getPost('editHead');
@@ -2655,6 +2864,19 @@ public function getVisitCount()
                 $id = $this->request->getPost('id');
                 $serv = $serv_m->find($id);
 
+                // #23/#24 – DEPARTMENT/BARANGAY accounts can only update
+                // services that belong to their own entity.
+                if ($serv && $user->account_type === 'DEPARTMENT' &&
+                    (int)($serv['dept_cont_ID'] ?? 0) !== (int)$user->entity_ref_id) {
+                    $message = 'You can only update services linked to your own Department.';
+                    break;
+                }
+                if ($serv && $user->account_type === 'BARANGAY' &&
+                    (int)($serv['brngy_cont_ID'] ?? 0) !== (int)$user->entity_ref_id) {
+                    $message = 'You can only update services linked to your own Barangay.';
+                    break;
+                }
+
                 if ($serv){
                     $serv_name = $this->request->getPost('editServiceName');
                     $content = $this->request->getPost('editContent');
@@ -3140,15 +3362,29 @@ public function getVisitCount()
             case 'set_status_services':
             {
                 $invest_m = new \App\Models\Services();
-                $id = $this->request->getPost('id');
-                $status = $this->request->getPost('status');
+                $id       = $this->request->getPost('id');
+                $statusVal = $this->request->getPost('status');
+
+                // #23/#24 – ownership check
+                $svc = $invest_m->find($id);
+                if ($svc && $user->account_type === 'DEPARTMENT' &&
+                    (int)($svc['dept_cont_ID'] ?? 0) !== (int)$user->entity_ref_id) {
+                    $message = 'Unauthorized: not your service.';
+                    break;
+                }
+                if ($svc && $user->account_type === 'BARANGAY' &&
+                    (int)($svc['brngy_cont_ID'] ?? 0) !== (int)$user->entity_ref_id) {
+                    $message = 'Unauthorized: not your service.';
+                    break;
+                }
+
                 $data = [
-                    'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s')
+                    'status'       => $statusVal,
+                    'updated_date' => date('Y-m-d H:i:s'),
                 ];
                 $invest_m->update($id, $data);
                 $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'SERVICE_ID: ' . $id . ' - ' . $status;
+                $log_c['processDetails'] = 'SERVICE_ID: ' . $id . ' - ' . $statusVal;
                 $status = 1;
                 break;
             }

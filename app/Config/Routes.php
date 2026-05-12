@@ -116,6 +116,7 @@ $routes->group('admin', function ($routes) {
     $routes->get('about', 'Admin::mode/about');
 
     $routes->get('map', 'Admin::mode/map');
+    $routes->get('tickets', 'Admin::mode/tickets');
 
     $routes->get('getUserCount', 'Admin::getUserCount');
     $routes->get('getRecentNews', 'Admin::getRecentNews');
