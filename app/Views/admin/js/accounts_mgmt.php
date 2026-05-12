@@ -361,7 +361,13 @@
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
-                            Swal.fire({ icon: 'success', title: 'Reset', html: result.message });
+                            Swal.fire({ 
+                                icon: 'success', 
+                                title: 'Password Reset', 
+                                html: `The password for <b>${fullName}</b> has been reset.<br><br>` +
+                                      `Temporary Password: <b style="font-size: 1.25rem; color: #d35400; letter-spacing: 1px;">${result.message}</b><br><br>` +
+                                      `<small class="text-muted">An email has also been sent to the user.</small>`
+                            });
                         } else {
                             Swal.fire({ icon: 'error', title: 'Error', text: result.message });
                         }
