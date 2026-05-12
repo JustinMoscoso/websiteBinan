@@ -71,7 +71,7 @@ class Auther extends BaseController
             if ($user && password_verify($password, $user->pass)) {
                 if ($user->status !== 'ACTIVE') {
                     $message = 'User account is not active.';
-                } else if ($user->force_pass_reset == 1) {
+                } else if (isset($user->force_pass_reset) && $user->force_pass_reset == 1) {
                     $status = 2; // Signal for forced password change
                     $message = 'Temporary password detected. Please change your password.';
                     $data = ['userId' => $user->ID];
@@ -95,7 +95,7 @@ class Auther extends BaseController
             } else {
                 $userAccountModel = new UserAccount();
                 $updateData = [
-                    'pass' => password_hash($newPassword, PASSWORD_DEFAULT),
+                    'pass' => password_hash($newPassword, PASSWORD_ARGON2ID),
                     'force_pass_reset' => 0,
                     'updated_date' => date('Y-m-d H:i:s')
                 ];

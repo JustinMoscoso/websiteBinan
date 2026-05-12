@@ -873,6 +873,90 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
+
+            case 'get_tickets':
+            {
+                $ticket_m = new \App\Models\TicketModel();
+                // Join with useradmin to get admin name if ticket is in progress
+                $tickets = $ticket_m->select('support_tickets.*, useradmin.fname as admin_fname, useradmin.lname as admin_lname')
+                                   ->join('useradmin', 'useradmin.ID = support_tickets.assigned_admin_id', 'left')
+                                   ->whereIn('support_tickets.status', ['OPEN', 'IN_PROGRESS'])
+                                   ->orderBy('support_tickets.created_at', 'DESC')
+                                   ->findAll();
+                $data = $tickets;
+                $status = 1;
+                break;
+            }
+
+            case 'take_ticket':
+            {
+                $ticket_m = new \App\Models\TicketModel();
+                $id = $this->request->getPost('id');
+                $ticket = $ticket_m->find($id);
+
+                if ($ticket && $ticket->status === 'OPEN') {
+                    $updateData = [
+                        'status' => 'IN_PROGRESS',
+                        'assigned_admin_id' => $user->ID,
+                        'taken_at' => date('Y-m-d H:i:s')
+                    ];
+                    if ($ticket_m->update($id, $updateData)) {
+                        $status = 1;
+                        $message = 'Ticket claimed successfully.';
+                        $log_c['processDetails'] = 'TICKET_ID: ' . $id . ' CLAIMED';
+                    } else {
+                        $message = 'Failed to claim ticket.';
+                    }
+                } else {
+                    $message = 'Ticket is already being handled or resolved.';
+                }
+                break;
+            }
+
+            case 'resolve_ticket':
+            {
+                $ticket_m = new \App\Models\TicketModel();
+                $id = $this->request->getPost('id');
+                $ticket = $ticket_m->find($id);
+
+                if ($ticket && $ticket->status === 'IN_PROGRESS' && (int)$ticket->assigned_admin_id === (int)$user->ID) {
+                    $updateData = [
+                        'status' => 'RESOLVED',
+                        'resolved_at' => date('Y-m-d H:i:s')
+                    ];
+                    if ($ticket_m->update($id, $updateData)) {
+                        // Notify User via Email
+                        $user_m = new \App\Models\UserAccount();
+                        $ticketUser = $user_m->find($ticket->user_id);
+
+                        if ($ticketUser) {
+                            $mailer = new \App\Libraries\EmailQueue();
+                            $mailer->queue([
+                                'to'      => $ticketUser->email,
+                                'subject' => 'Support Ticket Resolved - ' . $ticket->ticket_number,
+                                'body'    => "
+                                    <p>Hello {$ticketUser->fname},</p>
+                                    <p>Your support ticket has been resolved by our team.</p>
+                                    <p><strong>Ticket Number:</strong> {$ticket->ticket_number}</p>
+                                    <p><strong>Status:</strong> RESOLVED</p>
+                                    <p>If you have any further concerns, please do not hesitate to reach out.</p>
+                                    <p>Thank you.</p>
+                                ",
+                            ]);
+                        }
+
+                        $status = 1;
+                        $message = 'Ticket marked as resolved.';
+                        $log_c['processDetails'] = 'TICKET_ID: ' . $id . ' RESOLVED';
+                    } else {
+                        $message = 'Failed to resolve ticket.';
+                    }
+                } else {
+                    $message = 'Unauthorized or invalid ticket status.';
+                }
+                break;
+            }
+
             case 'get_job':
             {
                 $job_m = new \App\Models\Job();
@@ -1752,7 +1836,7 @@ public function getVisitCount()
 
                         // Only update password if it is provided
                         if (!empty($passw)) {
-                            $data['pass'] = password_hash($passw, PASSWORD_DEFAULT);
+                            $data['pass'] = password_hash($passw, PASSWORD_ARGON2ID);
                         }
 
                         try {
@@ -2712,7 +2796,7 @@ public function getVisitCount()
 
                 $temporaryCode = bin2hex(random_bytes(4)); // Generates an 8-character temporary code    
                 $data = [
-                    'pass' => password_hash($temporaryCode, PASSWORD_DEFAULT),
+                    'pass' => password_hash($temporaryCode, PASSWORD_ARGON2ID),
                     'updated_date' => date('Y-m-d H:i:s'),
                     'force_pass_reset' => 1
                 ];

@@ -41,11 +41,40 @@
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-        <!-- <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li>End Search Icon-->
+        <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])): ?>
+        <li class="nav-item dropdown">
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" id="notificationBell">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number" id="ticketBadge" style="display: none;">0</span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" style="min-width: 300px; max-height: 400px; overflow-y: auto;" id="notificationList">
+            <li class="dropdown-header">
+              You have <span id="ticketCountText">0</span> open tickets
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <div id="ticketItems">
+                <!-- Tickets will be loaded here via AJAX -->
+                <li class="notification-item">
+                    <div class="p-3 text-center text-muted">No new tickets</div>
+                </li>
+            </div>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer">
+              <a href="#">Show all notifications</a>
+            </li>
+
+          </ul><!-- End Notification Dropdown Items -->
+
+        </li><!-- End Notification Nav -->
+        <?php endif; ?>
 
         <li class="nav-item dropdown pe-3">
 

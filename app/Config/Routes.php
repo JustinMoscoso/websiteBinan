@@ -69,6 +69,10 @@ $routes->get('/logout', 'Auther::logout');
 $routes->get('/history', 'Home::history');
 $routes->get('/hotlines', 'Home::hotlines');
 
+// Support Ticket Routes
+$routes->get('/ticket/create', 'TicketController::create');
+$routes->post('/ticket/submit', 'TicketController::submit');
+
 $routes->get('/map', 'MapController::index');
 $routes->get('/contact', 'ContactController::index');
 $routes->post('contact/send', 'ContactController::send');
@@ -88,6 +92,9 @@ $routes->get('jobpostings/(:num)', 'Home::jobpostings/$1');
 
 $routes->get('/jobs', 'Home::jobs');
 $routes->get('/test-jobs', 'Home::test_jobs');
+
+// Email Queue Processor (internal / loopback only)
+$routes->get('email-queue/process', 'EmailQueueController::process');
 
 // Define a group of routes with common prefix ('/admin')
 $routes->group('admin', function ($routes) {
