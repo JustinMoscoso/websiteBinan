@@ -69,7 +69,11 @@
                             // Check if current user is the one who took it
                             const currentAdminId = <?= $user->ID ?>;
                             if (parseInt(ticket.assigned_admin_id) === currentAdminId) {
-                                actionButton = `<button class="btn btn-sm btn-success mt-2" onclick="resolveTicket(${ticket.id})">Resolve</button>`;
+                                actionButton = `
+                                    <div class="mt-2">
+                                        <button class="btn btn-sm btn-success me-1" onclick="resolveTicket(${ticket.id})">Resolve</button>
+                                        <button class="btn btn-sm btn-danger" onclick="rejectTicket(${ticket.id})">Reject</button>
+                                    </div>`;
                             }
                         }
 
@@ -135,6 +139,38 @@
                     if (res.status === 1) {
                         fetchTickets();
                         Swal.fire('Resolved!', res.message, 'success');
+                    } else {
+                        Swal.fire('Error', res.message, 'error');
+                    }
+                }, 'json');
+            }
+        });
+    }
+
+    function rejectTicket(id) {
+        Swal.fire({
+            title: 'Reject Ticket?',
+            text: "This will mark the ticket as rejected for legitimately concern purposes and notify the user via email.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, reject it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while we notify the user.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.post("<?= site_url('admin/ajax/reject_ticket') ?>", { id: id }, function(res) {
+                    if (res.status === 1) {
+                        fetchTickets();
+                        Swal.fire('Rejected!', res.message, 'success');
                     } else {
                         Swal.fire('Error', res.message, 'error');
                     }

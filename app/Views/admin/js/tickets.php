@@ -52,7 +52,8 @@
                     const map = {
                         'OPEN':        '<span class="badge bg-success">Open</span>',
                         'IN_PROGRESS': '<span class="badge bg-warning text-dark">In Progress</span>',
-                        'RESOLVED':    '<span class="badge bg-secondary">Resolved</span>'
+                        'RESOLVED':    '<span class="badge bg-secondary">Resolved</span>',
+                        'REJECTED':    '<span class="badge bg-danger">Rejected</span>'
                     };
                     return map[data] || `<span class="badge bg-light text-dark">${data}</span>`;
                 }
@@ -107,6 +108,11 @@
                             <li>
                                 <a class="dropdown-item text-success" href="#" onclick="quickResolve(${row.id})">
                                     <i class="bi bi-check-circle me-1"></i>Resolve
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" onclick="quickReject(${row.id})">
+                                    <i class="bi bi-x-circle me-1"></i>Reject
                                 </a>
                             </li>`;
                     }
@@ -165,7 +171,8 @@
             const badgeMap = {
                 'OPEN':        '<span class="badge bg-success fs-6">Open</span>',
                 'IN_PROGRESS': '<span class="badge bg-warning text-dark fs-6">In Progress</span>',
-                'RESOLVED':    '<span class="badge bg-secondary fs-6">Resolved</span>'
+                'RESOLVED':    '<span class="badge bg-secondary fs-6">Resolved</span>',
+                'REJECTED':    '<span class="badge bg-danger fs-6">Rejected</span>'
             };
             $('#dtStatus').html(badgeMap[t.status] || t.status);
 
@@ -180,10 +187,12 @@
             // Action buttons
             $('#dtTakeBtn').hide();
             $('#dtResolveBtn').hide();
+            $('#dtRejectBtn').hide();
             if (t.status === 'OPEN') {
                 $('#dtTakeBtn').show();
             } else if (t.status === 'IN_PROGRESS' && parseInt(t.assigned_admin_id) === currentAdminId) {
                 $('#dtResolveBtn').show();
+                $('#dtRejectBtn').show();
             }
 
             $('#ticketDetailModal').modal('show');
@@ -199,6 +208,12 @@
     function resolveTicketFromDetail() {
         if (!activeTicketId) return;
         quickResolve(activeTicketId);
+        $('#ticketDetailModal').modal('hide');
+    }
+
+    function rejectTicketFromDetail() {
+        if (!activeTicketId) return;
+        quickReject(activeTicketId);
         $('#ticketDetailModal').modal('hide');
     }
 
@@ -229,6 +244,30 @@
                     if (res.status === 1) {
                         tbl.ajax.reload(null, false);
                         Swal.fire('Resolved!', res.message, 'success');
+                    } else {
+                        Swal.fire('Error', res.message, 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function quickReject(id) {
+        Swal.fire({
+            title: 'Reject Ticket?',
+            text:  'This will mark the ticket as rejected for legitimately concern purposes and notify the user.',
+            icon:  'warning',
+            showCancelButton:    true,
+            confirmButtonColor:  '#d33',
+            cancelButtonColor:   '#6c757d',
+            confirmButtonText:   'Yes, reject!'
+        }).then(result => {
+            if (result.isConfirmed) {
+                Swal.fire({ title: 'Processing…', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                $.post('<?= site_url('admin/ajax/reject_ticket') ?>', { id: id }, function(res) {
+                    if (res.status === 1) {
+                        tbl.ajax.reload(null, false);
+                        Swal.fire('Rejected!', res.message, 'success');
                     } else {
                         Swal.fire('Error', res.message, 'error');
                     }
