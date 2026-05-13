@@ -41,33 +41,7 @@
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-        <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])): ?>
-        <li class="nav-item dropdown">
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" id="notificationBell">
-            <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number" id="ticketBadge" style="display: none;">0</span>
-          </a><!-- End Notification Icon -->
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" style="min-width: 300px; max-height: 400px; overflow-y: auto;" id="notificationList">
-            <li class="dropdown-header">
-              You have <span id="ticketCountText">0</span> open tickets
-              <a href="<?= site_url('admin/tickets') ?>"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <div id="ticketItems">
-                <!-- Tickets will be loaded here via AJAX -->
-                <li class="notification-item">
-                    <div class="p-3 text-center text-muted">No new tickets</div>
-                </li>
-            </div>
-
-          </ul><!-- End Notification Dropdown Items -->
-
-        </li><!-- End Notification Nav -->
-        <?php endif; ?>
 
         <li class="nav-item dropdown pe-3">
 
@@ -274,14 +248,7 @@
         </a>
       </li>
       <?php endif; ?>
-      <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])): ?>
-      <li class="nav-item">
-        <a class="nav-link <?= $mode == 'tickets' ? '' : 'collapsed' ?>" href="<?= $mode == 'tickets' ? '#' : site_url('admin/tickets') ?>">
-          <i class="bi bi-ticket-perforated"></i>
-          <span>Support Tickets</span>
-        </a>
-      </li>
-      <?php endif; ?>
+
 
       
       <!-- End Login Page Nav -->

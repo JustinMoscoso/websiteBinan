@@ -18,7 +18,7 @@
         margin-left: 10px !important;
     }
 </style>
-<?php if ($user->user_lvl !== 'VIEWER'): ?>
+<?php if (!in_array($user->user_lvl, ['VIEWER', 'ENCODER'])): ?>
 <!-- Search Filters UI Start -->
 <div class="container-fluid py-3">
     <div class="card mb-4">

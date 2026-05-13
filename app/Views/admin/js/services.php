@@ -153,6 +153,12 @@
         $('#category').val('').trigger('change');
     });
 
+    $('#addModal').on('hidden.bs.modal', function (e) {
+        if (typeof quillContent !== 'undefined' && quillContent) {
+            quillContent.setContents([]);
+        }
+    });
+
     $('#editModal').on('show.bs.modal', function (e) {
         $('#category').val('').trigger('change');
     });
@@ -184,6 +190,11 @@
 
     // Save new announcement
     $('#btnAdd').on('click', function() {
+        if (quillContent) {
+            let htmlContent = quillContent.root.innerHTML;
+            $('#content').val(htmlContent === '<p><br></p>' ? '' : htmlContent);
+        }
+        
         let form = $('#addForm')[0];
         let formData = new FormData(form);
 

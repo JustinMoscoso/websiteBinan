@@ -62,11 +62,7 @@
 
         </form>
 
-        <div class="text-center mt-2">
-            <a href="<?= site_url('ticket/create') ?>" class="text-primary small" style="text-decoration: none; position: relative; z-index: 999;">
-                <i class="bi bi-question-circle"></i> Any Concerns? Send A Ticket
-            </a>
-        </div>
+
       </div>
     </div>
     <!-- ======= Footer ======= -->
