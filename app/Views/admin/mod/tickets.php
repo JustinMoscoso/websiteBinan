@@ -146,6 +146,10 @@
                         onclick="resolveTicketFromDetail()">
                     <i class="bi bi-check-circle me-1"></i>Resolve
                 </button>
+                <button type="button" class="btn btn-danger" id="dtRejectBtn" style="display:none;"
+                        onclick="rejectTicketFromDetail()">
+                    <i class="bi bi-x-circle me-1"></i>Reject
+                </button>
             </div>
         </div>
     </div>

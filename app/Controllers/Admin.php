@@ -1039,6 +1039,50 @@ public function getVisitCount()
                 break;
             }
 
+            case 'reject_ticket':
+            {
+                $ticket_m = new \App\Models\TicketModel();
+                $id = $this->request->getPost('id');
+                $ticket = $ticket_m->find($id);
+
+                if ($ticket && $ticket->status === 'IN_PROGRESS' && (int)$ticket->assigned_admin_id === (int)$user->ID) {
+                    $updateData = [
+                        'status' => 'REJECTED',
+                        'rejected_at' => date('Y-m-d H:i:s')
+                    ];
+                    if ($ticket_m->update($id, $updateData)) {
+                        // Notify User via Email
+                        $user_m = new \App\Models\UserAccount();
+                        $ticketUser = $user_m->find($ticket->user_id);
+
+                        if ($ticketUser) {
+                            $mailer = new \App\Libraries\EmailQueue();
+                            $mailer->queue([
+                                'to'      => $ticketUser->email,
+                                'subject' => 'Support Ticket Rejected - ' . $ticket->ticket_number,
+                                'body'    => "
+                                    <p>Hello {$ticketUser->fname},</p>
+                                    <p>Your support ticket has been reviewed and rejected by our team, as it may not be a legitimate concern.</p>
+                                    <p><strong>Ticket Number:</strong> {$ticket->ticket_number}</p>
+                                    <p><strong>Status:</strong> REJECTED</p>
+                                    <p>If you believe this is an error, please do not hesitate to reach out or create a new ticket with more details.</p>
+                                    <p>Thank you.</p>
+                                ",
+                            ]);
+                        }
+
+                        $status = 1;
+                        $message = 'Ticket marked as rejected.';
+                        $log_c['processDetails'] = 'TICKET_ID: ' . $id . ' REJECTED';
+                    } else {
+                        $message = 'Failed to reject ticket.';
+                    }
+                } else {
+                    $message = 'Unauthorized or invalid ticket status.';
+                }
+                break;
+            }
+
             case 'get_job':
             {
                 $job_m = new \App\Models\Job();

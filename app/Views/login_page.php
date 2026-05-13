@@ -22,13 +22,14 @@
   <div class="backgroundlogin">
     <div class="containerlogin col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
       <!-- ======= Logo Start ======= -->
-      <div class="d-flex justify-content-center">
+     <!-- ======= Logo End ======= -->
+      <div class="loginborder pt-4 pb-2" style="padding: 1rem; border-radius: 8px; max-width: 80%; margin: auto;">
+         <div class="d-flex justify-content-center">
           <a href="<?= base_url('#')?>">
             <img src="<?= site_url('assets/img/binanlogo.png'); ?>" alt="" class ="loginlogo img-fluid">
           </a>
-      </div> <!-- ======= Logo End ======= -->
-      <div class="loginborder pt-4 pb-2" style="padding: 1rem; border-radius: 8px; max-width: 80%; margin: auto;">
-        <h1 style="text-align: center;"><b>LOGIN</b></h1>
+      </div> 
+        <h1 style="text-align: center; font-size: 2rem;"><b>LOGIN</b></h1>
         <form method="post">
 
           <label for="txtUser" class="lbl form-label">Username</label>
@@ -70,7 +71,7 @@
     </div>
     <!-- ======= Footer ======= -->
     <div class="d-flex flex-column align-items-center justify-content-center mt-3">
-      <div class="copyrightlogin">
+      <div class="copyrightlogin text-light">
           &copy; Copyright <strong><span>Biñan City Official Website</span></strong>. All Rights Reserved
       </div>
     </div>
