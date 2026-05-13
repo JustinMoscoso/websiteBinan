@@ -41,7 +41,7 @@
                 }
             },
             {
-                title: 'Submitted', data: 'created_at',
+                title: 'Created At', data: 'created_at',
                 render: function(data) {
                     return data ? formatDate(new Date(data)) : '—';
                 }
@@ -73,6 +73,12 @@
             },
             {
                 title: 'Resolved At', data: 'resolved_at',
+                render: function(data) {
+                    return data ? `<span style="font-size: 0.85rem;">${formatDate(new Date(data))}</span>` : '<span class="text-muted">—</span>';
+                }
+            },
+            {
+                title: 'Rejected At', data: 'rejected_at',
                 render: function(data) {
                     return data ? `<span style="font-size: 0.85rem;">${formatDate(new Date(data))}</span>` : '<span class="text-muted">—</span>';
                 }
@@ -167,6 +173,13 @@
                 $('#dtResolvedAtRow').hide();
             }
 
+            if (t.rejected_at) {
+                $('#dtRejectedAt').text(formatDate(new Date(t.rejected_at)));
+                $('#dtRejectedAtRow').show();
+            } else {
+                $('#dtRejectedAtRow').hide();
+            }
+
             // Status badge
             const badgeMap = {
                 'OPEN':        '<span class="badge bg-success fs-6">Open</span>',
@@ -211,12 +224,6 @@
         $('#ticketDetailModal').modal('hide');
     }
 
-    function rejectTicketFromDetail() {
-        if (!activeTicketId) return;
-        quickReject(activeTicketId);
-        $('#ticketDetailModal').modal('hide');
-    }
-
     function quickTake(id) {
         $.post('<?= site_url('admin/ajax/take_ticket') ?>', { id: id }, function(res) {
             if (res.status === 1) {
@@ -252,15 +259,21 @@
         });
     }
 
+    function rejectTicketFromDetail() {
+        if (!activeTicketId) return;
+        quickReject(activeTicketId);
+        $('#ticketDetailModal').modal('hide');
+    }
+
     function quickReject(id) {
         Swal.fire({
             title: 'Reject Ticket?',
-            text:  'This will mark the ticket as rejected for legitimately concern purposes and notify the user.',
+            text:  'This will close the ticket as rejected for legitimate concern purposes and notify the user.',
             icon:  'warning',
             showCancelButton:    true,
             confirmButtonColor:  '#d33',
             cancelButtonColor:   '#6c757d',
-            confirmButtonText:   'Yes, reject!'
+            confirmButtonText:   'Yes, reject it!'
         }).then(result => {
             if (result.isConfirmed) {
                 Swal.fire({ title: 'Processing…', allowOutsideClick: false, didOpen: () => Swal.showLoading() });

@@ -28,6 +28,7 @@
                             <option value="OPEN">Open</option>
                             <option value="IN_PROGRESS">In Progress</option>
                             <option value="RESOLVED">Resolved</option>
+                            <option value="REJECTED">Rejected</option>
                         </select>
                     </div>
                     <div class="col-lg-2 col-md-3">
@@ -115,7 +116,7 @@
                         <p class="mb-0" id="dtUsername">—</p>
                     </div>
                     <div class="col-md-6">
-                        <label class="text-muted small">Submitted On</label>
+                        <label class="text-muted small">Created At</label>
                         <p class="mb-0" id="dtCreatedAt">—</p>
                     </div>
                     <div class="col-md-6" id="dtTakenAtRow" style="display:none;">
@@ -125,6 +126,10 @@
                     <div class="col-md-6" id="dtResolvedAtRow" style="display:none;">
                         <label class="text-muted small">Resolved On</label>
                         <p class="mb-0" id="dtResolvedAt">—</p>
+                    </div>
+                    <div class="col-md-6" id="dtRejectedAtRow" style="display:none;">
+                        <label class="text-muted small">Rejected On</label>
+                        <p class="mb-0" id="dtRejectedAt">—</p>
                     </div>
                     <div class="col-12">
                         <label class="text-muted small">Concern</label>

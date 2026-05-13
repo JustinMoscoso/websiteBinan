@@ -60,35 +60,34 @@
                         let adminText = '';
 
                         if (ticket.status === 'OPEN') {
-                            statusBadge = '<span class="badge bg-success">Open</span>';
-                            actionButton = `<button class="btn btn-sm btn-primary mt-2" onclick="takeTicket(${ticket.id})">Take It</button>`;
+                            statusBadge = '<span class="badge bg-success mb-2">Open</span>';
+                            actionButton = `<button class="btn btn-sm btn-primary w-100" style="white-space: nowrap;" onclick="takeTicket(${ticket.id})">Take It</button>`;
                         } else if (ticket.status === 'IN_PROGRESS') {
-                            statusBadge = '<span class="badge bg-warning">In Progress</span>';
+                            statusBadge = '<span class="badge bg-warning mb-2">In Progress</span>';
                             adminText = `<p class="mb-0 small text-muted">Claimed by: ${ticket.admin_fname} ${ticket.admin_lname}</p>`;
                             
                             // Check if current user is the one who took it
                             const currentAdminId = <?= $user->ID ?>;
                             if (parseInt(ticket.assigned_admin_id) === currentAdminId) {
                                 actionButton = `
-                                    <div class="mt-2">
-                                        <button class="btn btn-sm btn-success me-1" onclick="resolveTicket(${ticket.id})">Resolve</button>
-                                        <button class="btn btn-sm btn-danger" onclick="rejectTicket(${ticket.id})">Reject</button>
-                                    </div>`;
+                                    <button class="btn btn-sm btn-success w-100 mb-1" onclick="resolveTicket(${ticket.id})">Resolve</button>
+                                    <button class="btn btn-sm btn-danger w-100" onclick="rejectTicket(${ticket.id})">Reject</button>
+                                `;
                             }
                         }
 
                         html += `
-                            <li class="notification-item p-3 border-bottom">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div style="flex: 1;">
-                                        <h4 class="mb-1" style="font-size: 14px; color: #012970;">${ticket.ticket_number}</h4>
-                                        <p class="mb-1 text-dark" style="font-size: 13px;">${ticket.concern}</p>
-                                        <p class="mb-0 small text-muted">From: ${ticket.username} | ${ticket.created_at}</p>
-                                        ${adminText}
-                                    </div>
-                                    ${statusBadge}
+                            <li class="notification-item border-bottom" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 15px;">
+                                <div style="flex: 1; min-width: 0; padding-right: 15px;">
+                                    <h4 class="mb-1" style="font-size: 14px; color: #012970; font-weight: 600;">${ticket.ticket_number}</h4>
+                                    <p class="mb-1 text-dark text-truncate" style="font-size: 13px;">${ticket.concern}</p>
+                                    <p class="mb-0 small text-muted" style="font-size: 11px;">From: ${ticket.username} | ${ticket.created_at}</p>
+                                    ${adminText}
                                 </div>
-                                ${actionButton}
+                                <div class="d-flex flex-column align-items-end" style="min-width: 80px;">
+                                    ${statusBadge}
+                                    ${actionButton}
+                                </div>
                             </li>
                         `;
                     });
