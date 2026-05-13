@@ -140,7 +140,7 @@
                         <!-- shown when DEPT is selected -->
                         <div class="form-group" id="deptGroup" style="display:none;">
                             <label for="txtDept" class="form-label">Department</label>
-                            <select id="txtDept" name="txtDept" class="form-select" placeholder="Choose a department">
+                            <select id="txtDept" name="txtDept" class="form-control" placeholder="Choose a department">
                                 <option selected disabled>Choose a department</option>
                                 <!-- Get depts -->
                             </select>
@@ -148,8 +148,8 @@
                         <!-- shown when BRGY is selected -->
                         <div class="form-group" id="brgyGroup" style="display:none;">
                             <label for="txtBrgy" class="form-label">Barangay</label>
-                            <select id="txtBrgy" name="txtBrgy" class="form-select" placeholder="Choose a barangay">
-                                <option selected disabled>Choose a barangay</option>
+                            <select id="txtBrgy" name="txtBrgy" class="form-control" placeholder="Choose a barangay">
+                           
                                 <!-- Get barangay -->
                             </select>
                         </div>
@@ -201,13 +201,12 @@
                 <!-- Entity dropdowns – same position, toggled by editcategory -->
                 <div id="editdeptGroup" style="display:none;" class="form-group">
                     <label for="editDept" class="form-label">Department</label>
-                    <select id="editDept" name="editDept" class="form-select" placeholder="Choose a department">
+                    <select id="editDept" name="editDept" class="form-control" placeholder="Choose a department">
                         <!-- Get depts -->
                     </select>
-                </div>
-                <div id="editbrgyGroup" style="display:none;" class="form-group">
+    
                     <label for="editBrgy" class="form-label">Barangay</label>
-                    <select id="editBrgy" name="editBrgy" class="form-select" placeholder="Choose a barangay">
+                    <select id="editBrgy" name="editBrgy" class="form-control" placeholder="Choose a barangay">
                         <!-- Get barangay -->
                     </select>
                 </div>
@@ -241,4 +240,4 @@
 
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <!-- Add Quill JS before closing body -->
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>	

@@ -49,10 +49,7 @@ class Admin extends BaseController
             return redirect()->to(base_url('admin/dashboard'));
         }
 
-        // Restrict tickets page to DEVELOPER, SUPERADMIN, ADMIN
-        if ($mode === 'tickets' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
-            return redirect()->to(base_url('admin/dashboard'));
-        }
+
 
         $data['user'] = $user;
         $data['mode'] = $mode;
@@ -113,7 +110,7 @@ class Admin extends BaseController
             case 'profile': $data['title'] = 'My Profile'; break;
             case 'audit':   $data['title'] = 'System Logs'; break;
             case 'map':     $data['title'] = 'Map Management'; break;
-            case 'tickets': $data['title'] = 'Support Tickets'; break;
+
             default: $data['title'] = 'Unknown'; break;
         }
 
@@ -379,9 +376,11 @@ public function getVisitCount()
                         $message = 'Department not found';
                     }
                 } else {
-                    $dept_d = $dept_m
-                            ->orderBy('created_date', 'desc') 
-                            ->findAll();
+                    $builder = $dept_m->orderBy('created_date', 'desc');
+                    if ($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') {
+                        $builder->where('ID', $user->entity_ref_id);
+                    }
+                    $dept_d = $builder->findAll();
                     foreach ($dept_d as $dept) {
                         $data[] = $dept;
                     }
@@ -408,6 +407,11 @@ public function getVisitCount()
                         }
                     } else {
                         $builder = $dept_m->orderBy('created_date', 'desc');
+                        
+                        // If user is ENCODER with DEPARTMENT account type, only show their own department
+                        if ($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') {
+                            $builder->where('ID', $user->entity_ref_id);
+                        }
                         
                         // Add partial match filters if provided
                         if (!empty($searchDept)) {
@@ -905,183 +909,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'get_tickets':
-            {
-                $ticket_m = new \App\Models\TicketModel();
-                $singleId = $this->request->getPost('id');
 
-                if ($singleId) {
-                    // Single ticket detail for the view modal
-                    $ticket = $ticket_m->select('support_tickets.*, useradmin.fname as admin_fname, useradmin.lname as admin_lname')
-                                       ->join('useradmin', 'useradmin.ID = support_tickets.assigned_admin_id', 'left')
-                                       ->find($singleId);
-                    if ($ticket) {
-                        $data   = $ticket;
-                        $status = 1;
-                    } else {
-                        $message = 'Ticket not found';
-                    }
-                } else {
-                    // List view — support filters from tickets page
-                    $searchConcern = $this->request->getPost('searchConcern');
-                    $searchStatus  = $this->request->getPost('searchStatus');
-                    $dateFrom      = $this->request->getPost('dateFrom');
-                    $dateTo        = $this->request->getPost('dateTo');
-                    $searchAdmin   = $this->request->getPost('searchAdmin');
-
-                    $builder = $ticket_m->select('support_tickets.*, useradmin.fname as admin_fname, useradmin.lname as admin_lname')
-                                        ->join('useradmin', 'useradmin.ID = support_tickets.assigned_admin_id', 'left')
-                                        ->orderBy('support_tickets.created_at', 'DESC');
-
-                    // Default: notification bell only shows open/in_progress tickets. DataTable shows all.
-                    $is_datatable = $this->request->getPost('is_datatable');
-
-                    if (!empty($searchStatus)) {
-                        $builder->where('support_tickets.status', $searchStatus);
-                    } else if (!$is_datatable) {
-                        // Bell call (no status filter) — only open/in-progress
-                        $builder->whereIn('support_tickets.status', ['OPEN', 'IN_PROGRESS']);
-                    }
-
-                    if (!empty($searchConcern)) {
-                        $builder->groupStart()
-                                ->like('support_tickets.concern', $searchConcern)
-                                ->orLike('support_tickets.ticket_number', $searchConcern)
-                                ->orLike('support_tickets.username', $searchConcern)
-                                ->groupEnd();
-                    }
-                    if (!empty($dateFrom)) {
-                        $builder->where('DATE(support_tickets.created_at) >=', $dateFrom);
-                    }
-                    if (!empty($dateTo)) {
-                        $builder->where('DATE(support_tickets.created_at) <=', $dateTo);
-                    }
-                    if (!empty($searchAdmin)) {
-                        $builder->groupStart()
-                                ->like('useradmin.fname', $searchAdmin)
-                                ->orLike('useradmin.lname', $searchAdmin)
-                                ->groupEnd();
-                    }
-
-                    $tickets = $builder->findAll();
-                    $data    = $tickets;
-                    $status  = 1;
-                }
-                break;
-            }
-
-            case 'take_ticket':
-            {
-                $ticket_m = new \App\Models\TicketModel();
-                $id = $this->request->getPost('id');
-                $ticket = $ticket_m->find($id);
-
-                if ($ticket && $ticket->status === 'OPEN') {
-                    $updateData = [
-                        'status' => 'IN_PROGRESS',
-                        'assigned_admin_id' => $user->ID,
-                        'taken_at' => date('Y-m-d H:i:s')
-                    ];
-                    if ($ticket_m->update($id, $updateData)) {
-                        $status = 1;
-                        $message = 'Ticket claimed successfully.';
-                        $log_c['processDetails'] = 'TICKET_ID: ' . $id . ' CLAIMED';
-                    } else {
-                        $message = 'Failed to claim ticket.';
-                    }
-                } else {
-                    $message = 'Ticket is already being handled or resolved.';
-                }
-                break;
-            }
-
-            case 'resolve_ticket':
-            {
-                $ticket_m = new \App\Models\TicketModel();
-                $id = $this->request->getPost('id');
-                $ticket = $ticket_m->find($id);
-
-                if ($ticket && $ticket->status === 'IN_PROGRESS' && (int)$ticket->assigned_admin_id === (int)$user->ID) {
-                    $updateData = [
-                        'status' => 'RESOLVED',
-                        'resolved_at' => date('Y-m-d H:i:s')
-                    ];
-                    if ($ticket_m->update($id, $updateData)) {
-                        // Notify User via Email
-                        $user_m = new \App\Models\UserAccount();
-                        $ticketUser = $user_m->find($ticket->user_id);
-
-                        if ($ticketUser) {
-                            $mailer = new \App\Libraries\EmailQueue();
-                            $mailer->queue([
-                                'to'      => $ticketUser->email,
-                                'subject' => 'Support Ticket Resolved - ' . $ticket->ticket_number,
-                                'body'    => "
-                                    <p>Hello {$ticketUser->fname},</p>
-                                    <p>Your support ticket has been resolved by our team.</p>
-                                    <p><strong>Ticket Number:</strong> {$ticket->ticket_number}</p>
-                                    <p><strong>Status:</strong> RESOLVED</p>
-                                    <p>If you have any further concerns, please do not hesitate to reach out.</p>
-                                    <p>Thank you.</p>
-                                ",
-                            ]);
-                        }
-
-                        $status = 1;
-                        $message = 'Ticket marked as resolved.';
-                        $log_c['processDetails'] = 'TICKET_ID: ' . $id . ' RESOLVED';
-                    } else {
-                        $message = 'Failed to resolve ticket.';
-                    }
-                } else {
-                    $message = 'Unauthorized or invalid ticket status.';
-                }
-                break;
-            }
-
-            case 'reject_ticket':
-            {
-                $ticket_m = new \App\Models\TicketModel();
-                $id = $this->request->getPost('id');
-                $ticket = $ticket_m->find($id);
-
-                if ($ticket && $ticket->status === 'IN_PROGRESS' && (int)$ticket->assigned_admin_id === (int)$user->ID) {
-                    $updateData = [
-                        'status' => 'REJECTED',
-                        'rejected_at' => date('Y-m-d H:i:s')
-                    ];
-                    if ($ticket_m->update($id, $updateData)) {
-                        // Notify User via Email
-                        $user_m = new \App\Models\UserAccount();
-                        $ticketUser = $user_m->find($ticket->user_id);
-
-                        if ($ticketUser) {
-                            $mailer = new \App\Libraries\EmailQueue();
-                            $mailer->queue([
-                                'to'      => $ticketUser->email,
-                                'subject' => 'Support Ticket Rejected - ' . $ticket->ticket_number,
-                                'body'    => "
-                                    <p>Hello {$ticketUser->fname},</p>
-                                    <p>Your support ticket has been reviewed and rejected by our team, as it may not be a legitimate concern.</p>
-                                    <p><strong>Ticket Number:</strong> {$ticket->ticket_number}</p>
-                                    <p><strong>Status:</strong> REJECTED</p>
-                                    <p>If you believe this is an error, please do not hesitate to reach out or create a new ticket with more details.</p>
-                                    <p>Thank you.</p>
-                                ",
-                            ]);
-                        }
-
-                        $status = 1;
-                        $message = 'Ticket marked as rejected.';
-                        $log_c['processDetails'] = 'TICKET_ID: ' . $id . ' REJECTED';
-                    } else {
-                        $message = 'Failed to reject ticket.';
-                    }
-                } else {
-                    $message = 'Unauthorized or invalid ticket status.';
-                }
-                break;
-            }
 
             case 'get_job':
             {
@@ -1475,8 +1303,8 @@ public function getVisitCount()
             }
             case 'create_dept':
             {
-                // #23b – DEPARTMENT accounts cannot create new departments
-                if ($user->account_type === 'DEPARTMENT') {
+                // #23b – DEPARTMENT accounts cannot create new departments unless DEVELOPER
+                if ($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') {
                     $message = 'Department accounts cannot create new Departments.';
                     break;
                 }
@@ -2185,8 +2013,9 @@ public function getVisitCount()
                     break;
                 }
 
-                // #23 – DEPARTMENT accounts can only update THEIR OWN department
+                // #23 – DEPARTMENT accounts can only update THEIR OWN department unless DEVELOPER
                 if ($user->account_type === 'DEPARTMENT' &&
+                    $user->user_lvl !== 'DEVELOPER' &&
                     (int)$user->entity_ref_id !== (int)$id) {
                     $message = 'You can only update your own Department.';
                     break;
@@ -3134,6 +2963,15 @@ public function getVisitCount()
             {
                 $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
+                
+                // Enforce ENCODER restriction
+                if ($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') {
+                    if ((int)$id !== (int)$user->entity_ref_id) {
+                        $message = 'You are only authorized to manage your own department.';
+                        break;
+                    }
+                }
+
                 $status = $this->request->getPost('status');
                 $data = [
                     'status' => $status,
