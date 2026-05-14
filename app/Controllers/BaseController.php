@@ -52,8 +52,8 @@ abstract class BaseController extends Controller
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
 
-        // Log page visits for every request except admin dashboard
-        $this->logPageVisit();
+        // NOTE: Page visit logging is handled by the VisitCounter filter (app/Filters/VisitCounter.php).
+        // The logPageVisit() call has been removed to prevent double-counting every visit.
 
         //$this->session = \Config\Services::session();
 
@@ -62,37 +62,36 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Logs the current page visit to the visit_data table, excluding admin dashboard pages.
+     * Logs the current page visit to the visit_data table.
+     * Excludes admin and login pages.
+     *
+     * NOTE: This method is intentionally kept for direct use if needed,
+     * but is NO LONGER called from initController to avoid duplication
+     * with the VisitCounter filter.
      *
      * @return void
      */
-   protected function logPageVisit()
-{
-    $baseURL = "http://localhost/"; // Replace with your actual base URL
-    $currentURL = $_SERVER['REQUEST_URI'];
+    protected function logPageVisit()
+    {
+        $currentURL = $_SERVER['REQUEST_URI'];
 
-    // Skip logging if the URL contains /admin anywhere
-    if (strpos($currentURL, '/admin') !== false) {
-        return;
+        // Skip logging if the URL contains /admin or /login
+        if (strpos($currentURL, '/admin') !== false || strpos($currentURL, '/login') !== false) {
+            return;
+        }
+
+        try {
+            $db = Database::connect();
+
+            $data = [
+                'page_url'   => $currentURL,
+                'ip_address' => $this->request->getIPAddress() ?? '0.0.0.0',
+                'visit_date' => date('Y-m-d H:i:s'),
+            ];
+
+            $db->table('visit_data')->insert($data);
+        } catch (\Exception $e) {
+            log_message('error', 'Database Error in logPageVisit: ' . $e->getMessage());
+        }
     }
-
-    //skip logging if the url contains/login anywhere
-    if (strpos($currentURL, '/login') !== false) {
-        return;
-    }
-
-    try {
-        $db = Database::connect();
-
-        $data = [
-            'page_url' => $currentURL,
-            'ip_address' => $this->request->getIPAddress() ?? '0.0.0.0',
-            'visit_date' => date('Y-m-d H:i:s'),
-        ];
-
-        $db->table('visit_data')->insert($data);
-    } catch (\Exception $e) {
-        log_message('error', 'Database Error in logPageVisit: ' . $e->getMessage());
-    }
-}
 }

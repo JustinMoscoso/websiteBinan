@@ -58,7 +58,7 @@ $routes->get('/newsevents/(:num)', 'Home::newsevents/$1');
 $routes->get('/newseventscontent/(:num)', 'Home::newseventscontent/$1');
 $routes->get('/announcements/(:num)', 'Home::announcements/$1');
 $routes->get('/announcementcontent/(:num)', 'Home::announcementcontent/$1');
-$route['announcements/(:num)'] = 'announcements_page/index/$1';
+
 
 $routes->get('/invest', 'Home::invest');
 $routes->get('/investmentopp', 'Home::investmentopp');
@@ -73,12 +73,7 @@ $routes->get('/map', 'MapController::index');
 $routes->get('/contact', 'ContactController::index');
 $routes->post('contact/send', 'ContactController::send');
 
-$routes->get('newsevents', 'Home::newsevents');
-$routes->get('/newsevents/(:num)', 'Home::newsevents/$1');
-$routes->get('/newseventscontent/(:num)', 'Home::newseventscontent/$1');
-$routes->get('/announcements/(:num)', 'Home::announcements/$1');
 $routes->get('announcements', 'Home::announcements');
-$routes->get('/announcementcontent/(:num)', 'Home::announcementcontent/$1');
 
 $routes->post('/process/(:any)', 'Home::process/$1');
 $routes->get('/process/(:any)', 'Home::process/$1');
@@ -87,7 +82,6 @@ $routes->get('jobpostings', 'Home::jobpostings');
 $routes->get('jobpostings/(:num)', 'Home::jobpostings/$1');
 
 $routes->get('/jobs', 'Home::jobs');
-$routes->get('/test-jobs', 'Home::test_jobs');
 
 // Define a group of routes with common prefix ('/admin')
 $routes->group('admin', function ($routes) {
@@ -130,9 +124,6 @@ $routes->group('admin', function ($routes) {
     $routes->post('ajax/update_job', 'Admin::ajax/update_job');
     $routes->post('ajax/set_status_job', 'Admin::ajax/set_status_job');
     $routes->post('ajax/delete_job', 'Admin::ajax/delete_job');
-
-    $routes->get('image/(:segment)/(:segment)', 'Admin::image/$1/$2');
-    $routes->get('preview_file/(:segment)/(:segment)', 'Admin::preview_file/$1/$2');
 });
 
 $routes->get('auth/login', 'Auther::login');

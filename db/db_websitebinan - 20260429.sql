@@ -15,11 +15,11 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Dumping database structure for websitebinan
-CREATE DATABASE IF NOT EXISTS `websitebinan` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `websitebinan`;
+-- Dumping database structure for websiteBinan_optimisize
+CREATE DATABASE IF NOT EXISTS `websiteBinan_optimisize` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `websiteBinan_optimisize`;
 
--- Dumping structure for table websitebinan.about_content
+-- Dumping structure for table websiteBinan_optimisize.about_content
 DROP TABLE IF EXISTS `about_content`;
 CREATE TABLE IF NOT EXISTS `about_content` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `about_content` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.about_content: ~14 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.about_content: ~14 rows (approximately)
 DELETE FROM `about_content`;
 INSERT INTO `about_content` (`ID`, `section`, `title`, `description`, `about_img`, `status`, `created_date`, `updated_date`) VALUES
 	(5, 'History', '1571', 'Captain Juan de Salcedo discovered ad founded Biñan at the end of June 1571, a month after Miguel Lopez de Legaspi established Manila when he explored the largest freshwater lake in the Philippines and second in Asia (Laguna de Bay)', '1722563762_58dbf047f10d1d2cfc2c.png', 'ACTIVE', '2024-08-02 01:56:02', '2024-08-02 09:56:02'),
@@ -51,7 +51,7 @@ INSERT INTO `about_content` (`ID`, `section`, `title`, `description`, `about_img
 	(26, 'Emergency Hotlines', 'PNP Biñan (Philippine National Police Biñan)', '<p class="ql-align-right"><strong>SMART:</strong> 0998-598-5631</p><p class="ql-align-right"><strong>GLOBE:</strong> 0916-261-9833</p><p class="ql-align-right"><strong>INTELCO: </strong>(049) 513-5113</p>', NULL, 'ACTIVE', '2025-08-01 09:13:04', '2026-01-14 10:01:46'),
 	(27, 'Emergency Hotlines', 'BFP Biñan (Bureau of Fire Protection Biñan)', '<p class="ql-align-right"><strong>INTELCO:</strong> (049) 511-9111</p><p class="ql-align-right"><strong>DITO:</strong> 0992-419-3585</p>', NULL, 'ACTIVE', '2025-08-01 09:13:04', '2026-01-14 10:01:53');
 
--- Dumping structure for table websitebinan.audit_trails
+-- Dumping structure for table websiteBinan_optimisize.audit_trails
 DROP TABLE IF EXISTS `audit_trails`;
 CREATE TABLE IF NOT EXISTS `audit_trails` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `audit_trails` (
   CONSTRAINT `audit_trails_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `useradmin` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1159 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.audit_trails: ~967 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.audit_trails: ~967 rows (approximately)
 DELETE FROM `audit_trails`;
 INSERT INTO `audit_trails` (`ID`, `ipaddress`, `action`, `processDetails`, `created_date`, `userID`) VALUES
 	(180, '::1', 'set_status_barangay', 'BRGY_ID: 10 INACTIVE', '2024-06-05 02:13:48', 6),
@@ -1043,7 +1043,7 @@ INSERT INTO `audit_trails` (`ID`, `ipaddress`, `action`, `processDetails`, `crea
 	(1157, '127.0.0.1', 'update_services', 'SERVICE_ID: 19', '2026-04-15 01:47:03', 13),
 	(1158, '127.0.0.1', 'create_user', 'ACCOUNT_ID: 15 admin', '2026-04-29 05:31:28', 13);
 
--- Dumping structure for table websitebinan.barangay_content
+-- Dumping structure for table websiteBinan_optimisize.barangay_content
 DROP TABLE IF EXISTS `barangay_content`;
 CREATE TABLE IF NOT EXISTS `barangay_content` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -1062,7 +1062,7 @@ CREATE TABLE IF NOT EXISTS `barangay_content` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.barangay_content: ~24 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.barangay_content: ~24 rows (approximately)
 DELETE FROM `barangay_content`;
 INSERT INTO `barangay_content` (`ID`, `brgy_name`, `brngy_capt`, `img_logo`, `img_capt`, `mission`, `vision`, `contact`, `barangay_staff`, `about`, `status`, `created_date`, `updated_date`) VALUES
 	(19, 'Biñan', 'Juan Dela Ipsum', '1753930518_891b3cb1e88fd902c6be.png', '1753930913_c369a3c587df31ca4b46.jpg', '<p class="ql-align-justify"><strong style="color: rgb(0, 0, 0);">Lorem ipsum</strong><span style="color: rgb(0, 0, 0);"> dolor sit amet, consectetur adipiscing elit. Suspendisse ipsum lectus, ultrices quis leo vel, tincidunt tempor nulla. Nam id tellus ac purus placerat tristique non non ex.</span><strong style="color: rgb(0, 0, 0);"><span class="ql-cursor">﻿﻿﻿﻿﻿</span></strong></p>', '<p class="ql-align-justify"><em style="color: rgb(0, 0, 0);"><u>Lorem ipsum</u></em><span style="color: rgb(0, 0, 0);"> dolor sit amet, consectetur adipiscing elit. Suspendisse ipsum lectus, ultrices quis leo vel, tincidunt tempor nulla. Nam id tellus ac purus placerat tristique non non ex.</span></p>', '<p><strong>Phone Number: </strong></p><p><strong><span class="ql-cursor">﻿﻿﻿﻿﻿﻿﻿</span></strong>09123456789</p>', '<ol><li class="ql-align-justify"><strong>Barangay Secretary:</strong> Maria Lorem Santos</li><li class="ql-align-justify"><strong>Barangay Treasurer:</strong> Pedro Ipsum Cruz</li><li class="ql-align-justify"><strong>Kagawad (Councilor) 1:</strong> Ana Dolor Reyes</li><li class="ql-align-justify"><strong>Kagawad (Councilor) 2:</strong> Marco Elit Hernandez</li><li class="ql-align-justify"><strong>Kagawad (Councilor) 3:</strong> Lucia Magna De Guzman</li><li class="ql-align-justify"><strong>Kagawad (Councilor) 4: </strong>Carlo Sit Amet</li><li class="ql-align-justify"><strong>Kagawad (Councilor) 5: </strong>Teresa Ipsum Lopez</li><li class="ql-align-justify"><strong>Kagawad (Councilor) 6:</strong> Roberto Lorem Ramos</li><li class="ql-align-justify"><strong>Kagawad (Councilor) 7:</strong> Angela Ipsum Bautista</li><li class="ql-align-justify"><strong>SK Chairperson:</strong> Kevin Lorem Mendoza</li><li class="ql-align-justify"><strong>Barangay Health Worker:</strong> Sheila Ipsum Navarro</li><li class="ql-align-justify"><strong>Barangay Tanod (Chief):</strong> Ernesto Ipsum Aguilar</li><li class="ql-align-justify"><strong>Barangay Tanod (Member):</strong> Dennis Lorem Fabros</li><li class="ql-align-justify"><strong>Barangay Tanod (Member): </strong>Jason Ipsum Torres</li><li class="ql-align-justify"><strong>Barangay Maintenance Staff:</strong> Liza Ipsum Salazar</li></ol>', '<p class="ql-align-justify"><span style="color: rgb(0, 0, 0);">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac lorem ac eros sagittis gravida ac at diam. In tempor elementum porttitor. Praesent tempor finibus ante eget pharetra. Nullam rhoncus sed purus ut commodo. Nunc malesuada in orci quis vehicula. Proin nec felis tellus. Nam ut dolor id enim sollicitudin egestas. Nulla facilisi. Vivamus eu tincidunt ante. Morbi aliquet magna a ultricies ullamcorper. Ut varius, neque dictum mollis hendrerit, urna ante vehicula mi, a pellentesque mi nulla sit amet diam. Integer imperdiet orci et nulla tristique feugiat. Phasellus gravida semper imperdiet. Phasellus ut feugiat dolor, in auctor diam. Aliquam ultricies dolor quis magna convallis feugiat.</span></p>', 'ACTIVE', '2025-07-11 08:22:27', '2025-08-04 05:47:09'),
@@ -1090,7 +1090,7 @@ INSERT INTO `barangay_content` (`ID`, `brgy_name`, `brngy_capt`, `img_logo`, `im
 	(41, 'Tubigan', 'Lorem Ipsum', '1752223145_3397df7b7e61205e16c5.jpg', '1752223145_5e95edeaad80e778701e.jpg', 'Lorem Ipsum', 'Lorem Ipsum', NULL, '', NULL, 'ACTIVE', '2025-07-11 08:39:05', '2025-08-04 05:38:24'),
 	(42, 'Zapote', 'Lorem Ipsum', '1752715158_d3acbc5c0caa1c3a086a.jpeg', '1752715158_044a53a06f52073ad609.jpg', '<p>Lorem Ipsum</p>', '<p>Lorem Ipsum</p>', '<p><strong>Phone: 123456</strong></p>', '', '<p><strong>"Where Biñan\'s Shoemaking and Kalesa Making Industries Originated"</strong></p><p><strong>Land Area: </strong>216 hectares</p><p><strong>Land Use:</strong> Residential, commercial, mixed use Population: 31.374</p><p><strong>Fiesta: </strong>Feast of Nuestra Señora de la Paz y Buen Viaje - January 24</p><p>Barangay Dela Paz is known for shoemaking, kalesa making, and fishing. The shoe and tsinelas (slippers) making industry, which used to be a dominant home-based livelihood, has disappeared over the years, and the town is</p><p>now mainly residential, but is being developed for its commercial potential. This barangay is the home of Biñan\'s honorary queen, the Nuestra Señora de la Paz y Buen Viaje. of which Jose Rizal was a devotee. As a student in Biñan, he often visited and attended Holy Mass at the Nuestra Señora de la Paz y Buen Viaje Parish Church. Barangay Dela Paz is also known for its beautiful view of the Laguna de Bay where Biñanenses go for swimming.</p>', 'ACTIVE', '2025-07-11 08:39:23', '2025-08-04 05:38:24');
 
--- Dumping structure for table websitebinan.content_tbl
+-- Dumping structure for table websiteBinan_optimisize.content_tbl
 DROP TABLE IF EXISTS `content_tbl`;
 CREATE TABLE IF NOT EXISTS `content_tbl` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -1106,7 +1106,7 @@ CREATE TABLE IF NOT EXISTS `content_tbl` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.content_tbl: ~18 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.content_tbl: ~18 rows (approximately)
 DELETE FROM `content_tbl`;
 INSERT INTO `content_tbl` (`ID`, `title`, `author`, `description`, `file_loc`, `category`, `created_date`, `updated_date`, `status`, `content_ref_id`) VALUES
 	(26, 'PH says US mid-range missile system to be pulled out', 'Chippy', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus a pellentesque sit amet porttitor eget. Proin sagittis nisl rhoncus mattis. Elit ullamcorper dignissim cras tincidunt lobortis feugiat vivamus. Lorem ipsum dolor sit amet consectetur adipiscing. Morbi tincidunt augue interdum velit euismod. In est ante in nibh mauris. Egestas egestas fringilla phasellus faucibus scelerisque eleifend. Arcu bibendum at varius vel pharetra vel turpis nunc eget. Tristique sollicitudin nibh sit amet commodo. Amet venenatis urna cursus eget nunc scelerisque viverra mauris in. Quis enim lobortis scelerisque fermentum dui faucibus in ornare quam. Orci ac auctor augue mauris augue neque gravida in fermentum. Eget felis eget nunc lobortis. Etiam dignissim diam quis enim lobortis scelerisque. Iaculis eu non diam phasellus vestibulum lorem sed risus. Aliquam sem et tortor consequat. Odio ut sem nulla pharetra diam. Nullam non nisi est sit.\r\n\r\nFacilisis magna etiam tempor orci eu lobortis elementum. Vel pretium lectus quam id. Quam quisque id diam vel quam elementum pulvinar. Ultricies lacus sed turpis tincidunt. Lacus suspendisse faucibus interdum posuere. Arcu ac tortor dignissim convallis aenean et. In ante metus dictum at tempor commodo ullamcorper a. Aliquam sem fringilla ut morbi tincidunt augue. Tristique senectus et netus et malesuada fames. Odio ut enim blandit volutpat maecenas volutpat blandit. Sapien eget mi proin sed libero enim sed faucibus turpis.\r\n\r\nMalesuada nunc vel risus commodo viverra maecenas accumsan lacus vel. Vitae semper quis lectus nulla. Et pharetra pharetra massa massa ultricies mi quis hendrerit. Non blandit massa enim nec dui nunc mattis enim ut. Nunc sed augue lacus viverra vitae. Pellentesque elit ullamcorper dignissim cras tincidunt lobortis. Rhoncus urna neque viverra justo nec ultrices. In eu mi bibendum neque egestas congue quisque. Ligula ullamcorper malesuada proin libero nunc consequat interdum. Nibh venenatis cras sed felis eget velit aliquet. Lacus sed viverra tellus in hac. Sed felis eget velit aliquet sagittis id consectetur. Urna et pharetra pharetra massa massa ultricies mi. Ac ut consequat semper viverra. Nulla posuere sollicitudin aliquam ultrices. Sed ullamcorper morbi tincidunt ornare massa eget egestas. Risus commodo viverra maecenas accumsan lacus vel. Orci dapibus ultrices in iaculis nunc sed.', '1720086681_6f24b94f33ed5e27c3c4.jpg', 'NEWS', '2024-07-04 01:51:21', '2024-07-08 06:33:47', 'ACTIVE', NULL),
@@ -1128,7 +1128,7 @@ INSERT INTO `content_tbl` (`ID`, `title`, `author`, `description`, `file_loc`, `
 	(51, 'Mayor Gel pinangunahan and General Assembly at Permit Release para sa mga iskolar', 'John Doe', '<p>Pinangunahan ni Mayor Gel Alonte ngayong umaga, July 4, ang General Assembly at Release of Enrollment Permit para sa mga benepisyaryo ng Iskolar ng Biñan (INB) at Artista at Atletang Biñanense College (ABC) Scholarship Program na ginanap sa Football Stadium.\r\nKasama ni Mayor Alonte sa programa sina City Education Officer Edmil Recibe at Committee Chairman on Education, Konsehal Jedi Alatiit, na kapwa nagpahayag ng kanilang suporta sa pagpapatuloy ng libre at kalidad na edukasyon ng mga kabataang Biñense.\r\n<strong>#CityOfLife #ABC #INB</strong></p>', '1752491708_2ee68cad8c2a4fcee755.jpg', 'NEWS', '2025-07-14 11:15:08', '2025-07-31 01:17:34', 'ACTIVE', NULL),
 	(52, 'Vice Mayor Dada leads inaugural session of 7th City Council of Biñan ', 'John Doe', '<p class="ql-align-justify">Vice Mayor Jonalina \'Dada\' Reyes presided the 7th City Council of Biñan on officially July 7 at the Rianzares Bautista Hall, marking the beginning of a new legislative term committed to service and good governance.\r\nThe session gathered all elected City Councilors, along with Mayor Angelo \'Gel\' Alonte and Congressman Walfredo \'Arman\' Dimaguila, Jr. who delivered their messages of support and solidarity. \r\nSenator Bam Aquino graced the session as a guest speaker, while Vice Mayor Reyes delivered her inaugural address. \r\nMeanwhile, Former Congresswoman Marlyn “Len” Alonte, Mayor Alonte, Congressman Dimaguila, and other former councilors — Alvin Garcia, Jay Souza, and Jigcy Pecaña were honored with Service Award in recognition of their longstanding contributions to the city’s development.\r\n<strong>#InauguralSession #CityOfBiñan #7thCityCouncil</strong></p>', '1752491896_d4d17bc7bae7db6cdfbc.jpg', 'NEWS', '2025-07-14 11:18:16', '2025-08-04 02:12:30', 'ACTIVE', NULL);
 
--- Dumping structure for table websitebinan.department_content
+-- Dumping structure for table websiteBinan_optimisize.department_content
 DROP TABLE IF EXISTS `department_content`;
 CREATE TABLE IF NOT EXISTS `department_content` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -1148,7 +1148,7 @@ CREATE TABLE IF NOT EXISTS `department_content` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.department_content: ~41 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.department_content: ~41 rows (approximately)
 DELETE FROM `department_content`;
 INSERT INTO `department_content` (`ID`, `dept_name`, `about`, `contact`, `head`, `post_title`, `mission`, `vision`, `img_logo`, `org_chart_img`, `quality_policy`, `created_date`, `updated_date`, `status`) VALUES
 	(41, 'City Population Office', '<p><strong>City Population Office of Binan. </strong>\r\n<strong>Programs: </strong>\r\nPre-Marriage Counselling; \r\nResponsible Parenthood: Adolescent Health and Development; Population Development Integration</p>', '<ul><li><strong>Phone Number:</strong> (049) 513 5070\r\n</li><li><strong>Email:</strong> pop@binan.gov.ph</li></ul>', 'Mian R. Yco', NULL, '<p class="ql-align-justify"><strong><em>Lorem ipsum</em></strong> dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <strong><em><u>quis nostrud exercitation</u></em></strong> ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>', '<p class="ql-align-justify"><strong><em><s><u>Lorem ipsum dolor sit</u></s></em></strong> amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <em><u>quis nostrud exercitatio</u></em>n ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>', '1753324249_c677850577c6604233ed.jpg', '1754289562_d508e913e2c12190fcb3.png', '<p class="ql-align-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>', '2024-05-28 22:59:29', '2025-08-04 06:39:22', 'ACTIVE'),
@@ -1193,7 +1193,7 @@ INSERT INTO `department_content` (`ID`, `dept_name`, `about`, `contact`, `head`,
 	(82, 'Office of the City Youth and Sports Development Officer', '', '', 'Aflred E. Suarez	', NULL, 'asd', 'asd', '1752493763_b4739bc9be0e7364cbb4.png', NULL, 'asd', '2025-05-08 00:58:40', '2025-07-14 11:49:23', 'ACTIVE'),
 	(83, 'Human Settlements and Livelihood Officer	          ', '', '', 'Alexis H. Desuasido	', NULL, 'asd', 'asd', '1752493797_a17591d9450b08847544.jpg', NULL, 'asd', '2025-05-08 00:58:57', '2025-07-14 11:49:57', 'ACTIVE');
 
--- Dumping structure for table websitebinan.file_tbl
+-- Dumping structure for table websiteBinan_optimisize.file_tbl
 DROP TABLE IF EXISTS `file_tbl`;
 CREATE TABLE IF NOT EXISTS `file_tbl` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -1210,7 +1210,7 @@ CREATE TABLE IF NOT EXISTS `file_tbl` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.file_tbl: ~86 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.file_tbl: ~86 rows (approximately)
 DELETE FROM `file_tbl`;
 INSERT INTO `file_tbl` (`ID`, `file_name`, `file_category`, `category`, `level`, `year`, `publication_date`, `quarter`, `status`, `created_date`, `updated_date`) VALUES
 	(6, '1752713688_5cc2e432fca8fdc0ce42.pdf', 'Business Directory', 'INVEST', NULL, NULL, NULL, NULL, 'ACTIVE', '2024-06-05 18:23:43', '2025-07-17 00:54:48'),
@@ -1306,7 +1306,7 @@ INSERT INTO `file_tbl` (`ID`, `file_name`, `file_category`, `category`, `level`,
 	(123, '1770862849_6651448e2ea63a7000dc.pdf', NULL, 'CAREER', 4, NULL, '2025-11-03', NULL, 'ACTIVE', '2026-02-12 02:20:49', NULL),
 	(124, '1770862872_053309c701e6826d174b.pdf', NULL, 'CAREER', 4, NULL, '2025-11-12', NULL, 'ACTIVE', '2026-02-12 02:21:12', NULL);
 
--- Dumping structure for table websitebinan.hotlines
+-- Dumping structure for table websiteBinan_optimisize.hotlines
 DROP TABLE IF EXISTS `hotlines`;
 CREATE TABLE IF NOT EXISTS `hotlines` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -1322,7 +1322,7 @@ CREATE TABLE IF NOT EXISTS `hotlines` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.hotlines: ~15 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.hotlines: ~15 rows (approximately)
 DELETE FROM `hotlines`;
 INSERT INTO `hotlines` (`ID`, `telco`, `smart`, `globe`, `number`, `created_date`, `updated_date`, `status`, `section`, `content_ref_id`) VALUES
 	(2, 'New teclo', '-', '-', 'New contact', '2024-07-08 00:03:24', '2025-08-01 02:12:42', 'INACTIVE', 'Department', '42'),
@@ -1341,7 +1341,7 @@ INSERT INTO `hotlines` (`ID`, `telco`, `smart`, `globe`, `number`, `created_date
 	(15, '-', '-', '-', '511-9111', '2025-08-01 02:14:17', NULL, 'ACTIVE', 'Others', 'Bureau of Fire Protection Biñan'),
 	(16, '513-5040', '-', '-', '-', '2025-08-01 02:14:45', NULL, 'ACTIVE', 'Department', '60');
 
--- Dumping structure for table websitebinan.jobs
+-- Dumping structure for table websiteBinan_optimisize.jobs
 DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE IF NOT EXISTS `jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1357,7 +1357,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.jobs: ~8 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.jobs: ~8 rows (approximately)
 DELETE FROM `jobs`;
 INSERT INTO `jobs` (`id`, `title`, `description`, `company`, `type`, `publication_date`, `email`, `status`, `created_date`, `updated_date`) VALUES
 	(3, 'IT Specialist', '<p class="ql-align-justify">An <strong><em>IT Specialist</em></strong> at a leading technology company like Microsoft plays a critical role in maintaining and optimizing the organization\'s digital infrastructure. They are responsible for managing and supporting hardware, software, networks, and security systems to ensure smooth and secure operations across all departments. This role involves troubleshooting technical issues, implementing system upgrades, and collaborating with cross-functional teams to develop and deploy innovative IT solutions. With a strong focus on reliability, performance, and cybersecurity, the <strong><em>IT Specialist</em></strong> helps drive Microsoft’s mission to empower every person and organization on the planet to achieve more through seamless technology support and innovation.</p>', 'Microsoft', 'Full Time', '2025-07-11', 'mscompany@outlook.com', 'ACTIVE', '2025-07-11 10:11:33', '2025-07-31 09:42:16'),
@@ -1369,7 +1369,7 @@ INSERT INTO `jobs` (`id`, `title`, `description`, `company`, `type`, `publicatio
 	(9, 'Graphic Designer', '<p class="ql-align-justify">Canvas &amp; Co. is looking for a freelance Graphic Designer to produce visual assets for branding, social media, and print. Proficiency in Adobe Creative Suite is required. Must have a strong portfolio and be comfortable working with tight deadlines.</p>', 'Canvas & Co. Studio', 'Full Time', '2025-07-11', 'hello@canvasnco.com', 'ACTIVE', '2025-07-11 10:20:13', '2025-07-31 09:45:48'),
 	(10, 'Project Manager', '<p class="ql-align-justify"><strong><em>Microsoft Technologies</em></strong> is seeking a detail-oriented and experienced Project Manager to lead cross-functional teams in the delivery of software, cloud, and enterprise projects. You will be responsible for planning, scheduling, budgeting, risk management, and ensuring timely completion of deliverables. Strong leadership, communication, and knowledge of Agile or Scrum methodologies are essential.</p>', 'Microsoft', 'Full Time', '2025-07-11', 'careers@microsoft-tech.com', 'ACTIVE', '2025-07-11 10:20:44', '2025-07-31 09:45:40');
 
--- Dumping structure for table websitebinan.map
+-- Dumping structure for table websiteBinan_optimisize.map
 DROP TABLE IF EXISTS `map`;
 CREATE TABLE IF NOT EXISTS `map` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -1380,7 +1380,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table websitebinan.map: ~7 rows (approximately)
+-- Dumping data for table websiteBinan_optimisize.map: ~7 rows (approximately)
 DELETE FROM `map`;
 INSERT INTO `map` (`ID`, `brgy_name`, `top_loc`, `left_loc`, `details`) VALUES
 	(1, 'Ganado', '65%', '63%', 'Biñan’s Gateway to the National Road     Land Area: 732 hectares Land Use: Residential, mixed use, commercial Population: 28,669.'),

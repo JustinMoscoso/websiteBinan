@@ -45,8 +45,9 @@ class Auther extends BaseController
             exit;
         }
 
-        $this->response->setHeader('Access-Control-Allow-Origin', '*')
-                       ->setHeader('Content-type', 'application/json');
+        $this->response
+            ->setHeader('Access-Control-Allow-Origin', ENVIRONMENT === 'production' ? 'https://' . $_SERVER['HTTP_HOST'] : '*')
+            ->setHeader('Content-type', 'application/json');
 
         $status = 0;
         $message = "";
