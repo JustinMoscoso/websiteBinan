@@ -61,7 +61,7 @@
 
                         if (ticket.status === 'OPEN') {
                             statusBadge = '<span class="badge bg-success mb-2">Open</span>';
-                            actionButton = `<button class="btn btn-sm btn-primary w-100" style="white-space: nowrap;" onclick="takeTicket(${ticket.id})">Take It</button>`;
+                            actionButton = `<button class="btn btn-sm btn-primary" style="white-space: nowrap; font-size: 13px; padding: 4px 4px;" onclick="takeTicket(${ticket.id})">Take It</button>`;
                         } else if (ticket.status === 'IN_PROGRESS') {
                             statusBadge = '<span class="badge bg-warning mb-2">In Progress</span>';
                             adminText = `<p class="mb-0 small text-muted">Claimed by: ${ticket.admin_fname} ${ticket.admin_lname}</p>`;
