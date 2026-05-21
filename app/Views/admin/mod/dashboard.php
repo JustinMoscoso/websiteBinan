@@ -16,8 +16,9 @@
       <div class="row">
 
        <!-- Website Visits Card -->
-<div class="col-xxl-6 col-md-6">
-    <div class="card info-card website-visits-card" id="website-visits-card"> <!-- Ensure ID matches -->
+<div class="col-lg-6 col-md-6 mb-4">
+    <!-- Added 'h-100' to force the card to stretch to the height of the tallest card in the row -->
+    <div class="card info-card website-visits-card h-100" id="website-visits-card"> 
         <div class="filter">
             <a class="icon" href="#" data-bs-toggle="dropdown">
                 <i class="bi bi-three-dots"></i>
@@ -31,9 +32,13 @@
                 <li><a class="dropdown-item" href="#" data-filter="This Year">This Year</a></li>
             </ul>
         </div>
-        <div class="card-body">
-            <h5 class="card-title">Website Visited <span id="visits-filter-text">| Today</span></h5> <!-- FIXED ID -->
-            <div class="d-flex align-items-center">
+
+        <!-- Added 'd-flex flex-column' to the card-body to allow internal alignment -->
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Website Visited <span id="visits-filter-text">| Today</span></h5>
+            
+            <!-- This container will now stay vertically centered if the card expands -->
+            <div class="d-flex align-items-center my-auto">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                     <i class="bi bi-globe"></i>
                 </div>
@@ -42,13 +47,17 @@
                     <span class="text-success small pt-1 fw-bold">visits</span>
                 </div>
             </div>
+            
+            <!-- Optional: Empty div to maintain spacing balance with the 'Announcements' link -->
+            <div style="height: 24px;" class="mt-auto"></div>
         </div>
     </div>
 </div>
 
 <!-- Revenue Card -->
-<div class="col-xxl-6 col-md-6">
-  <div class="card info-card revenue-card">
+<div class="col-lg-6 col-md-6 mb-4">
+  <!-- Added 'h-100' to ensure it matches the height of the card next to it -->
+  <div class="card info-card revenue-card h-100">
     <div class="filter">
       <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -61,7 +70,8 @@
       </ul>
     </div>
 
-    <div class="card-body">
+    <!-- Added 'd-flex flex-column' to manage internal vertical spacing -->
+    <div class="card-body d-flex flex-column">
       <h5 class="card-title">Recent announcements <span id="filter-text">| Today</span></h5>
 
       <div class="d-flex align-items-center">
@@ -74,7 +84,14 @@
           <span class="text-muted small pt-2 ps-1" id="update-date">Updated on [Date]</span>
         </div>
       </div>
-       <a href="http://localhost/websitebinan/public/announcements/1" class="news-link">Announcements <i class="bi bi-box-arrow-up-right"></i></a>
+
+      <!-- Added 'mt-auto' to push this link to the very bottom of the card -->
+      <div class="mt-auto pt-3">
+        <a href="http://localhost/websitebinan/public/announcements/1" class="news-link">
+          Announcements <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+      </div>
+      
     </div>
   </div>
 </div><!-- End Revenue Card -->
@@ -346,7 +363,8 @@
     }
 </style>
 <div class="col-lg-4">
-    <div class="card news-card">
+    <!-- Removed h-50 and added a style attribute to lock the height -->
+    <div class="card news-card mb-4" style="height: 235px;"> 
         <div class="filter">
             <a class="icon" href="#" data-bs-toggle="dropdown">
                 <i class="bi bi-three-dots"></i>
@@ -360,38 +378,55 @@
                 <li><a class="dropdown-item" href="#" data-filter="This Year">This Year</a></li>
             </ul>
         </div>
-        <div class="card-body">
+
+        <!-- Keep d-flex flex-column to handle the link at the bottom -->
+        <div class="card-body d-flex flex-column">
             <h5 class="card-title">Recent News <span id="news-filter">| Today</span></h5>
+            
             <div class="activity" id="news-activity">
                 No recent news added.
             </div>
-            <a href="http://localhost/websitebinan/public/newsevents/1" class="news-link">News&Events <i class="bi bi-box-arrow-up-right"></i></a>
+
+            <!-- mt-auto will now work perfectly within the 230px height -->
+            <div class="mt-auto pt-3">
+                <a href="http://localhost/websitebinan/public/newsevents/1" class="news-link">
+                    News&Events <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
         </div>
     </div>
-    <div class="highlight-card">
-        <ul class="nav nav-tabs" id="highlightTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab">Top Views Page</button>
-            </li>
-            <!-- <li class="nav-item" role="presentation">
-                <button class="nav-link" id="referrers-tab" data-bs-toggle="tab" data-bs-target="#referrers" type="button" role="tab">Top Referrers</button>
-            </li> -->
-        </ul>
-        <div class="tab-content" id="highlightTabContent">
-    <div class="tab-pane fade show active" id="posts" role="tabpanel">
-        <ul class="list-group">
-            <?php if ($topPage): ?>
-                <li class="list-group-item"><?php echo htmlspecialchars($topPage['page_name']); ?> <span class="float-end"><?php echo $topPage['visit_count']; ?> Views</span></li>
-            <?php else: ?>
-                <li class="list-group-item">No data available</li>
-            <?php endif; ?>
-        </ul>
-    </div>
-    <div class="tab-pane fade" id="referrers" role="tabpanel">
-        <ul class="list-group">
-            <li class="list-group-item">Referrer 1 <span class="float-end">150 Views</span></li>
-            <li class="list-group-item">Referrer 2 <span class="float-end">120 Views</span></li>
-        </ul>
+
+    <!-- Highlight Card remains below -->
+<div class="highlight-card card border-0 shadow-sm" style="height: 505px; background-color: #ffffff;"> 
+    <ul class="nav nav-tabs border-0 bg-white" id="highlightTab" role="tablist">
+      <li class="nav-item" role="presentation">
+          <!-- Kept the button styling but ensured border-0 -->
+          <button class="nav-link active border-0 fw-bold" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab" style="background-color: #ffffff;">
+              Top Views Page
+          </button>
+      </li>
+    </ul>
+    
+    <div class="tab-content h-100 d-flex flex-column" id="highlightTabContent" style="background-color: #ffffff;">
+        <div class="tab-pane fade show active h-100" id="posts" role="tabpanel">
+            <ul class="list-group list-group-flush h-100"> 
+                <?php if ($topPage): ?>
+                    <li class="list-group-item border-0" style="background-color: #ffffff;">
+                        <?php echo htmlspecialchars($topPage['page_name']); ?> 
+                        <span class="float-end text-primary fw-bold"><?php echo $topPage['visit_count']; ?> Views</span>
+                    </li>
+                <?php else: ?>
+                    <li class="list-core-item border-0 text-muted" style="background-color: #ffffff;">No data available</li>
+                <?php endif; ?>
+            </ul>
+        </div>
+        
+        <div class="tab-pane fade h-100" id="referrers" role="tabpanel">
+            <ul class="list-group list-group-flush h-100">
+                <li class="list-group-item border-0" style="background-color: #ffffff;">Referrer 1 <span class="float-end">150 Views</span></li>
+                <li class="list-group-item border-0" style="background-color: #ffffff;">Referrer 2 <span class="float-end">120 Views</span></li>
+            </ul>
+        </div>
     </div>
 </div>
 </div>
