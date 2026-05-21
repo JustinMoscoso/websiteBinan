@@ -206,6 +206,8 @@
           <span>City Officials</span>
         </a>
       </li><!-- End City Officials Nav -->
+      <?php endif; /* end !$isEntityAccount */ ?>
+
       <?php if (!$isEntityAccount || ($is_cio ?? false) || ($is_mayor ?? false)): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'fullDisc' ? '' : 'collapsed' ?>" href="<?= $mode == 'fullDisc' ? '#' : site_url('admin/fullDisc') ?>">
@@ -220,7 +222,6 @@
           <span>Map</span>
         </a>
       </li>End Map Nav -->
-      <?php endif; /* end !$isEntityAccount */ ?>
 
       <?php if (!$isEntityAccount || ($is_peso ?? false)): ?>
       <li class="nav-item">
