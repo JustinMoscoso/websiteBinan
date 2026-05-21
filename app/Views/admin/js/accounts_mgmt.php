@@ -439,11 +439,11 @@
             { title: 'Email', data: 'email' },
             { title: 'User Level', data: 'user_lvl' },
             {
-                title: 'Account Type', data: 'account_type', className: 'dt-center',
+                title: 'Account Type', data: 'account_type', className: 'dt-center', defaultContent: 'System',
                 render: function (data) {
                     if (data === 'DEPARTMENT') return '<span class="badge bg-primary">Department</span>';
                     if (data === 'BARANGAY')   return '<span class="badge bg-info text-dark">Barangay</span>';
-                    if (!data) return '<span class="badge bg-secondary">System</span>';
+                    return '<span class="badge bg-secondary">System</span>';
                 }
             },
             {

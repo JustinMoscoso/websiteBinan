@@ -49,10 +49,98 @@ class Admin extends BaseController
             return redirect()->to(base_url('admin/dashboard'));
         }
 
+        // Department-scoped ADMIN: restrict to dept, services, contacts, accounts_mgmt, dashboard
+        $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+
+        // Determine if user belongs to the HRDO, PESO, BPLO, Mayor, or CIO department
+        $isHRDO = false;
+        $isPESO = false;
+        $isBPLO = false;
+        $isMayor = false;
+        $isCIO = false;
+        if (!empty($user->entity_ref_id) && ($user->account_type ?? '') === 'DEPARTMENT') {
+            $deptModel = new \App\Models\Department();
+            $linkedDept = $deptModel->find($user->entity_ref_id);
+            if ($linkedDept) {
+                if (stripos($linkedDept->dept_name, 'HRDO') !== false || stripos($linkedDept->dept_name, 'Human Resources') !== false) {
+                    $isHRDO = true;
+                }
+                if (stripos($linkedDept->dept_name, 'PESO') !== false || stripos($linkedDept->dept_name, 'Public Employment Service') !== false) {
+                    $isPESO = true;
+                }
+                if (stripos($linkedDept->dept_name, 'BPLO') !== false || stripos($linkedDept->dept_name, 'Business Permit') !== false) {
+                    $isBPLO = true;
+                }
+                if (stripos($linkedDept->dept_name, 'Mayor') !== false) {
+                    $isMayor = true;
+                }
+                if (stripos($linkedDept->dept_name, 'Information Officer') !== false || stripos($linkedDept->dept_name, 'CIO') !== false) {
+                    $isCIO = true;
+                }
+            }
+        }
+
+        // Modes blocked for dept-scoped accounts
+        $deptOnlyModes = ['cityOff']; // CIO has access to about and fullDisc, so we remove them from the base list if CIO is true. Wait, we can construct the list conditionally.
+        
+        if (!$isCIO) {
+            $deptOnlyModes[] = 'about';
+        }
+        if (!$isCIO && !$isMayor) {
+            $deptOnlyModes[] = 'fullDisc';
+        }
+
+        if (!$isHRDO) {
+            $deptOnlyModes[] = 'careers'; // non-HRDO depts cannot access careers
+        }
+        if (!$isPESO) {
+            $deptOnlyModes[] = 'jobs'; // non-PESO depts cannot access jobs
+        }
+        if (!$isBPLO) {
+            $deptOnlyModes[] = 'invest'; // non-BPLO depts cannot access invest
+        }
+        if (!$isMayor && !$isCIO) {
+            $deptOnlyModes[] = 'postcontent';
+            $deptOnlyModes[] = 'mayor';
+        }
+
+        // Restrict specific mode routes based on their required department
+        if (in_array($mode, ['postcontent', 'mayor']) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) && !($isMayor || $isCIO)) {
+            // ADMIN accounts generally have postcontent/mayor access if not dept-scoped.
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+        if ($mode === 'careers' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']) && !$isHRDO) {
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+        if ($mode === 'jobs' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']) && !$isPESO) {
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+        if ($mode === 'invest' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']) && !$isBPLO) {
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+
+        // Restrict services: DEPARTMENT accounts cannot access services
+        if ($mode === 'services' && ($user->account_type ?? '') === 'DEPARTMENT') {
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+
+        if ($isDeptScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['brgy']))) {
+            return redirect()->to(base_url('admin/dept'));
+        }
+        if ($isBrgyScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['dept']))) {
+            return redirect()->to(base_url('admin/brgy'));
+        }
+
 
 
         $data['user'] = $user;
         $data['mode'] = $mode;
+        $data['is_hrdo'] = $isHRDO;
+        $data['is_peso'] = $isPESO;
+        $data['is_bplo'] = $isBPLO;
+        $data['is_mayor'] = $isMayor;
+        $data['is_cio'] = $isCIO;
 
         if ($mode === 'dashboard') {
             $visitCountModel = new \App\Models\VisitCountModel();
@@ -253,6 +341,48 @@ public function getVisitCount()
             exit;
         }
 
+        // Helper flags for scoped-ADMIN enforcement (mirrors ENCODER scoping)
+        $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+
+        // Determine if user belongs to HRDO, PESO, BPLO, Mayor, or CIO department
+        $isHRDO = false;
+        $isPESO = false;
+        $isBPLO = false;
+        $isMayor = false;
+        $isCIO = false;
+        if (!empty($user->entity_ref_id) && ($user->account_type ?? '') === 'DEPARTMENT') {
+            $deptModel = new \App\Models\Department();
+            $linkedDept = $deptModel->find($user->entity_ref_id);
+            if ($linkedDept) {
+                if (stripos($linkedDept->dept_name, 'HRDO') !== false || stripos($linkedDept->dept_name, 'Human Resources') !== false) {
+                    $isHRDO = true;
+                }
+                if (stripos($linkedDept->dept_name, 'PESO') !== false || stripos($linkedDept->dept_name, 'Public Employment Service') !== false) {
+                    $isPESO = true;
+                }
+                if (stripos($linkedDept->dept_name, 'BPLO') !== false || stripos($linkedDept->dept_name, 'Business Permit') !== false) {
+                    $isBPLO = true;
+                }
+                if (stripos($linkedDept->dept_name, 'Mayor') !== false) {
+                    $isMayor = true;
+                }
+                if (stripos($linkedDept->dept_name, 'Information Officer') !== false || stripos($linkedDept->dept_name, 'CIO') !== false) {
+                    $isCIO = true;
+                }
+            }
+        }
+        // Privileged roles (DEVELOPER, SUPERADMIN) are always treated as capable
+        $canManageCareers = $isHRDO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+        $canManageJobs = $isPESO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+        $canManageInvest = $isBPLO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+        $canManageMayor = $isMayor || $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
+        
+        $canManageAbout = $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
+        $canManageFullDisc = $isCIO || $isMayor || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
+
+        $currentUserFullName = trim(($user->fname ?? '') . ' ' . ($user->lname ?? ''));
+
         $log_m = new \App\Models\Audit();
         $log_c = [
             'ipaddress' => $this->request->getIPAddress(),
@@ -283,8 +413,15 @@ public function getVisitCount()
                     if ($target && $target->user_lvl === 'DEVELOPER' && $user->user_lvl !== 'DEVELOPER') {
                         $message = 'User not found';
                     } elseif ($target) {
-                        $data   = $target;
-                        $status = 1;
+                        // Dept-scoped ADMIN can only view users from their own entity
+                        if ($isDeptScopedAdmin && ((int)$target->entity_ref_id !== (int)$user->entity_ref_id || $target->account_type !== 'DEPARTMENT')) {
+                            $message = 'User not found';
+                        } elseif ($isBrgyScopedAdmin && ((int)$target->entity_ref_id !== (int)$user->entity_ref_id || $target->account_type !== 'BARANGAY')) {
+                            $message = 'User not found';
+                        } else {
+                            $data   = $target;
+                            $status = 1;
+                        }
                     } else {
                         $message = 'User not found';
                     }
@@ -294,6 +431,15 @@ public function getVisitCount()
                     // Non-developers never see DEVELOPER accounts
                     if ($user->user_lvl !== 'DEVELOPER') {
                         $builder->where('user_lvl !=', 'DEVELOPER');
+                    }
+
+                    // Dept-scoped ADMIN: only see users from their own entity
+                    if ($isDeptScopedAdmin) {
+                        $builder->where('account_type', 'DEPARTMENT')
+                                ->where('entity_ref_id', $user->entity_ref_id);
+                    } elseif ($isBrgyScopedAdmin) {
+                        $builder->where('account_type', 'BARANGAY')
+                                ->where('entity_ref_id', $user->entity_ref_id);
                     }
 
                     if (!empty($searchUser)) {
@@ -315,6 +461,9 @@ public function getVisitCount()
 
                     $users_d = $builder->findAll();
                     foreach ($users_d as $u) {
+                        if (in_array($u->user_lvl, ['DEVELOPER', 'SUPERADMIN']) || empty($u->account_type)) {
+                            $u->account_type = 'System';
+                        }
                         $data[] = $u;
                     }
                     $status = 1;
@@ -366,6 +515,7 @@ public function getVisitCount()
             case 'get_dept':
             {
                 $deptId = $this->request->getPost('id');
+                $status_filter = $this->request->getPost('status');
                 $dept_m = new \App\Models\Department();
                 if ($deptId) {
                     $department = $dept_m->find($deptId);
@@ -377,9 +527,14 @@ public function getVisitCount()
                     }
                 } else {
                     $builder = $dept_m->orderBy('created_date', 'desc');
-                    if ($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') {
+                    if (($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') || $isDeptScopedAdmin) {
                         $builder->where('ID', $user->entity_ref_id);
                     }
+
+                    if (!empty($status_filter)) {
+                        $builder->where('status', $status_filter);
+                    }
+
                     $dept_d = $builder->findAll();
                     foreach ($dept_d as $dept) {
                         $data[] = $dept;
@@ -408,8 +563,8 @@ public function getVisitCount()
                     } else {
                         $builder = $dept_m->orderBy('created_date', 'desc');
                         
-                        // If user is ENCODER with DEPARTMENT account type, only show their own department
-                        if ($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') {
+                        // If user is ENCODER/dept-scoped ADMIN with DEPARTMENT account type, only show their own department
+                        if (($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') || $isDeptScopedAdmin) {
                             $builder->where('ID', $user->entity_ref_id);
                         }
                         
@@ -464,8 +619,14 @@ public function getVisitCount()
                 if ($conId) {
                     $news = $con_m->find($conId);
                     if ($news) {
-                        $data = $news;
-                        $status = 1;
+                        // If restricted Mayor or CIO, check ownership
+                        $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+                        if ($isMayorOrCIORestricted && $news->author !== $currentUserFullName) {
+                            $message = 'Unauthorized: You can only view your own created data.';
+                        } else {
+                            $data = $news;
+                            $status = 1;
+                        }
                     } else {
                         $message = 'Content not found';
                     }
@@ -477,6 +638,12 @@ public function getVisitCount()
                 
                     $query = $con_m;
                 
+                    // Enforce ownership for restricted Mayor or CIO
+                    $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+                    if ($isMayorOrCIORestricted) {
+                        $query = $query->where('author', $currentUserFullName);
+                    }
+
                     if (!empty($search)) {
                         $query = $query->groupStart()
                                       ->like('title', $search)
@@ -733,6 +900,13 @@ public function getVisitCount()
                             ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
                             ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left');
     
+                        // Scoped ADMIN: restrict to their own department's services
+                        if ($isDeptScopedAdmin) {
+                            $builder->where('service_content.dept_cont_ID', $user->entity_ref_id);
+                        } elseif ($isBrgyScopedAdmin) {
+                            $builder->where('service_content.brngy_cont_ID', $user->entity_ref_id);
+                        }
+
                         // Service Name filter
                         if ($this->request->getPost('service_name')) {
                             $builder->like('service_content.serv_name', $this->request->getPost('service_name'));
@@ -813,6 +987,15 @@ public function getVisitCount()
                             ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
                             ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
                             ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left');
+
+                    // Scoped ADMIN: restrict to their own department/barangay contacts (CIO has global access)
+                    if ($isDeptScopedAdmin && !$isCIO) {
+                        $builder->where('hotlines.section', 'Department')
+                                ->where('hotlines.content_ref_id', $user->entity_ref_id);
+                    } elseif ($isBrgyScopedAdmin) {
+                        $builder->where('hotlines.section', 'Barangay')
+                                ->where('hotlines.content_ref_id', $user->entity_ref_id);
+                    }
 
                     if (!empty($query_param)) {
                         $builder->groupStart()
@@ -932,6 +1115,10 @@ public function getVisitCount()
             }
             case 'create_job':
             {
+                if (!$canManageJobs) {
+                    $message = 'Unauthorized: Only the PESO department can manage jobs.';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $title = trim($this->request->getPost('title'));
                 $description = trim($this->request->getPost('description'));
@@ -1016,6 +1203,10 @@ public function getVisitCount()
             }
             case 'update_job':
             {
+                if (!$canManageJobs) {
+                    $message = 'Unauthorized: Only the PESO department can manage jobs.';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $title = trim($this->request->getPost('title'));
@@ -1304,7 +1495,8 @@ public function getVisitCount()
             case 'create_dept':
             {
                 // #23b – DEPARTMENT accounts cannot create new departments unless DEVELOPER
-                if ($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') {
+                // Department-scoped ADMINs also cannot create new departments
+                if (($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') || $isDeptScopedAdmin) {
                     $message = 'Department accounts cannot create new Departments.';
                     break;
                 }
@@ -1446,7 +1638,7 @@ public function getVisitCount()
             {
                 $con_m = new \App\Models\Content();
                 $title = $this->request->getPost('title');
-                $author = $user->fname . ' ' . $user->lname; // Automatically set author from session
+                $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
                 $desc = $this->request->getPost('desc');
                 $imgLogo = $this->request->getFile('newsImg');
                 $category = $this->request->getPost('content_category');
@@ -1483,6 +1675,10 @@ public function getVisitCount()
             }
             case 'create_mayor':
             {
+                if (!$canManageMayor) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $may_m = new \App\Models\MayorContent();
                 $mayor_name = $this->request->getPost('myrname');
                 $section = $this->request->getPost('content_category');
@@ -1537,6 +1733,10 @@ public function getVisitCount()
                           
             case 'create_fulldiscpol':
             {
+                if (!$canManageFullDisc) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $policy_m = new \App\Models\FileTbl();
                 $fc = $this->request->getPost('fileCategory');
                 $yr = $this->request->getPost('yr');
@@ -1578,6 +1778,11 @@ public function getVisitCount()
                 
             case 'create_career':
             {
+                // Only HRDO department and privileged roles can manage careers
+                if (!$canManageCareers) {
+                    $message = 'Unauthorized: Only the HRDO department can manage career postings.';
+                    break;
+                }
                 $career_m = new \App\Models\FileTbl();
                 $publication = $this->request->getPost('publication');
                 $careerFile =  $this->request->getFile('careerFile');
@@ -1618,6 +1823,10 @@ public function getVisitCount()
                 
             case 'create_invest':
             {
+                if (!$canManageInvest) {
+                    $message = 'Unauthorized: Only the BPLO department can manage investment content.';
+                    break;
+                }
                 $invest_m = new \App\Models\FileTbl();
                 $fc = $this->request->getPost('fileCategory');
                 $investFile =  $this->request->getFile('investFile');
@@ -1713,6 +1922,17 @@ public function getVisitCount()
                 $dept_cont_ID = $this->request->getPost('txtDept');
                 $brngy_cont_ID = $this->request->getPost('txtBrgy');
                 $others_cont_ID = $this->request->getPost('txtOthers');
+
+                // Dept/brgy-scoped ADMIN: force their own entity
+                if ($isDeptScopedAdmin) {
+                    $dept_cont_ID  = $user->entity_ref_id;
+                    $brngy_cont_ID = null;
+                    $others_cont_ID = null;
+                } elseif ($isBrgyScopedAdmin) {
+                    $brngy_cont_ID = $user->entity_ref_id;
+                    $dept_cont_ID  = null;
+                    $others_cont_ID = null;
+                }
             
                 if ($dept_cont_ID) {
                     $content_ref_id = $dept_cont_ID;
@@ -1760,6 +1980,10 @@ public function getVisitCount()
             }
             case 'create_about':
             {
+                if (!$canManageAbout) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $about_m = new \App\Models\About();
                 $section = $this->request->getPost('content_category');
                 $title = $this->request->getPost('TxtTitle');
@@ -2014,9 +2238,10 @@ public function getVisitCount()
                 }
 
                 // #23 – DEPARTMENT accounts can only update THEIR OWN department unless DEVELOPER
-                if ($user->account_type === 'DEPARTMENT' &&
-                    $user->user_lvl !== 'DEVELOPER' &&
-                    (int)$user->entity_ref_id !== (int)$id) {
+                // This also applies to dept-scoped ADMIN accounts
+                if (($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER' &&
+                    (int)$user->entity_ref_id !== (int)$id) || 
+                    ($isDeptScopedAdmin && (int)$user->entity_ref_id !== (int)$id)) {
                     $message = 'You can only update your own Department.';
                     break;
                 }
@@ -2306,8 +2531,13 @@ public function getVisitCount()
                 $ne_dt = $con_m->find($id);
             
                 if ($ne_dt) {
+                    $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+                    if ($isMayorOrCIORestricted && $ne_dt->author !== $currentUserFullName) {
+                        $message = 'Unauthorized: You can only update your own created data.';
+                        break;
+                    }
                     $title = $this->request->getPost('editTitle');
-                    $author = $user->fname . ' ' . $user->lname; // Automatically set author from session
+                    $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
                     $desc = $this->request->getPost('editDesc');
                     $category = $this->request->getPost('edit_content_category');
             
@@ -2350,6 +2580,10 @@ public function getVisitCount()
             }
             case 'update_mayor':
             {
+                if (!$canManageMayor) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $may_m = new \App\Models\MayorContent();
                 $id = $this->request->getPost('id');
                 $mayorcontent = $may_m->find($id);
@@ -2409,6 +2643,10 @@ public function getVisitCount()
             }
             case "update_fulldiscpol":
             {
+                if (!$canManageFullDisc) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $policy_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
                 $policy = $policy_m->find($id);
@@ -2648,6 +2886,11 @@ public function getVisitCount()
 
             case "update_career":
             {
+                // Only HRDO department and privileged roles can manage careers
+                if (!$canManageCareers) {
+                    $message = 'Unauthorized: Only the HRDO department can manage career postings.';
+                    break;
+                }
                 $career_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
                 $career = $career_m->find($id);
@@ -2688,6 +2931,10 @@ public function getVisitCount()
             }
             case "update_invest":
             {
+                if (!$canManageInvest) {
+                    $message = 'Unauthorized: Only the BPLO department can manage investment content.';
+                    break;
+                }
                 $invest_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
                 $inv_d = $invest_m->find($id);
@@ -2790,6 +3037,19 @@ public function getVisitCount()
                 $id = $this->request->getPost('id');
                 $hot = $hot_m->find($id);
 
+                // Scoped ADMIN ownership check (CIO bypassed)
+                if ($hot && $isDeptScopedAdmin && !$isCIO) {
+                    if ($hot->section !== 'Department' || (int)$hot->content_ref_id !== (int)$user->entity_ref_id) {
+                        $message = 'You can only update contacts linked to your own department.';
+                        break;
+                    }
+                } elseif ($hot && $isBrgyScopedAdmin) {
+                    if ($hot->section !== 'Barangay' || (int)$hot->content_ref_id !== (int)$user->entity_ref_id) {
+                        $message = 'You can only update contacts linked to your own barangay.';
+                        break;
+                    }
+                }
+
                 if ($hot){
                     $telco = $this->request->getPost('editTelco');
                     $number = $this->request->getPost('editContact');
@@ -2798,6 +3058,18 @@ public function getVisitCount()
                     $dept_cont_ID = $this->request->getPost('editDept');
                     $brngy_cont_ID = $this->request->getPost('editBrgy');
                     $others_cont_ID = $this->request->getPost('editOthers');
+
+                    // Scoped ADMIN: force their own entity reference
+                    if ($isDeptScopedAdmin) {
+                        $dept_cont_ID  = $user->entity_ref_id;
+                        $brngy_cont_ID = null;
+                        $others_cont_ID = null;
+                    } elseif ($isBrgyScopedAdmin) {
+                        $brngy_cont_ID = $user->entity_ref_id;
+                        $dept_cont_ID  = null;
+                        $others_cont_ID = null;
+                    }
+
                     if ($dept_cont_ID) {
                         $content_ref_id = $dept_cont_ID;
                         $section = 'Department';
@@ -2833,6 +3105,10 @@ public function getVisitCount()
             }
             case 'update_about':
             {
+                if (!$canManageAbout) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $about_m = new \App\Models\About();
                 $id = $this->request->getPost('id');
                 $about = $about_m->find($id);
@@ -2964,8 +3240,8 @@ public function getVisitCount()
                 $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
                 
-                // Enforce ENCODER restriction
-                if ($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') {
+                // Enforce ENCODER/dept-scoped ADMIN restriction
+                if (($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') || $isDeptScopedAdmin) {
                     if ((int)$id !== (int)$user->entity_ref_id) {
                         $message = 'You are only authorized to manage your own department.';
                         break;
@@ -3018,6 +3294,10 @@ public function getVisitCount()
             }
             case 'set_status_mayor':
             {
+                if (!$canManageMayor) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $may_m = new \App\Models\MayorContent();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
@@ -3035,6 +3315,16 @@ public function getVisitCount()
             {
                 $anns_m = new \App\Models\Content();
                 $id = $this->request->getPost('id');
+                
+                $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+                if ($isMayorOrCIORestricted) {
+                    $post = $anns_m->find($id);
+                    if ($post && $post->author !== $currentUserFullName) {
+                        $message = 'Unauthorized: You can only update your own created data.';
+                        break;
+                    }
+                }
+                
                 $status = $this->request->getPost('status');
                 $data = [
                     'status' => $status,
@@ -3049,6 +3339,10 @@ public function getVisitCount()
 
             case 'set_status_fulldiscpol':
             {
+                if (!$canManageFullDisc) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $fulldisc_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
@@ -3065,7 +3359,7 @@ public function getVisitCount()
 
             case 'delete_fulldiscpol':
             {
-                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                if (!$canManageFullDisc) {
                     $message = 'Unauthorized access. You do not have permission to delete content.';
                     $status = 0;
                     break;
@@ -3088,13 +3382,30 @@ public function getVisitCount()
 
             case 'delete_contacts':
             {
-                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                if (!$isCIO && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
                     $message = 'Unauthorized access.';
                     $status = 0;
                     break;
                 }
                 $hot_m = new \App\Models\Hotlines();
                 $id = $this->request->getPost('id');
+
+                // Dept-scoped ADMIN can only delete contacts linked to their own department (CIO bypassed)
+                if ($isDeptScopedAdmin && !$isCIO) {
+                    $hotline = $hot_m->find($id);
+                    if (!$hotline || $hotline->section !== 'Department' || (int)$hotline->content_ref_id !== (int)$user->entity_ref_id) {
+                        $message = 'You can only delete contacts linked to your own department.';
+                        $status = 0;
+                        break;
+                    }
+                } elseif ($isBrgyScopedAdmin) {
+                    $hotline = $hot_m->find($id);
+                    if (!$hotline || $hotline->section !== 'Barangay' || (int)$hotline->content_ref_id !== (int)$user->entity_ref_id) {
+                        $message = 'You can only delete contacts linked to your own barangay.';
+                        $status = 0;
+                        break;
+                    }
+                }
                 if ($hot_m->find($id)) {
                     $hot_m->delete($id);
                     $message = 'Contact deleted successfully.';
@@ -3109,8 +3420,8 @@ public function getVisitCount()
 
             case 'delete_invest':
             {
-                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
-                    $message = 'Unauthorized access.';
+                if (!$canManageInvest) {
+                    $message = 'Unauthorized: Only the BPLO department can manage investment content.';
                     $status = 0;
                     break;
                 }
@@ -3130,8 +3441,9 @@ public function getVisitCount()
 
             case 'delete_careers':
             {
-                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
-                    $message = 'Unauthorized access.';
+                // Only HRDO department and privileged roles can manage careers
+                if (!$canManageCareers) {
+                    $message = 'Unauthorized: Only the HRDO department can manage career postings.';
                     $status = 0;
                     break;
                 }
@@ -3156,6 +3468,12 @@ public function getVisitCount()
                     $status = 0;
                     break;
                 }
+                // Dept-scoped ADMINs cannot delete departments at all
+                if ($isDeptScopedAdmin) {
+                    $message = 'Department accounts cannot delete departments.';
+                    $status = 0;
+                    break;
+                }
                 $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
                 if ($dept_m->find($id)) {
@@ -3172,7 +3490,7 @@ public function getVisitCount()
 
             case 'delete_mayor':
             {
-                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                if (!$canManageMayor) {
                     $message = 'Unauthorized access.';
                     $status = 0;
                     break;
@@ -3193,13 +3511,23 @@ public function getVisitCount()
 
             case 'delete_postcontent':
             {
-                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+                if (!$isMayorOrCIORestricted && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
                     $message = 'Unauthorized access.';
                     $status = 0;
                     break;
                 }
                 $con_m = new \App\Models\Content();
                 $id = $this->request->getPost('id');
+                
+                if ($isMayorOrCIORestricted) {
+                    $post = $con_m->find($id);
+                    if ($post && $post->author !== $currentUserFullName) {
+                        $message = 'Unauthorized: You can only delete your own created data.';
+                        $status = 0;
+                        break;
+                    }
+                }
                 if ($con_m->find($id)) {
                     $con_m->delete($id);
                     $message = 'Post content deleted successfully.';
@@ -3213,6 +3541,11 @@ public function getVisitCount()
             }
             case 'set_status_career':
             {
+                // Only HRDO department and privileged roles can manage careers
+                if (!$canManageCareers) {
+                    $message = 'Unauthorized: Only the HRDO department can manage career postings.';
+                    break;
+                }
                 $career_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
@@ -3228,6 +3561,10 @@ public function getVisitCount()
             }
             case 'set_status_invest':
             {
+                if (!$canManageInvest) {
+                    $message = 'Unauthorized: Only the BPLO department can manage investment content.';
+                    break;
+                }
                 $invest_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
@@ -3272,6 +3609,10 @@ public function getVisitCount()
             }
             case 'set_status_about':
             {
+                if (!$canManageAbout) {
+                    $message = 'Unauthorized access.';
+                    break;
+                }
                 $invest_m = new \App\Models\About();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
@@ -3290,6 +3631,21 @@ public function getVisitCount()
                     $invest_m = new \App\Models\Hotlines();
                     $id = $this->request->getPost('id');
                     $status = $this->request->getPost('status');
+
+                    // Scoped ADMIN ownership check (CIO bypassed)
+                    $hotline = $invest_m->find($id);
+                    if ($hotline && $isDeptScopedAdmin && !$isCIO) {
+                        if ($hotline->section !== 'Department' || (int)$hotline->content_ref_id !== (int)$user->entity_ref_id) {
+                            $message = 'You can only manage contacts linked to your own department.';
+                            break;
+                        }
+                    } elseif ($hotline && $isBrgyScopedAdmin) {
+                        if ($hotline->section !== 'Barangay' || (int)$hotline->content_ref_id !== (int)$user->entity_ref_id) {
+                            $message = 'You can only manage contacts linked to your own barangay.';
+                            break;
+                        }
+                    }
+
                     $data = [
                         'status' => $status,
                         'updated_date' => date('Y-m-d H:i:s')
@@ -3302,6 +3658,10 @@ public function getVisitCount()
                 }
             case 'set_status_job':
             {
+                if (!$canManageJobs) {
+                    $message = 'Unauthorized: Only the PESO department can manage jobs.';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
@@ -3338,6 +3698,10 @@ public function getVisitCount()
             }
             case 'delete_job':
             {
+                if (!$canManageJobs) {
+                    $message = 'Unauthorized: Only the PESO department can manage jobs.';
+                    break;
+                }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 
@@ -3410,7 +3774,7 @@ public function getVisitCount()
             exit;
         } else {
             log_message('error', 'File not found: ' . $filePath);
-            header("HTTP/1.0 404 Not Found");
+            header("HTTP/1.0 404     Not Found");
             echo 'File not found.';
             exit;
         }
