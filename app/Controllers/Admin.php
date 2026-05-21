@@ -315,6 +315,9 @@ public function getVisitCount()
 
                     $users_d = $builder->findAll();
                     foreach ($users_d as $u) {
+                        if (in_array($u->user_lvl, ['DEVELOPER', 'SUPERADMIN']) || empty($u->account_type)) {
+                            $u->account_type = 'System';
+                        }
                         $data[] = $u;
                     }
                     $status = 1;
@@ -3410,7 +3413,7 @@ public function getVisitCount()
             exit;
         } else {
             log_message('error', 'File not found: ' . $filePath);
-            header("HTTP/1.0 404 Not Found");
+            header("HTTP/1.0 404     Not Found");
             echo 'File not found.';
             exit;
         }
