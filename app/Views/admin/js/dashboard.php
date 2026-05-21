@@ -1,229 +1,210 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    // Load default news filter
+    // Basic setups
+    document.getElementById('filter-text').textContent = `| Today`;
+    loadRecentAnns("Today");
     loadRecentNews("Today");
-
-    // Set initial filter text and load announcements
-    document.getElementById('filter-text').textContent = `| Today`; // Set default filter text
-    loadRecentAnns("Today"); // Load with "Today" as default
-    console.log("DOM Loaded, calling loadRecentAnns with Today");
-});
-
-// Handle filters for Recent News
-document.querySelectorAll('.card .filter .dropdown-item[data-filter]').forEach(item => {
-    item.addEventListener('click', function(event) {
-        event.preventDefault();
-        const selectedFilter = this.getAttribute('data-filter');
-        const parentCard = this.closest('.card'); // Find the specific card container
-
-        if (parentCard.classList.contains('website-visits-card')) {
-            loadWebsiteVisits(selectedFilter);
-        } else if (parentCard.classList.contains('news-card')) {
-            loadRecentNews(selectedFilter);
-        }
-    });
-});
-
-// Handle filters for Recent Announcements
-document.querySelectorAll('.revenue-card .filter .dropdown-item[data-filter]').forEach(item => {
-    item.addEventListener('click', function(event) {
-        event.preventDefault();
-        const selectedFilter = this.getAttribute('data-filter');
-        document.getElementById('filter-text').textContent = `| ${selectedFilter}`; // Update filter text
-        loadRecentAnns(selectedFilter); // Load with the new filter
-        console.log(`Filter changed to: ${selectedFilter}, calling loadRecentAnns`);
-    });
-});
-
-// Load Recent News
-function loadRecentNews(filter = "Today") {
-    document.getElementById('news-filter').textContent = `| ${filter}`;
-    const newsActivity = document.getElementById('news-activity');
-    newsActivity.innerHTML = '';
-
-    fetch(`getRecentNews?filter=${filter}`)
-        .then(response => response.json())
-        .then(newsItems => {
-            if (newsItems.length === 0) {
-                newsActivity.innerHTML = "<p>No recent news added.</p>";
-                return;
-            }
-
-            newsItems.forEach(news => {
-                const formattedDate = new Date(news.created_date).toLocaleDateString();
-                const newsElement = `
-                    <div class="activity-item d-flex">
-                        <div class="activity-label">${formattedDate}</div>
-                        <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                        <div class="activity-content">
-                            <span class="fw-bold text-dark">${news.title}</span>
-                        </div>
-                    </div>
-                `;
-                newsActivity.insertAdjacentHTML('beforeend', newsElement);
-            });
-        })
-        .catch(error => console.error('Error fetching news:', error));
-}
-
-// Load Recent Announcements
-function loadRecentAnns(filter = "Today") {
-    const announcementTitle = document.getElementById('announcement-title');
-    const contentCount = document.getElementById('content-count');
-    const updateDate = document.getElementById('update-date');
-
-    if (!announcementTitle || !contentCount || !updateDate) {
-        console.error('One or more DOM elements not found:', { announcementTitle, contentCount, updateDate });
-        return;
-    }
-
-    // Show loading state
-    announcementTitle.textContent = 'Loading...';
-    contentCount.textContent = '';
-    updateDate.textContent = '';
-
-    console.log(`Fetching announcements with filter: ${filter}, URL: <?= base_url('admin/getRecentAnns') ?>?filter=${filter}`);
-    fetch(`<?= base_url('admin/getRecentAnns') ?>?filter=${filter}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-            // Uncomment if CSRF is enabled: 'X-CSRF-TOKEN': '<?= csrf_token() ?>'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(announcements => {
-        console.log('Fetched announcements:', announcements);
-        if (announcements.length === 0) {
-            announcementTitle.textContent = 'No announcements';
-            contentCount.textContent = '0';
-            updateDate.textContent = 'No updates';
-            return;
-        }
-
-        // Use the most recent announcement
-        const latestAnn = announcements[0];
-        announcementTitle.textContent = latestAnn.title || 'No title';
-        contentCount.textContent = announcements.length; // Number of announcements
-        updateDate.textContent = `Updated on ${new Date(latestAnn.created_date).toLocaleDateString()}`;
-    })
-    .catch(error => {
-        console.error('Error fetching announcements:', error.message, 'Full error:', error);
-        announcementTitle.textContent = 'Error loading';
-        contentCount.textContent = '0';
-        updateDate.textContent = 'No updates';
-    });
-}
-
-//Handle websites visit home count
-function loadWebsiteVisits(filter = "Today") {
-    document.getElementById('visits-filter-text').textContent = `| ${filter}`;
-    const visitCountElement = document.getElementById('visit-count');
-    visitCountElement.textContent = 'Loading...';
-
-    fetch(`getVisitCount?filter=${filter}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log("API Response:", data); // Debugging step
-            visitCountElement.textContent = data.visit_count ?? "Error";
-        })
-        .catch(error => {
-            console.error('Error fetching visit count:', error);
-            visitCountElement.textContent = 'Error';
-        });
-}
-
-// Handle filter clicks for Website Visits only
-document.querySelectorAll('#website-visits-card .dropdown-item[data-filter]').forEach(item => {
-    item.addEventListener('click', function(event) {
-        event.preventDefault();
-        const selectedFilter = this.getAttribute('data-filter');
-        loadWebsiteVisits(selectedFilter);
-    });
-});
-
-// Handle Reports - Most Visited Website
-document.addEventListener("DOMContentLoaded", () => {
-    // Hypothetical visit data (replace with real data from your analytics/database)
-    const visitData = {
-        today: {
-            categories: ['Home', 'About', 'Transparency', 'Careers', 'Invest', 'Contact'],
-            data: [50, 30, 40, 10, 5, 3] // Visits as of May 30, 2025, 04:06 PM PST
-        },
-        month: {
-            categories: ['Home', 'About', 'Transparency', 'Careers', 'Invest', 'Contact'],
-            data: [1200, 850, 950, 300, 200, 150] // Visits for May 2025
-        },
-        year: {
-            categories: ['Home', 'About', 'Transparency', 'Careers', 'Invest', 'Contact'],
-            data: [5000, 3500, 4000, 1200, 800, 600] // Visits for 2025
-        }
-    };
-
-    let currentFilter = 'month'; // Default filter (This Month)
-
-    // Handle filter selection
-    document.querySelectorAll('#filterDropdown .dropdown-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            currentFilter = item.getAttribute('data-filter');
-            document.getElementById('filterSpan').textContent = '/' + item.textContent;
-
-            // Update chart with new data
-            chart.updateOptions({
-                series: [{
-                    name: 'Visits',
-                    data: visitData[currentFilter].data
-                }],
-                xaxis: {
-                    categories: visitData[currentFilter].categories
-                }
-            });
-        });
-    });
-
-    // Optional: Fetch real data via AJAX (uncomment and adjust if using a backend)
     
-function fetchVisitData(filter) {
-        fetch(`<?= base_url('admin/getVisitData') ?>?filter=${filter}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error(data.error);
-                return;
-            }
-            chart.updateOptions({
-                series: [{
-                    name: 'Visits',
-                    data: data.data
-                }],
-                xaxis: {
-                    categories: data.categories
-                }
-            });
-            document.getElementById('filterSpan').textContent = '/' + filter.charAt(0).toUpperCase() + filter.slice(1);
-        })
-        .catch(error => console.error('Error fetching visit data:', error));
+    // Line Chart Data
+    const allLabels = <?php echo json_encode($visit_labels ?? []); ?>;
+    const allCounts = <?php echo json_encode($visit_counts ?? [], JSON_NUMERIC_CHECK); ?>;
+    const cleanCounts = allCounts.map(count => parseInt(count) || 0);
+    
+    // Group definitions
+    const page1Labels = ['Home', 'Mission & Vision', 'City Officials', 'History', 'Barangays', 'Jobs'];
+    const page2Labels = ['Invest', 'Contact', 'Departments', 'Maps', 'Full Disclosure Policy', 'Careers'];
+    let currentPage = 1;
+
+    // Helper to find index in PHP data
+    function findLabelMatch(targetLabel) {
+        let index = allLabels.indexOf(targetLabel);
+        if (index !== -1) return index;
+        index = allLabels.findIndex(phpLabel => phpLabel.toLowerCase().trim() === targetLabel.toLowerCase().trim());
+        if (index !== -1) return index;
+        return allLabels.findIndex(phpLabel => 
+            phpLabel.toLowerCase().includes(targetLabel.toLowerCase()) || targetLabel.toLowerCase().includes(phpLabel.toLowerCase())
+        );
     }
 
-    // Initial load and filter event with AJAX
-    document.querySelectorAll('#filterDropdown .dropdown-item').forEach(item => {
-        item.addEventListener('click', (e) => {
+    // Colors for Pie Chart
+    const pieColors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'];
+    const pieHoverColors = ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#be2617', '#60616f'];
+
+    // Setup Area Chart
+    const ctxArea = document.getElementById("myAreaChart");
+    let myLineChart;
+    
+    function updateAreaChart() {
+        const paginatedLabels = currentPage === 1 ? page1Labels : page2Labels;
+        const paginatedCounts = paginatedLabels.map(label => {
+            const index = findLabelMatch(label);
+            return index !== -1 ? cleanCounts[index] : 0;
+        });
+
+        if (!myLineChart) {
+            myLineChart = new Chart(ctxArea, {
+                type: 'line',
+                data: {
+                    labels: paginatedLabels,
+                    datasets: [{
+                        label: "Visits",
+                        tension: 0.3,
+                        backgroundColor: "rgba(78, 115, 223, 0.05)",
+                        borderColor: "rgba(78, 115, 223, 1)",
+                        pointRadius: 3,
+                        pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHoverRadius: 3,
+                        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 2,
+                        data: paginatedCounts,
+                        fill: true
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    layout: { padding: { left: 10, right: 25, top: 25, bottom: 0 } },
+                    scales: {
+                        x: { grid: { display: false, drawBorder: false } },
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { maxTicksLimit: 5, padding: 10 },
+                            grid: { color: "rgb(234, 236, 244)", drawBorder: false, borderDash: [2] }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: "rgb(255,255,255)", titleColor: '#6e707e', bodyColor: "#858796", borderColor: '#dddfeb', borderWidth: 1, padding: 15, displayColors: false, intersect: false, mode: 'index' }
+                    }
+                }
+            });
+        } else {
+            myLineChart.data.labels = paginatedLabels;
+            myLineChart.data.datasets[0].data = paginatedCounts;
+            myLineChart.update();
+        }
+
+        // Update pagination buttons
+        document.getElementById('page1Btn').className = currentPage === 1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary';
+        document.getElementById('page2Btn').className = currentPage === 2 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary';
+    }
+    updateAreaChart();
+
+    document.getElementById('page1Btn').addEventListener('click', () => { if (currentPage !== 1) { currentPage = 1; updateAreaChart(); } });
+    document.getElementById('page2Btn').addEventListener('click', () => { if (currentPage !== 2) { currentPage = 2; updateAreaChart(); } });
+
+    // Setup Pie Chart
+    const ctxPie = document.getElementById("myPieChart");
+    
+    // Get Top 3 pages
+    let combinedData = allLabels.map((lbl, idx) => ({ label: lbl, count: cleanCounts[idx] }));
+    combinedData.sort((a, b) => b.count - a.count);
+    const top3Data = combinedData.slice(0, 3);
+    const pieLabels = top3Data.map(d => d.label);
+    const pieCounts = top3Data.map(d => d.count);
+
+    new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+            labels: pieLabels,
+            datasets: [{
+                data: pieCounts,
+                backgroundColor: pieColors.slice(0, pieCounts.length),
+                hoverBackgroundColor: pieHoverColors.slice(0, pieCounts.length),
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: { backgroundColor: "rgb(255,255,255)", bodyColor: "#858796", borderColor: '#dddfeb', borderWidth: 1, padding: 15, displayColors: false },
+                legend: { display: false }
+            },
+            cutout: '80%'
+        },
+    });
+
+    // Populate Pie Legend
+    const legendContainer = document.getElementById("pie-chart-legend");
+    let legendHtml = '';
+    pieLabels.forEach((label, idx) => {
+        legendHtml += `<span class="mr-2"><i class="fas fa-circle" style="color:${pieColors[idx]}"></i> ${label}</span>`;
+    });
+    legendContainer.innerHTML = legendHtml;
+
+    // Load Announcements
+    function loadRecentAnns(filter) {
+        document.getElementById('filter-text').textContent = `| ${filter}`;
+        const countEl = document.getElementById('content-count');
+        
+        fetch(`<?= base_url('admin/getRecentAnns') ?>?filter=${filter}`)
+            .then(res => res.json())
+            .then(data => { countEl.textContent = data.length; })
+            .catch(() => { countEl.textContent = '0'; });
+    }
+
+    document.querySelectorAll('.revenue-card .dropdown-item[data-filter]').forEach(item => {
+        item.addEventListener('click', function(e) {
             e.preventDefault();
-            const filter = item.getAttribute('data-filter');
-            fetchVisitData(filter);
+            loadRecentAnns(this.getAttribute('data-filter'));
         });
     });
-    fetchVisitData('month'); // Initial load
+
+    // Load Recent News
+    function loadRecentNews(filter) {
+        document.getElementById('news-filter').textContent = `| ${filter}`;
+        const newsActivity = document.getElementById('news-activity');
+        const newsCount = document.getElementById('news-count');
+        newsActivity.innerHTML = 'Loading...';
+        
+        fetch(`<?= base_url('admin/getRecentNews') ?>?filter=${filter}`)
+            .then(res => res.json())
+            .then(data => {
+                newsCount.textContent = data.length;
+                if (data.length === 0) {
+                    newsActivity.innerHTML = "<p class='text-muted'>No recent news added.</p>";
+                    return;
+                }
+                newsActivity.innerHTML = '';
+                data.forEach(news => {
+                    const d = new Date(news.created_date).toLocaleDateString();
+                    newsActivity.insertAdjacentHTML('beforeend', `
+                        <div class="mb-2 pb-2 border-bottom text-sm">
+                            <span class="font-weight-bold text-dark d-block">${news.title}</span>
+                            <span class="text-xs text-muted"><i class="fas fa-calendar-alt"></i> ${d}</span>
+                        </div>
+                    `);
+                });
+            })
+            .catch(() => { newsActivity.innerHTML = 'Error loading.'; newsCount.textContent = '0'; });
+    }
+
+    document.querySelectorAll('.news-card .dropdown-item[data-filter]').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            loadRecentNews(this.getAttribute('data-filter'));
+        });
+    });
+
+    // Website Visits filters
+    function loadWebsiteVisits(filter) {
+        document.getElementById('visits-filter-text').textContent = `| ${filter}`;
+        const visitCountElement = document.getElementById('visit-count');
+        visitCountElement.textContent = 'Loading...';
+
+        fetch(`<?= base_url('admin/getVisitCount') ?>?filter=${filter}`)
+            .then(res => res.json())
+            .then(data => { visitCountElement.textContent = data.visit_count ?? "0"; })
+            .catch(() => { visitCountElement.textContent = 'Error'; });
+    }
+
+    document.querySelectorAll('.website-visits-card .dropdown-item[data-filter]').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            loadWebsiteVisits(this.getAttribute('data-filter'));
+        });
+    });
 });
 </script>

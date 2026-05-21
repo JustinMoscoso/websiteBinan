@@ -2,13 +2,8 @@
   <h1>Full Disclosure Policy Management</h1>
   <nav>
     <ol class="breadcrumb">
-<<<<<<< HEAD
         <li class="breadcrumb-item"><a href="<?php echo site_url('admin/dashboard'); ?>">Dashboard</a></li>
         <li class="breadcrumb-item">City Officials</li>
-=======
-      <li class="breadcrumb-item"><a href="<?= base_url('/admin/dashboard') ?>">Dashboard</a></li>
-      <li class="breadcrumb-item active">Full Disclosure Policy Management</li>
->>>>>>> 1094d2e (haha)
     </ol>
   </nav>
 </div><!-- End Page Title -->
