@@ -366,6 +366,7 @@ public function getVisitCount()
             case 'get_dept':
             {
                 $deptId = $this->request->getPost('id');
+                $status_filter = $this->request->getPost('status');
                 $dept_m = new \App\Models\Department();
                 if ($deptId) {
                     $department = $dept_m->find($deptId);
@@ -380,6 +381,11 @@ public function getVisitCount()
                     if ($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') {
                         $builder->where('ID', $user->entity_ref_id);
                     }
+
+                    if (!empty($status_filter)) {
+                        $builder->where('status', $status_filter);
+                    }
+
                     $dept_d = $builder->findAll();
                     foreach ($dept_d as $dept) {
                         $data[] = $dept;
