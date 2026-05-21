@@ -1638,7 +1638,7 @@ public function getVisitCount()
             {
                 $con_m = new \App\Models\Content();
                 $title = $this->request->getPost('title');
-                $author = $user->fname . ' ' . $user->lname; // Automatically set author from session
+                $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
                 $desc = $this->request->getPost('desc');
                 $imgLogo = $this->request->getFile('newsImg');
                 $category = $this->request->getPost('content_category');
@@ -2537,7 +2537,7 @@ public function getVisitCount()
                         break;
                     }
                     $title = $this->request->getPost('editTitle');
-                    $author = $user->fname . ' ' . $user->lname; // Automatically set author from session
+                    $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
                     $desc = $this->request->getPost('editDesc');
                     $category = $this->request->getPost('edit_content_category');
             
