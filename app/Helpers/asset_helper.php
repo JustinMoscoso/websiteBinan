@@ -27,16 +27,12 @@ function pre_styles($mode = 'default')
         );
     } elseif ($mode == 'admin') {
         $css = array(
+            site_url("assets/sbadmin2/vendor/fontawesome-free/css/all.min.css"),
+            site_url("assets/sbadmin2/css/sb-admin-2.min.css"),
             site_url("assets/css/datatables.min.css"),
-            site_url("assets/css/google-fonts.css"),
-            site_url("assets/admin/vendor/bootstrap/css/bootstrap.min.css"),
-            site_url("assets/admin/vendor/bootstrap-icons/bootstrap-icons.css"),
-            site_url("assets/admin/vendor/boxicons/css/boxicons.min.css"),
             site_url("assets/admin/vendor/quill/quill.snow.css"),
             site_url("assets/admin/vendor/quill/quill.bubble.css"),
-            site_url("assets/admin/vendor/remixicon/remixicon.css"),
             site_url("assets/admin/vendor/simple-datatables/style.css"),
-            site_url("assets/admin/css/style.css"),
             site_url("assets/admin/yearpicker/dist/yearpicker.css"),
         );
         $css[] = site_url("assets/css/bootstrap-select.min.css");
@@ -87,19 +83,20 @@ function pre_scripts($mode = 'default')
         );
     } elseif ($mode == 'admin') {
         $js = array(
-            site_url("assets/js/jquery_v3.6.4.js"),
+            site_url("assets/sbadmin2/vendor/jquery/jquery.min.js"),
+            site_url("assets/sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js"),
+            site_url("assets/sbadmin2/vendor/jquery-easing/jquery.easing.min.js"),
+            site_url("assets/sbadmin2/js/sb-admin-2.min.js"),
             site_url("assets/js/vendor/pdfmake/pdfmake.min.js"),
             site_url("assets/js/vendor/pdfmake/vfs_fonts.js"),
             site_url("assets/js/vendor/datatables/datatables-bundle.min.js"),
             site_url("assets/js/vendor/moment/moment.min.js"),
             site_url("assets/admin/vendor/apexcharts/apexcharts.min.js"),
-            site_url("assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"),
             site_url("assets/admin/vendor/chart.js/chart.umd.js"),
             site_url("assets/admin/vendor/echarts/echarts.min.js"),
             site_url("assets/admin/vendor/quill/quill.min.js"),
             site_url("assets/admin/vendor/simple-datatables/simple-datatables.js"),
             site_url("assets/admin/vendor/tinymce/tinymce.min.js"),
-            site_url("assets/admin/vendor/php-email-form/validate.js"),
             site_url("assets/js/main.js?v=" . time()),
             site_url("assets/admin/yearpicker/dist/yearpicker.js"),
         );
