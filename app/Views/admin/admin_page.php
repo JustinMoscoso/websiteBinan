@@ -115,21 +115,29 @@
         </a>
       </li><!-- End Dashboard Nav -->
       <?php
-        // Privileged roles always see the full sidebar regardless of account_type
-        $privilegedRoles = ['DEVELOPER', 'SUPERADMIN', 'ADMIN'];
+        // Privileged roles see the full sidebar UNLESS they are a dept/brgy-scoped ADMIN
+        $privilegedRoles = ['DEVELOPER', 'SUPERADMIN'];
+        $isDeptAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+
+        // ADMIN scoped to a department/barangay behaves like an entity account for sidebar
         $isEntityAccount = !in_array($user->user_lvl, $privilegedRoles)
-                           && in_array($user->account_type ?? '', ['DEPARTMENT', 'BARANGAY']);
+                           && ($isDeptAdmin || $isBrgyAdmin
+                               || in_array($user->account_type ?? '', ['DEPARTMENT', 'BARANGAY']));
         $showBrgy        = !in_array($user->user_lvl, $privilegedRoles)
-                           ? ($user->account_type ?? '') !== 'DEPARTMENT'
+                           ? ($user->account_type ?? '') !== 'DEPARTMENT' && !$isDeptAdmin
                            : true;
         $showDept        = !in_array($user->user_lvl, $privilegedRoles)
-                           ? ($user->account_type ?? '') !== 'BARANGAY'
+                           ? ($user->account_type ?? '') !== 'BARANGAY' && !$isBrgyAdmin
                            : true;
       ?>
 
       <li class="nav-heading">Content Management</li>
 
       <?php if (!$isEntityAccount): ?>
+      <?php endif; ?>
+
+      <?php if (!$isEntityAccount || ($is_mayor ?? false) || ($is_cio ?? false)): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'postcontent' ? '' : 'collapsed' ?>" href="<?= $mode == 'postcontent' ? '#' : site_url('admin/postcontent') ?>">
         <i class="bi bi-newspaper"></i>
@@ -143,7 +151,9 @@
           <span>Mayor's Corner</span>
         </a>
       </li><!-- End Mayor's Corner Nav -->
+      <?php endif; ?>
 
+      <?php if (!$isEntityAccount || ($is_cio ?? false)): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'about' ? '' : 'collapsed' ?>" href="<?= $mode == 'about' ? '#' : site_url('admin/about') ?>">
           <i class="bi bi-info-circle"></i>
@@ -152,12 +162,14 @@
       </li><!-- End About Nav -->
       <?php endif; ?>
 
+      <?php if (($user->account_type ?? '') !== 'DEPARTMENT'): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'services' ? '' : 'collapsed' ?>" href="<?= $mode == 'services' ? '#' : site_url('admin/services') ?>">
           <i class="bi bi-patch-check"></i>
           <span>Services</span>
         </a>
       </li><!-- End Services Nav -->
+      <?php endif; ?>
 
       <?php if ($showBrgy): ?>
       <li class="nav-item">
@@ -177,49 +189,61 @@
       </li><!-- End department Nav -->
       <?php endif; ?>
 
-      <?php if (!$isEntityAccount): ?>
-      <li class="nav-item">
-        <a class="nav-link <?= $mode == 'cityOff' ? '' : 'collapsed' ?>" href="<?= $mode == 'cityOff' ? '#' : site_url('admin/cityOff') ?>">
-          <i class="bi bi-people"></i>
-          <span>City Officials</span>
-        </a>
-      </li><!-- End City Officials Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link <?= $mode == 'fullDisc' ? '' : 'collapsed' ?>" href="<?= $mode == 'fullDisc' ? '#' : site_url('admin/fullDisc') ?>">
-          <i class="bi bi-card-list"></i>
-          <span>Full Disclosure Policy</span>
-        </a>
-      </li><!-- End Full Disclosure Policy Nav -->
-        <!-- Hide Map for now -->
-      <!-- <li class="nav-item">
-        <a class="nav-link <?= $mode == 'map' ? '' : 'collapsed' ?>" href="<?= $mode == 'map' ? '#' : site_url('admin/map') ?>">
-          <i class="bi bi-map"></i>
-          <span>Map</span>
-        </a>
-      </li>End Map Nav -->
-
+      <?php if (!$isEntityAccount || ($is_hrdo ?? false)): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'careers' ? '' : 'collapsed' ?>" href="<?= $mode == 'careers' ? '#' : site_url('admin/careers') ?>">
           <i class="bi bi-briefcase"></i>
           <span>Careers</span>
         </a>
       </li><!-- End Careers Nav -->
+      <?php endif; /* end careers */ ?>
 
+      <?php if (!$isEntityAccount): ?>
+
+      <li class="nav-item">
+        <a class="nav-link <?= $mode == 'cityOff' ? '' : 'collapsed' ?>" href="<?= $mode == 'cityOff' ? '#' : site_url('admin/cityOff') ?>">
+          <i class="bi bi-people"></i>
+          <span>City Officials</span>
+        </a>
+      </li><!-- End City Officials Nav -->
+      <?php if (!$isEntityAccount || ($is_cio ?? false) || ($is_mayor ?? false)): ?>
+      <li class="nav-item">
+        <a class="nav-link <?= $mode == 'fullDisc' ? '' : 'collapsed' ?>" href="<?= $mode == 'fullDisc' ? '#' : site_url('admin/fullDisc') ?>">
+          <i class="bi bi-file-earmark-text"></i>
+          <span>Full Disclosure Policy</span>
+        </a>
+      </li><!-- End Full Disclosure Policy Nav -->
+      <?php endif; ?><!-- Hide Map for now -->
+      <!-- <li class="nav-item">
+        <a class="nav-link <?= $mode == 'map' ? '' : 'collapsed' ?>" href="<?= $mode == 'map' ? '#' : site_url('admin/map') ?>">
+          <i class="bi bi-map"></i>
+          <span>Map</span>
+        </a>
+      </li>End Map Nav -->
+      <?php endif; /* end !$isEntityAccount */ ?>
+
+      <?php if (!$isEntityAccount || ($is_peso ?? false)): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'jobs' ? '' : 'collapsed' ?>" href="<?= $mode == 'jobs' ? '#' : site_url('admin/jobs') ?>">
           <i class="bi bi-person-workspace"></i>
           <span>Job Management</span>
         </a>
       </li><!-- End Jobs Nav -->
+      <?php endif; /* end jobs */ ?>
 
+      <?php if (!$isEntityAccount): ?>
+      <?php endif; /* end !$isEntityAccount */ ?>
+
+      <?php if (!$isEntityAccount || ($is_bplo ?? false)): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'invest' ? '' : 'collapsed' ?>" href="<?= $mode == 'invest' ? '#' : site_url('admin/invest') ?>">
           <i class="bi bi-cash-stack"></i>
           <span>Invest</span>
         </a>
       </li><!-- End Invest Nav -->
+      <?php endif; /* end invest */ ?>
       
+      <?php if (!$isEntityAccount || ($is_cio ?? false)): ?>
       <li class="nav-item">
         <a class="nav-link <?= $mode == 'contacts' ? '' : 'collapsed' ?>" href="<?= $mode == 'contacts' ? '#' : site_url('admin/contacts') ?>">
           <i class="bi bi-telephone"></i>
