@@ -69,9 +69,7 @@ $routes->get('/logout', 'Auther::logout');
 $routes->get('/history', 'Home::history');
 $routes->get('/hotlines', 'Home::hotlines');
 
-// Support Ticket Routes
-$routes->get('/ticket/create', 'TicketController::create');
-$routes->post('/ticket/submit', 'TicketController::submit');
+
 
 $routes->get('/map', 'MapController::index');
 $routes->get('/contact', 'ContactController::index');
@@ -116,7 +114,7 @@ $routes->group('admin', function ($routes) {
     $routes->get('about', 'Admin::mode/about');
 
     $routes->get('map', 'Admin::mode/map');
-    $routes->get('tickets', 'Admin::mode/tickets');
+
 
     $routes->get('getUserCount', 'Admin::getUserCount');
     $routes->get('getRecentNews', 'Admin::getRecentNews');
