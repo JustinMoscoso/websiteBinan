@@ -44,11 +44,8 @@
 
                     <div class="mb-4">
                         <label for="profileDepartment" class="form-label">Current Department</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="profileDepartment" name="department"
-                                value="<?= esc($current_department ?? '') ?>" placeholder="No department assigned" readonly>
-                            <button type="button" class="btn btn-primary" id="changeDepartmentBtn">Change Department</button>
-                        </div>
+                        <input type="text" class="form-control" id="profileDepartment" name="department"
+                            value="<?= esc($current_department ?? '') ?>" placeholder="No department assigned" readonly>
                     </div>
 
                     <button type="submit" class="btn btn-primary">
