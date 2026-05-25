@@ -214,15 +214,14 @@
         </li>
       <?php endif; ?>
 
-      <?php if ($showDept): ?>
-        <li class="nav-item <?= $mode == 'dept' ? 'active' : '' ?>">
-          <a class="nav-link" href="<?= site_url('admin/dept') ?>">
-            <i class="fas fa-fw fa-building"></i>
-            <span>Departments</span>
+      <?php if (($user->account_type ?? '') !== 'DEPARTMENT' || $isDeptAdmin): ?>
+        <li class="nav-item <?= $mode == 'services' ? 'active' : '' ?>">
+          <a class="nav-link" href="<?= site_url('admin/services') ?>">
+            <i class="fas fa-fw fa-certificate"></i>
+            <span>Services</span>
           </a>
         </li>
       <?php endif; ?>
-
       <?php if (!$isEntityAccount || ($is_hrdo ?? false)): ?>
         <li class="nav-item <?= $mode == 'careers' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/careers') ?>">
@@ -277,22 +276,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])): ?>
-        <!-- Divider -->
-        <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Admin
-        </div>
-
-        <li class="nav-item <?= $mode == 'accounts_mgmt' ? 'active' : '' ?>">
-          <a class="nav-link" href="<?= site_url('admin/accounts_mgmt') ?>">
-            <i class="fas fa-fw fa-user-cog"></i>
-            <span>Account Management</span>
-          </a>
-        </li>
-      <?php endif; ?>
 
       <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'])): ?>
         <li class="nav-item <?= $mode == 'audit' ? 'active' : '' ?>">
@@ -306,10 +290,7 @@
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
-      <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
+
 
     </ul>
     <!-- End of Sidebar -->
