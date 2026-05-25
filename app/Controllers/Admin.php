@@ -195,7 +195,17 @@ class Admin extends BaseController
                 $data['departments'] = $deptModel->where('status', 'ACTIVE')->findAll();
                 break;
             case 'invest': $data['title'] = 'Invest'; break;
-            case 'profile': $data['title'] = 'My Profile'; break;
+            case 'profile':
+                $data['title'] = 'My Profile';
+                $data['current_department'] = '';
+                if (!empty($user->dept)) {
+                    $data['current_department'] = $user->dept;
+                } elseif (!empty($user->entity_ref_id) && ($user->account_type ?? '') === 'DEPARTMENT') {
+                    $deptModel = new \App\Models\Department();
+                    $department = $deptModel->find($user->entity_ref_id);
+                    $data['current_department'] = $department->dept_name ?? '';
+                }
+                break;
             case 'audit':   $data['title'] = 'System Logs'; break;
             case 'map':     $data['title'] = 'Map Management'; break;
 
@@ -397,6 +407,109 @@ public function getVisitCount()
             | GET DETAILS
             |
             ------------------- */
+
+            case 'update_profile': {
+                $fullName = trim((string) $this->request->getPost('fullName'));
+                $email    = trim((string) $this->request->getPost('email'));
+                $username = trim((string) $this->request->getPost('username'));
+                $dept     = trim((string) $this->request->getPost('department'));
+
+                if ($fullName === '' || $email === '' || $username === '') {
+                    $message = 'Full name, email, and username are required.';
+                    break;
+                }
+
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $message = 'Please enter a valid email address.';
+                    break;
+                }
+
+                $nameParts = preg_split('/\s+/', $fullName);
+                $lname = count($nameParts) > 1 ? array_pop($nameParts) : '';
+                $fname = trim(implode(' ', $nameParts));
+                if ($fname === '') {
+                    $fname = $fullName;
+                }
+
+                $user_m = new \App\Models\UserAccount();
+                $existing = $user_m
+                    ->groupStart()
+                        ->where('username', $username)
+                        ->orWhere('email', $email)
+                    ->groupEnd()
+                    ->where('ID !=', $user->ID)
+                    ->first();
+
+                if ($existing) {
+                    $message = 'Username or email already exists.';
+                    break;
+                }
+
+                $updateData = [
+                    'fname' => $fname,
+                    'lname' => $lname,
+                    'username' => $username,
+                    'email' => $email,
+                    'dept' => $dept,
+                    'updated_date' => date('Y-m-d H:i:s'),
+                ];
+
+                if ($user_m->update($user->ID, $updateData)) {
+                    $updatedUser = $user_m->find($user->ID);
+                    $this->session->set('user', $updatedUser);
+                    $data = [
+                        'fullName' => trim(($updatedUser->fname ?? '') . ' ' . ($updatedUser->lname ?? '')),
+                        'email' => $updatedUser->email ?? '',
+                        'username' => $updatedUser->username ?? '',
+                    ];
+                    $status = 1;
+                    $message = 'Profile updated successfully.';
+                    $log_c['processDetails'] = 'PROFILE_ID: ' . $user->ID;
+                } else {
+                    $message = 'Failed to update profile.';
+                }
+                break;
+            }
+
+            case 'change_profile_password': {
+                $oldPassword = (string) $this->request->getPost('oldPassword');
+                $newPassword = (string) $this->request->getPost('newPassword');
+
+                if ($oldPassword === '' || $newPassword === '') {
+                    $message = 'Old password and new password are required.';
+                    break;
+                }
+
+                if (strlen($newPassword) < 8) {
+                    $message = 'New password must be at least 8 characters.';
+                    break;
+                }
+
+                $user_m = new \App\Models\UserAccount();
+                $currentUser = $user_m->find($user->ID);
+
+                if (!$currentUser || !password_verify($oldPassword, $currentUser->pass)) {
+                    $message = 'Old password is incorrect.';
+                    break;
+                }
+
+                $updateData = [
+                    'pass' => password_hash($newPassword, PASSWORD_ARGON2ID),
+                    'force_pass_reset' => 0,
+                    'updated_date' => date('Y-m-d H:i:s'),
+                ];
+
+                if ($user_m->update($user->ID, $updateData)) {
+                    $updatedUser = $user_m->find($user->ID);
+                    $this->session->set('user', $updatedUser);
+                    $status = 1;
+                    $message = 'Password changed successfully.';
+                    $log_c['processDetails'] = 'PROFILE_PASSWORD_ID: ' . $user->ID;
+                } else {
+                    $message = 'Failed to change password.';
+                }
+                break;
+            }
 
             case 'get_users': {
                 $userId          = $this->request->getPost('id');
