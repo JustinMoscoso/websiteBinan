@@ -7,6 +7,7 @@ use App\Models\VisitCountModel;
 use App\Models\UserAccount;
 use App\Models\Content;
 use App\Models\Job;
+use App\Services\ProfilePictureService;
 
 class Admin extends BaseController
 {
@@ -37,6 +38,12 @@ class Admin extends BaseController
 
         if(empty($user)){
             return redirect()->to(base_url('login'));
+        }
+
+        $freshUser = $this->userAccount->find($user->ID);
+        if ($freshUser) {
+            $user = $freshUser;
+            $this->session->set('user', $user);
         }
 
         // Restrict accounts_mgmt access
@@ -195,7 +202,22 @@ class Admin extends BaseController
                 $data['departments'] = $deptModel->where('status', 'ACTIVE')->findAll();
                 break;
             case 'invest': $data['title'] = 'Invest'; break;
-            case 'profile': $data['title'] = 'My Profile'; break;
+            case 'profile':
+                $data['title'] = 'My Profile';
+                $data['current_department'] = '';
+                $data['profile_department'] = null;
+                $data['profile_picture_url'] = !empty($user->profile_image)
+                    ? site_url('admin/image/PROFILE/' . $user->profile_image)
+                    : '';
+                if (!empty($user->entity_ref_id) && ($user->account_type ?? '') === 'DEPARTMENT') {
+                    $deptModel = new \App\Models\Department();
+                    $department = $deptModel->find($user->entity_ref_id);
+                    $data['profile_department'] = $department;
+                    $data['current_department'] = $department->dept_name ?? '';
+                } elseif (!empty($user->dept)) {
+                    $data['current_department'] = $user->dept;
+                }
+                break;
             case 'audit':   $data['title'] = 'System Logs'; break;
             case 'map':     $data['title'] = 'Map Management'; break;
 
@@ -341,6 +363,12 @@ public function getVisitCount()
             exit;
         }
 
+        $freshUser = $this->userAccount->find($user->ID);
+        if ($freshUser) {
+            $user = $freshUser;
+            $this->session->set('user', $user);
+        }
+
         // Helper flags for scoped-ADMIN enforcement (mirrors ENCODER scoping)
         $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
         $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
@@ -397,6 +425,343 @@ public function getVisitCount()
             | GET DETAILS
             |
             ------------------- */
+
+            case 'update_profile': {
+                $fullName = trim((string) $this->request->getPost('fullName'));
+                $email    = trim((string) $this->request->getPost('email'));
+                $username = trim((string) $this->request->getPost('username'));
+                $dept     = trim((string) $this->request->getPost('department'));
+
+                if ($fullName === '' || $email === '' || $username === '') {
+                    $message = 'Full name, email, and username are required.';
+                    break;
+                }
+
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $message = 'Please enter a valid email address.';
+                    break;
+                }
+
+                $nameParts = preg_split('/\s+/', $fullName);
+                $lname = count($nameParts) > 1 ? array_pop($nameParts) : '';
+                $fname = trim(implode(' ', $nameParts));
+                if ($fname === '') {
+                    $fname = $fullName;
+                }
+
+                $user_m = new \App\Models\UserAccount();
+                $existing = $user_m
+                    ->groupStart()
+                        ->where('username', $username)
+                        ->orWhere('email', $email)
+                    ->groupEnd()
+                    ->where('ID !=', $user->ID)
+                    ->first();
+
+                if ($existing) {
+                    $message = 'Username or email already exists.';
+                    break;
+                }
+
+                $updateData = [
+                    'fname' => $fname,
+                    'lname' => $lname,
+                    'username' => $username,
+                    'email' => $email,
+                    'dept' => $dept,
+                    'updated_date' => date('Y-m-d H:i:s'),
+                ];
+
+                if ($user_m->update($user->ID, $updateData)) {
+                    $updatedUser = $user_m->find($user->ID);
+                    $this->session->set('user', $updatedUser);
+                    $data = [
+                        'fullName' => trim(($updatedUser->fname ?? '') . ' ' . ($updatedUser->lname ?? '')),
+                        'email' => $updatedUser->email ?? '',
+                        'username' => $updatedUser->username ?? '',
+                    ];
+                    $status = 1;
+                    $message = 'Profile updated successfully.';
+                    $log_c['processDetails'] = 'PROFILE_ID: ' . $user->ID;
+                } else {
+                    $message = 'Failed to update profile.';
+                }
+                break;
+            }
+
+            case 'change_profile_password': {
+                $oldPassword = (string) $this->request->getPost('oldPassword');
+                $newPassword = (string) $this->request->getPost('newPassword');
+
+                if ($oldPassword === '' || $newPassword === '') {
+                    $message = 'Old password and new password are required.';
+                    break;
+                }
+
+                if (strlen($newPassword) < 8) {
+                    $message = 'New password must be at least 8 characters.';
+                    break;
+                }
+
+                $user_m = new \App\Models\UserAccount();
+                $currentUser = $user_m->find($user->ID);
+
+                if (!$currentUser || !password_verify($oldPassword, $currentUser->pass)) {
+                    $message = 'Old password is incorrect.';
+                    break;
+                }
+
+                $updateData = [
+                    'pass' => password_hash($newPassword, PASSWORD_ARGON2ID),
+                    'force_pass_reset' => 0,
+                    'updated_date' => date('Y-m-d H:i:s'),
+                ];
+
+                if ($user_m->update($user->ID, $updateData)) {
+                    $updatedUser = $user_m->find($user->ID);
+                    $this->session->set('user', $updatedUser);
+                    $status = 1;
+                    $message = 'Password changed successfully.';
+                    $log_c['processDetails'] = 'PROFILE_PASSWORD_ID: ' . $user->ID;
+                } else {
+                    $message = 'Failed to change password.';
+                }
+                break;
+            }
+
+            case 'update_profile_picture': {
+                try {
+                    $profileImage = $this->request->getFile('profileImage');
+                    $user_m = new \App\Models\UserAccount();
+                    $currentUser = $user_m->find($user->ID);
+
+                    if (!$currentUser) {
+                        $message = 'User not found.';
+                        break;
+                    }
+
+                    $pictureService = new ProfilePictureService();
+                    $uploadResult = $pictureService->store($profileImage, $currentUser->profile_image ?? null);
+
+                    if (!$uploadResult['status']) {
+                        $message = $uploadResult['message'];
+                        break;
+                    }
+
+                    $updateData = [
+                        'profile_image' => $uploadResult['filename'],
+                        'updated_date' => date('Y-m-d H:i:s'),
+                    ];
+
+                    if ($user_m->update($user->ID, $updateData)) {
+                        $updatedUser = $user_m->find($user->ID);
+                        $this->session->set('user', $updatedUser);
+                        $data = [
+                            'profileImageUrl' => site_url('admin/image/PROFILE/' . $uploadResult['filename']),
+                        ];
+                        $status = 1;
+                        $message = 'Profile picture updated successfully.';
+                        $log_c['processDetails'] = 'PROFILE_IMAGE_ID: ' . $user->ID;
+                    } else {
+                        $message = 'Failed to update profile picture.';
+                    }
+                } catch (\Throwable $e) {
+                    log_message('error', 'Profile picture upload failed: ' . $e->getMessage());
+                    $message = str_contains($e->getMessage(), 'profile_image')
+                        ? 'Profile picture database column is missing. Please run the database migration.'
+                        : 'Unable to save profile picture. Please try again.';
+                }
+                break;
+            }
+
+            case 'update_profile_department': {
+                if (($user->account_type ?? '') !== 'DEPARTMENT' || empty($user->entity_ref_id)) {
+                    $message = 'No linked department found for this account.';
+                    break;
+                }
+
+                $dept_m = new \App\Models\Department();
+                $department = $dept_m->find($user->entity_ref_id);
+                if (!$department) {
+                    $message = 'Department not found.';
+                    break;
+                }
+
+                $deptName = trim((string) $this->request->getPost('deptName'));
+                $head = trim((string) $this->request->getPost('head'));
+                $deptStatus = trim((string) $this->request->getPost('status'));
+                $about = (string) $this->request->getPost('about');
+                $contact = (string) $this->request->getPost('contact');
+                $mission = (string) $this->request->getPost('mission');
+                $vision = (string) $this->request->getPost('vision');
+                $qualityPolicy = (string) $this->request->getPost('qualityPolicy');
+
+                if ($deptName === '' || $deptStatus === '') {
+                    $message = 'Department name and status are required.';
+                    break;
+                }
+
+                if (!in_array($deptStatus, ['ACTIVE', 'INACTIVE', 'ARCHIVED'], true)) {
+                    $message = 'Invalid department status.';
+                    break;
+                }
+
+                $existingDept = $dept_m
+                    ->where('dept_name', $deptName)
+                    ->where('ID !=', $department->ID)
+                    ->first();
+                if ($existingDept) {
+                    $message = 'Department name already exists.';
+                    break;
+                }
+
+                $updateData = [
+                    'dept_name' => $deptName,
+                    'head' => $head,
+                    'about' => $about,
+                    'contact' => $contact,
+                    'mission' => $mission,
+                    'vision' => $vision,
+                    'quality_policy' => $qualityPolicy,
+                    'status' => $deptStatus,
+                    'updated_date' => date('Y-m-d H:i:s'),
+                ];
+
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                $uploadPath = WRITEPATH . 'uploads' . DIRECTORY_SEPARATOR . 'DEPT';
+                if (!is_dir($uploadPath)) {
+                    mkdir($uploadPath, 0755, true);
+                }
+
+                $logo = $this->request->getFile('deptLogo');
+                if ($logo && $logo->isValid() && !$logo->hasMoved()) {
+                    if ($logo->getSize() > (4 * 1024 * 1024)) {
+                        $message = 'Department logo must not exceed 4 MB.';
+                        break;
+                    }
+                    if (!in_array($logo->getMimeType(), $allowedTypes, true)) {
+                        $message = 'Department logo must be a valid image file.';
+                        break;
+                    }
+
+                    $logoName = $logo->getRandomName();
+                    if ($logo->move($uploadPath, $logoName)) {
+                        $updateData['img_logo'] = $logoName;
+                    }
+                }
+
+                $orgChart = $this->request->getFile('deptOrgChart');
+                if ($orgChart && $orgChart->isValid() && !$orgChart->hasMoved()) {
+                    if ($orgChart->getSize() > (4 * 1024 * 1024)) {
+                        $message = 'Organizational chart must not exceed 4 MB.';
+                        break;
+                    }
+                    if (!in_array($orgChart->getMimeType(), $allowedTypes, true)) {
+                        $message = 'Organizational chart must be a valid image file.';
+                        break;
+                    }
+
+                    $orgChartName = $orgChart->getRandomName();
+                    if ($orgChart->move($uploadPath, $orgChartName)) {
+                        $updateData['org_chart_img'] = $orgChartName;
+                    }
+                }
+
+                try {
+                    $dept_m->update($department->ID, $updateData);
+                    $updatedDepartment = $dept_m->find($department->ID);
+                    $data = [
+                        'ID' => $updatedDepartment->ID,
+                        'dept_name' => $updatedDepartment->dept_name,
+                        'head' => $updatedDepartment->head,
+                        'status' => $updatedDepartment->status,
+                        'about' => $updatedDepartment->about,
+                        'contact' => $updatedDepartment->contact,
+                        'mission' => $updatedDepartment->mission,
+                        'vision' => $updatedDepartment->vision,
+                        'quality_policy' => $updatedDepartment->quality_policy,
+                        'logoUrl' => !empty($updatedDepartment->img_logo)
+                            ? site_url('admin/image/DEPT/' . $updatedDepartment->img_logo)
+                            : '',
+                        'orgChartUrl' => !empty($updatedDepartment->org_chart_img)
+                            ? site_url('admin/image/DEPT/' . $updatedDepartment->org_chart_img)
+                            : '',
+                    ];
+                    $status = 1;
+                    $message = 'Department updated successfully.';
+                    $log_c['processDetails'] = 'PROFILE_DEPT_ID: ' . $department->ID;
+                } catch (\Throwable $e) {
+                    log_message('error', 'Profile department update failed: ' . $e->getMessage());
+                    $message = 'Unable to update department. Please try again.';
+                }
+                break;
+            }
+
+            case 'set_status_profile_department': {
+                if (($user->account_type ?? '') !== 'DEPARTMENT' || empty($user->entity_ref_id)) {
+                    $message = 'No linked department found for this account.';
+                    break;
+                }
+
+                $deptStatus = trim((string) $this->request->getPost('status'));
+                if (!in_array($deptStatus, ['ACTIVE', 'INACTIVE'], true)) {
+                    $message = 'Invalid department status.';
+                    break;
+                }
+
+                $dept_m = new \App\Models\Department();
+                $department = $dept_m->find($user->entity_ref_id);
+                if (!$department) {
+                    $message = 'Department not found.';
+                    break;
+                }
+
+                $dept_m->update($department->ID, [
+                    'status' => $deptStatus,
+                    'updated_date' => date('Y-m-d H:i:s'),
+                ]);
+
+                $status = 1;
+                $message = 'Department status updated successfully.';
+                $data = [
+                    'ID' => $department->ID,
+                    'status' => $deptStatus,
+                ];
+                $log_c['processDetails'] = 'PROFILE_DEPT_ID: ' . $department->ID . ' - ' . $deptStatus;
+                break;
+            }
+
+            case 'delete_profile_department': {
+                if (($user->account_type ?? '') !== 'DEPARTMENT' || empty($user->entity_ref_id)) {
+                    $message = 'No linked department found for this account.';
+                    break;
+                }
+
+                $dept_m = new \App\Models\Department();
+                $department = $dept_m->find($user->entity_ref_id);
+                if (!$department) {
+                    $message = 'Department not found.';
+                    break;
+                }
+
+                if ($dept_m->delete($department->ID)) {
+                    $this->userAccount->update($user->ID, [
+                        'entity_ref_id' => null,
+                        'account_type' => '',
+                        'updated_date' => date('Y-m-d H:i:s'),
+                    ]);
+                    $freshUser = $this->userAccount->find($user->ID);
+                    if ($freshUser) {
+                        $this->session->set('user', $freshUser);
+                    }
+                    $status = 1;
+                    $message = 'Department deleted successfully.';
+                    $log_c['processDetails'] = 'PROFILE_DEPT_ID: ' . $department->ID . ' - DELETED';
+                } else {
+                    $message = 'Unable to delete department.';
+                }
+                break;
+            }
 
             case 'get_users': {
                 $userId          = $this->request->getPost('id');
