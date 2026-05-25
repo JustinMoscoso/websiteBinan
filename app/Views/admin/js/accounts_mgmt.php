@@ -146,6 +146,13 @@
         let form     = $('#addForm')[0];
         let formData = new FormData(form);
 
+        // Selectize replaces the native <select> with a custom widget.
+        // Read the selected value directly from the Selectize API to be safe.
+        var txtEntityRefSelectize = document.getElementById('txtEntityRef');
+        if (txtEntityRefSelectize && txtEntityRefSelectize.selectize) {
+            formData.set('txtEntityRef', txtEntityRefSelectize.selectize.getValue() || '');
+        }
+
         // Basic required fields
         const basicFields = [
             { name: 'txtFirstName', label: 'First Name' },
@@ -269,6 +276,21 @@
     $('#btnEdit').click(function () {
         let form     = $('#editForm')[0];
         let formData = new FormData(form);
+
+        // Selectize replaces the native <select> with a custom widget.
+        // FormData may not capture the Selectize-managed value reliably,
+        // so we read it directly from the Selectize API and override formData.
+        var editEntityRefSelectize = document.getElementById('editEntityRef');
+        if (editEntityRefSelectize && editEntityRefSelectize.selectize) {
+            var selectizeVal = editEntityRefSelectize.selectize.getValue();
+            formData.set('editEntityRef', selectizeVal || '');
+        }
+
+        // Also ensure editAccountType is captured (it's a plain select, but be safe)
+        var editAccountTypeEl = document.getElementById('editAccountType');
+        if (editAccountTypeEl) {
+            formData.set('editAccountType', editAccountTypeEl.value || '');
+        }
 
         const basicFields = [
             { name: 'editFirstName', label: 'First Name'    },

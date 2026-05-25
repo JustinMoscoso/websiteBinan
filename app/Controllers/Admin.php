@@ -47,19 +47,19 @@ class Admin extends BaseController
             $this->session->set('user', $user);
         }
 
+        // Department-scoped ADMIN: restrict to profile, services, and dashboard
+        $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+
         // Restrict accounts_mgmt access
-        if ($mode === 'accounts_mgmt' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
-            return redirect()->to(base_url('admin/dashboard'));
+        if ($mode === 'accounts_mgmt' && (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) || $isDeptScopedAdmin)) {
+            return redirect()->to(base_url($isDeptScopedAdmin ? 'admin/services' : 'admin/dashboard'));
         }
 
         // Restrict audit (System Logs) to DEVELOPER and SUPERADMIN only
         if ($mode === 'audit' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'])) {
             return redirect()->to(base_url('admin/dashboard'));
         }
-
-        // Department-scoped ADMIN: restrict to dept, services, contacts, accounts_mgmt, dashboard
-        $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
-        $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
 
         // Determine if user belongs to the HRDO, PESO, BPLO, Mayor, or CIO department
         $isHRDO = false;
@@ -128,13 +128,13 @@ class Admin extends BaseController
             return redirect()->to(base_url('admin/dashboard'));
         }
 
-        // Restrict services: DEPARTMENT accounts cannot access services
-        if ($mode === 'services' && ($user->account_type ?? '') === 'DEPARTMENT') {
+        // Restrict services: non-admin DEPARTMENT accounts cannot access services.
+        if ($mode === 'services' && ($user->account_type ?? '') === 'DEPARTMENT' && !$isDeptScopedAdmin) {
             return redirect()->to(base_url('admin/dashboard'));
         }
 
-        if ($isDeptScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['brgy']))) {
-            return redirect()->to(base_url('admin/dept'));
+        if ($isDeptScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['brgy', 'dept', 'contacts']))) {
+            return redirect()->to(base_url('admin/services'));
         }
         if ($isBrgyScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['dept']))) {
             return redirect()->to(base_url('admin/brgy'));
@@ -3386,6 +3386,14 @@ class Admin extends BaseController
                     $dept_cont_ID = $this->request->getPost('editDept');
                     $brngy_cont_ID = $this->request->getPost('editBrgy');
 
+                    if ($isDeptScopedAdmin) {
+                        $dept_cont_ID = $user->entity_ref_id;
+                        $brngy_cont_ID = null;
+                    } elseif ($isBrgyScopedAdmin) {
+                        $brngy_cont_ID = $user->entity_ref_id;
+                        $dept_cont_ID = null;
+                    }
+
                     $data = [
                         'serv_name' => $serv_name,
                         'content' => $content,
@@ -3946,7 +3954,6 @@ class Admin extends BaseController
                 $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
 
-                // #23/#24 – ownership check
                 $svc = $invest_m->find($id);
                 if (
                     $svc && $user->account_type === 'DEPARTMENT' &&
