@@ -7,6 +7,7 @@ use App\Models\VisitCountModel;
 use App\Models\UserAccount;
 use App\Models\Content;
 use App\Models\Job;
+use App\Services\ProfilePictureService;
 
 class Admin extends BaseController
 {
@@ -37,6 +38,12 @@ class Admin extends BaseController
 
         if(empty($user)){
             return redirect()->to(base_url('login'));
+        }
+
+        $freshUser = $this->userAccount->find($user->ID);
+        if ($freshUser) {
+            $user = $freshUser;
+            $this->session->set('user', $user);
         }
 
         // Restrict accounts_mgmt access
@@ -349,6 +356,12 @@ public function getVisitCount()
                 'message' => 'Session expired or unauthorized',
             ]);
             exit;
+        }
+
+        $freshUser = $this->userAccount->find($user->ID);
+        if ($freshUser) {
+            $user = $freshUser;
+            $this->session->set('user', $user);
         }
 
         // Helper flags for scoped-ADMIN enforcement (mirrors ENCODER scoping)
