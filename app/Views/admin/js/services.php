@@ -1,16 +1,11 @@
 <script>
     $(document).ready(function(){ 
-        // $('#searchCategory').click(function(){ 
-        //     if ($('#searchCategory').val() == ""){
-        //         $("#div_searchbtn").removeClass("col-md-6").addClass("col-md-2");
-        //     }
-        //     else{
-        //         $("#div_searchbtn").removeClass("col-md-2").addClass("col-md-6");
-        //     }
-        // });
+        // placeholder for ready block
     });
 
-    const userLevel = '<?= $user->user_lvl ?>'.toUpperCase(); // Get user level from backend and force uppercase
+    const userLevel = '<?= $user->user_lvl ?>'.toUpperCase();
+    const userAccountType = '<?= $user->account_type ?? '' ?>'.toUpperCase();
+    const isDeptScopedAdmin = userLevel === 'ADMIN' && userAccountType === 'DEPARTMENT';
     console.log("Current User Role:", userLevel);
 
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
@@ -47,7 +42,7 @@
     function populateDepartmentDropdown(selectElement, selectedValue = null) {
         $.ajax({
             url: '<?php echo site_url('admin/ajax/get_dept'); ?>',
-            method: 'GET',
+            method: 'POST',
             dataType: 'json',
             success: function (response) {
                 if (response.status === 1 && Array.isArray(response.data)) {
@@ -56,9 +51,9 @@
                     response.data.forEach(function (department) {
                         selectizeControl.addOption({ value: department.ID, text: department.dept_name });
                     });
-                    selectizeControl.refreshOptions(false); // Refresh the options in the selectize control
+                    selectizeControl.refreshOptions(false);
                     if (selectedValue) {
-                        selectizeControl.setValue(selectedValue); // Set the selected value
+                        selectizeControl.setValue(selectedValue);
                     }
                 } else {
                     Swal.fire({
@@ -78,13 +73,11 @@
         });
     }
 
-    
-
     // Function to populate barangay dropdown
     function populateBrgyDropdown(selectElement, selectedValue = null) {
         $.ajax({
             url: '<?php echo site_url('admin/ajax/get_barangay'); ?>',
-            method: 'GET',
+            method: 'POST',
             dataType: 'json',
             success: function (response) {
                 if (response.status === 1 && Array.isArray(response.data)) {
@@ -93,9 +86,9 @@
                     response.data.forEach(function (barangay) {
                         selectizeControl.addOption({ value: barangay.ID, text: barangay.brgy_name });
                     });
-                    selectizeControl.refreshOptions(false); // Refresh the options in the selectize control
+                    selectizeControl.refreshOptions(false);
                     if (selectedValue) {
-                        selectizeControl.setValue(selectedValue); // Set the selected value
+                        selectizeControl.setValue(selectedValue);
                     }
                 } else {
                     Swal.fire({
@@ -147,9 +140,13 @@
         }
     });
 
-    // Populate departments dropdown
+    // Reset Add modal on open
     $('#addModal').on('show.bs.modal', function (e) {
-        // Reset the category selection
+        if (isDeptScopedAdmin) {
+            $('#category').val('DEPT');
+            $('#deptGroup, #brgyGroup').hide();
+            return;
+        }
         $('#category').val('').trigger('change');
     });
 
@@ -174,7 +171,8 @@
 
     // Add Modal Quill editor
     var quillContent;
-    $('#addModal').on('shown.bs.modal', function () {
+    // Initialize on 'show' (before animation) so Quill is ready immediately
+    $('#addModal').on('show.bs.modal', function () {
       if (!quillContent) {
         quillContent = new Quill('#quillContent', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
       }
@@ -182,32 +180,41 @@
 
     // Edit Modal Quill editor
     var editQuillContent;
-    $('#editModal').on('shown.bs.modal', function () {
+    $('#editModal').on('show.bs.modal', function () {
       if (!editQuillContent) {
         editQuillContent = new Quill('#editQuillContent', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
       }
     });
 
-    // Save new announcement
+    // Save new service
     $('#btnAdd').on('click', function() {
-        if (quillContent) {
-            let htmlContent = quillContent.root.innerHTML;
-            $('#content').val(htmlContent === '<p><br></p>' ? '' : htmlContent);
-        }
-        
         let form = $('#addForm')[0];
         let formData = new FormData(form);
 
-        // Form validation
-        if (!formData.get('category') || !formData.get('serviceName') || !formData.get('content')) {
+        // Read Quill content directly from the instance and set it in FormData.
+        // Do NOT rely on the hidden #content input — it may be empty if the
+        // input was not explicitly set before FormData was constructed.
+        var quillHtml = (quillContent && quillContent.root)
+            ? quillContent.root.innerHTML
+            : '';
+        // Treat Quill's empty-paragraph state as blank
+        if (quillHtml === '<p><br></p>') quillHtml = '';
+        formData.set('content', quillHtml);
+
+        // Also update the hidden input so the value is visible in the DOM
+        $('#content').val(quillHtml);
+
+        // Only validate the truly required fields (category + service name).
+        // Content is optional and handled server-side.
+        if (!formData.get('category') || !formData.get('serviceName')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
             });
-            return; // Stop further execution if validation fails
+            return;
         }
-        
+
         Swal.fire({
             title: 'Please wait...',
             showConfirmButton: false,
@@ -229,8 +236,9 @@
             success: function(result) {
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
-                    $('#txtDept')[0].selectize.clear(); 
-                    $('#txtBrgy')[0].selectize.clear(); 
+                    if ($('#txtDept')[0] && $('#txtDept')[0].selectize) $('#txtDept')[0].selectize.clear();
+                    if ($('#txtBrgy')[0] && $('#txtBrgy')[0].selectize) $('#txtBrgy')[0].selectize.clear();
+                    if (quillContent) quillContent.setContents([]);
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
@@ -265,7 +273,7 @@
         data: { id: id },
         success: function (response) {
             if (response.status === 1) {
-                let res = response.data; // Directly access the data object
+                let res = response.data;
                 $('#editId').val(res.ID);
                 $('#editServiceName').val(res.serv_name);
                 $('#editContent').val(res.content);
@@ -274,17 +282,17 @@
                     if (editQuillContent) editQuillContent.root.innerHTML = res.content || '';
                 });
                 if (res.brngy_cont_ID) {
-                    $('#editcategory').val('BRGY').trigger('change'); // Set the category and trigger change
+                    $('#editcategory').val('BRGY').trigger('change');
                     $('#editdeptGroup').hide();
                     $('#editbrgyGroup').show();
                     populateBrgyDropdown($('#editBrgy'), res.brngy_cont_ID);
-                    $('#editDept').val(null); // Set editDept to null
+                    $('#editDept').val(null);
                 } else if (res.dept_cont_ID) {
                     $('#editcategory').val('DEPT').trigger('change');
                     $('#editdeptGroup').show();
                     $('#editbrgyGroup').hide();
                     populateDepartmentDropdown($('#editDept'), res.dept_cont_ID);
-                    $('#editBrgy').val(null); // Set editBrgy to null
+                    $('#editBrgy').val(null);
                 }
                 $('#editModal').modal('show');
             } else {
@@ -306,21 +314,25 @@
 }
     // Function to submit the edit form
     $('#btnEdit').click(function () {
-        // Always update hidden input with Quill content before creating FormData
-        if (editQuillContent) {
-            $('#editContent').val(editQuillContent.root.innerHTML);
-        }
         let form = $('#editForm')[0];
         let formData = new FormData(form);
 
+        // Read Quill content directly from the instance and set it in FormData.
+        var editQuillHtml = (editQuillContent && editQuillContent.root)
+            ? editQuillContent.root.innerHTML
+            : '';
+        if (editQuillHtml === '<p><br></p>') editQuillHtml = '';
+        formData.set('editContent', editQuillHtml);
+        $('#editContent').val(editQuillHtml);
+
         // Form validation
-        if (!formData.get('editServiceName') || !formData.get('editContent')) {
+        if (!formData.get('editServiceName')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
             });
-            return; // Stop further execution if validation fails
+            return;
         }
         $.ajax({
             url: '<?php echo site_url('admin/ajax/update_services'); ?>',
@@ -500,7 +512,6 @@
 
 
     //datatable
-    // Initialize DataTable (keep your existing configuration)
     var tbl = $('#tblservice').DataTable({
     select: false,
     searching: true,
@@ -512,7 +523,6 @@
         "url": "<?php echo base_url('admin/ajax/get_services'); ?>",
         "type": "POST",
         "data": function(d) {
-            // Add your custom filter parameters
             d.service_name = $('#service_name').val();
             d.category = $('#searchCategory').val();
             d.brgy = $('#searchBrgy').val();
@@ -526,11 +536,11 @@
     initComplete: function() {
             var searchInput = $('#tblservice_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
-            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.removeClass('form-control-sm');
             searchInput.css({
-                'width': '350px',           // Make it wider
-                'border': '2px solid #388e3c', // Distinct brand-green border
-                'margin-left': '10px'       // Add space from the "Search:" label
+                'width': '350px',
+                'border': '2px solid #388e3c',
+                'margin-left': '10px'
             });
         },
         columns: [
@@ -552,7 +562,16 @@
                     }
              },
             { "title": "Services", "data": "serv_name"},
-            { "title": "Content", "data": "content", "className": "dt-head-center dt-body-justify",  width: '35%' },
+            { "title": "Content", "data": "content", "className": "dt-head-center dt-body-justify", width: '35%',
+                "render": function (data, type, row) {
+                    if (!data) return '—';
+                    // Strip HTML tags from Quill-generated content for plain-text display in table
+                    var tmp = document.createElement('div');
+                    tmp.innerHTML = data;
+                    var text = tmp.textContent || tmp.innerText || '';
+                    return text.length > 120 ? text.substring(0, 120) + '…' : text;
+                }
+            },
             { 
                 "title": "Status", 
                 "data": "status",
@@ -610,8 +629,6 @@
         sltdRow = tbl.row(this).data();
     });
 
-
-
   // Search filter functionality
 $('#searchCategory').on('change', function() {
     var selectedCategory = $(this).val();
@@ -623,7 +640,6 @@ $('#searchCategory').on('change', function() {
         $('#searchDeptGroup').show();
         populateDepartmentDropdown($('#searchDept'));
     } else {
-        // Show default disabled dropdown when no category is selected
         $('#searchDefaultGroup').show();
     }
 });
@@ -632,50 +648,37 @@ $('#searchCategory').on('change', function() {
 $('#serviceSearchForm').on('submit', function(e) {
     e.preventDefault();
     
-    // Show loading state
     const searchBtn = $(this).find('button[type="submit"]');
     const originalBtnText = searchBtn.html();
     searchBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...');
     
-    // Reload table with new filters
     tbl.ajax.reload(function() {
         searchBtn.html(originalBtnText);
     });
 });
 
-// Reset handler - fixed version
+// Reset handler
 $('#serviceSearchForm').on('reset', function() {
-    // Hide filter dropdowns
     $('#searchDeptGroup, #searchBrgyGroup').hide();
-    
-    // Show default dropdown
     $('#searchDefaultGroup').show();
-    
-    // Reset category dropdown
     $('#searchCategory').val('').trigger('change');
     
-    // Clear Selectize dropdowns if they exist
     if ($('#searchBrgy')[0].selectize) $('#searchBrgy')[0].selectize.clear();
     if ($('#searchDept')[0].selectize) $('#searchDept')[0].selectize.clear();
     
-    // Clear all input fields
     $('#service_name').val('');
     $('#status').val('');
     
-    // Reset the table - IMPORTANT FIX HERE
     tbl.ajax.url('<?php echo base_url('admin/ajax/get_services'); ?>').load();
     
-    // Prevent default form reset behavior that might interfere
     return false;
 });
 
 // Reusable function for both search mechanisms
 function reloadTableWithFilters(filters, searchBtn) {
-    // Show loading state
     const originalBtnText = searchBtn.html();
     searchBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...');
     
-    // Convert filters to FormData for proper handling
     let formData = new FormData();
     for (const key in filters) {
         if (filters[key]) {
@@ -683,17 +686,12 @@ function reloadTableWithFilters(filters, searchBtn) {
         }
     }
     
-    // Reload DataTable with filters
     tbl.ajax.url('<?php echo base_url('admin/ajax/get_services'); ?>')
         .data(formData)
         .load(function(json) {
-            // Restore button text
             searchBtn.html(originalBtnText);
-            
-            // Debugging - check what was returned
             console.log("Filtered results:", json.data);
         }, function(xhr, status, error) {
-            // Restore button text on error
             searchBtn.html(originalBtnText);
             console.error("Search error:", status, error);
         });
