@@ -84,7 +84,7 @@ function pre_scripts($mode = 'default')
     } elseif ($mode == 'admin') {
         $js = array(
             site_url("assets/sbadmin2/vendor/jquery/jquery.min.js"),
-            site_url("assets/sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js"),
+            site_url("assets/vendor/bootstrap/js/bootstrap.bundle.min.js"),
             site_url("assets/sbadmin2/vendor/jquery-easing/jquery.easing.min.js"),
             site_url("assets/sbadmin2/js/sb-admin-2.min.js"),
             site_url("assets/js/vendor/pdfmake/pdfmake.min.js"),
