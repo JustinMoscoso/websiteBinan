@@ -384,162 +384,250 @@
 			</div>
 		</div>
 	</section>
-	<!-- Emergency Hotlines Section -->
-	<section class="py-5" style="background: linear-gradient(135deg, #388E3C, #2E7D32);">
-		<div class="container">
+	<!-- =========================================
+	 EMERGENCY HOTLINES
+	 MODERN GOVERNMENT DIRECTORY
+========================================= -->
 
-			<!-- Header -->
+	<section class="py-5" style="
+		background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 100%);
+		padding-top: 80px !important;
+		padding-bottom: 80px !important;
+	">
+
+		<div class="container" style="max-width: 1400px;">
+
+			<!-- HEADER -->
 			<div class="text-center mb-5">
-				<h2 class="text-white fw-bold mb-2">Emergency Hotlines</h2>
-				<p class="text-white-50">24/7 Emergency Services for Biñan City</p>
 
-				<a href="<?= base_url('/hotlines') ?>" class="btn btn-light fw-semibold rounded-pill px-4">
-					View All Hotlines
-				</a>
+				<span class="badge rounded-pill px-4 py-2 mb-3" style="
+					background: rgba(255,255,255,0.10);
+					color: white;
+					font-size: 13px;
+					letter-spacing: 0.5px;
+				">
+
+					24/7 PUBLIC SAFETY SERVICES
+
+				</span>
+
+				<h2 class="fw-bold text-white mb-3" style="
+					font-size: clamp(2rem, 4vw, 3rem);
+				">
+
+					Emergency Hotlines
+
+				</h2>
+
+				<p class="text-light opacity-75 mx-auto" style="
+					max-width: 750px;
+					font-size: 1.05rem;
+					line-height: 1.8;
+				">
+
+					Quick access to emergency response and public safety services
+					within the City of Biñan.
+
+				</p>
+
 			</div>
 
-			<!-- GRID CARDS -->
-			<div class="row g-4">
+			<!-- HOTLINE LIST -->
+			<div class="d-flex flex-column gap-3">
 
 				<?php if (!empty($emergency_hotlines)): ?>
+
 					<?php foreach ($emergency_hotlines as $hotline): ?>
 
 						<?php
-						// ICON
-						$icon = 'fas fa-phone';
 
+						$icon = 'fas fa-phone-alt';
+						$image = 'assets/img/default.png';
+						$color = '#40916C';
+
+						// POLICE
 						if (stripos($hotline->title, 'Police') !== false) {
 							$icon = 'fas fa-shield-alt';
-						} elseif (stripos($hotline->title, 'Fire') !== false) {
-							$icon = 'fas fa-fire-extinguisher';
-						} elseif (stripos($hotline->title, 'Hospital') !== false) {
-							$icon = 'fas fa-hospital';
-						} elseif (stripos($hotline->title, 'Disaster') !== false) {
-							$icon = 'fas fa-exclamation-triangle';
-						}
-
-						// IMAGE
-						$image = 'assets/img/default.png';
-
-						if (stripos($hotline->title, 'Police') !== false) {
 							$image = 'assets/img/Emergency_Hotline/PNP.png';
-						} elseif (stripos($hotline->title, 'Fire') !== false) {
-							$image = 'assets/img/Emergency_Hotline/BFP.jpg';
-						} elseif (stripos($hotline->title, 'Hospital') !== false) {
-							$image = 'assets/img/Emergency_Hotline/BCH.jpg';
-						} elseif (stripos($hotline->title, 'Disaster') !== false) {
-							$image = 'assets/img/Emergency_Hotline/BCDRRM.jpg';
+							$color = '#1D3557';
 						}
+
+						// FIRE
+						elseif (stripos($hotline->title, 'Fire') !== false) {
+							$icon = 'fas fa-fire-extinguisher';
+							$image = 'assets/img/Emergency_Hotline/BFP.jpg';
+							$color = '#C1121F';
+						}
+
+						// HOSPITAL
+						elseif (stripos($hotline->title, 'Hospital') !== false) {
+							$icon = 'fas fa-hospital';
+							$image = 'assets/img/Emergency_Hotline/BCH.jpg';
+							$color = '#2D6A4F';
+						}
+
+						// DISASTER
+						elseif (stripos($hotline->title, 'Disaster') !== false) {
+							$icon = 'fas fa-exclamation-triangle';
+							$image = 'assets/img/Emergency_Hotline/BCDRRM.jpg';
+							$color = '#F77F00';
+						}
+
 						?>
 
-						<!-- GRID ITEM -->
-						<div class="col-12 col-md-6 col-lg-4">
-							<div class="card hotline-card h-100 border-0 shadow-sm p-4">
+						<!-- HOTLINE ROW -->
+						<div class="row align-items-center px-4 py-4 rounded-5 mx-1 hotline-row" style="
+							background: rgba(255,255,255,0.06);
+							backdrop-filter: blur(12px);
+							border: 1px solid rgba(255,255,255,0.08);
+							transition: all 0.3s ease;
+						">
 
-								<!-- Title -->
-								<div class="d-flex align-items-center mb-3">
-									<div class="hotline-icon me-2">
-										<i class="<?= $icon ?> text-white"></i>
-									</div>
+							<!-- LEFT SIDE -->
+							<div class="col-lg-5">
 
-									<h6 class="fw-bold text-success mb-0">
-										<?= htmlspecialchars($hotline->title) ?>
-									</h6>
-								</div>
-
-								<!-- IMAGE + NUMBERS -->
-								<div class="d-flex flex-column flex-sm-row align-items-start">
+								<div class="d-flex align-items-center">
 
 									<!-- IMAGE -->
-									<img src="<?= base_url($image) ?>" class="hotline-img me-3" alt="Hotline Image">
+									<div class="me-3">
 
-									<!-- NUMBERS -->
-									<div class="hotline-numbers">
-										<?= $hotline->description ?>
+										<img src="<?= base_url($image) ?>" alt="Hotline Image" class="rounded-4 p-2" style="
+											width: 80px;
+											height: 80px;
+											object-fit: contain;
+											background: rgba(255,255,255,0.10);
+										">
+
+									</div>
+
+									<!-- DETAILS -->
+									<div>
+
+										<!-- LABEL -->
+										<div class="d-flex align-items-center mb-2">
+
+											<!-- ICON -->
+											<div class="rounded-circle d-flex align-items-center justify-content-center me-2"
+												style="
+												width: 40px;
+												height: 40px;
+												min-width: 40px;
+												background: <?= $color ?>;
+												color: white;
+												font-size: 16px;
+											">
+
+												<i class="<?= $icon ?>"></i>
+
+											</div>
+
+											<span class="text-light opacity-75 fw-semibold" style="font-size: 13px;">
+
+												Emergency Unit
+
+											</span>
+
+										</div>
+
+										<!-- TITLE -->
+										<h4 class="fw-bold text-white mb-1" style="
+											font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+											line-height: 1.3;
+										">
+
+											<?= htmlspecialchars($hotline->title) ?>
+
+										</h4>
+
+										<!-- SUBTITLE -->
+										<p class="text-light opacity-50 mb-0" style="
+											font-size: 13px;
+										">
+
+											City Government of Biñan
+
+										</p>
+
 									</div>
 
 								</div>
 
 							</div>
+
+							<!-- CENTER -->
+							<div class="col-lg-4 mt-4 mt-lg-0">
+
+								<div class="text-light" style="
+									font-size: 0.98rem;
+									line-height: 1.9;
+									letter-spacing: 0.2px;
+								">
+
+									<?= $hotline->description ?>
+
+								</div>
+
+							</div>
+
+							<!-- RIGHT -->
+							<div class="col-lg-3 text-lg-end mt-4 mt-lg-0">
+
+								<a href="#" class="btn btn-light rounded-pill px-4 py-2 fw-semibold hotline-btn" style="
+									font-size: 14px;
+									min-width: 150px;
+									transition: 0.3s ease;
+								">
+
+									<i class="fas fa-phone-alt me-2"></i>
+									Call Now
+
+								</a>
+
+							</div>
+
 						</div>
 
 					<?php endforeach; ?>
-				<?php else: ?>
-
-					<!-- FALLBACK -->
-					<div class="col-12 col-md-6 col-lg-4">
-						<div class="card hotline-card h-100 border-0 shadow-sm p-4">
-							<div class="d-flex align-items-center mb-3">
-								<div class="hotline-icon me-2">
-									<i class="fas fa-exclamation-triangle text-white"></i>
-								</div>
-								<h6 class="fw-bold text-success mb-0">CDRRMO</h6>
-							</div>
-
-							<div class="d-flex">
-								<img src="<?= base_url('assets/img/Emergency_Hotline/BCDRRM.jpg') ?>"
-									class="hotline-img me-3">
-								<div class="hotline-numbers">
-									SMART: 0908-891-9711<br>
-									GLOBE: 0917-120-8911
-								</div>
-							</div>
-						</div>
-					</div>
 
 				<?php endif; ?>
 
 			</div>
 
+			<!-- BUTTON -->
+			<div class="text-center mt-5 pt-2">
+
+				<a href="<?= base_url('/hotlines') ?>" class="btn btn-outline-light rounded-pill px-5 py-3 fw-semibold"
+					style="
+					font-size: 15px;
+					letter-spacing: 0.3px;
+				">
+
+					<i class="fas fa-phone-alt me-2"></i>
+					View Complete Hotline Directory
+
+				</a>
+
+			</div>
+
 		</div>
+
 	</section>
+
+	<!-- HOVER EFFECT -->
 	<style>
-		.hotline-img {
-			width: 100px;
-			height: 100px;
-			object-fit: contain;
-			border-radius: 12px;
-			background: #fff;
-			padding: 5px;
+		.hotline-row:hover {
+			transform: translateY(-4px);
+			background: rgba(255, 255, 255, 0.10) !important;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+			border-color: rgba(255, 255, 255, 0.15) !important;
 		}
 
-		@media (min-width: 576px) {
-			.hotline-img {
-				margin-bottom: 0;
-			}
-		}
-
-		.hotline-card {
-			border-radius: 12px;
-			transition: 0.3s ease;
-			min-height: 180px;
-			background: #fff;
-		}
-
-		.hotline-card:hover {
-			transform: translateY(-5px);
-			box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-		}
-
-		.hotline-icon {
-			width: 45px;
-			height: 45px;
-			border-radius: 60%;
-			background: #2E7D32;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 18px;
-		}
-
-		.hotline-numbers {
-			font-size: 14px;
-			line-height: 1.6;
-			color: #333;
+		.hotline-row:hover .hotline-btn {
+			background: #ffffff;
+			color: #1B4332 !important;
+			transform: scale(1.03);
 		}
 	</style>
-
-
 	</div>
 
 	<?php include "footer.php"; ?>
