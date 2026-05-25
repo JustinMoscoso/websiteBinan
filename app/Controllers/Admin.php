@@ -46,19 +46,19 @@ class Admin extends BaseController
             $this->session->set('user', $user);
         }
 
+        // Department-scoped ADMIN: restrict to profile, services, and dashboard
+        $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+
         // Restrict accounts_mgmt access
-        if ($mode === 'accounts_mgmt' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
-            return redirect()->to(base_url('admin/dashboard'));
+        if ($mode === 'accounts_mgmt' && (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) || $isDeptScopedAdmin)) {
+            return redirect()->to(base_url($isDeptScopedAdmin ? 'admin/services' : 'admin/dashboard'));
         }
 
         // Restrict audit (System Logs) to DEVELOPER and SUPERADMIN only
         if ($mode === 'audit' && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'])) {
             return redirect()->to(base_url('admin/dashboard'));
         }
-
-        // Department-scoped ADMIN: restrict to dept, services, contacts, accounts_mgmt, dashboard
-        $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
-        $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
 
         // Determine if user belongs to the HRDO, PESO, BPLO, Mayor, or CIO department
         $isHRDO = false;
@@ -127,13 +127,13 @@ class Admin extends BaseController
             return redirect()->to(base_url('admin/dashboard'));
         }
 
-        // Restrict services: DEPARTMENT accounts cannot access services
-        if ($mode === 'services' && ($user->account_type ?? '') === 'DEPARTMENT') {
+        // Restrict services: non-admin DEPARTMENT accounts cannot access services.
+        if ($mode === 'services' && ($user->account_type ?? '') === 'DEPARTMENT' && !$isDeptScopedAdmin) {
             return redirect()->to(base_url('admin/dashboard'));
         }
 
-        if ($isDeptScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['brgy']))) {
-            return redirect()->to(base_url('admin/dept'));
+        if ($isDeptScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['brgy', 'dept', 'contacts']))) {
+            return redirect()->to(base_url('admin/services'));
         }
         if ($isBrgyScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['dept']))) {
             return redirect()->to(base_url('admin/brgy'));
@@ -1253,8 +1253,12 @@ public function getVisitCount()
                             ->first();
                         
                         if ($serv_d) {
-                            $data = $serv_d;
-                            $status = 1;
+                            if (!$this->canAccessServiceRecord($serv_d, $user)) {
+                                $message = 'Service not found';
+                            } else {
+                                $data = $serv_d;
+                                $status = 1;
+                            }
                         } else {
                             $message = 'Service not found';
                         }
@@ -1763,6 +1767,17 @@ public function getVisitCount()
                 if (in_array($acct_type, ['DEPARTMENT','BARANGAY']) && empty($entity_ref)) {
                     $message = 'A Department or Barangay account must be linked to an entity.';
                     break;
+                }
+
+                $linkedEntityName = $this->resolveAccountEntityName($acct_type, $entity_ref);
+                if ($linkedEntityName === null) {
+                    $message = $acct_type === 'DEPARTMENT'
+                        ? 'Selected department was not found.'
+                        : 'Selected barangay was not found.';
+                    break;
+                }
+                if ($linkedEntityName !== '') {
+                    $dept = $linkedEntityName;
                 }
 
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -2461,6 +2476,17 @@ public function getVisitCount()
                 if (in_array($acct_type, ['DEPARTMENT','BARANGAY']) && empty($entity_ref)) {
                     $message = 'A Department or Barangay account must be linked to an entity.';
                     break;
+                }
+
+                $linkedEntityName = $this->resolveAccountEntityName($acct_type, $entity_ref);
+                if ($linkedEntityName === null) {
+                    $message = $acct_type === 'DEPARTMENT'
+                        ? 'Selected department was not found.'
+                        : 'Selected barangay was not found.';
+                    break;
+                }
+                if ($linkedEntityName !== '') {
+                    $dept = $linkedEntityName;
                 }
 
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -3349,16 +3375,13 @@ public function getVisitCount()
                 $id = $this->request->getPost('id');
                 $serv = $serv_m->find($id);
 
-                // #23/#24 – DEPARTMENT/BARANGAY accounts can only update
-                // services that belong to their own entity.
-                if ($serv && $user->account_type === 'DEPARTMENT' &&
-                    (int)($serv['dept_cont_ID'] ?? 0) !== (int)$user->entity_ref_id) {
-                    $message = 'You can only update services linked to your own Department.';
+                if (!$serv) {
+                    $message = 'Service not found.';
                     break;
                 }
-                if ($serv && $user->account_type === 'BARANGAY' &&
-                    (int)($serv['brngy_cont_ID'] ?? 0) !== (int)$user->entity_ref_id) {
-                    $message = 'You can only update services linked to your own Barangay.';
+
+                if (!$this->canAccessServiceRecord($serv, $user)) {
+                    $message = 'You can only update services linked to your own entity.';
                     break;
                 }
 
@@ -3367,6 +3390,14 @@ public function getVisitCount()
                     $content = $this->request->getPost('editContent');
                     $dept_cont_ID = $this->request->getPost('editDept');
                     $brngy_cont_ID = $this->request->getPost('editBrgy');
+
+                    if ($isDeptScopedAdmin) {
+                        $dept_cont_ID = $user->entity_ref_id;
+                        $brngy_cont_ID = null;
+                    } elseif ($isBrgyScopedAdmin) {
+                        $brngy_cont_ID = $user->entity_ref_id;
+                        $dept_cont_ID = null;
+                    }
 
                     $data = [
                         'serv_name' => $serv_name,
@@ -3949,15 +3980,13 @@ public function getVisitCount()
                 $id       = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
 
-                // #23/#24 – ownership check
                 $svc = $invest_m->find($id);
-                if ($svc && $user->account_type === 'DEPARTMENT' &&
-                    (int)($svc['dept_cont_ID'] ?? 0) !== (int)$user->entity_ref_id) {
-                    $message = 'Unauthorized: not your service.';
+                if (!$svc) {
+                    $message = 'Service not found.';
                     break;
                 }
-                if ($svc && $user->account_type === 'BARANGAY' &&
-                    (int)($svc['brngy_cont_ID'] ?? 0) !== (int)$user->entity_ref_id) {
+
+                if (!$this->canAccessServiceRecord($svc, $user)) {
                     $message = 'Unauthorized: not your service.';
                     break;
                 }
@@ -4125,6 +4154,56 @@ public function getVisitCount()
             echo 'File not found.';
             exit;
         }
+    }
+
+    private function resolveAccountEntityName($accountType, $entityRef): ?string
+    {
+        if (empty($accountType) || empty($entityRef)) {
+            return '';
+        }
+
+        if ($accountType === 'DEPARTMENT') {
+            $department = (new \App\Models\Department())->find($entityRef);
+            return $department ? (string) $department->dept_name : null;
+        }
+
+        if ($accountType === 'BARANGAY') {
+            $barangay = (new \App\Models\Barangay())->find($entityRef);
+            return $barangay ? (string) $barangay->brgy_name : null;
+        }
+
+        return '';
+    }
+
+    private function canAccessServiceRecord($service, $user): bool
+    {
+        if (!$service) {
+            return false;
+        }
+
+        $accountType = $user->account_type ?? '';
+        if ($accountType === 'DEPARTMENT') {
+            return (int) $this->recordValue($service, 'dept_cont_ID') === (int) ($user->entity_ref_id ?? 0);
+        }
+
+        if ($accountType === 'BARANGAY') {
+            return (int) $this->recordValue($service, 'brngy_cont_ID') === (int) ($user->entity_ref_id ?? 0);
+        }
+
+        return true;
+    }
+
+    private function recordValue($record, string $field)
+    {
+        if (is_array($record)) {
+            return $record[$field] ?? null;
+        }
+
+        if (is_object($record)) {
+            return $record->{$field} ?? null;
+        }
+
+        return null;
     }
 
     public function preview_file($category, $filename) 

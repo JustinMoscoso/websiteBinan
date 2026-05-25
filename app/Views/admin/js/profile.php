@@ -78,10 +78,6 @@ $(document).ready(function () {
         initProfileDepartmentEditors();
     });
 
-    $('#changeDepartmentBtn').on('click', function () {
-        $('#profileDepartment').prop('readonly', false).trigger('focus');
-    });
-
     $('#profileImage').on('change', function () {
         const file = this.files && this.files[0] ? this.files[0] : null;
         if (!file) {

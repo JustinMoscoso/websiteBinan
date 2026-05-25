@@ -1,4 +1,4 @@
-
+<?php $isDeptScopedAdmin = (($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT'); ?>
 <div class="pagetitle">
   <h1>Service Management</h1>
   <nav>
@@ -32,6 +32,7 @@
                 <div class="col-lg-4 col-md-12">
                         <input type="text" class="form-control" name="service_name" id="service_name" placeholder="Service Name">
                     </div>
+                    <?php if (!$isDeptScopedAdmin): ?>
                     <div class="col-lg-2 col-md-6">
                         <select class="form-select" name="category" id="searchCategory">
                             <option selected value="">- Category -</option>
@@ -56,6 +57,7 @@
                             </select>
                         </div>
                     </div>
+                    <?php endif; ?>
                     <div class="col-lg-2 col-md-6">
                         <select class="form-select" name="status" id="status">
                             <option selected value="">- Status -</option>
@@ -116,6 +118,17 @@
           <div class="modal-body">
             <div class="form-group row">
                 <!-- Category and Service Name in one row -->
+                <?php if ($isDeptScopedAdmin): ?>
+                <input type="hidden" id="category" name="category" value="DEPT">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="serviceName" class="form-label">Service Name</label>
+                            <input type="text" class="form-control" id="serviceName" name="serviceName" placeholder="Enter service name" required>
+                        </div>
+                    </div>
+                </div>
+                <?php else: ?>
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -134,7 +147,9 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
                 <!-- Department/Barangay Selection – same column, toggled by category -->
+                <?php if (!$isDeptScopedAdmin): ?>
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <!-- shown when DEPT is selected -->
@@ -155,6 +170,7 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
 
                 <!-- Content Field in Add Modal -->
                 <div class="row mb-3">
