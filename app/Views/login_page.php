@@ -2,85 +2,144 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Admin Login</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+  <title>Admin Login</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 
-    <!-- Favicons -->
-    <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="icon">
-    <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="apple-touch-icon">
-    <link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
-   
-    <?php pre_styles('admin'); ?>
+  <!-- Favicons -->
+  <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="icon">
+  <link href="<?= site_url('assets/img/binanlogo.png'); ?>" rel="apple-touch-icon">
+  <link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
+
+  <?php pre_styles('admin'); ?>
 
 </head>
-  <body>
-    
-  <div class="backgroundlogin">
-    <div class="containerlogin col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-      <!-- ======= Logo Start ======= -->
-     <!-- ======= Logo End ======= -->
-      <div class="loginborder pt-4 pb-2" style="padding: 1rem; border-radius: 8px; max-width: 80%; margin: auto;">
-         <div class="d-flex justify-content-center">
-          <a href="<?= base_url('#')?>">
-            <img src="<?= site_url('assets/img/binanlogo.png'); ?>" alt="" class ="loginlogo img-fluid">
-          </a>
-      </div> 
-        <h1 style="text-align: center; font-size: 2rem;"><b>LOGIN</b></h1>
-        <form method="post">
 
-          <label for="txtUser" class="lbl form-label">Username</label>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1"><i class='bx bxs-envelope'></i></span>
-            <input type="text" class="form-control" name="username" id="txtUser" placeholder="Enter username" required>
-            <div class="invalid-feedback">Please enter your username.</div>
-          </div>
+<body>
 
-          <label for="txtPass" class="lbl form-label">Password</label>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1"><i class='bx bxs-lock-alt'></i></span>
-            <input type="password" class="form-control" name="password" id="txtPass" placeholder="Enter password">
-            <div class="invalid-feedback">Please enter your password!</div>
-          </div>
+  <div class="backgroundlogin d-flex align-items-center justify-content-center min-vh-100">
 
-          <div class="mb-3 form-check d-flex align-items-center justify-content-start">
-              <input type="checkbox" class="form-check-input" id="check">
-              <label class="form-check-label ms-2" for="check"><span>Remember Me</span></label>
-          </div>
+    <div class="login-wrapper row shadow-lg overflow-hidden">
 
-          <div class="log-btn col-12">
-            <button id="btnLoad" class="btn btn-primary w-100" type="button" style="display: none;" disabled>
-                <span class="spinner-grow spinner-grow-sm" role="status"></span>
-                Please wait...
-            </button>
-            <button id="btnLogin" class="btn btn-primary w-100" type="submit">Login</button>
-          </div>
-          <br>
+      <!-- Left Branding Side -->
+      <div
+        class="col-lg-5 branding-side d-none d-lg-flex flex-column justify-content-center align-items-center text-white">
 
-        </form>
+        <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="brand-logo mb-4" alt="Biñan Logo">
 
+        <h1 class="fw-bold mb-2">BIÑAN ADMIN</h1>
+
+        <p class="text-center px-4 opacity-75">
+          Official Content Management System
+          for Biñan City Website Administration.
+        </p>
 
       </div>
-    </div>
-    <!-- ======= Footer ======= -->
-    <div class="d-flex flex-column align-items-center justify-content-center mt-3">
-      <div class="copyrightlogin text-light">
-          &copy; Copyright <strong><span>Biñan City Official Website</span></strong>. All Rights Reserved
+
+      <!-- Right Login Side -->
+      <div class="col-lg-7 bg-white login-side">
+
+        <div class="login-content">
+
+          <div class="mb-4">
+            <h2 class="fw-bold text-dark">Welcome Back</h2>
+            <p class="text-muted">
+              Sign in to continue to dashboard
+            </p>
+          </div>
+
+          <form method="post">
+
+            <!-- Username -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">
+                Username
+              </label>
+
+              <div class="input-group custom-input-group">
+                <span class="input-group-text">
+                  <i class='bx bxs-user'></i>
+                </span>
+
+                <input type="text" class="form-control" name="username" id="txtUser" placeholder="Enter username"
+                  required>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                Password
+              </label>
+
+              <div class="input-group custom-input-group">
+                <span class="input-group-text">
+                  <i class='bx bxs-lock-alt'></i>
+                </span>
+
+                <input type="password" class="form-control" name="password" id="txtPass" placeholder="Enter password"
+                  required>
+              </div>
+            </div>
+
+            <!-- Remember -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="check">
+
+                <label class="form-check-label" for="check">
+                  Remember me
+                </label>
+              </div>
+
+              <a href="#" class="forgot-link">
+                Forgot Password?
+              </a>
+
+            </div>
+            <!-- Buttons -->
+            <div class="d-grid mt-4">
+
+              <!-- Loading Button -->
+              <button id="btnLoad" class="btn login-btn d-none" type="button" disabled>
+
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+
+                Signing in...
+
+              </button>
+
+              <!-- Login Button -->
+              <button id="btnLogin" class="btn login-btn" type="submit">
+
+                <i class='bx bx-log-in-circle me-2'></i>
+                Login
+
+              </button>
+
+            </div>
+          </form>
+
+        </div>
+
       </div>
+
     </div>
 
   </div>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
-<?php
-pre_scripts('admin');
+  <?php
+  pre_scripts('admin');
 
-echo view('login_js');
-?>
+  echo view('login_js');
+  ?>
 
-  </body>
+</body>
+
 </html>
-
