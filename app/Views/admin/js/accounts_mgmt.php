@@ -1,6 +1,6 @@
 <!-- js/accounts_mgmt.php -->
 <script>
-    const userLevel  = "<?= $user->user_lvl ?>".toUpperCase();
+    const userLevel = "<?= $user->user_lvl ?>".toUpperCase();
     const phpAccType = "<?= $user->account_type ?? '' ?>".toUpperCase();
 
     // ── Show/hide Add button ───────────────────────────────────────────────
@@ -50,7 +50,7 @@
      * Populate the entity dropdown and initialise Selectize with search.
      */
     function loadEntityOptions(type, selectId, hintId, currentVal) {
-        var $raw  = $(selectId);
+        var $raw = $(selectId);
         var $hint = $(hintId);
 
         // Destroy existing Selectize before rebuilding
@@ -62,11 +62,11 @@
 
         var url, labelKey;
         if (type === 'DEPARTMENT') {
-            url      = '<?= site_url('admin/ajax/get_dept') ?>';
+            url = '<?= site_url('admin/ajax/get_dept') ?>';
             labelKey = 'dept_name';
             if ($hint && $hint.length) $hint.text('Select the department this account manages.');
         } else if (type === 'BARANGAY') {
-            url      = '<?= site_url('admin/ajax/get_barangay') ?>';
+            url = '<?= site_url('admin/ajax/get_barangay') ?>';
             labelKey = 'brgy_name';
             if ($hint && $hint.length) $hint.text('Select the barangay this account manages.');
         } else {
@@ -88,10 +88,10 @@
 
             // Init Selectize with search
             $raw.selectize({
-                sortField:    'text',
-                searchField:  'text',
-                placeholder:  '\u2014 Type to search \u2014',
-                allowClear:   true,
+                sortField: 'text',
+                searchField: 'text',
+                placeholder: '\u2014 Type to search \u2014',
+                allowClear: true,
                 onInitialize: function () {
                     if (currentVal) { this.setValue(String(currentVal)); }
                 }
@@ -143,7 +143,7 @@
 
     // ── Handle form submission for adding a user ─────────────────────────
     $('#btnAdd').on('click', function () {
-        let form     = $('#addForm')[0];
+        let form = $('#addForm')[0];
         let formData = new FormData(form);
 
         // Selectize replaces the native <select> with a custom widget.
@@ -156,11 +156,11 @@
         // Basic required fields
         const basicFields = [
             { name: 'txtFirstName', label: 'First Name' },
-            { name: 'txtLastName',  label: 'Last Name'  },
-            { name: 'txtUsername',  label: 'Username'   },
-            { name: 'txtEmail',     label: 'Email'      },
-            { name: 'txtPassword',  label: 'Password'   },
-            { name: 'txtAccLevel',  label: 'Account Level' }
+            { name: 'txtLastName', label: 'Last Name' },
+            { name: 'txtUsername', label: 'Username' },
+            { name: 'txtEmail', label: 'Email' },
+            { name: 'txtPassword', label: 'Password' },
+            { name: 'txtAccLevel', label: 'Account Level' }
         ];
         for (let f of basicFields) {
             if (!formData.get(f.name)) {
@@ -173,8 +173,8 @@
         const acctType = formData.get('txtAccountType');
         const acctLevel = formData.get('txtAccLevel') || '';
         const needsEntity = !HIGH_PRIV.includes(acctLevel.toUpperCase())
-                            && userLevel !== 'ADMIN'
-                            && ['DEPARTMENT', 'BARANGAY'].includes(acctType);
+            && userLevel !== 'ADMIN'
+            && ['DEPARTMENT', 'BARANGAY'].includes(acctType);
         if (needsEntity && !formData.get('txtEntityRef')) {
             Swal.fire('Validation Error', 'Please select a Linked Entity.', 'warning');
             return;
@@ -185,7 +185,7 @@
             showConfirmButton: false,
             backdrop: true,
             scrollbarPadding: false,
-            allowEscapeKey:    () => !Swal.isLoading(),
+            allowEscapeKey: () => !Swal.isLoading(),
             allowOutsideClick: () => !Swal.isLoading(),
             willOpen: () => { Swal.showLoading(); }
         });
@@ -220,7 +220,7 @@
             data: { id: userId },
             success: function (response) {
                 if (response.data) {
-                    let res     = response.data;
+                    let res = response.data;
                     let accType = res.account_type || '';
 
                     $('#editUserId').val(res.ID);
@@ -274,7 +274,7 @@
 
     // ── Submit edit user form ────────────────────────────────────────────
     $('#btnEdit').click(function () {
-        let form     = $('#editForm')[0];
+        let form = $('#editForm')[0];
         let formData = new FormData(form);
 
         // Selectize replaces the native <select> with a custom widget.
@@ -293,11 +293,11 @@
         }
 
         const basicFields = [
-            { name: 'editFirstName', label: 'First Name'    },
-            { name: 'editLastName',  label: 'Last Name'     },
-            { name: 'editUsername',  label: 'Username'      },
-            { name: 'editEmail',     label: 'Email'         },
-            { name: 'editAccLevel',  label: 'Account Level' }
+            { name: 'editFirstName', label: 'First Name' },
+            { name: 'editLastName', label: 'Last Name' },
+            { name: 'editUsername', label: 'Username' },
+            { name: 'editEmail', label: 'Email' },
+            { name: 'editAccLevel', label: 'Account Level' }
         ];
         for (let f of basicFields) {
             if (!formData.get(f.name)) {
@@ -336,18 +336,18 @@
     });
 
     function toggleStatus(userId, currentStatus) {
-        var newStatus  = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+        var newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
         var actionText = newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
 
         Swal.fire({
             heightAuto: false,
             title: (newStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') + ' User',
-            text:  'Are you sure you want to ' + actionText + ' this user?',
-            icon:  'question',
-            showCancelButton:    true,
-            confirmButtonColor:  '#27ae60',
-            cancelButtonColor:   '#c0392b',
-            confirmButtonText:   'Yes',
+            text: 'Are you sure you want to ' + actionText + ' this user?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#27ae60',
+            cancelButtonColor: '#c0392b',
+            confirmButtonText: 'Yes',
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({ title: 'Please wait\u2026', showConfirmButton: false, willOpen: () => Swal.showLoading() });
@@ -368,12 +368,12 @@
 
     function reset_password(userId, fullName) {
         Swal.fire({
-            title:             'Reset Password',
-            text:              `Reset password for ${fullName}?`,
-            icon:              'warning',
-            showCancelButton:  true,
+            title: 'Reset Password',
+            text: `Reset password for ${fullName}?`,
+            icon: 'warning',
+            showCancelButton: true,
             confirmButtonText: 'Yes, reset',
-            confirmButtonColor:'#e67e22',
+            confirmButtonColor: '#e67e22',
             cancelButtonColor: '#7f8c8d',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -383,12 +383,12 @@
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
-                            Swal.fire({ 
-                                icon: 'success', 
-                                title: 'Password Reset', 
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Password Reset',
                                 html: `The password for <b>${fullName}</b> has been reset.<br><br>` +
-                                      `Temporary Password: <b style="font-size: 1.25rem; color: #d35400; letter-spacing: 1px;">${result.message}</b><br><br>` +
-                                      `<small class="text-muted">An email has also been sent to the user.</small>`
+                                    `Temporary Password: <b style="font-size: 1.25rem; color: #d35400; letter-spacing: 1px;">${result.message}</b><br><br>` +
+                                    `<small class="text-muted">An email has also been sent to the user.</small>`
                             });
                         } else {
                             Swal.fire({ icon: 'error', title: 'Error', text: result.message });
@@ -401,11 +401,11 @@
 
     function del(userId) {
         Swal.fire({
-            title:             'Delete User',
-            text:              'This will permanently delete the user account.',
-            icon:              'warning',
-            showCancelButton:  true,
-            confirmButtonColor:'#c0392b',
+            title: 'Delete User',
+            text: 'This will permanently delete the user account.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#c0392b',
             cancelButtonColor: '#7f8c8d',
             confirmButtonText: 'Yes, Delete',
         }).then((result) => {
@@ -428,21 +428,21 @@
 
     // ── DataTable ────────────────────────────────────────────────────────
     var tbl = $('#tbluser').DataTable({
-        select:    false,
+        select: false,
         searching: true,
-        ordering:  true,
-        order:     [],
+        ordering: true,
+        order: [],
         pageLength: 10,
         processing: true,
         ajax: {
-            url:  '<?php echo base_url('admin/ajax/get_users'); ?>',
+            url: '<?php echo base_url('admin/ajax/get_users'); ?>',
             type: 'POST',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             },
             data: function (d) {
-                d.searchUser      = $('#searchUser').val();
-                d.searchStatus    = $('#searchStatus').val();
+                d.searchUser = $('#searchUser').val();
+                d.searchStatus = $('#searchStatus').val();
                 d.searchUserLevel = $('#searchUserLevel').val();
             },
             dataSrc: function (json) {
@@ -464,14 +464,14 @@
                 title: 'Account Type', data: 'account_type', className: 'dt-center', defaultContent: 'System',
                 render: function (data) {
                     if (data === 'DEPARTMENT') return '<span class="badge bg-primary">Department</span>';
-                    if (data === 'BARANGAY')   return '<span class="badge bg-info text-dark">Barangay</span>';
+                    if (data === 'BARANGAY') return '<span class="badge bg-info text-dark">Barangay</span>';
                     return '<span class="badge bg-secondary">System</span>';
                 }
             },
             {
                 title: 'Status', data: 'status', className: 'dt-center', width: '10%',
                 render: function (data) {
-                    if (data === 'ACTIVE')   return '<span class="badge bg-success">Active</span>';
+                    if (data === 'ACTIVE') return '<span class="badge bg-success">Active</span>';
                     if (data === 'INACTIVE') return '<span class="badge bg-danger">Inactive</span>';
                     return '<span class="badge bg-secondary">Archived</span>';
                 }

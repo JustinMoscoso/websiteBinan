@@ -125,7 +125,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-success sidebar sidebar-dark accordion shadow" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center"
@@ -163,7 +163,7 @@
         ? ($user->account_type ?? '') !== 'DEPARTMENT' && !$isDeptAdmin
         : true;
       $showDept = !in_array($user->user_lvl, $privilegedRoles)
-        ? ($user->account_type ?? '') !== 'BARANGAY' && !$isBrgyAdmin
+        ? ($user->account_type ?? '') !== 'BARANGAY' && !$isBrgyAdmin && !$isDeptAdmin
         : true;
       ?>
 
@@ -172,7 +172,7 @@
         Content Management
       </div>
 
-      <?php if (!$isEntityAccount || ($is_mayor ?? false) || ($is_cio ?? false)): ?>
+      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_mayor ?? false) || ($is_cio ?? false))): ?>
         <li class="nav-item <?= $mode == 'postcontent' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/postcontent') ?>">
             <i class="fas fa-fw fa-newspaper"></i>
@@ -187,7 +187,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isEntityAccount || ($is_cio ?? false)): ?>
+      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_cio ?? false))): ?>
         <li class="nav-item <?= $mode == 'about' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/about') ?>">
             <i class="fas fa-fw fa-info-circle"></i>
@@ -196,7 +196,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (($user->account_type ?? '') !== 'DEPARTMENT'): ?>
+      <?php if (($user->account_type ?? '') !== 'DEPARTMENT' || $isDeptAdmin): ?>
         <li class="nav-item <?= $mode == 'services' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/services') ?>">
             <i class="fas fa-fw fa-certificate"></i>
@@ -214,15 +214,16 @@
         </li>
       <?php endif; ?>
 
-      <?php if (($user->account_type ?? '') !== 'DEPARTMENT' || $isDeptAdmin): ?>
-        <li class="nav-item <?= $mode == 'services' ? 'active' : '' ?>">
-          <a class="nav-link" href="<?= site_url('admin/services') ?>">
-            <i class="fas fa-fw fa-certificate"></i>
-            <span>Services</span>
+      <?php if ($showDept): ?>
+        <li class="nav-item <?= $mode == 'dept' ? 'active' : '' ?>">
+          <a class="nav-link" href="<?= site_url('admin/dept') ?>">
+            <i class="fas fa-fw fa-building"></i>
+            <span>Departments</span>
           </a>
         </li>
       <?php endif; ?>
-      <?php if (!$isEntityAccount || ($is_hrdo ?? false)): ?>
+
+      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_hrdo ?? false))): ?>
         <li class="nav-item <?= $mode == 'careers' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/careers') ?>">
             <i class="fas fa-fw fa-briefcase"></i>
@@ -231,7 +232,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isEntityAccount): ?>
+      <?php if (!$isDeptAdmin && !$isEntityAccount): ?>
         <li class="nav-item <?= $mode == 'cityOff' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/cityOff') ?>">
             <i class="fas fa-fw fa-users"></i>
@@ -249,7 +250,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isEntityAccount || ($is_peso ?? false)): ?>
+      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_peso ?? false))): ?>
         <li class="nav-item <?= $mode == 'jobs' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/jobs') ?>">
             <i class="fas fa-fw fa-user-md"></i>
@@ -258,7 +259,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isEntityAccount || ($is_bplo ?? false)): ?>
+      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_bplo ?? false))): ?>
         <li class="nav-item <?= $mode == 'invest' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/invest') ?>">
             <i class="fas fa-fw fa-coins"></i>
@@ -267,7 +268,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isEntityAccount || ($is_cio ?? false)): ?>
+      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_cio ?? false))): ?>
         <li class="nav-item <?= $mode == 'contacts' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/contacts') ?>">
             <i class="fas fa-fw fa-phone"></i>
@@ -276,7 +277,22 @@
         </li>
       <?php endif; ?>
 
+      <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) && !$isDeptAdmin): ?>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
 
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Admin
+        </div>
+
+        <li class="nav-item <?= $mode == 'accounts_mgmt' ? 'active' : '' ?>">
+          <a class="nav-link" href="<?= site_url('admin/accounts_mgmt') ?>">
+            <i class="fas fa-fw fa-user-cog"></i>
+            <span>Account Management</span>
+          </a>
+        </li>
+      <?php endif; ?>
 
       <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'])): ?>
         <li class="nav-item <?= $mode == 'audit' ? 'active' : '' ?>">
@@ -289,7 +305,6 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
-
 
 
     </ul>
@@ -321,7 +336,14 @@
                 <span
                   class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $user->fname . ' ' . $user->lname; ?>
                   (<?php echo $user->user_lvl; ?>)</span>
-                <i class="fas fa-user-circle fa-2x text-gray-300"></i>
+                <span id="topbarProfileAvatar">
+                  <?php if (!empty($user->profile_image)): ?>
+                    <img class="rounded-circle" src="<?= site_url('admin/image/PROFILE/' . $user->profile_image); ?>"
+                      alt="Profile picture" style="width: 32px; height: 32px; object-fit: cover;">
+                  <?php else: ?>
+                    <i class="fas fa-user-circle fa-2x text-gray-300"></i>
+                  <?php endif; ?>
+                </span>
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -330,7 +352,7 @@
                   Edit Profile
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                <a class="dropdown-item" href="<?= site_url('auth/logout'); ?>">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
@@ -380,24 +402,6 @@
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
-
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="<?= site_url('auth/logout'); ?>">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <?php
   pre_scripts('admin');

@@ -1276,8 +1276,12 @@ class Admin extends BaseController
                         ->first();
 
                     if ($serv_d) {
-                        $data = $serv_d;
-                        $status = 1;
+                        if (!$this->canAccessServiceRecord($serv_d, $user)) {
+                            $message = 'Service not found';
+                        } else {
+                            $data = $serv_d;
+                            $status = 1;
+                        }
                     } else {
                         $message = 'Service not found';
                     }
@@ -3363,20 +3367,13 @@ class Admin extends BaseController
                 $id = $this->request->getPost('id');
                 $serv = $serv_m->find($id);
 
-                // #23/#24 – DEPARTMENT/BARANGAY accounts can only update
-                // services that belong to their own entity.
-                if (
-                    $serv && $user->account_type === 'DEPARTMENT' &&
-                    (int) ($serv['dept_cont_ID'] ?? 0) !== (int) $user->entity_ref_id
-                ) {
-                    $message = 'You can only update services linked to your own Department.';
+                if (!$serv) {
+                    $message = 'Service not found.';
                     break;
                 }
-                if (
-                    $serv && $user->account_type === 'BARANGAY' &&
-                    (int) ($serv['brngy_cont_ID'] ?? 0) !== (int) $user->entity_ref_id
-                ) {
-                    $message = 'You can only update services linked to your own Barangay.';
+
+                if (!$this->canAccessServiceRecord($serv, $user)) {
+                    $message = 'You can only update services linked to your own entity.';
                     break;
                 }
 
@@ -3955,17 +3952,12 @@ class Admin extends BaseController
                 $statusVal = $this->request->getPost('status');
 
                 $svc = $invest_m->find($id);
-                if (
-                    $svc && $user->account_type === 'DEPARTMENT' &&
-                    (int) ($svc['dept_cont_ID'] ?? 0) !== (int) $user->entity_ref_id
-                ) {
-                    $message = 'Unauthorized: not your service.';
+                if (!$svc) {
+                    $message = 'Service not found.';
                     break;
                 }
-                if (
-                    $svc && $user->account_type === 'BARANGAY' &&
-                    (int) ($svc['brngy_cont_ID'] ?? 0) !== (int) $user->entity_ref_id
-                ) {
+
+                if (!$this->canAccessServiceRecord($svc, $user)) {
                     $message = 'Unauthorized: not your service.';
                     break;
                 }
@@ -4148,6 +4140,37 @@ class Admin extends BaseController
         }
 
         return '';
+    }
+
+    private function canAccessServiceRecord($service, $user): bool
+    {
+        if (!$service) {
+            return false;
+        }
+
+        $accountType = $user->account_type ?? '';
+        if ($accountType === 'DEPARTMENT') {
+            return (int) $this->recordValue($service, 'dept_cont_ID') === (int) ($user->entity_ref_id ?? 0);
+        }
+
+        if ($accountType === 'BARANGAY') {
+            return (int) $this->recordValue($service, 'brngy_cont_ID') === (int) ($user->entity_ref_id ?? 0);
+        }
+
+        return true;
+    }
+
+    private function recordValue($record, string $field)
+    {
+        if (is_array($record)) {
+            return $record[$field] ?? null;
+        }
+
+        if (is_object($record)) {
+            return $record->{$field} ?? null;
+        }
+
+        return null;
     }
 
     public function preview_file($category, $filename)
