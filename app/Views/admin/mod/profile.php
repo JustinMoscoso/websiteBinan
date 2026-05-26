@@ -46,7 +46,12 @@
                                     value="<?= esc($user->username ?? '') ?>" required>
                             </div>
 
-
+                            <div class="mb-4">
+                                <label for="profileDepartment" class="form-label">Current Department</label>
+                                <input type="text" class="form-control" id="profileDepartment" name="department"
+                                    value="<?= esc($current_department ?? '') ?>" placeholder="No department assigned"
+                                    readonly>
+                            </div>
 
                             <button type="submit" class="btn btn-success">
                                 <i class="fas fa-save mr-1"></i> Save Profile
@@ -359,7 +364,7 @@
                         </div>
                         <div class="dropdown">
                             <?php $nextDeptStatus = ($profile_department->status ?? '') === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'; ?>
-                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                            <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
                                 data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="fas fa-list mr-1"></i> Actions
                             </button>
@@ -566,12 +571,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save mr-1"></i> Save Department
-                        </button>
-                    </div>
+
                 </form>
             </div>
         </div>
