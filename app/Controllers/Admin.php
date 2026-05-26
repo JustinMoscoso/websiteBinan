@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\VisitCountModel; 
+use App\Models\VisitCountModel;
 use App\Models\UserAccount;
 use App\Models\Content;
 use App\Models\Job;
@@ -33,10 +33,11 @@ class Admin extends BaseController
             return $this->response->setJSON(['error' => 'Official not found'], 404);
         }
     }
-    public function mode($mode = 'dashboard'){
+    public function mode($mode = 'dashboard')
+    {
         $user = $this->session->get('user');
 
-        if(empty($user)){
+        if (empty($user)) {
             return redirect()->to(base_url('login'));
         }
 
@@ -90,7 +91,7 @@ class Admin extends BaseController
 
         // Modes blocked for dept-scoped accounts
         $deptOnlyModes = ['cityOff']; // CIO has access to about and fullDisc, so we remove them from the base list if CIO is true. Wait, we can construct the list conditionally.
-        
+
         if (!$isCIO) {
             $deptOnlyModes[] = 'about';
         }
@@ -163,7 +164,7 @@ class Admin extends BaseController
                 '/websitebinan/public/history',           // Page 1: History
                 '/websitebinan/public/barangays',         // Page 1: Barangays
                 '/websitebinan/public/jobs',              // Page 1: Jobs
-                
+
 
                 '/websitebinan/public/invest',            // Page 2: Invest
                 '/websitebinan/public/contact',           // Page 2: Contact
@@ -183,25 +184,51 @@ class Admin extends BaseController
         }
 
         switch ($mode) {
-            case 'dashboard': $data['title'] = 'Dashboard'; break;
-            case 'contacts': $data['title'] = 'Contacts'; break;
-            case 'accounts_mgmt': $data['title'] = 'Accounts Management'; break;
-            case 'postcontent': $data['title'] = 'Post Content'; break;
-            case 'mayor': $data['title'] = 'Mayor\'s Content'; break;
-            case 'about': $data['title'] = 'About'; break;
-            case 'brgy': $data['title'] = 'Barangay'; break;
-            case 'services': $data['title'] = 'Services'; break;
-            case 'dept': $data['title'] = 'Department'; break;
-            case 'cityOff': $data['title'] = 'City Officials'; break;
-            case 'fullDisc': $data['title'] = 'Full Disclosure Policy'; break;
-            case 'careers': $data['title'] = 'Careers'; break;
-            case 'jobs': 
-                $data['title'] = 'Job Management'; 
+            case 'dashboard':
+                $data['title'] = 'Dashboard';
+                break;
+            case 'contacts':
+                $data['title'] = 'Contacts';
+                break;
+            case 'accounts_mgmt':
+                $data['title'] = 'Accounts Management';
+                break;
+            case 'postcontent':
+                $data['title'] = 'Post Content';
+                break;
+            case 'mayor':
+                $data['title'] = 'Mayor\'s Content';
+                break;
+            case 'about':
+                $data['title'] = 'About';
+                break;
+            case 'brgy':
+                $data['title'] = 'Barangay';
+                break;
+            case 'services':
+                $data['title'] = 'Services';
+                break;
+            case 'dept':
+                $data['title'] = 'Department';
+                break;
+            case 'cityOff':
+                $data['title'] = 'City Officials';
+                break;
+            case 'fullDisc':
+                $data['title'] = 'Full Disclosure Policy';
+                break;
+            case 'careers':
+                $data['title'] = 'Careers';
+                break;
+            case 'jobs':
+                $data['title'] = 'Job Management';
                 // Load departments for job form
                 $deptModel = new \App\Models\Department();
                 $data['departments'] = $deptModel->where('status', 'ACTIVE')->findAll();
                 break;
-            case 'invest': $data['title'] = 'Invest'; break;
+            case 'invest':
+                $data['title'] = 'Invest';
+                break;
             case 'profile':
                 $data['title'] = 'My Profile';
                 $data['current_department'] = '';
@@ -218,127 +245,133 @@ class Admin extends BaseController
                     $data['current_department'] = $user->dept;
                 }
                 break;
-            case 'audit':   $data['title'] = 'System Logs'; break;
-            case 'map':     $data['title'] = 'Map Management'; break;
+            case 'audit':
+                $data['title'] = 'System Logs';
+                break;
+            case 'map':
+                $data['title'] = 'Map Management';
+                break;
 
-            default: $data['title'] = 'Unknown'; break;
+            default:
+                $data['title'] = 'Unknown';
+                break;
         }
 
         return view('admin/admin_page', $data);
     }
-        public function logVisit($page_url)
+    public function logVisit($page_url)
     {
         $this->logPageVisit(); // Use the base controller method
     }
 
     public function getUserCount()
-{
-    $selectedLevel = $this->request->getGet('level');
+    {
+        $selectedLevel = $this->request->getGet('level');
 
-    if ($selectedLevel && $selectedLevel !== 'ALL') {
-        $userCount = $this->userAccount
-            ->where('user_lvl', $selectedLevel)
+        if ($selectedLevel && $selectedLevel !== 'ALL') {
+            $userCount = $this->userAccount
+                ->where('user_lvl', $selectedLevel)
+                ->where('status', 'Active')
+                ->countAllResults();
+        } else {
+            // Fetch all users when "ALL" is selected
+            $userCount = $this->userAccount
+                //->where('status', 'Active')
+                ->countAllResults();
+        }
+
+        $totalActiveUsers = $this->userAccount
             ->where('status', 'Active')
             ->countAllResults();
-    } else {
-        // Fetch all users when "ALL" is selected
-        $userCount = $this->userAccount
-            //->where('status', 'Active')
-            ->countAllResults();
+
+        return $this->response->setJSON([
+            'count' => $userCount,
+            'active_users' => $totalActiveUsers
+        ]);
     }
 
-    $totalActiveUsers = $this->userAccount
-        ->where('status', 'Active')
-        ->countAllResults();
+    public function getRecentNews()
+    {
+        // Corrected: Match the request key with frontend data-filter attribute
+        $filter = $this->request->getGet('filter'); // "Today", "This Month", "This Year"
+        $contentModel = new Content();
 
-    return $this->response->setJSON([
-        'count' => $userCount,
-        'active_users' => $totalActiveUsers
-    ]);
-}
+        // Ensure filter has a valid value
+        if (!$filter) {
+            $filter = "Today"; // Default to Today
+        }
 
-public function getRecentNews()
-{
-    // Corrected: Match the request key with frontend data-filter attribute
-    $filter = $this->request->getGet('filter'); // "Today", "This Month", "This Year"
-    $contentModel = new Content();
+        // Initialize query
+        $query = $contentModel->select('title, created_date')
+            ->where('category', 'NEWS')
+            ->where('status', 'ACTIVE')
+            ->orderBy('created_date', 'DESC');
 
-    // Ensure filter has a valid value
-    if (!$filter) {
-        $filter = "Today"; // Default to Today
+        // Apply filters based on the selection
+        if ($filter === "Today") {
+            $query->where('DATE(created_date)', date('Y-m-d'));
+        } elseif ($filter === "This Month") {
+            $query->where('MONTH(created_date)', date('m'))
+                ->where('YEAR(created_date)', date('Y'));
+        } elseif ($filter === "This Year") {
+            $query->where('YEAR(created_date)', date('Y'));
+        }
+
+        // Debugging step: Print SQL query for review
+        error_log($query->getLastQuery());
+
+        return $this->response->setJSON($query->findAll());
     }
 
-    // Initialize query
-    $query = $contentModel->select('title, created_date')
-                          ->where('category', 'NEWS')
-                          ->where('status', 'ACTIVE')
-                          ->orderBy('created_date', 'DESC');
+    public function getRecentAnns()
+    {
+        // Corrected: Match the request key with frontend data-filter attribute
+        $filter = $this->request->getGet('filter'); // "Today", "This Month", "This Year"
+        $contentModel = new Content();
 
-    // Apply filters based on the selection
-    if ($filter === "Today") {
-        $query->where('DATE(created_date)', date('Y-m-d'));
-    } elseif ($filter === "This Month") {
-        $query->where('MONTH(created_date)', date('m'))
-              ->where('YEAR(created_date)', date('Y'));
-    } elseif ($filter === "This Year") {
-        $query->where('YEAR(created_date)', date('Y'));
+        // Ensure filter has a valid value
+        if (!$filter) {
+            $filter = "Today"; // Default to Today
+        }
+
+        // Initialize query
+        $query = $contentModel->select('title, created_date')
+            ->where('category', 'ANNS')
+            ->where('status', 'ACTIVE')
+            ->orderBy('created_date', 'DESC');
+
+        // Apply filters based on the selection
+        if ($filter === "Today") {
+            $query->where('DATE(created_date)', date('Y-m-d'));
+        } elseif ($filter === "This Month") {
+            $query->where('MONTH(created_date)', date('m'))
+                ->where('YEAR(created_date)', date('Y'));
+        } elseif ($filter === "This Year") {
+            $query->where('YEAR(created_date)', date('Y'));
+        }
+
+        // Debugging step: Print SQL query for review
+        error_log($query->getLastQuery());
+
+        return $this->response->setJSON($query->findAll());
     }
 
-    // Debugging step: Print SQL query for review
-    error_log($query->getLastQuery());
+    public function getVisitCount()
+    {
+        $filter = $this->request->getGet('filter');
+        $visitModel = new VisitCountModel();
 
-    return $this->response->setJSON($query->findAll());
-}
+        if (!$filter) {
+            return $this->response->setContentType('application/json')->setJSON(['error' => 'Filter missing']);
+        }
 
-public function getRecentAnns()
-{
-    // Corrected: Match the request key with frontend data-filter attribute
-    $filter = $this->request->getGet('filter'); // "Today", "This Month", "This Year"
-    $contentModel = new Content();
+        $visitCount = $visitModel->getVisitCountByFilter($filter);
 
-    // Ensure filter has a valid value
-    if (!$filter) {
-        $filter = "Today"; // Default to Today
+        return $this->response->setContentType('application/json')->setJSON(['visit_count' => $visitCount]);
     }
 
-    // Initialize query
-    $query = $contentModel->select('title, created_date')
-                          ->where('category', 'ANNS')
-                          ->where('status', 'ACTIVE')
-                          ->orderBy('created_date', 'DESC');
 
-    // Apply filters based on the selection
-    if ($filter === "Today") {
-        $query->where('DATE(created_date)', date('Y-m-d'));
-    } elseif ($filter === "This Month") {
-        $query->where('MONTH(created_date)', date('m'))
-              ->where('YEAR(created_date)', date('Y'));
-    } elseif ($filter === "This Year") {
-        $query->where('YEAR(created_date)', date('Y'));
-    }
-
-    // Debugging step: Print SQL query for review
-    error_log($query->getLastQuery());
-
-    return $this->response->setJSON($query->findAll());
-}
-
-public function getVisitCount()
-{
-    $filter = $this->request->getGet('filter');
-    $visitModel = new VisitCountModel();
-
-    if (!$filter) {
-        return $this->response->setContentType('application/json')->setJSON(['error' => 'Filter missing']);
-    }
-
-    $visitCount = $visitModel->getVisitCountByFilter($filter);
-
-    return $this->response->setContentType('application/json')->setJSON(['visit_count' => $visitCount]);
-}
-
-
-    public function ajax($mode) 
+    public function ajax($mode)
     {
         if (!$this->request->isAJAX()) {
             exit;
@@ -353,7 +386,7 @@ public function getVisitCount()
         $data = array();
 
         $user = $this->session->get('user');
-        
+
         if (!$user) {
             echo json_encode([
                 'status' => 0,
@@ -405,7 +438,7 @@ public function getVisitCount()
         $canManageJobs = $isPESO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
         $canManageInvest = $isBPLO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
         $canManageMayor = $isMayor || $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
-        
+
         $canManageAbout = $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
         $canManageFullDisc = $isCIO || $isMayor || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
 
@@ -428,9 +461,9 @@ public function getVisitCount()
 
             case 'update_profile': {
                 $fullName = trim((string) $this->request->getPost('fullName'));
-                $email    = trim((string) $this->request->getPost('email'));
+                $email = trim((string) $this->request->getPost('email'));
                 $username = trim((string) $this->request->getPost('username'));
-                $dept     = trim((string) $this->request->getPost('department'));
+                $dept = trim((string) $this->request->getPost('department'));
 
                 if ($fullName === '' || $email === '' || $username === '') {
                     $message = 'Full name, email, and username are required.';
@@ -452,8 +485,8 @@ public function getVisitCount()
                 $user_m = new \App\Models\UserAccount();
                 $existing = $user_m
                     ->groupStart()
-                        ->where('username', $username)
-                        ->orWhere('email', $email)
+                    ->where('username', $username)
+                    ->orWhere('email', $email)
                     ->groupEnd()
                     ->where('ID !=', $user->ID)
                     ->first();
@@ -764,9 +797,9 @@ public function getVisitCount()
             }
 
             case 'get_users': {
-                $userId          = $this->request->getPost('id');
-                $searchUser      = $this->request->getPost('searchUser');
-                $searchStatus    = $this->request->getPost('searchStatus');
+                $userId = $this->request->getPost('id');
+                $searchUser = $this->request->getPost('searchUser');
+                $searchStatus = $this->request->getPost('searchStatus');
                 $searchUserLevel = $this->request->getPost('searchUserLevel');
 
                 $user_m = new \App\Models\UserAccount();
@@ -779,12 +812,12 @@ public function getVisitCount()
                         $message = 'User not found';
                     } elseif ($target) {
                         // Dept-scoped ADMIN can only view users from their own entity
-                        if ($isDeptScopedAdmin && ((int)$target->entity_ref_id !== (int)$user->entity_ref_id || $target->account_type !== 'DEPARTMENT')) {
+                        if ($isDeptScopedAdmin && ((int) $target->entity_ref_id !== (int) $user->entity_ref_id || $target->account_type !== 'DEPARTMENT')) {
                             $message = 'User not found';
-                        } elseif ($isBrgyScopedAdmin && ((int)$target->entity_ref_id !== (int)$user->entity_ref_id || $target->account_type !== 'BARANGAY')) {
+                        } elseif ($isBrgyScopedAdmin && ((int) $target->entity_ref_id !== (int) $user->entity_ref_id || $target->account_type !== 'BARANGAY')) {
                             $message = 'User not found';
                         } else {
-                            $data   = $target;
+                            $data = $target;
                             $status = 1;
                         }
                     } else {
@@ -801,18 +834,18 @@ public function getVisitCount()
                     // Dept-scoped ADMIN: only see users from their own entity
                     if ($isDeptScopedAdmin) {
                         $builder->where('account_type', 'DEPARTMENT')
-                                ->where('entity_ref_id', $user->entity_ref_id);
+                            ->where('entity_ref_id', $user->entity_ref_id);
                     } elseif ($isBrgyScopedAdmin) {
                         $builder->where('account_type', 'BARANGAY')
-                                ->where('entity_ref_id', $user->entity_ref_id);
+                            ->where('entity_ref_id', $user->entity_ref_id);
                     }
 
                     if (!empty($searchUser)) {
                         $builder->groupStart()
-                                ->like('username', $searchUser)
-                                ->orLike('fname', $searchUser)
-                                ->orLike('lname', $searchUser)
-                                ->groupEnd();
+                            ->like('username', $searchUser)
+                            ->orLike('fname', $searchUser)
+                            ->orLike('lname', $searchUser)
+                            ->groupEnd();
                     }
                     if (!empty($searchStatus)) {
                         $builder->where('status', $searchStatus);
@@ -835,50 +868,48 @@ public function getVisitCount()
                 }
                 break;
             }
-            
-            case 'get_barangay':
-                {
-                    $brgyId = $this->request->getPost('id');
-                    $searchBrgy = $this->request->getPost('searchBrgy');
-                    $searchCapt = $this->request->getPost('searchCapt');
-                    $status = $this->request->getPost('status');
-                    
-                    $brgy_m = new \App\Models\Barangay();
-    
-                    if ($brgyId) {
-                        $barangay = $brgy_m->find($brgyId);
-                        if ($barangay) {
-                            $data = $barangay;
-                            $status = 1;
-                        } else {
-                            $message = 'Barangay not found';
-                        }
-                    } else {
-                        $builder = $brgy_m->orderBy('created_date', 'desc');
-                        
-                        // Add partial match filters if provided
-                        if (!empty($searchBrgy)) {
-                            $builder->like('LOWER(brgy_name)', strtolower($searchBrgy));
-                        }
-                        if (!empty($searchCapt)) {
-                            $builder->like('LOWER(brngy_capt)', strtolower($searchCapt));
-                        }
-                        if (!empty($status)) {
-                            $builder->where('status', $status);
-                        }
-                        
-                        $brgy_d = $builder->findAll();
-                        
-                        foreach ($brgy_d as $brgy) {
-                            $data[] = $brgy;
-                        }
-                        $status = 1;
-                    }
-                    break;
-                }   
 
-            case 'get_dept':
-            {
+            case 'get_barangay': {
+                $brgyId = $this->request->getPost('id');
+                $searchBrgy = $this->request->getPost('searchBrgy');
+                $searchCapt = $this->request->getPost('searchCapt');
+                $status = $this->request->getPost('status');
+
+                $brgy_m = new \App\Models\Barangay();
+
+                if ($brgyId) {
+                    $barangay = $brgy_m->find($brgyId);
+                    if ($barangay) {
+                        $data = $barangay;
+                        $status = 1;
+                    } else {
+                        $message = 'Barangay not found';
+                    }
+                } else {
+                    $builder = $brgy_m->orderBy('created_date', 'desc');
+
+                    // Add partial match filters if provided
+                    if (!empty($searchBrgy)) {
+                        $builder->like('LOWER(brgy_name)', strtolower($searchBrgy));
+                    }
+                    if (!empty($searchCapt)) {
+                        $builder->like('LOWER(brngy_capt)', strtolower($searchCapt));
+                    }
+                    if (!empty($status)) {
+                        $builder->where('status', $status);
+                    }
+
+                    $brgy_d = $builder->findAll();
+
+                    foreach ($brgy_d as $brgy) {
+                        $data[] = $brgy;
+                    }
+                    $status = 1;
+                }
+                break;
+            }
+
+            case 'get_dept': {
                 $deptId = $this->request->getPost('id');
                 $status_filter = $this->request->getPost('status');
                 $dept_m = new \App\Models\Department();
@@ -908,53 +939,51 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_departments':
-                {
-                    $deptId = $this->request->getPost('id');
-                    $searchDept = $this->request->getPost('searchDept');
-                    $searchOfficer = $this->request->getPost('searchOfficer');
-                    $status = $this->request->getPost('status');
-                    
-                    $dept_m = new \App\Models\Department();
-    
-                    if ($deptId) {
-                        $department = $dept_m->find($deptId);
-                        if ($department) {
-                            $data = $department;
-                            $status = 1;
-                        } else {
-                            $message = 'Department not found';
-                        }
-                    } else {
-                        $builder = $dept_m->orderBy('created_date', 'desc');
-                        
-                        // If user is ENCODER/dept-scoped ADMIN with DEPARTMENT account type, only show their own department
-                        if (($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') || $isDeptScopedAdmin) {
-                            $builder->where('ID', $user->entity_ref_id);
-                        }
-                        
-                        // Add partial match filters if provided
-                        if (!empty($searchDept)) {
-                            $builder->like('LOWER(dept_name)', strtolower($searchDept));
-                        }
-                        if (!empty($searchOfficer)) {
-                            $builder->like('LOWER(officer_in_charge)', strtolower($searchOfficer));
-                        }
-                        if (!empty($status)) {
-                            $builder->where('status', $status);
-                        }
-                        
-                        $deptData = $builder->findAll();
-                        
-                        foreach ($deptData as $dept) {
-                            $data[] = $dept;
-                        }
+            case 'get_departments': {
+                $deptId = $this->request->getPost('id');
+                $searchDept = $this->request->getPost('searchDept');
+                $searchOfficer = $this->request->getPost('searchOfficer');
+                $status = $this->request->getPost('status');
+
+                $dept_m = new \App\Models\Department();
+
+                if ($deptId) {
+                    $department = $dept_m->find($deptId);
+                    if ($department) {
+                        $data = $department;
                         $status = 1;
+                    } else {
+                        $message = 'Department not found';
                     }
-                    break;
+                } else {
+                    $builder = $dept_m->orderBy('created_date', 'desc');
+
+                    // If user is ENCODER/dept-scoped ADMIN with DEPARTMENT account type, only show their own department
+                    if (($user->user_lvl === 'ENCODER' && $user->account_type === 'DEPARTMENT') || $isDeptScopedAdmin) {
+                        $builder->where('ID', $user->entity_ref_id);
+                    }
+
+                    // Add partial match filters if provided
+                    if (!empty($searchDept)) {
+                        $builder->like('LOWER(dept_name)', strtolower($searchDept));
+                    }
+                    if (!empty($searchOfficer)) {
+                        $builder->like('LOWER(officer_in_charge)', strtolower($searchOfficer));
+                    }
+                    if (!empty($status)) {
+                        $builder->where('status', $status);
+                    }
+
+                    $deptData = $builder->findAll();
+
+                    foreach ($deptData as $dept) {
+                        $data[] = $dept;
+                    }
+                    $status = 1;
                 }
-            case 'get_cityoff':
-            {
+                break;
+            }
+            case 'get_cityoff': {
                 $coId = $this->request->getPost('id');
                 $co_m = new \App\Models\CityOfficial();
 
@@ -975,9 +1004,8 @@ public function getVisitCount()
                 }
                 break;
             }
-        
-            case 'get_postcontent':
-            {
+
+            case 'get_postcontent': {
                 $conId = $this->request->getPost('id');
                 $con_m = new \App\Models\Content();
 
@@ -1000,9 +1028,9 @@ public function getVisitCount()
                     $search = $this->request->getPost('search');
                     $category = $this->request->getPost('category');
                     $status_filter = $this->request->getPost('status');
-                
+
                     $query = $con_m;
-                
+
                     // Enforce ownership for restricted Mayor or CIO
                     $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
                     if ($isMayorOrCIORestricted) {
@@ -1011,10 +1039,10 @@ public function getVisitCount()
 
                     if (!empty($search)) {
                         $query = $query->groupStart()
-                                      ->like('title', $search)
-                                      ->orLike('author', $search)
-                                      ->orWhere('YEAR(created_date)', $search)
-                                      ->groupEnd();
+                            ->like('title', $search)
+                            ->orLike('author', $search)
+                            ->orWhere('YEAR(created_date)', $search)
+                            ->groupEnd();
                     }
                     if (!empty($category)) {
                         $query = $query->where('category', $category);
@@ -1022,7 +1050,7 @@ public function getVisitCount()
                     if (!empty($status_filter)) {
                         $query = $query->where('status', $status_filter);
                     }
-                
+
                     $con_d = $query->orderBy('created_date', 'desc')->findAll();
                     foreach ($con_d as $pol) {
                         $data[] = $pol;
@@ -1034,12 +1062,12 @@ public function getVisitCount()
             case 'get_audit': {
                 $log_m = new \App\Models\Audit();
                 $user_m = new \App\Models\UserAccount();
-                
+
                 // Build query with user information using correct table names
                 $query = $log_m->select('audit_trails.*, useradmin.fname, useradmin.lname')
-                              ->join('useradmin', 'useradmin.ID = audit_trails.userID', 'left')
-                              ->orderBy('audit_trails.created_date', 'desc');
-                
+                    ->join('useradmin', 'useradmin.ID = audit_trails.userID', 'left')
+                    ->orderBy('audit_trails.created_date', 'desc');
+
                 $searchAction = $this->request->getPost('searchAction');
                 $searchDate = $this->request->getPost('searchDate');
                 $isSearching = false;
@@ -1048,14 +1076,14 @@ public function getVisitCount()
                     $query->like('audit_trails.action', $searchAction);
                     $isSearching = true;
                 }
-                
+
                 if (!empty($searchDate)) {
                     $query->where('DATE(audit_trails.created_date)', $searchDate);
                     $isSearching = true;
                 }
 
                 if (!$isSearching) {
-                    $query->limit(200);  
+                    $query->limit(200);
                 }
 
                 $log_d = $query->find();
@@ -1068,7 +1096,7 @@ public function getVisitCount()
                     } elseif ($logs->userID) {
                         $userName = 'User ID: ' . $logs->userID;
                     }
-                    
+
                     // Create the data object with user name
                     $data[] = [
                         'ID' => $logs->ID,
@@ -1083,8 +1111,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'get_mayor':
-            {
+            case 'get_mayor': {
                 $mayId = $this->request->getPost('id');
                 $may_m = new \App\Models\MayorContent();
 
@@ -1098,8 +1125,8 @@ public function getVisitCount()
                     }
                 } else {
                     $may_d = $may_m
-                            ->orderBy('created_date', 'desc') 
-                            ->findAll();
+                        ->orderBy('created_date', 'desc')
+                        ->findAll();
                     foreach ($may_d as $mayorc) {
                         $data[] = $mayorc;
                     }
@@ -1107,12 +1134,11 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_fulldiscpol':
-            {
+            case 'get_fulldiscpol': {
                 $policyId = $this->request->getPost('id');
                 $policy_m = new \App\Models\FileTbl();
                 $data = []; // Explicitly initialize
-            
+
                 if ($policyId) {
                     $policies = $policy_m->find($policyId);
                     if ($policies) {
@@ -1130,18 +1156,18 @@ public function getVisitCount()
                     $frequency = $this->request->getPost('frequency');
                     $file_category = $this->request->getPost('file_category');
                     $status_filter = $this->request->getPost('status');
-            
+
                     // Build the query with filters
                     $query = $policy_m->where('category', 'FULLDISC');
-                    
+
                     // Apply combined search filter
                     if (!empty($search)) {
                         $query = $query->groupStart()
-                                      ->like('file_name', $search)
-                                      ->orWhere('year', $search)
-                                      ->groupEnd();
+                            ->like('file_name', $search)
+                            ->orWhere('year', $search)
+                            ->groupEnd();
                     }
-                    
+
                     // Apply frequency filter
                     if (!empty($frequency)) {
                         if ($frequency === 'ANNUAL') {
@@ -1170,16 +1196,16 @@ public function getVisitCount()
                             $query = $query->whereIn('file_category', $quarterly_categories);
                         }
                     }
-                    
+
                     // Apply filters if they are provided and not empty
                     if (!empty($file_category) && $file_category !== '- File Category -') {
                         $query = $query->where('file_category', $file_category);
                     }
-                    
+
                     if (!empty($status_filter) && $status_filter !== '- Status -') {
                         $query = $query->where('status', $status_filter);
                     }
-            
+
                     $policy_d = $query->orderBy('created_date', 'desc')->findAll();
                     foreach ($policy_d as $pol) {
                         $data[] = $pol;
@@ -1188,8 +1214,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_career':
-            {
+            case 'get_career': {
                 $careerId = $this->request->getPost('id');
                 $career_m = new \App\Models\FileTbl();
 
@@ -1203,9 +1228,9 @@ public function getVisitCount()
                     }
                 } else {
                     $career_d = $career_m
-                            ->where('category', 'CAREER')
-                            ->orderBy('created_date', 'desc') 
-                            ->findAll();
+                        ->where('category', 'CAREER')
+                        ->orderBy('created_date', 'desc')
+                        ->findAll();
                     foreach ($career_d as $car) {
                         $data[] = $car;
                     }
@@ -1213,8 +1238,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_invest':
-            {
+            case 'get_invest': {
                 $investId = $this->request->getPost('id');
                 $invest_m = new \App\Models\FileTbl();
 
@@ -1228,9 +1252,9 @@ public function getVisitCount()
                     }
                 } else {
                     $inv_d = $invest_m
-                            ->where('category', 'INVEST')
-                            ->orderBy('created_date', 'desc') 
-                            ->findAll();
+                        ->where('category', 'INVEST')
+                        ->orderBy('created_date', 'desc')
+                        ->findAll();
                     foreach ($inv_d as $inv) {
                         $data[] = $inv;
                     }
@@ -1238,107 +1262,100 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_services':
-                {
-                    $servId = $this->request->getPost('id');
-                    $serv_m = new \App\Models\Services();
-    
-                    if ($servId) {
-                        // Existing single service lookup
-                        $serv_d = $serv_m
-                            ->select('service_content.*, barangay_content.brgy_name, department_content.dept_name')
-                            ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
-                            ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left')
-                            ->where('service_content.ID', $servId)
-                            ->first();
-                        
-                        if ($serv_d) {
-                            if (!$this->canAccessServiceRecord($serv_d, $user)) {
-                                $message = 'Service not found';
-                            } else {
-                                $data = $serv_d;
-                                $status = 1;
-                            }
-                        } else {
-                            $message = 'Service not found';
-                        }
-                    } else {
-                        // Build the filtered query
-                        $builder = $serv_m
-                            ->select('service_content.*, barangay_content.brgy_name, department_content.dept_name')
-                            ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
-                            ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left');
-    
-                        // Scoped ADMIN: restrict to their own department's services
-                        if ($isDeptScopedAdmin) {
-                            $builder->where('service_content.dept_cont_ID', $user->entity_ref_id);
-                        } elseif ($isBrgyScopedAdmin) {
-                            $builder->where('service_content.brngy_cont_ID', $user->entity_ref_id);
-                        }
+            case 'get_services': {
+                $servId = $this->request->getPost('id');
+                $serv_m = new \App\Models\Services();
 
-                        // Service Name filter
-                        if ($this->request->getPost('service_name')) {
-                            $builder->like('service_content.serv_name', $this->request->getPost('service_name'));
-                        }
-    
-                        // Category filter (Barangay/Department)
-                        if ($this->request->getPost('category')) {
-                            $category = $this->request->getPost('category');
-                            
-                            if ($category === 'BARANGAY') {
-                                if ($this->request->getPost('brgy')) {
-                                    $builder->where('service_content.brngy_cont_ID', $this->request->getPost('brgy'));
-                                } else {
-                                    $builder->where('service_content.brngy_cont_ID IS NOT NULL');
-                                }
-                            } 
-                            elseif ($category === 'DEPARTMENT') {
-                                if ($this->request->getPost('dept')) {
-                                    $builder->where('service_content.dept_cont_ID', $this->request->getPost('dept'));
-                                } else {
-                                    $builder->where('service_content.dept_cont_ID IS NOT NULL');
-                                }
+                if ($servId) {
+                    // Existing single service lookup
+                    $serv_d = $serv_m
+                        ->select('service_content.*, barangay_content.brgy_name, department_content.dept_name')
+                        ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
+                        ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left')
+                        ->where('service_content.ID', $servId)
+                        ->first();
+
+                    if ($serv_d) {
+                        $data = $serv_d;
+                        $status = 1;
+                    } else {
+                        $message = 'Service not found';
+                    }
+                } else {
+                    // Build the filtered query
+                    $builder = $serv_m
+                        ->select('service_content.*, barangay_content.brgy_name, department_content.dept_name')
+                        ->join('barangay_content', 'barangay_content.ID = service_content.brngy_cont_ID', 'left')
+                        ->join('department_content', 'department_content.ID = service_content.dept_cont_ID', 'left');
+
+                    // Scoped ADMIN: restrict to their own department's services
+                    if ($isDeptScopedAdmin) {
+                        $builder->where('service_content.dept_cont_ID', $user->entity_ref_id);
+                    } elseif ($isBrgyScopedAdmin) {
+                        $builder->where('service_content.brngy_cont_ID', $user->entity_ref_id);
+                    }
+
+                    // Service Name filter
+                    if ($this->request->getPost('service_name')) {
+                        $builder->like('service_content.serv_name', $this->request->getPost('service_name'));
+                    }
+
+                    // Category filter (Barangay/Department)
+                    if ($this->request->getPost('category')) {
+                        $category = $this->request->getPost('category');
+
+                        if ($category === 'BARANGAY') {
+                            if ($this->request->getPost('brgy')) {
+                                $builder->where('service_content.brngy_cont_ID', $this->request->getPost('brgy'));
+                            } else {
+                                $builder->where('service_content.brngy_cont_ID IS NOT NULL');
+                            }
+                        } elseif ($category === 'DEPARTMENT') {
+                            if ($this->request->getPost('dept')) {
+                                $builder->where('service_content.dept_cont_ID', $this->request->getPost('dept'));
+                            } else {
+                                $builder->where('service_content.dept_cont_ID IS NOT NULL');
                             }
                         }
-    
-                        // Status filter
-                        if ($this->request->getPost('status')) {
-                            $builder->where('service_content.status', $this->request->getPost('status'));
-                        }
-    
-                        // Order by creation date
-                        $builder->orderBy('service_content.created_date', 'desc');
-    
-                        // Get results
-                        $results = $builder->findAll();
-                        
-                        $data = [];
-                        foreach ($results as $row) {
-                            $data[] = $row;
-                        }
-                        $status = 1;
                     }
-                    
-                    // Return response
-                    return $this->response->setJSON([
-                        'status' => $status ?? 0,
-                        'message' => $message ?? '',
-                        'data' => $data ?? []
-                    ]);
-                    break;
+
+                    // Status filter
+                    if ($this->request->getPost('status')) {
+                        $builder->where('service_content.status', $this->request->getPost('status'));
+                    }
+
+                    // Order by creation date
+                    $builder->orderBy('service_content.created_date', 'desc');
+
+                    // Get results
+                    $results = $builder->findAll();
+
+                    $data = [];
+                    foreach ($results as $row) {
+                        $data[] = $row;
+                    }
+                    $status = 1;
                 }
-            case 'get_contact':
-            {
+
+                // Return response
+                return $this->response->setJSON([
+                    'status' => $status ?? 0,
+                    'message' => $message ?? '',
+                    'data' => $data ?? []
+                ]);
+                break;
+            }
+            case 'get_contact': {
                 $hotlineId = $this->request->getPost('id');
                 $hot_m = new \App\Models\Hotlines();
 
                 if ($hotlineId) {
                     $hotline_d = $hot_m
-                    ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
-                    ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
-                    ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left')
-                    ->where('hotlines.ID', $hotlineId)
-                    ->first();
+                        ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
+                        ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
+                        ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left')
+                        ->where('hotlines.ID', $hotlineId)
+                        ->first();
 
                     if ($hotline_d) {
                         $data = $hotline_d;
@@ -1346,33 +1363,33 @@ public function getVisitCount()
                     } else {
                         $message = 'Hotline not found';
                     }
-                    
+
                 } else {
                     $query_param = $this->request->getPost('query');
                     $category_param = $this->request->getPost('category');
                     $status_param = $this->request->getPost('status');
 
                     $builder = $hot_m
-                            ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
-                            ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
-                            ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left');
+                        ->select('hotlines.*, barangay_content.brgy_name, department_content.dept_name')
+                        ->join('barangay_content', 'barangay_content.ID = hotlines.content_ref_id', 'left')
+                        ->join('department_content', 'department_content.ID = hotlines.content_ref_id', 'left');
 
                     // Scoped ADMIN: restrict to their own department/barangay contacts (CIO has global access)
                     if ($isDeptScopedAdmin && !$isCIO) {
                         $builder->where('hotlines.section', 'Department')
-                                ->where('hotlines.content_ref_id', $user->entity_ref_id);
+                            ->where('hotlines.content_ref_id', $user->entity_ref_id);
                     } elseif ($isBrgyScopedAdmin) {
                         $builder->where('hotlines.section', 'Barangay')
-                                ->where('hotlines.content_ref_id', $user->entity_ref_id);
+                            ->where('hotlines.content_ref_id', $user->entity_ref_id);
                     }
 
                     if (!empty($query_param)) {
                         $builder->groupStart()
-                                ->like('barangay_content.brgy_name', $query_param)
-                                ->orLike('department_content.dept_name', $query_param)
-                                ->orLike('hotlines.content_ref_id', $query_param)
-                                ->orLike('hotlines.number', $query_param)
-                                ->groupEnd();
+                            ->like('barangay_content.brgy_name', $query_param)
+                            ->orLike('department_content.dept_name', $query_param)
+                            ->orLike('hotlines.content_ref_id', $query_param)
+                            ->orLike('hotlines.number', $query_param)
+                            ->groupEnd();
                     }
 
                     if (!empty($category_param)) {
@@ -1394,8 +1411,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_career':
-            {
+            case 'get_career': {
                 $careerId = $this->request->getPost('id');
                 $career_m = new \App\Models\FileTbl();
 
@@ -1409,9 +1425,9 @@ public function getVisitCount()
                     }
                 } else {
                     $career_d = $career_m
-                            ->where('category', 'CAREER')
-                            ->orderBy('created_date', 'desc') 
-                            ->findAll();
+                        ->where('category', 'CAREER')
+                        ->orderBy('created_date', 'desc')
+                        ->findAll();
                     foreach ($career_d as $car) {
                         $data[] = $car;
                     }
@@ -1419,8 +1435,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_about':
-            {
+            case 'get_about': {
                 $aboutId = $this->request->getPost('id');
                 $about_m = new \App\Models\About();
 
@@ -1434,8 +1449,8 @@ public function getVisitCount()
                     }
                 } else {
                     $abt_d = $about_m
-                            ->orderBy('created_date', 'desc') 
-                            ->findAll();
+                        ->orderBy('created_date', 'desc')
+                        ->findAll();
                     foreach ($abt_d as $inv) {
                         $data[] = $inv;
                     }
@@ -1443,13 +1458,13 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_jobs':
-            {
+            case 'get_jobs': {
                 $job_m = new \App\Models\Job();
                 $jobs = $job_m->orderBy('created_date', 'desc')->findAll();
                 // Ensure each job has an 'ID' field (uppercase)
-                $jobs = array_map(function($job) {
-                    if (isset($job['ID'])) return $job;
+                $jobs = array_map(function ($job) {
+                    if (isset($job['ID']))
+                        return $job;
                     if (isset($job['id'])) {
                         $job['ID'] = $job['id'];
                         unset($job['id']);
@@ -1463,16 +1478,15 @@ public function getVisitCount()
 
 
 
-            case 'get_job':
-            {
+            case 'get_job': {
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
-                
+
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-                
+
                 $job = $job_m->where('ID', $id)->first();
                 if ($job) {
                     $data = $job;
@@ -1482,8 +1496,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'create_job':
-            {
+            case 'create_job': {
                 if (!$canManageJobs) {
                     $message = 'Unauthorized: Only the PESO department can manage jobs.';
                     break;
@@ -1495,7 +1508,7 @@ public function getVisitCount()
                 $type = trim($this->request->getPost('type'));
                 $publication_date = $this->request->getPost('publication_date');
                 $email = trim($this->request->getPost('email'));
-                
+
                 // Debug: Log the received data
                 log_message('debug', 'Create Job - Received data: ' . json_encode([
                     'title' => $title,
@@ -1505,31 +1518,31 @@ public function getVisitCount()
                     'publication_date' => $publication_date,
                     'email' => $email
                 ]));
-                
+
                 // Basic validation
                 if (empty($title) || empty($description) || empty($company) || empty($type) || empty($publication_date) || empty($email)) {
                     $message = 'All fields are required';
                     break;
                 }
-                
+
                 // Validate job type
                 if (!in_array($type, ['Full Time', 'Part Time'])) {
                     $message = 'Please select a valid job type';
                     break;
                 }
-                
+
                 // Validate email format
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Please enter a valid email address';
                     break;
                 }
-                
+
                 // Check if publication date is not in the future
                 if (strtotime($publication_date) > time()) {
                     $message = 'Publication date cannot be in the future';
                     break;
                 }
-                
+
                 $jobData = [
                     'title' => $title,
                     'description' => $description,
@@ -1539,16 +1552,16 @@ public function getVisitCount()
                     'email' => $email,
                     'status' => 'ACTIVE'
                 ];
-                
+
                 // Debug: Log the data being inserted
                 log_message('debug', 'Create Job - Data to insert: ' . json_encode($jobData));
-                
+
                 // Try to create the job with better error handling
                 try {
                     // Try direct database insert first
                     $db = \Config\Database::connect();
                     $result = $db->table('jobs')->insert($jobData);
-                    
+
                     if ($result) {
                         $status = 1;
                         $message = 'Job created successfully';
@@ -1570,8 +1583,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'update_job':
-            {
+            case 'update_job': {
                 if (!$canManageJobs) {
                     $message = 'Unauthorized: Only the PESO department can manage jobs.';
                     break;
@@ -1585,37 +1597,37 @@ public function getVisitCount()
                 $publication_date = $this->request->getPost('publication_date');
                 $email = trim($this->request->getPost('email'));
                 $status = $this->request->getPost('status');
-                
+
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-                
+
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-                
+
                 // Basic validation
                 if (empty($title) || empty($description) || empty($company) || empty($publication_date) || empty($email)) {
                     $message = 'All fields are required';
                     break;
                 }
-                
+
                 // Validate email format
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Please enter a valid email address';
                     break;
                 }
-                
+
                 // Check if publication date is not in the future
                 if (strtotime($publication_date) > time()) {
                     $message = 'Publication date cannot be in the future';
                     break;
                 }
-                
+
                 $jobData = [
                     'title' => $title,
                     'description' => $description,
@@ -1629,7 +1641,7 @@ public function getVisitCount()
                 if ($status !== null) {
                     $jobData['status'] = $status;
                 }
-                
+
                 // Try to update the job with better error handling
                 try {
                     if ($job_m->update($id, $jobData)) {
@@ -1649,34 +1661,33 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'set_status_job':
-            {
+            case 'set_status_job': {
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
-                
+
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-                
+
                 if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'])) {
                     $message = 'Invalid status value';
                     break;
                 }
-                
+
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-                
+
                 $data = [
                     'status' => $statusVal,
                     'updated_date' => date('Y-m-d H:i:s'),
                 ];
-                
+
                 if ($job_m->update($id, $data)) {
                     $status = 1;
                     $message = 'Job status updated successfully';
@@ -1685,23 +1696,22 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'delete_job':
-            {
+            case 'delete_job': {
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
-                
+
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-                
+
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-                
+
                 if ($job_m->delete($id)) {
                     $status = 1;
                     $message = 'Job deleted successfully';
@@ -1716,19 +1726,18 @@ public function getVisitCount()
             |
             ------------------- */
 
-            case 'create_user':
-            {
+            case 'create_user': {
                 $user_m = new \App\Models\UserAccount();
-                $fname       = $this->request->getPost('txtFirstName');
-                $lname       = $this->request->getPost('txtLastName');
-                $usern       = $this->request->getPost('txtUsername');
-                $email       = $this->request->getPost('txtEmail');
-                $passw       = $this->request->getPost('txtPassword');
-                $acclvl      = $this->request->getPost('txtAccLevel');
-                $dept        = $this->request->getPost('txtDept') ?: '';
+                $fname = $this->request->getPost('txtFirstName');
+                $lname = $this->request->getPost('txtLastName');
+                $usern = $this->request->getPost('txtUsername');
+                $email = $this->request->getPost('txtEmail');
+                $passw = $this->request->getPost('txtPassword');
+                $acclvl = $this->request->getPost('txtAccLevel');
+                $dept = $this->request->getPost('txtDept') ?: '';
                 // #25 – account type & linked entity
-                $acct_type   = $this->request->getPost('txtAccountType') ?: null;
-                $entity_ref  = $this->request->getPost('txtEntityRef')   ?: null;
+                $acct_type = $this->request->getPost('txtAccountType') ?: null;
+                $entity_ref = $this->request->getPost('txtEntityRef') ?: null;
 
                 // Nobody can create a DEVELOPER account
                 if ($acclvl === 'DEVELOPER') {
@@ -1755,16 +1764,16 @@ public function getVisitCount()
                 }
                 // For high-privilege roles the account_type should be empty string
                 if (in_array($acclvl, ['SUPERADMIN'])) {
-                    $acct_type  = '';
+                    $acct_type = '';
                     $entity_ref = null;
                 }
                 // ADMIN: auto-assign their own entity_ref_id; they cannot set a different one
                 if ($user->user_lvl === 'ADMIN') {
-                    $acct_type  = $user->account_type  ?? '';
+                    $acct_type = $user->account_type ?? '';
                     $entity_ref = $user->entity_ref_id ?? null;
                 }
                 // DEPARTMENT / BARANGAY accounts MUST have an entity
-                if (in_array($acct_type, ['DEPARTMENT','BARANGAY']) && empty($entity_ref)) {
+                if (in_array($acct_type, ['DEPARTMENT', 'BARANGAY']) && empty($entity_ref)) {
                     $message = 'A Department or Barangay account must be linked to an entity.';
                     break;
                 }
@@ -1786,16 +1795,16 @@ public function getVisitCount()
                     $message = 'Username or email already exists.';
                 } else {
                     $userData = [
-                        'fname'          => $fname,
-                        'lname'          => $lname,
-                        'username'       => $usern,
-                        'pass'           => password_hash($passw, PASSWORD_ARGON2ID),
-                        'email'          => $email,
-                        'user_lvl'       => $acclvl,
-                        'dept'           => $dept,
-                        'account_type'   => $acct_type,
-                        'entity_ref_id'  => $entity_ref ? (int)$entity_ref : null,
-                        'status'         => 'ACTIVE',
+                        'fname' => $fname,
+                        'lname' => $lname,
+                        'username' => $usern,
+                        'pass' => password_hash($passw, PASSWORD_ARGON2ID),
+                        'email' => $email,
+                        'user_lvl' => $acclvl,
+                        'dept' => $dept,
+                        'account_type' => $acct_type,
+                        'entity_ref_id' => $entity_ref ? (int) $entity_ref : null,
+                        'status' => 'ACTIVE',
                     ];
                     try {
                         $user_m->save($userData);
@@ -1810,8 +1819,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'create_barangay':
-            {
+            case 'create_barangay': {
                 // #24b – BARANGAY accounts cannot create new barangays
                 if ($user->account_type === 'BARANGAY') {
                     $message = 'Barangay accounts cannot create new Barangays.';
@@ -1830,7 +1838,7 @@ public function getVisitCount()
 
                 // Check if the department name already exists
                 $existing_brgy = $brgy_m->where('brgy_name', $brgy_name)->first();
-                    
+
                 if ($existing_brgy) {
                     $message = 'Barangay name already exists.';
                 } else {
@@ -1845,14 +1853,14 @@ public function getVisitCount()
                         $data = [
                             'brgy_name' => $brgy_name,
                             'brngy_capt' => $brngy_capt,
-                            'mission' =>$mission,
+                            'mission' => $mission,
                             'vision' => $vision,
                             'about' => $about,
                             'contact' => $contact,
                             'barangay_staff' => $barangay_staff,
                             'img_logo' => $logoName,
                             // 'img_capt' => $captName, // Captain image - commented out as not needed
-                            'status' => 'ACTIVE',  
+                            'status' => 'ACTIVE',
                             'created_date' => date('Y-m-d H:i:s')
                         ];
 
@@ -1860,7 +1868,7 @@ public function getVisitCount()
                             $status = 1;
                             $message = 'Barangay created successfully';
                             $brgy_id = $brgy_m->getInsertID();
-                            $log_c['processDetails'] = 'BRGY_ID: ' .$brgy_id . ' ' . $brgy_name;
+                            $log_c['processDetails'] = 'BRGY_ID: ' . $brgy_id . ' ' . $brgy_name;
                         } else {
                             $message = 'Failed to save data';
                             return;
@@ -1872,8 +1880,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'create_dept':
-            {
+            case 'create_dept': {
                 // #23b – DEPARTMENT accounts cannot create new departments unless DEVELOPER
                 // Department-scoped ADMINs also cannot create new departments
                 if (($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') || $isDeptScopedAdmin) {
@@ -1894,7 +1901,7 @@ public function getVisitCount()
 
                 // Check if the department name already exists
                 $existing_dept = $dept_m->where('dept_name', $dept_name)->first();
-                    
+
                 if ($existing_dept) {
                     $message = 'Department name already exists.';
                 } else {
@@ -1909,15 +1916,15 @@ public function getVisitCount()
                         $data = [
                             'dept_name' => $dept_name,
                             'head' => $head,
-                            'post_title' =>$post_title,
-                            'mission' =>$mission,
+                            'post_title' => $post_title,
+                            'mission' => $mission,
                             'vision' => $vision,
                             'img_logo' => $logoName,
                             'org_chart_img' => $orgChartName,
                             'quality_policy' => $quality_policy,
                             'about' => $about,
                             'contact' => $contact,
-                            'status' => 'ACTIVE',  
+                            'status' => 'ACTIVE',
                             'created_date' => date('Y-m-d H:i:s')
                         ];
 
@@ -1938,8 +1945,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'create_cityoff':
-            {
+            case 'create_cityoff': {
                 $co_m = new \App\Models\CityOfficial();
                 $off_name = $this->request->getPost('offname');
                 $off_position = $this->request->getPost('offpos');
@@ -2013,20 +2019,19 @@ public function getVisitCount()
                 }
                 break;
             }
-            
-            case 'create_postcontent':
-            {
+
+            case 'create_postcontent': {
                 $con_m = new \App\Models\Content();
                 $title = $this->request->getPost('title');
                 $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
                 $desc = $this->request->getPost('desc');
                 $imgLogo = $this->request->getFile('newsImg');
                 $category = $this->request->getPost('content_category');
-            
+
                 $logoName = $imgLogo->getRandomName();
                 $file_category = 'POSTCONTENT';
                 $path = WRITEPATH . 'uploads/' . $file_category;
-        
+
                 if ($imgLogo->move($path, $logoName)) {
                     // Save other form data to the database
                     $data = [
@@ -2038,7 +2043,7 @@ public function getVisitCount()
                         'status' => 'ACTIVE',
                         'created_date' => date('Y-m-d H:i:s')
                     ];
-        
+
                     if ($con_m->insert($data)) {
                         $status = 1;
                         $message = 'Post Content created successfully';
@@ -2053,8 +2058,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'create_mayor':
-            {
+            case 'create_mayor': {
                 if (!$canManageMayor) {
                     $message = 'Unauthorized access.';
                     break;
@@ -2063,10 +2067,10 @@ public function getVisitCount()
                 $mayor_name = $this->request->getPost('myrname');
                 $section = $this->request->getPost('content_category');
                 $content = $this->request->getPost('perdata');
-            
+
                 // Check if the section already exists
                 $existing_section = $may_m->where('section', $section)->first();
-            
+
                 if ($existing_section) {
                     $message = 'Only one entry per section';
                 } else {
@@ -2078,10 +2082,10 @@ public function getVisitCount()
                         'status' => 'ACTIVE',
                         'created_date' => date('Y-m-d H:i:s')
                     ];
-            
+
                     $file_category = 'MAYOR';
                     $path = WRITEPATH . 'uploads/' . $file_category;
-            
+
                     // Handle file upload
                     $mayor_img = $this->request->getFileMultiple('mayorimg');
                     if ($mayor_img) {
@@ -2093,7 +2097,7 @@ public function getVisitCount()
                         }
                         $data['mayor_img'] = json_encode($uploaded_files); // Store as JSON
                     }
-            
+
                     // Insert data into the database
                     try {
                         if ($may_m->insert($data)) {
@@ -2110,9 +2114,8 @@ public function getVisitCount()
                 }
                 break;
             }
-                          
-            case 'create_fulldiscpol':
-            {
+
+            case 'create_fulldiscpol': {
                 if (!$canManageFullDisc) {
                     $message = 'Unauthorized access.';
                     break;
@@ -2121,7 +2124,7 @@ public function getVisitCount()
                 $fc = $this->request->getPost('fileCategory');
                 $yr = $this->request->getPost('yr');
                 $qtr = $this->request->getPost('qtr');
-                $policyFile =  $this->request->getFile('policyFile');
+                $policyFile = $this->request->getFile('policyFile');
 
                 // Validate the file
                 if ($policyFile->isValid() && !$policyFile->hasMoved()) {
@@ -2133,14 +2136,14 @@ public function getVisitCount()
                     $message = 'Failed to upload the file. Please try again.';
                     return;
                 }
-                
+
                 $data = [
-                    'file_name' =>$fileName,
+                    'file_name' => $fileName,
                     'file_category' => $fc,
                     'category' => $file_category,
                     'created_date' => date('Y-m-d H:i:s'),
                     'quarter' => $qtr,
-                    'status' => 'ACTIVE',  
+                    'status' => 'ACTIVE',
                     'year' => $yr,
                 ];
                 try {
@@ -2155,9 +2158,8 @@ public function getVisitCount()
                 }
                 break;
             }
-                
-            case 'create_career':
-            {
+
+            case 'create_career': {
                 // Only HRDO department and privileged roles can manage careers
                 if (!$canManageCareers) {
                     $message = 'Unauthorized: Only the HRDO department can manage career postings.';
@@ -2165,7 +2167,7 @@ public function getVisitCount()
                 }
                 $career_m = new \App\Models\FileTbl();
                 $publication = $this->request->getPost('publication');
-                $careerFile =  $this->request->getFile('careerFile');
+                $careerFile = $this->request->getFile('careerFile');
                 $level = $this->request->getPost('level'); // Get level from POST
 
                 // Validate the file
@@ -2178,9 +2180,9 @@ public function getVisitCount()
                     $message = 'Failed to upload the file. Please try again.';
                     return;
                 }
-                
+
                 $data = [
-                    'file_name' =>$fileName,
+                    'file_name' => $fileName,
                     'category' => 'CAREER',
                     'created_date' => date('Y-m-d H:i:s'),
                     'publication_date' => $publication,
@@ -2199,25 +2201,23 @@ public function getVisitCount()
                 }
                 break;
             }
-    
-                
-            case 'create_invest':
-            {
+
+
+            case 'create_invest': {
                 if (!$canManageInvest) {
                     $message = 'Unauthorized: Only the BPLO department can manage investment content.';
                     break;
                 }
                 $invest_m = new \App\Models\FileTbl();
                 $fc = $this->request->getPost('fileCategory');
-                $investFile =  $this->request->getFile('investFile');
+                $investFile = $this->request->getFile('investFile');
 
                 $existing_inv = $invest_m->where('file_category', $fc)->first();
 
                 if ($existing_inv) {
                     $status = 0;
                     $message = 'File category already exists.';
-                }
-                else {
+                } else {
                     if ($investFile->isValid() && !$investFile->hasMoved()) {
                         $fileName = $investFile->getRandomName();
                         $file_category = 'INVEST';
@@ -2229,7 +2229,7 @@ public function getVisitCount()
                     }
 
                     $data = [
-                        'file_name' =>$fileName,
+                        'file_name' => $fileName,
                         'file_category' => $fc,
                         'category' => $file_category,
                         'created_date' => date('Y-m-d H:i:s'),
@@ -2246,31 +2246,30 @@ public function getVisitCount()
                         $message = 'An error occurred while saving the data.';
                     }
                 }
-                
+
                 break;
             }
-            case 'create_services':
-            {
-                $serv_m        = new \App\Models\Services();
-                $serv_name     = $this->request->getPost('serviceName');
-                $content       = $this->request->getPost('content');
-                $dept_cont_ID  = $this->request->getPost('txtDept');
+            case 'create_services': {
+                $serv_m = new \App\Models\Services();
+                $serv_name = $this->request->getPost('serviceName');
+                $content = $this->request->getPost('content');
+                $dept_cont_ID = $this->request->getPost('txtDept');
                 $brngy_cont_ID = $this->request->getPost('txtBrgy');
 
                 // #23/#24 – DEPARTMENT/BARANGAY accounts can only create
                 // services linked to their OWN entity.
                 if ($user->account_type === 'DEPARTMENT') {
-                    $dept_cont_ID  = $user->entity_ref_id;
+                    $dept_cont_ID = $user->entity_ref_id;
                     $brngy_cont_ID = null;
                 } elseif ($user->account_type === 'BARANGAY') {
                     $brngy_cont_ID = $user->entity_ref_id;
-                    $dept_cont_ID  = null;
+                    $dept_cont_ID = null;
                 }
 
                 $data = [
-                    'serv_name'    => $serv_name,
-                    'content'      => $content,
-                    'status'       => 'ACTIVE',
+                    'serv_name' => $serv_name,
+                    'content' => $content,
+                    'status' => 'ACTIVE',
                     'created_date' => date('Y-m-d H:i:s'),
                 ];
 
@@ -2292,8 +2291,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'create_contact':
-            {
+            case 'create_contact': {
                 $hot_m = new \App\Models\Hotlines();
                 $telco = $this->request->getPost('telco');
                 $number = $this->request->getPost('contact');
@@ -2305,37 +2303,37 @@ public function getVisitCount()
 
                 // Dept/brgy-scoped ADMIN: force their own entity
                 if ($isDeptScopedAdmin) {
-                    $dept_cont_ID  = $user->entity_ref_id;
+                    $dept_cont_ID = $user->entity_ref_id;
                     $brngy_cont_ID = null;
                     $others_cont_ID = null;
                 } elseif ($isBrgyScopedAdmin) {
                     $brngy_cont_ID = $user->entity_ref_id;
-                    $dept_cont_ID  = null;
+                    $dept_cont_ID = null;
                     $others_cont_ID = null;
                 }
-            
+
                 if ($dept_cont_ID) {
                     $content_ref_id = $dept_cont_ID;
                     $section = 'Department';
                 } else if ($brngy_cont_ID) {
                     $content_ref_id = $brngy_cont_ID;
                     $section = 'Barangay';
-                } else if($others_cont_ID) {
+                } else if ($others_cont_ID) {
                     $content_ref_id = $others_cont_ID;
                     $section = 'Others';
                 }
-            
+
                 // Check for existing hotline with the same content_ref_id and section
                 $existingHotline = $hot_m->where('section', $section)
-                                            ->where('content_ref_id', $content_ref_id)
-                                            ->first();
-            
+                    ->where('content_ref_id', $content_ref_id)
+                    ->first();
+
                 if ($existingHotline) {
                     $status = 0;
                     $message = 'A hotline for this ' . strtolower($section) . ' already exists.';
                     break;
                 }
-            
+
                 $data = [
                     'telco' => $telco,
                     'number' => $number,
@@ -2346,7 +2344,7 @@ public function getVisitCount()
                     'content_ref_id' => $content_ref_id,
                     'created_date' => date('Y-m-d H:i:s'),
                 ];
-            
+
                 try {
                     $hot_m->save($data);
                     $status = 1;
@@ -2358,8 +2356,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'create_about':
-            {
+            case 'create_about': {
                 if (!$canManageAbout) {
                     $message = 'Unauthorized access.';
                     break;
@@ -2411,27 +2408,26 @@ public function getVisitCount()
                 }
                 break;
             }
-        
+
             /* -------------------
             |
             | UPDATE
             |
             ------------------- */
 
-            case 'update_user':
-            {
-                $user_m     = new \App\Models\UserAccount();
-                $id         = $this->request->getPost('id');
-                $fname      = $this->request->getPost('editFirstName');
-                $lname      = $this->request->getPost('editLastName');
-                $usern      = $this->request->getPost('editUsername');
-                $email      = $this->request->getPost('editEmail');
-                $acclvl     = $this->request->getPost('editAccLevel');
-                $dept       = $this->request->getPost('editDept') ?: '';
-                $passw      = $this->request->getPost('editPassword');
+            case 'update_user': {
+                $user_m = new \App\Models\UserAccount();
+                $id = $this->request->getPost('id');
+                $fname = $this->request->getPost('editFirstName');
+                $lname = $this->request->getPost('editLastName');
+                $usern = $this->request->getPost('editUsername');
+                $email = $this->request->getPost('editEmail');
+                $acclvl = $this->request->getPost('editAccLevel');
+                $dept = $this->request->getPost('editDept') ?: '';
+                $passw = $this->request->getPost('editPassword');
                 // #25 – account type & linked entity
-                $acct_type  = $this->request->getPost('editAccountType') ?: null;
-                $entity_ref = $this->request->getPost('editEntityRef')   ?: null;
+                $acct_type = $this->request->getPost('editAccountType') ?: null;
+                $entity_ref = $this->request->getPost('editEntityRef') ?: null;
 
                 // Nobody can promote an account to DEVELOPER
                 if ($acclvl === 'DEVELOPER') {
@@ -2449,8 +2445,10 @@ public function getVisitCount()
                 if ($user->user_lvl === 'ADMIN') {
                     $target = $user_m->find($id);
                     // Admin cannot edit other Admin-level or higher accounts
-                    if ($target && in_array($target->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])
-                        && (int)$target->ID !== (int)$user->ID) {
+                    if (
+                        $target && in_array($target->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])
+                        && (int) $target->ID !== (int) $user->ID
+                    ) {
                         $message = 'You do not have permission to edit this account.';
                         break;
                     }
@@ -2460,7 +2458,7 @@ public function getVisitCount()
                         break;
                     }
                     // Admin cannot change entity — force their own
-                    $acct_type  = $user->account_type  ?? '';
+                    $acct_type = $user->account_type ?? '';
                     $entity_ref = $user->entity_ref_id ?? null;
                 }
 
@@ -2470,10 +2468,10 @@ public function getVisitCount()
                 }
                 // For high-privilege roles, clear entity binding
                 if (in_array($acclvl, ['SUPERADMIN'])) {
-                    $acct_type  = '';
+                    $acct_type = '';
                     $entity_ref = null;
                 }
-                if (in_array($acct_type, ['DEPARTMENT','BARANGAY']) && empty($entity_ref)) {
+                if (in_array($acct_type, ['DEPARTMENT', 'BARANGAY']) && empty($entity_ref)) {
                     $message = 'A Department or Barangay account must be linked to an entity.';
                     break;
                 }
@@ -2503,15 +2501,15 @@ public function getVisitCount()
                         $message = 'Username or email already exists.';
                     } else {
                         $data = [
-                            'fname'         => $fname,
-                            'lname'         => $lname,
-                            'username'      => $usern,
-                            'email'         => $email,
-                            'user_lvl'      => $acclvl,
-                            'dept'          => $dept,
-                            'account_type'  => $acct_type,
-                            'entity_ref_id' => $entity_ref ? (int)$entity_ref : null,
-                            'updated_date'  => date('Y-m-d H:i:s'),
+                            'fname' => $fname,
+                            'lname' => $lname,
+                            'username' => $usern,
+                            'email' => $email,
+                            'user_lvl' => $acclvl,
+                            'dept' => $dept,
+                            'account_type' => $acct_type,
+                            'entity_ref_id' => $entity_ref ? (int) $entity_ref : null,
+                            'updated_date' => date('Y-m-d H:i:s'),
                         ];
 
                         if (!empty($passw)) {
@@ -2531,94 +2529,94 @@ public function getVisitCount()
                 }
                 break;
             }
-            case "update_barangay":
-                {
-                    $brgy_m = new \App\Models\Barangay();
-                    $id = $this->request->getPost('id');
-                    $barangay = $brgy_m->find($id);
-                
-                    if (!$barangay) {
-                        $message = "Barangay not found.";
-                        break;
-                    }
+            case "update_barangay": {
+                $brgy_m = new \App\Models\Barangay();
+                $id = $this->request->getPost('id');
+                $barangay = $brgy_m->find($id);
 
-                    // #24 – BARANGAY accounts can only update THEIR OWN barangay
-                    if ($user->account_type === 'BARANGAY' &&
-                        (int)$user->entity_ref_id !== (int)$id) {
-                        $message = 'You can only update your own Barangay.';
-                        break;
-                    }
-                    
-                    $brgy_contact = $this->request->getPost('editContact');
-                    $brgy_about = $this->request->getPost('editAbout');
-                    $brgy_name = $this->request->getPost('editBrgy');
-                    $brngy_capt = $this->request->getPost('editCapt');
-                    $mission = $this->request->getPost('editMission');
-                    $vision = $this->request->getPost('editVision');
-                    $barangay_staff = $this->request->getPost('editStaff');
-                
-                    // Check if the barangay name already exists for other records
-                    $existing_brgy = $brgy_m->where('brgy_name', $brgy_name)->where('id !=', $id)->first();
-                
-                    if ($existing_brgy) {
-                        $message = 'Barangay name already exists.';
-                        break;
-                    }
-                
-                    $data = [
-                        'contact' => $brgy_contact,
-                        'about'=> $brgy_about,
-                        'brgy_name' => $brgy_name,
-                        'brngy_capt' => $brngy_capt,
-                        'mission' => $mission,
-                        'vision' => $vision,
-                        'barangay_staff' => $barangay_staff,
-                        'updated_date' => date('Y-m-d H:i:s'),
-                    ];
-                
-                    $maxmb = 4;
-                    $file_category = 'BARANGAY';
-                
-                    // Handle file uploads for barangay logo
-                    $imgLogo = $this->request->getFile('editbrgyImg');
-                    if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
-                        $logoName = $imgLogo->getRandomName();
-                        $path = WRITEPATH . 'uploads/' . $file_category;
-                
-                        if ($imgLogo->move($path, $logoName)) {
-                            $data['img_logo'] = $logoName;
-                        }
-                    }
-                
-                    // Captain image upload handling - commented out as not needed
-                    /*
-                    // Handle file uploads for captain image
-                    $imgCapt = $this->request->getFile('editbrgyImgCapt');
-                    if ($imgCapt && $imgCapt->isValid() && $imgCapt->getSize() < ($maxmb * 1024 * 1024)) {
-                        $captName = $imgCapt->getRandomName();
-                        $path = WRITEPATH . 'uploads/' . $file_category;
-                
-                        if ($imgCapt->move($path, $captName)) {
-                            $data['img_capt'] = $captName;
-                        }
-                    }
-                    */
-                
-                    // Update barangay data
-                    try {
-                        $brgy_m->update($id, $data);
-                        $status = 1;
-                        $message = 'Content updated successfully.';
-                        $log_c['processDetails'] = 'BRGY_ID: ' . $id;
-                    } catch (\Exception $e) {
-                        $message = 'An error occurred while updating.';
-                    }
-                
+                if (!$barangay) {
+                    $message = "Barangay not found.";
                     break;
                 }
-                
-            case "update_dept":
-            {
+
+                // #24 – BARANGAY accounts can only update THEIR OWN barangay
+                if (
+                    $user->account_type === 'BARANGAY' &&
+                    (int) $user->entity_ref_id !== (int) $id
+                ) {
+                    $message = 'You can only update your own Barangay.';
+                    break;
+                }
+
+                $brgy_contact = $this->request->getPost('editContact');
+                $brgy_about = $this->request->getPost('editAbout');
+                $brgy_name = $this->request->getPost('editBrgy');
+                $brngy_capt = $this->request->getPost('editCapt');
+                $mission = $this->request->getPost('editMission');
+                $vision = $this->request->getPost('editVision');
+                $barangay_staff = $this->request->getPost('editStaff');
+
+                // Check if the barangay name already exists for other records
+                $existing_brgy = $brgy_m->where('brgy_name', $brgy_name)->where('id !=', $id)->first();
+
+                if ($existing_brgy) {
+                    $message = 'Barangay name already exists.';
+                    break;
+                }
+
+                $data = [
+                    'contact' => $brgy_contact,
+                    'about' => $brgy_about,
+                    'brgy_name' => $brgy_name,
+                    'brngy_capt' => $brngy_capt,
+                    'mission' => $mission,
+                    'vision' => $vision,
+                    'barangay_staff' => $barangay_staff,
+                    'updated_date' => date('Y-m-d H:i:s'),
+                ];
+
+                $maxmb = 4;
+                $file_category = 'BARANGAY';
+
+                // Handle file uploads for barangay logo
+                $imgLogo = $this->request->getFile('editbrgyImg');
+                if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
+                    $logoName = $imgLogo->getRandomName();
+                    $path = WRITEPATH . 'uploads/' . $file_category;
+
+                    if ($imgLogo->move($path, $logoName)) {
+                        $data['img_logo'] = $logoName;
+                    }
+                }
+
+                // Captain image upload handling - commented out as not needed
+                /*
+                // Handle file uploads for captain image
+                $imgCapt = $this->request->getFile('editbrgyImgCapt');
+                if ($imgCapt && $imgCapt->isValid() && $imgCapt->getSize() < ($maxmb * 1024 * 1024)) {
+                    $captName = $imgCapt->getRandomName();
+                    $path = WRITEPATH . 'uploads/' . $file_category;
+
+                    if ($imgCapt->move($path, $captName)) {
+                        $data['img_capt'] = $captName;
+                    }
+                }
+                */
+
+                // Update barangay data
+                try {
+                    $brgy_m->update($id, $data);
+                    $status = 1;
+                    $message = 'Content updated successfully.';
+                    $log_c['processDetails'] = 'BRGY_ID: ' . $id;
+                } catch (\Exception $e) {
+                    $message = 'An error occurred while updating.';
+                }
+
+                break;
+            }
+
+            case "update_dept": {
                 $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
                 $department = $dept_m->find($id);
@@ -2630,9 +2628,11 @@ public function getVisitCount()
 
                 // #23 – DEPARTMENT accounts can only update THEIR OWN department unless DEVELOPER
                 // This also applies to dept-scoped ADMIN accounts
-                if (($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER' &&
-                    (int)$user->entity_ref_id !== (int)$id) || 
-                    ($isDeptScopedAdmin && (int)$user->entity_ref_id !== (int)$id)) {
+                if (
+                    ($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER' &&
+                        (int) $user->entity_ref_id !== (int) $id) ||
+                    ($isDeptScopedAdmin && (int) $user->entity_ref_id !== (int) $id)
+                ) {
                     $message = 'You can only update your own Department.';
                     break;
                 }
@@ -2646,10 +2646,10 @@ public function getVisitCount()
                     $quality_policy = $this->request->getPost('editPolicy');
                     $about = $this->request->getPost('editAbout');
                     $contact = $this->request->getPost('editContact');
-            
+
                     // Check if the department name already exists, excluding the current department
                     $existing_dept = $dept_m->where('dept_name', $dept_name)->where('id !=', $id)->first();
-                        
+
                     if ($existing_dept) {
                         $message = 'Department name already exists.';
                     } else {
@@ -2657,20 +2657,20 @@ public function getVisitCount()
                         $data = [
                             'dept_name' => $dept_name,
                             'head' => $head,
-                            'post_title' =>$post_title,
-                            'mission' =>$mission,
+                            'post_title' => $post_title,
+                            'mission' => $mission,
                             'vision' => $vision,
                             'quality_policy' => $quality_policy,
                             'about' => $about,
                             'contact' => $contact,
                             'updated_date' => date('Y-m-d H:i:s')
                         ];
-            
+
                         $maxmb = 4;
                         $file_category = 'DEPT';
-            
+
                         $logoName = null;
-            
+
                         // Handle file uploads for dept logo
                         $imgLogo = $this->request->getFile('editdeptImg');
                         if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
@@ -2679,9 +2679,9 @@ public function getVisitCount()
 
                             if (!$imgLogo->hasMoved() && $imgLogo->move($path, $logoName)) {
                                 $data['img_logo'] = $logoName;
-                            } 
+                            }
                         }
-                        
+
                         // Handle file uploads for org chart
                         $imgOrgChart = $this->request->getFile('editdeptOrgChart');
                         if ($imgOrgChart && $imgOrgChart->isValid() && $imgOrgChart->getSize() < ($maxmb * 1024 * 1024)) {
@@ -2690,7 +2690,7 @@ public function getVisitCount()
 
                             if (!$imgOrgChart->hasMoved() && $imgOrgChart->move($path, $orgChartName)) {
                                 $data['org_chart_img'] = $orgChartName;
-                            } 
+                            }
                         }
                         // Update department data
                         try {
@@ -2708,13 +2708,12 @@ public function getVisitCount()
                 }
                 break;
             }
-            case "update_cityoff":
-            {
+            case "update_cityoff": {
                 $cityofficialmodel = new \App\Models\CityOfficial();
-                
+
                 $id = $this->request->getPost('id');
                 $cityofficial = $cityofficialmodel->find($id);
-                
+
                 if ($cityofficial) {
                     $off_name = $this->request->getPost('editoffname');
                     $off_position = $this->request->getPost('editoffpos');
@@ -2772,7 +2771,7 @@ public function getVisitCount()
                     // Handle carousel images (editoffcaroimg[])
                     $carousel_filenames = [];
                     $existing_images = [];
-                    
+
                     // Get existing images from the form or database
                     $existing_images_input = $this->request->getPost('existing_images');
                     if (!empty($existing_images_input)) {
@@ -2834,8 +2833,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case "remove_carousel_image":
-            {
+            case "remove_carousel_image": {
                 // Clear any output buffers to prevent stray output
                 while (ob_get_level()) {
                     ob_end_clean();
@@ -2845,7 +2843,7 @@ public function getVisitCount()
                 ob_start();
 
                 $cityofficialmodel = new \App\Models\CityOfficial();
-                
+
                 $id = $this->request->getPost('id');
                 $imageName = $this->request->getPost('image');
                 $cityofficial = $cityofficialmodel->find($id);
@@ -2915,12 +2913,11 @@ public function getVisitCount()
                 exit; // Ensure no further output
                 break;
             }
-            case "update_postcontent":
-            {
+            case "update_postcontent": {
                 $con_m = new \App\Models\Content();
                 $id = $this->request->getPost('id');
                 $ne_dt = $con_m->find($id);
-            
+
                 if ($ne_dt) {
                     $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
                     if ($isMayorOrCIORestricted && $ne_dt->author !== $currentUserFullName) {
@@ -2931,7 +2928,7 @@ public function getVisitCount()
                     $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
                     $desc = $this->request->getPost('editDesc');
                     $category = $this->request->getPost('edit_content_category');
-            
+
                     $data = [
                         'title' => $title,
                         'author' => $author,
@@ -2939,21 +2936,21 @@ public function getVisitCount()
                         'category' => $category,
                         'updated_date' => date('Y-m-d H:i:s')
                     ];
-            
+
                     $maxSize = 4 * 1024 * 1024; // 4MB
                     $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
                     $file_category = 'POSTCONTENT';
                     $imgLogo = $this->request->getFile('editNewsImg');
-            
+
                     if ($imgLogo && $imgLogo->isValid() && in_array($imgLogo->getMimeType(), $allowedTypes) && $imgLogo->getSize() <= $maxSize) {
                         $logoName = $imgLogo->getRandomName();
                         $path = WRITEPATH . 'uploads/' . $file_category;
-            
+
                         if (!$imgLogo->hasMoved() && $imgLogo->move($path, $logoName)) {
                             $data['file_loc'] = $logoName;
                         }
                     }
-            
+
                     try {
                         $con_m->update($id, $data);
                         $status = 1;
@@ -2969,8 +2966,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'update_mayor':
-            {
+            case 'update_mayor': {
                 if (!$canManageMayor) {
                     $message = 'Unauthorized access.';
                     break;
@@ -2978,18 +2974,17 @@ public function getVisitCount()
                 $may_m = new \App\Models\MayorContent();
                 $id = $this->request->getPost('id');
                 $mayorcontent = $may_m->find($id);
-                
+
                 if ($mayorcontent) {
-                    $mayor_name = $this->request->getPost('editmyrname'); 
+                    $mayor_name = $this->request->getPost('editmyrname');
                     $section = $this->request->getPost('edit_content_category');
                     $content = $this->request->getPost('editperdata');
-                    
+
                     // Check if the section already exists
                     $existing_section = $may_m->where('section', $section)->where('id !=', $id)->first();
                     if ($existing_section) {
                         $message = 'Section already exists.';
-                    }
-                    else {
+                    } else {
                         // Prepare data for saving
                         $data = [
                             'mayor_name' => $mayor_name,
@@ -2997,11 +2992,11 @@ public function getVisitCount()
                             'content' => $content,
                             'updated_date' => date('Y-m-d H:i:s')
                         ];
-                
+
                         $maxmb = 4;
                         $file_category = 'MAYOR';
                         $path = WRITEPATH . 'uploads/' . $file_category;
-                        
+
                         // Handle file uploads for mayor image if new files are selected
                         $mayor_img = $this->request->getFileMultiple('editmayorimg');
                         if ($mayor_img) {
@@ -3016,7 +3011,7 @@ public function getVisitCount()
                             // If no new files are uploaded, retain the existing mayor_img value
                             $data['mayor_img'] = $mayorcontent['mayor_img'];
                         }
-                
+
                         // Update mayor data
                         try {
                             $may_m->update($id, $data);
@@ -3032,8 +3027,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case "update_fulldiscpol":
-            {
+            case "update_fulldiscpol": {
                 if (!$canManageFullDisc) {
                     $message = 'Unauthorized access.';
                     break;
@@ -3042,7 +3036,7 @@ public function getVisitCount()
                 $id = $this->request->getPost('id');
                 $policy = $policy_m->find($id);
 
-                if ($policy){
+                if ($policy) {
                     $fc = $this->request->getPost('editFileCategory');
                     $yr = $this->request->getPost('edityr');
                     $qtr = $this->request->getPost('editqtr');
@@ -3055,7 +3049,7 @@ public function getVisitCount()
                     ];
 
                     $file_category = 'FULLDISC';
-                    $policyFile =  $this->request->getFile('editpolicyFile');
+                    $policyFile = $this->request->getFile('editpolicyFile');
 
                     if ($policyFile && $policyFile->isValid()) {
                         $fileName = $policyFile->getRandomName();
@@ -3064,8 +3058,8 @@ public function getVisitCount()
                         if ($policyFile->hasMoved() && $policyFile->move($path, $fileName)) {
                             $data['file_name'] = $fileName;
                         }
-                    } 
-                
+                    }
+
                     try {
                         $policy_m->update($id, $data);
                         $status = 1;
@@ -3079,13 +3073,13 @@ public function getVisitCount()
                 break;
             }
 
-            case 'create_map':
-            {
+            case 'create_map': {
                 // Initialize Map model
                 $map_m = new \App\Models\Map();
-            
+
                 // Validate percentage input for top_loc and left_loc
-                function validatePercentage($value, $fieldName) {
+                function validatePercentage($value, $fieldName)
+                {
                     $cleanValue = trim($value);
                     if (empty($cleanValue) || strpos($cleanValue, '%') === false) {
                         return ['status' => 0, 'message' => "$fieldName must include a percentage ('%')."];
@@ -3096,7 +3090,7 @@ public function getVisitCount()
                     }
                     return ['status' => 1, 'value' => $cleanValue . '%'];
                 }
-            
+
                 // Validate top_loc and left_loc inputs
                 $top_loc_result = validatePercentage($this->request->getPost('top_loc'), 'Top Location');
                 if ($top_loc_result['status'] === 0) {
@@ -3106,7 +3100,7 @@ public function getVisitCount()
                 if ($left_loc_result['status'] === 0) {
                     return $this->response->setJSON($left_loc_result);
                 }
-            
+
                 // Prepare data for insertion
                 $data = [
                     'brgy_name' => $this->request->getPost('brgy_name'),
@@ -3115,15 +3109,15 @@ public function getVisitCount()
                     'details' => $this->request->getPost('details'),
                     'status' => 'Active'
                 ];
-            
+
                 // Log data to be inserted
                 error_log("Attempting to create map record with data: " . json_encode($data));
-            
+
                 // Perform the insertion using the Map model
                 try {
                     $insertResult = $map_m->insert($data);
                     error_log("Model insert result: " . var_export($insertResult, true) . ". Last query: " . $map_m->getLastQuery());
-            
+
                     if ($insertResult) {
                         return $this->response->setJSON(['status' => 1, 'message' => 'Map record created']);
                     } else {
@@ -3136,11 +3130,10 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'get_map':
-            {
+            case 'get_map': {
                 $mapId = $this->request->getPost('id');
                 $map_m = new \App\Models\Map(); // Adjust model name if needed
-            
+
                 if ($mapId) {
                     $map_d = $map_m->find($mapId);
                     if ($map_d) {
@@ -3151,8 +3144,8 @@ public function getVisitCount()
                     }
                 } else {
                     $map_d = $map_m
-                            ->orderBy('brgy_name', 'desc') 
-                            ->findAll();
+                        ->orderBy('brgy_name', 'desc')
+                        ->findAll();
                     foreach ($map_d as $map) {
                         $data[] = $map;
                     }
@@ -3160,15 +3153,14 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'set_status_map':
-            {
+            case 'set_status_map': {
                 $map_m = new \App\Models\Map();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
 
                 $data = [
                     'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s') 
+                    'updated_date' => date('Y-m-d H:i:s')
                 ];
 
                 $map_m->update($id, $data);
@@ -3178,16 +3170,15 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            case 'update_map_record':
-            {
+            case 'update_map_record': {
                 // Initialize Map model
                 $map_m = new \App\Models\Map();
                 $id = $this->request->getPost('id', FILTER_SANITIZE_STRING);
-            
+
                 // Log received ID and form data for debugging
                 error_log("Received ID for update: " . var_export($id, true));
                 error_log("Received POST data: " . json_encode($_POST));
-            
+
                 // Check if record exists
                 $map_d = $map_m->find($id);
                 if (!$map_d) {
@@ -3195,9 +3186,10 @@ public function getVisitCount()
                     echo json_encode(['status' => 0, 'msg' => 'Record not found for ID: ' . $id]);
                     exit;
                 }
-            
+
                 // Validate percentage input for top_loc and left_loc
-                function validatePercentage($value, $fieldName) {
+                function validatePercentage($value, $fieldName)
+                {
                     $cleanValue = trim($value);
                     if (empty($cleanValue) || strpos($cleanValue, '%') === false) {
                         echo json_encode(['status' => 0, 'msg' => "$fieldName must include a percentage ('%')."]);
@@ -3210,11 +3202,11 @@ public function getVisitCount()
                     }
                     return $cleanValue . '%';
                 }
-            
+
                 // Validate top_loc and left_loc inputs
                 $top_loc = validatePercentage($this->request->getPost('top_loc', FILTER_SANITIZE_STRING), 'Top Location');
                 $left_loc = validatePercentage($this->request->getPost('left_loc', FILTER_SANITIZE_STRING), 'Left Location');
-            
+
                 // Prepare data for update
                 $data = [
                     'brgy_name' => $this->request->getPost('brgy_name', FILTER_SANITIZE_STRING),
@@ -3222,15 +3214,15 @@ public function getVisitCount()
                     'left_loc' => $left_loc,
                     'details' => $this->request->getPost('details', FILTER_SANITIZE_STRING)
                 ];
-            
+
                 // Log data to be updated with ID
                 error_log("Attempting to update record with ID: $id and data: " . json_encode($data));
-            
+
                 // Perform the update using the Map model
                 try {
                     $update = $map_m->update($id, $data);
                     error_log("Model update result: " . var_export($update, true) . ". Last query: " . $map_m->getLastQuery());
-            
+
                     if ($update) {
                         echo json_encode(['status' => 1, 'msg' => 'Record updated successfully!']);
                     } else {
@@ -3241,17 +3233,16 @@ public function getVisitCount()
                     error_log("Model update error for ID $id: " . $e->getMessage() . ". Data: " . json_encode($data) . ". Last query: " . $map_m->getLastQuery());
                     echo json_encode(['status' => 0, 'msg' => 'An error occurred while updating the record. Check server logs: ' . $e->getMessage()]);
                 }
-            
+
                 exit;
             }
-            case 'get_map_details':
-            {
+            case 'get_map_details': {
                 $map_m = new \App\Models\Map();
                 $id = $this->request->getPost('id');
-            
+
                 if ($id) {
                     $record = $map_m->where('ID', $id)->first(); // ✅ Fetches only one record
-                    
+
                     if ($record) {
                         $response = [
                             'status' => 1,
@@ -3270,13 +3261,12 @@ public function getVisitCount()
                         'msg' => 'Invalid request. Missing ID.'
                     ];
                 }
-            
+
                 echo json_encode($response);
                 exit;
             }
 
-            case "update_career":
-            {
+            case "update_career": {
                 // Only HRDO department and privileged roles can manage careers
                 if (!$canManageCareers) {
                     $message = 'Unauthorized: Only the HRDO department can manage career postings.';
@@ -3286,7 +3276,7 @@ public function getVisitCount()
                 $id = $this->request->getPost('id');
                 $career = $career_m->find($id);
 
-                if ($career){
+                if ($career) {
                     $editpublication = $this->request->getPost('editpublication');
                     $editlevel = $this->request->getPost('editlevel'); // Get editlevel from POST
 
@@ -3297,7 +3287,7 @@ public function getVisitCount()
                     ];
 
                     $file_category = 'CAREERS';
-                    $careerFile =  $this->request->getFile('editCareerFile');
+                    $careerFile = $this->request->getFile('editCareerFile');
 
                     if ($careerFile && $careerFile->isValid()) {
                         $fileName = $careerFile->getRandomName();
@@ -3306,8 +3296,8 @@ public function getVisitCount()
                         if ($careerFile->hasMoved() && $careerFile->move($path, $fileName)) {
                             $data['file_name'] = $fileName;
                         }
-                    } 
-                
+                    }
+
                     try {
                         $career_m->update($id, $data);
                         $status = 1;
@@ -3320,8 +3310,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case "update_invest":
-            {
+            case "update_invest": {
                 if (!$canManageInvest) {
                     $message = 'Unauthorized: Only the BPLO department can manage investment content.';
                     break;
@@ -3330,7 +3319,7 @@ public function getVisitCount()
                 $id = $this->request->getPost('id');
                 $inv_d = $invest_m->find($id);
 
-                if ($inv_d){
+                if ($inv_d) {
                     $fc = $this->request->getPost('editFileCategory');
 
                     $data = [
@@ -3339,7 +3328,7 @@ public function getVisitCount()
                     ];
 
                     $file_category = 'INVEST';
-                    $invFile =  $this->request->getFile('editInvestFile');
+                    $invFile = $this->request->getFile('editInvestFile');
 
                     if ($invFile && $invFile->isValid() && !$invFile->hasMoved()) {
                         $fileName = $invFile->getRandomName();
@@ -3352,8 +3341,8 @@ public function getVisitCount()
                             $message = 'Failed to upload the new file.';
                             break;
                         }
-                    } 
-                
+                    }
+
                     try {
                         $invest_m->update($id, $data);
                         $status = 1;
@@ -3369,23 +3358,29 @@ public function getVisitCount()
                 }
                 break;
             }
-            case "update_services":
-            {
+            case "update_services": {
                 $serv_m = new \App\Models\Services();
                 $id = $this->request->getPost('id');
                 $serv = $serv_m->find($id);
 
-                if (!$serv) {
-                    $message = 'Service not found.';
+                // #23/#24 – DEPARTMENT/BARANGAY accounts can only update
+                // services that belong to their own entity.
+                if (
+                    $serv && $user->account_type === 'DEPARTMENT' &&
+                    (int) ($serv['dept_cont_ID'] ?? 0) !== (int) $user->entity_ref_id
+                ) {
+                    $message = 'You can only update services linked to your own Department.';
+                    break;
+                }
+                if (
+                    $serv && $user->account_type === 'BARANGAY' &&
+                    (int) ($serv['brngy_cont_ID'] ?? 0) !== (int) $user->entity_ref_id
+                ) {
+                    $message = 'You can only update services linked to your own Barangay.';
                     break;
                 }
 
-                if (!$this->canAccessServiceRecord($serv, $user)) {
-                    $message = 'You can only update services linked to your own entity.';
-                    break;
-                }
-
-                if ($serv){
+                if ($serv) {
                     $serv_name = $this->request->getPost('editServiceName');
                     $content = $this->request->getPost('editContent');
                     $dept_cont_ID = $this->request->getPost('editDept');
@@ -3427,26 +3422,25 @@ public function getVisitCount()
                 }
                 break;
             }
-            case "update_contact":
-            {
+            case "update_contact": {
                 $hot_m = new \App\Models\Hotlines();
                 $id = $this->request->getPost('id');
                 $hot = $hot_m->find($id);
 
                 // Scoped ADMIN ownership check (CIO bypassed)
                 if ($hot && $isDeptScopedAdmin && !$isCIO) {
-                    if ($hot->section !== 'Department' || (int)$hot->content_ref_id !== (int)$user->entity_ref_id) {
+                    if ($hot->section !== 'Department' || (int) $hot->content_ref_id !== (int) $user->entity_ref_id) {
                         $message = 'You can only update contacts linked to your own department.';
                         break;
                     }
                 } elseif ($hot && $isBrgyScopedAdmin) {
-                    if ($hot->section !== 'Barangay' || (int)$hot->content_ref_id !== (int)$user->entity_ref_id) {
+                    if ($hot->section !== 'Barangay' || (int) $hot->content_ref_id !== (int) $user->entity_ref_id) {
                         $message = 'You can only update contacts linked to your own barangay.';
                         break;
                     }
                 }
 
-                if ($hot){
+                if ($hot) {
                     $telco = $this->request->getPost('editTelco');
                     $number = $this->request->getPost('editContact');
                     $smart = $this->request->getPost('editSmart');
@@ -3457,12 +3451,12 @@ public function getVisitCount()
 
                     // Scoped ADMIN: force their own entity reference
                     if ($isDeptScopedAdmin) {
-                        $dept_cont_ID  = $user->entity_ref_id;
+                        $dept_cont_ID = $user->entity_ref_id;
                         $brngy_cont_ID = null;
                         $others_cont_ID = null;
                     } elseif ($isBrgyScopedAdmin) {
                         $brngy_cont_ID = $user->entity_ref_id;
-                        $dept_cont_ID  = null;
+                        $dept_cont_ID = null;
                         $others_cont_ID = null;
                     }
 
@@ -3472,7 +3466,7 @@ public function getVisitCount()
                     } else if ($brngy_cont_ID) {
                         $content_ref_id = $brngy_cont_ID;
                         $section = 'Barangay';
-                    } else if($others_cont_ID) {
+                    } else if ($others_cont_ID) {
                         $content_ref_id = $others_cont_ID;
                         $section = 'Others';
                     }
@@ -3499,8 +3493,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'update_about':
-            {
+            case 'update_about': {
                 if (!$canManageAbout) {
                     $message = 'Unauthorized access.';
                     break;
@@ -3508,31 +3501,31 @@ public function getVisitCount()
                 $about_m = new \App\Models\About();
                 $id = $this->request->getPost('id');
                 $about = $about_m->find($id);
-            
+
                 if (!$about) {
                     $message = "Content not found.";
                     break;
                 }
-            
+
                 $section = $this->request->getPost('edit_content_category');
                 $title = $this->request->getPost('EditTxtTitle');
                 $description = $this->request->getPost('EditTxtDesc');
-                    
+
                 $data = [
                     'section' => $section,
                     'title' => $title,
                     'description' => $description,
                     'updated_date' => date('Y-m-d H:i:s'),
                 ];
-            
+
                 $maxmb = 4;
                 $file_category = 'ABOUT';
-            
+
                 $imgLogo = $this->request->getFile('EditAboutImg');
                 if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
                     $logoName = $imgLogo->getRandomName();
                     $path = WRITEPATH . 'uploads/' . $file_category;
-            
+
                     if ($imgLogo->move($path, $logoName)) {
                         $data['about_img'] = $logoName;
                     }
@@ -3545,15 +3538,14 @@ public function getVisitCount()
                 } catch (\Exception $e) {
                     $message = 'An error occurred while updating.';
                 }
-            
+
                 break;
             }
-                
-            case 'reset_password':
-            {
-                $user_m = new \App\Models\UserAccount(); 
+
+            case 'reset_password': {
+                $user_m = new \App\Models\UserAccount();
                 $id = $this->request->getPost('id');
-                
+
                 $userData = $user_m->find($id);
                 if (!$userData) {
                     $status = 0;
@@ -3567,7 +3559,7 @@ public function getVisitCount()
                     'updated_date' => date('Y-m-d H:i:s'),
                     'force_pass_reset' => 1
                 ];
-                
+
                 if ($user_m->update($id, $data)) {
                     // EMAIL SERVICE
                     $emailService = \Config\Services::email();
@@ -3599,8 +3591,7 @@ public function getVisitCount()
             | SET STATUS
             |
             ------------------- */
-            case 'set_status_user':
-            {
+            case 'set_status_user': {
                 $user_m = new \App\Models\UserAccount();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
@@ -3614,9 +3605,8 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            
-            case 'set_status_barangay':
-            {
+
+            case 'set_status_barangay': {
                 $brgy_m = new \App\Models\Barangay();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
@@ -3631,14 +3621,13 @@ public function getVisitCount()
                 break;
             }
 
-            case 'set_status_dept':
-            {
+            case 'set_status_dept': {
                 $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
-                
+
                 // Enforce ENCODER/dept-scoped ADMIN restriction
                 if (($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') || $isDeptScopedAdmin) {
-                    if ((int)$id !== (int)$user->entity_ref_id) {
+                    if ((int) $id !== (int) $user->entity_ref_id) {
                         $message = 'You are only authorized to manage your own department.';
                         break;
                     }
@@ -3655,8 +3644,7 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            case 'set_status_cityoff':
-            {
+            case 'set_status_cityoff': {
                 $cityofficialmodel = new \App\Models\CityOfficial();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
@@ -3670,11 +3658,10 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            case 'delete_cityoff':
-            {
+            case 'delete_cityoff': {
                 $cityofficialmodel = new \App\Models\CityOfficial();
                 $id = $this->request->getPost('id');
-                
+
                 // Check if the record exists
                 if ($cityofficialmodel->find($id)) {
                     $cityofficialmodel->delete($id);
@@ -3688,8 +3675,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'set_status_mayor':
-            {
+            case 'set_status_mayor': {
                 if (!$canManageMayor) {
                     $message = 'Unauthorized access.';
                     break;
@@ -3707,11 +3693,10 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            case 'set_status_postcontent':
-            {
+            case 'set_status_postcontent': {
                 $anns_m = new \App\Models\Content();
                 $id = $this->request->getPost('id');
-                
+
                 $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
                 if ($isMayorOrCIORestricted) {
                     $post = $anns_m->find($id);
@@ -3720,7 +3705,7 @@ public function getVisitCount()
                         break;
                     }
                 }
-                
+
                 $status = $this->request->getPost('status');
                 $data = [
                     'status' => $status,
@@ -3733,8 +3718,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'set_status_fulldiscpol':
-            {
+            case 'set_status_fulldiscpol': {
                 if (!$canManageFullDisc) {
                     $message = 'Unauthorized access.';
                     break;
@@ -3753,8 +3737,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'delete_fulldiscpol':
-            {
+            case 'delete_fulldiscpol': {
                 if (!$canManageFullDisc) {
                     $message = 'Unauthorized access. You do not have permission to delete content.';
                     $status = 0;
@@ -3776,8 +3759,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'delete_contacts':
-            {
+            case 'delete_contacts': {
                 if (!$isCIO && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
                     $message = 'Unauthorized access.';
                     $status = 0;
@@ -3789,14 +3771,14 @@ public function getVisitCount()
                 // Dept-scoped ADMIN can only delete contacts linked to their own department (CIO bypassed)
                 if ($isDeptScopedAdmin && !$isCIO) {
                     $hotline = $hot_m->find($id);
-                    if (!$hotline || $hotline->section !== 'Department' || (int)$hotline->content_ref_id !== (int)$user->entity_ref_id) {
+                    if (!$hotline || $hotline->section !== 'Department' || (int) $hotline->content_ref_id !== (int) $user->entity_ref_id) {
                         $message = 'You can only delete contacts linked to your own department.';
                         $status = 0;
                         break;
                     }
                 } elseif ($isBrgyScopedAdmin) {
                     $hotline = $hot_m->find($id);
-                    if (!$hotline || $hotline->section !== 'Barangay' || (int)$hotline->content_ref_id !== (int)$user->entity_ref_id) {
+                    if (!$hotline || $hotline->section !== 'Barangay' || (int) $hotline->content_ref_id !== (int) $user->entity_ref_id) {
                         $message = 'You can only delete contacts linked to your own barangay.';
                         $status = 0;
                         break;
@@ -3814,8 +3796,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'delete_invest':
-            {
+            case 'delete_invest': {
                 if (!$canManageInvest) {
                     $message = 'Unauthorized: Only the BPLO department can manage investment content.';
                     $status = 0;
@@ -3835,8 +3816,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'delete_careers':
-            {
+            case 'delete_careers': {
                 // Only HRDO department and privileged roles can manage careers
                 if (!$canManageCareers) {
                     $message = 'Unauthorized: Only the HRDO department can manage career postings.';
@@ -3857,8 +3837,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'delete_dept':
-            {
+            case 'delete_dept': {
                 if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
                     $message = 'Unauthorized access.';
                     $status = 0;
@@ -3884,8 +3863,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'delete_mayor':
-            {
+            case 'delete_mayor': {
                 if (!$canManageMayor) {
                     $message = 'Unauthorized access.';
                     $status = 0;
@@ -3905,8 +3883,7 @@ public function getVisitCount()
                 break;
             }
 
-            case 'delete_postcontent':
-            {
+            case 'delete_postcontent': {
                 $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
                 if (!$isMayorOrCIORestricted && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
                     $message = 'Unauthorized access.';
@@ -3915,7 +3892,7 @@ public function getVisitCount()
                 }
                 $con_m = new \App\Models\Content();
                 $id = $this->request->getPost('id');
-                
+
                 if ($isMayorOrCIORestricted) {
                     $post = $con_m->find($id);
                     if ($post && $post->author !== $currentUserFullName) {
@@ -3935,8 +3912,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'set_status_career':
-            {
+            case 'set_status_career': {
                 // Only HRDO department and privileged roles can manage careers
                 if (!$canManageCareers) {
                     $message = 'Unauthorized: Only the HRDO department can manage career postings.';
@@ -3955,8 +3931,7 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            case 'set_status_invest':
-            {
+            case 'set_status_invest': {
                 if (!$canManageInvest) {
                     $message = 'Unauthorized: Only the BPLO department can manage investment content.';
                     break;
@@ -3974,25 +3949,29 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            case 'set_status_services':
-            {
+            case 'set_status_services': {
                 $invest_m = new \App\Models\Services();
-                $id       = $this->request->getPost('id');
+                $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
 
                 $svc = $invest_m->find($id);
-                if (!$svc) {
-                    $message = 'Service not found.';
+                if (
+                    $svc && $user->account_type === 'DEPARTMENT' &&
+                    (int) ($svc['dept_cont_ID'] ?? 0) !== (int) $user->entity_ref_id
+                ) {
+                    $message = 'Unauthorized: not your service.';
                     break;
                 }
-
-                if (!$this->canAccessServiceRecord($svc, $user)) {
+                if (
+                    $svc && $user->account_type === 'BARANGAY' &&
+                    (int) ($svc['brngy_cont_ID'] ?? 0) !== (int) $user->entity_ref_id
+                ) {
                     $message = 'Unauthorized: not your service.';
                     break;
                 }
 
                 $data = [
-                    'status'       => $statusVal,
+                    'status' => $statusVal,
                     'updated_date' => date('Y-m-d H:i:s'),
                 ];
                 $invest_m->update($id, $data);
@@ -4001,8 +3980,7 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            case 'set_status_about':
-            {
+            case 'set_status_about': {
                 if (!$canManageAbout) {
                     $message = 'Unauthorized access.';
                     break;
@@ -4020,38 +3998,36 @@ public function getVisitCount()
                 $status = 1;
                 break;
             }
-            case 'set_status_contact':
-                {
-                    $invest_m = new \App\Models\Hotlines();
-                    $id = $this->request->getPost('id');
-                    $status = $this->request->getPost('status');
+            case 'set_status_contact': {
+                $invest_m = new \App\Models\Hotlines();
+                $id = $this->request->getPost('id');
+                $status = $this->request->getPost('status');
 
-                    // Scoped ADMIN ownership check (CIO bypassed)
-                    $hotline = $invest_m->find($id);
-                    if ($hotline && $isDeptScopedAdmin && !$isCIO) {
-                        if ($hotline->section !== 'Department' || (int)$hotline->content_ref_id !== (int)$user->entity_ref_id) {
-                            $message = 'You can only manage contacts linked to your own department.';
-                            break;
-                        }
-                    } elseif ($hotline && $isBrgyScopedAdmin) {
-                        if ($hotline->section !== 'Barangay' || (int)$hotline->content_ref_id !== (int)$user->entity_ref_id) {
-                            $message = 'You can only manage contacts linked to your own barangay.';
-                            break;
-                        }
+                // Scoped ADMIN ownership check (CIO bypassed)
+                $hotline = $invest_m->find($id);
+                if ($hotline && $isDeptScopedAdmin && !$isCIO) {
+                    if ($hotline->section !== 'Department' || (int) $hotline->content_ref_id !== (int) $user->entity_ref_id) {
+                        $message = 'You can only manage contacts linked to your own department.';
+                        break;
                     }
-
-                    $data = [
-                        'status' => $status,
-                        'updated_date' => date('Y-m-d H:i:s')
-                    ];
-                    $invest_m->update($id, $data);
-                    $message = 'Content status updated successfully.';
-                    $log_c['processDetails'] = 'CONTACT_ID: ' . $id . ' - ' . $status;
-                    $status = 1;
-                    break;
+                } elseif ($hotline && $isBrgyScopedAdmin) {
+                    if ($hotline->section !== 'Barangay' || (int) $hotline->content_ref_id !== (int) $user->entity_ref_id) {
+                        $message = 'You can only manage contacts linked to your own barangay.';
+                        break;
+                    }
                 }
-            case 'set_status_job':
-            {
+
+                $data = [
+                    'status' => $status,
+                    'updated_date' => date('Y-m-d H:i:s')
+                ];
+                $invest_m->update($id, $data);
+                $message = 'Content status updated successfully.';
+                $log_c['processDetails'] = 'CONTACT_ID: ' . $id . ' - ' . $status;
+                $status = 1;
+                break;
+            }
+            case 'set_status_job': {
                 if (!$canManageJobs) {
                     $message = 'Unauthorized: Only the PESO department can manage jobs.';
                     break;
@@ -4059,29 +4035,29 @@ public function getVisitCount()
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
                 $statusVal = $this->request->getPost('status');
-                
+
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-                
+
                 if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'])) {
                     $message = 'Invalid status value';
                     break;
                 }
-                
+
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-                
+
                 $data = [
                     'status' => $statusVal,
                     'updated_date' => date('Y-m-d H:i:s'),
                 ];
-                
+
                 if ($job_m->update($id, $data)) {
                     $status = 1;
                     $message = 'Job status updated successfully';
@@ -4090,27 +4066,26 @@ public function getVisitCount()
                 }
                 break;
             }
-            case 'delete_job':
-            {
+            case 'delete_job': {
                 if (!$canManageJobs) {
                     $message = 'Unauthorized: Only the PESO department can manage jobs.';
                     break;
                 }
                 $job_m = new \App\Models\Job();
                 $id = $this->request->getPost('id');
-                
+
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
                     break;
                 }
-                
+
                 // Check if job exists
                 $job = $job_m->where('ID', $id)->first();
                 if (!$job) {
                     $message = 'Job not found';
                     break;
                 }
-                
+
                 if ($job_m->delete($id)) {
                     $status = 1;
                     $message = 'Job deleted successfully';
@@ -4119,7 +4094,7 @@ public function getVisitCount()
                 }
                 break;
             }
-            
+
             default:
                 $message = 'Invalid request';
                 break;
@@ -4175,44 +4150,13 @@ public function getVisitCount()
         return '';
     }
 
-    private function canAccessServiceRecord($service, $user): bool
-    {
-        if (!$service) {
-            return false;
-        }
-
-        $accountType = $user->account_type ?? '';
-        if ($accountType === 'DEPARTMENT') {
-            return (int) $this->recordValue($service, 'dept_cont_ID') === (int) ($user->entity_ref_id ?? 0);
-        }
-
-        if ($accountType === 'BARANGAY') {
-            return (int) $this->recordValue($service, 'brngy_cont_ID') === (int) ($user->entity_ref_id ?? 0);
-        }
-
-        return true;
-    }
-
-    private function recordValue($record, string $field)
-    {
-        if (is_array($record)) {
-            return $record[$field] ?? null;
-        }
-
-        if (is_object($record)) {
-            return $record->{$field} ?? null;
-        }
-
-        return null;
-    }
-
-    public function preview_file($category, $filename) 
+    public function preview_file($category, $filename)
     {
         $filePath = WRITEPATH . 'uploads' . DIRECTORY_SEPARATOR . $category . DIRECTORY_SEPARATOR . $filename;
-    
+
         if (file_exists($filePath)) {
             $fileType = mime_content_type($filePath);
-    
+
             header("Content-Type: $fileType");
             readfile($filePath);
             exit;
