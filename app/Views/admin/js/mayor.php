@@ -1,8 +1,9 @@
 <script>
     const userLevel = '<?= $user->user_lvl ?>'.toUpperCase(); // Get user level from backend and force uppercase
-    console.log("Current User Role:", userLevel);
+    const isMayorDeptAdmin = <?= json_encode($is_mayor_dept_admin ?? false) ?>;
+    console.log("Current User Role:", userLevel, "| Mayor Dept Admin:", isMayorDeptAdmin);
 
-    if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
+    if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && !isMayorDeptAdmin) {
         $('.button-32').show();
     } else {
         $('.button-32').hide();

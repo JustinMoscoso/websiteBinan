@@ -451,7 +451,7 @@ class Admin extends BaseController
         $canManageMayor = $isMayor || $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
 
         $canManageAbout = $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
-        $canManageFullDisc = $isCIO || $isMayor || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
+        $canManageFullDisc = $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
         $isMayorDeptAdmin = $isDeptScopedAdmin && $isMayor;
         $isSpecialDeptAdmin = $isDeptScopedAdmin && ($isMayor || $isHRDO || $isPESO || $isBPLO || $isCIO);
 
@@ -1749,65 +1749,7 @@ class Admin extends BaseController
                 }
                 break;
             }
-            case 'set_status_job': {
-                $job_m = new \App\Models\Job();
-                $id = $this->request->getPost('id');
-                $statusVal = $this->request->getPost('status');
 
-                if (!$id || !is_numeric($id)) {
-                    $message = 'Invalid job ID';
-                    break;
-                }
-
-                if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'])) {
-                    $message = 'Invalid status value';
-                    break;
-                }
-
-                // Check if job exists
-                $job = $job_m->where('ID', $id)->first();
-                if (!$job) {
-                    $message = 'Job not found';
-                    break;
-                }
-
-                $data = [
-                    'status' => $statusVal,
-                    'updated_date' => date('Y-m-d H:i:s'),
-                ];
-
-                if ($job_m->update($id, $data)) {
-                    $status = 1;
-                    $message = 'Job status updated successfully';
-                } else {
-                    $message = 'Failed to update job status';
-                }
-                break;
-            }
-            case 'delete_job': {
-                $job_m = new \App\Models\Job();
-                $id = $this->request->getPost('id');
-
-                if (!$id || !is_numeric($id)) {
-                    $message = 'Invalid job ID';
-                    break;
-                }
-
-                // Check if job exists
-                $job = $job_m->where('ID', $id)->first();
-                if (!$job) {
-                    $message = 'Job not found';
-                    break;
-                }
-
-                if ($job_m->delete($id)) {
-                    $status = 1;
-                    $message = 'Job deleted successfully';
-                } else {
-                    $message = 'Failed to delete job';
-                }
-                break;
-            }
             /* -------------------
             |
             | CREATE
@@ -3017,8 +2959,8 @@ class Admin extends BaseController
                 $ne_dt = $con_m->find($id);
 
                 if ($ne_dt) {
-                    $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
-                    if ($isMayorOrCIORestricted && $ne_dt->author !== $currentUserFullName) {
+                    $isMayorRestricted = $isMayor && !$isCIO && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+                    if ($isMayorRestricted && $ne_dt->author !== $currentUserFullName) {
                         $message = 'Unauthorized: You can only update your own created data.';
                         break;
                     }
@@ -3791,11 +3733,11 @@ class Admin extends BaseController
                 $anns_m = new \App\Models\Content();
                 $id = $this->request->getPost('id');
 
-                $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
-                if ($isMayorOrCIORestricted) {
+                $isMayorRestricted = $isMayor && !$isCIO && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+                if ($isMayorRestricted) {
                     $post = $anns_m->find($id);
                     if ($post && $post->author !== $currentUserFullName) {
-                        $message = 'Unauthorized: You can only update your own created data.';
+                        $message = 'Unauthorized: You can only archive your own created data.';
                         break;
                     }
                 }
@@ -4014,8 +3956,8 @@ class Admin extends BaseController
                     break;
                 }
 
-                $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
-                if (!$isMayorOrCIORestricted && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
+                $isMayorRestricted = $isMayor && !$isCIO && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
+                if (!$isMayorRestricted && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
                     $message = 'Unauthorized access.';
                     $status = 0;
                     break;
@@ -4023,7 +3965,7 @@ class Admin extends BaseController
                 $con_m = new \App\Models\Content();
                 $id = $this->request->getPost('id');
 
-                if ($isMayorOrCIORestricted) {
+                if ($isMayorRestricted) {
                     $post = $con_m->find($id);
                     if ($post && $post->author !== $currentUserFullName) {
                         $message = 'Unauthorized: You can only delete your own created data.';
@@ -4042,6 +3984,120 @@ class Admin extends BaseController
                 }
                 break;
             }
+
+            case 'delete_about': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
+                if (!$canManageAbout) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+                $about_m = new \App\Models\About();
+                $id = $this->request->getPost('id');
+                if ($about_m->find($id)) {
+                    $about_m->delete($id);
+                    $message = 'About content deleted successfully.';
+                    $log_c['processDetails'] = 'ABOUT_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Content not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_barangay': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts cannot delete barangays.';
+                    $status = 0;
+                    break;
+                }
+                // Only Developer and Superadmin can delete barangays
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+                $brgy_m = new \App\Models\Barangay();
+                $id = $this->request->getPost('id');
+                if ($brgy_m->find($id)) {
+                    $brgy_m->delete($id);
+                    $message = 'Barangay deleted successfully.';
+                    $log_c['processDetails'] = 'BRGY_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Barangay not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_services': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
+                $services_m = new \App\Models\Services();
+                $id = $this->request->getPost('id');
+                $svc = $services_m->find($id);
+
+                if (!$svc) {
+                    $message = 'Service not found.';
+                    $status = 0;
+                    break;
+                }
+
+                if (!$this->canAccessServiceRecord($svc, $user)) {
+                    $message = 'Unauthorized: not your service.';
+                    $status = 0;
+                    break;
+                }
+
+                if ($services_m->delete($id)) {
+                    $message = 'Service deleted successfully.';
+                    $log_c['processDetails'] = 'SERVICE_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Failed to delete service.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_map': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
+                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'], true)) {
+                    $message = 'Unauthorized access.';
+                    $status = 0;
+                    break;
+                }
+
+                $map_m = new \App\Models\Map();
+                $id = $this->request->getPost('id');
+                if ($map_m->find($id)) {
+                    $map_m->delete($id);
+                    $message = 'Map record deleted successfully.';
+                    $log_c['processDetails'] = 'MAP_ID: ' . $id . ' - DELETED';
+                    $status = 1;
+                } else {
+                    $message = 'Map record not found.';
+                    $status = 0;
+                }
+                break;
+            }
+
             case 'set_status_career': {
                 // Only HRDO department and privileged roles can manage careers
                 if (!$canManageCareers) {
