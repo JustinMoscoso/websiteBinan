@@ -187,7 +187,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_cio ?? false) || ($is_mayor ?? false)): ?>
+      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_cio ?? false)): ?>
         <li class="nav-item <?= $mode == 'about' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/about') ?>">
             <i class="fas fa-fw fa-info-circle"></i>
@@ -241,7 +241,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isEntityAccount || ($is_cio ?? false) || ($is_mayor ?? false)): ?>
+      <?php if (!$isEntityAccount || ($is_cio ?? false)): ?>
         <li class="nav-item <?= $mode == 'fullDisc' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/fullDisc') ?>">
             <i class="fas fa-fw fa-file-alt"></i>
@@ -268,7 +268,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_cio ?? false) || ($is_mayor ?? false)): ?>
+      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_cio ?? false)): ?>
         <li class="nav-item <?= $mode == 'contacts' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/contacts') ?>">
             <i class="fas fa-fw fa-phone"></i>
