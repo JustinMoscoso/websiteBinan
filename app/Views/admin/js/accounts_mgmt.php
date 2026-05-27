@@ -156,6 +156,7 @@
         // Basic required fields
         const basicFields = [
             { name: 'txtFirstName', label: 'First Name' },
+            { name: 'txtMiddleName', label: 'Middle Name' },
             { name: 'txtLastName', label: 'Last Name' },
             { name: 'txtUsername', label: 'Username' },
             { name: 'txtEmail', label: 'Email' },
@@ -225,7 +226,9 @@
 
                     $('#editUserId').val(res.ID);
                     $('#editFirstName').val(res.fname);
+                    $('#editMiddleName').val(res.mname || '');
                     $('#editLastName').val(res.lname);
+                    $('#editSuffix').val(res.suffix || '');
                     $('#editUsername').val(res.username);
                     $('#editEmail').val(res.email);
                     $('#editPassword').val('');
@@ -294,6 +297,7 @@
 
         const basicFields = [
             { name: 'editFirstName', label: 'First Name' },
+            { name: 'editMiddleName', label: 'Middle Name' },
             { name: 'editLastName', label: 'Last Name' },
             { name: 'editUsername', label: 'Username' },
             { name: 'editEmail', label: 'Email' },
@@ -456,7 +460,13 @@
             {
                 title: 'Name', data: 'fname',
                 className: 'dt-head-center dt-body-justify', width: '15%',
-                render: function (data, type, row) { return row.fname + ' ' + row.lname; }
+                render: function (data, type, row) { 
+                    let fullName = row.fname;
+                    if (row.mname) fullName += ' ' + row.mname;
+                    fullName += ' ' + row.lname;
+                    if (row.suffix) fullName += ' ' + row.suffix;
+                    return fullName;
+                }
             },
             { title: 'Email', data: 'email' },
             { title: 'User Level', data: 'user_lvl' },

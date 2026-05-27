@@ -12,6 +12,73 @@
             $('#profilePasswordForm')[0].reset();
         });
 
+        $('#editNameModal').on('show.bs.modal', function () {
+            $('#dlgFirstName, #dlgMiddleName, #dlgLastName').removeClass('is-invalid');
+            
+            $('#dlgFirstName').val($('#profileFname').val() || '');
+            $('#dlgMiddleName').val($('#profileMname').val() || '');
+            $('#dlgLastName').val($('#profileLname').val() || '');
+            $('#dlgSuffix').val($('#profileSuffix').val() || '');
+        });
+
+        $('#editNameModal').on('shown.bs.modal', function () {
+            $('#dlgFirstName').trigger('focus');
+        });
+
+        $('#dlgFirstName, #dlgMiddleName, #dlgLastName').on('input', function () {
+            if ($(this).val().trim() !== '') {
+                $(this).removeClass('is-invalid');
+            }
+        });
+
+        $('#btnSaveNameDlg').on('click', function () {
+            let isValid = true;
+            const fname = $('#dlgFirstName').val().trim();
+            const mname = $('#dlgMiddleName').val().trim();
+            const lname = $('#dlgLastName').val().trim();
+            const suffix = $('#dlgSuffix').val().trim();
+
+            if (fname === '') {
+                $('#dlgFirstName').addClass('is-invalid');
+                isValid = false;
+            } else {
+                $('#dlgFirstName').removeClass('is-invalid');
+            }
+
+            if (mname === '') {
+                $('#dlgMiddleName').addClass('is-invalid');
+                isValid = false;
+            } else {
+                $('#dlgMiddleName').removeClass('is-invalid');
+            }
+
+            if (lname === '') {
+                $('#dlgLastName').addClass('is-invalid');
+                isValid = false;
+            } else {
+                $('#dlgLastName').removeClass('is-invalid');
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            $('#profileFname').val(fname);
+            $('#profileMname').val(mname);
+            $('#profileLname').val(lname);
+            $('#profileSuffix').val(suffix);
+
+            const fullNameParts = [];
+            if (fname) fullNameParts.push(fname);
+            if (mname) fullNameParts.push(mname);
+            if (lname) fullNameParts.push(lname);
+            if (suffix) fullNameParts.push(suffix);
+            
+            $('#profileFullName').val(fullNameParts.join(' '));
+
+            $('#editNameModal').modal('hide');
+        });
+
         const profileDeptQuillToolbar = [
             ['bold', 'italic', 'underline', 'strike'],
             [{ 'align': [] }],
@@ -293,6 +360,10 @@
                     showProfileMessage(saved, response.message || 'Profile saved.');
                     if (response.status == 1 && response.data) {
                         $('#profileFullName').val(response.data.fullName || '');
+                        if (response.data.fname !== undefined) $('#profileFname').val(response.data.fname);
+                        if (response.data.mname !== undefined) $('#profileMname').val(response.data.mname);
+                        if (response.data.lname !== undefined) $('#profileLname').val(response.data.lname);
+                        if (response.data.suffix !== undefined) $('#profileSuffix').val(response.data.suffix);
                         $('#profileEmail').val(response.data.email || '');
                         $('#profileUsername').val(response.data.username || '');
                         $('.topbar .text-gray-600.small').text((response.data.fullName || '') + ' (<?= esc($user->user_lvl ?? '') ?>)');

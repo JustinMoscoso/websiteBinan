@@ -5,8 +5,8 @@
 
     const userLevel = '<?= $user->user_lvl ?>'.toUpperCase();
     const userAccountType = '<?= $user->account_type ?? '' ?>'.toUpperCase();
-    const isDeptScopedAdmin = userLevel === 'ADMIN' && userAccountType === 'DEPARTMENT';
-    const isBrgyScopedAdmin = userLevel === 'ADMIN' && userAccountType === 'BARANGAY';
+    const isDeptScopedAdmin = (userLevel === 'ADMIN' || userLevel === 'ENCODER') && userAccountType === 'DEPARTMENT';
+    const isBrgyScopedAdmin = (userLevel === 'ADMIN' || userLevel === 'ENCODER') && userAccountType === 'BARANGAY';
     const isEntityScopedAdmin = isDeptScopedAdmin || isBrgyScopedAdmin;
     console.log("Current User Role:", userLevel);
 

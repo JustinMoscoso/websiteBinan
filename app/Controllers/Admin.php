@@ -47,9 +47,13 @@ class Admin extends BaseController
             $this->session->set('user', $user);
         }
 
-        // Department-scoped ADMIN: restrict to profile, services, and dashboard
-        $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
-        $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+        // Department-scoped ADMIN/ENCODER: restrict to profile, services, and dashboard
+        $isDeptScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'BARANGAY');
+
+        // Encoder accounts scoped to a specific department or barangay
+        $isDeptScopedEncoder = ($user->user_lvl === 'ENCODER' && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedEncoder = ($user->user_lvl === 'ENCODER' && ($user->account_type ?? '') === 'BARANGAY');
 
         // Restrict accounts_mgmt access
         if ($mode === 'accounts_mgmt' && (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) || $isDeptScopedAdmin)) {
@@ -145,6 +149,15 @@ class Admin extends BaseController
             return redirect()->to(base_url('admin/brgy'));
         }
 
+        // ENCODER scoped to a department: block brgy/dept and unrelated content modules
+        if ($isDeptScopedEncoder && in_array($mode, $deptBlockedModes)) {
+            return redirect()->to(base_url('admin/dashboard'));
+        }
+        // ENCODER scoped to a barangay: block dept and unrelated content modules (brgy is allowed)
+        if ($isBrgyScopedEncoder && in_array($mode, array_merge($deptOnlyModes, ['dept']))) {
+            return redirect()->to(base_url('admin/brgy'));
+        }
+
 
 
         $data['user'] = $user;
@@ -154,6 +167,8 @@ class Admin extends BaseController
         $data['is_bplo'] = $isBPLO;
         $data['is_mayor'] = $isMayor;
         $data['is_cio'] = $isCIO;
+        $data['is_dept_encoder'] = $isDeptScopedEncoder;
+        $data['is_brgy_encoder'] = $isBrgyScopedEncoder;
 
         if ($mode === 'dashboard') {
             $visitCountModel = new \App\Models\VisitCountModel();
@@ -413,9 +428,9 @@ class Admin extends BaseController
             $this->session->set('user', $user);
         }
 
-        // Helper flags for scoped-ADMIN enforcement (mirrors ENCODER scoping)
-        $isDeptScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
-        $isBrgyScopedAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+        // Helper flags for scoped-ADMIN/ENCODER enforcement
+        $isDeptScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'BARANGAY');
 
         // Determine if user belongs to HRDO, PESO, BPLO, Mayor, or CIO department
         $isHRDO = false;
@@ -476,26 +491,44 @@ class Admin extends BaseController
             ------------------- */
 
             case 'update_profile': {
-                $fullName = trim((string) $this->request->getPost('fullName'));
+                $fname = trim((string) $this->request->getPost('fname'));
+                $mname = trim((string) $this->request->getPost('mname'));
+                $lname = trim((string) $this->request->getPost('lname'));
+                $suffix = trim((string) $this->request->getPost('suffix'));
+                
                 $email = trim((string) $this->request->getPost('email'));
                 $username = trim((string) $this->request->getPost('username'));
                 $dept = trim((string) $this->request->getPost('department'));
 
-                if ($fullName === '' || $email === '' || $username === '') {
-                    $message = 'Full name, email, and username are required.';
+                if ($fname === '' && $lname === '') {
+                    $fullName = trim((string) $this->request->getPost('fullName'));
+                    if ($fullName === '' || $email === '' || $username === '') {
+                        $message = 'Full name, email, and username are required.';
+                        break;
+                    }
+                    $nameParts = preg_split('/\s+/', $fullName);
+                    $lname = count($nameParts) > 1 ? array_pop($nameParts) : '';
+                    $fname = trim(implode(' ', $nameParts));
+                    if ($fname === '') {
+                        $fname = $fullName;
+                    }
+                    $mname = '';
+                    $suffix = '';
+                } else {
+                    if ($fname === '' || $mname === '' || $lname === '') {
+                        $message = 'First name, middle name, and last name are required.';
+                        break;
+                    }
+                }
+
+                if ($email === '' || $username === '') {
+                    $message = 'Email and username are required.';
                     break;
                 }
 
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $message = 'Please enter a valid email address.';
                     break;
-                }
-
-                $nameParts = preg_split('/\s+/', $fullName);
-                $lname = count($nameParts) > 1 ? array_pop($nameParts) : '';
-                $fname = trim(implode(' ', $nameParts));
-                if ($fname === '') {
-                    $fname = $fullName;
                 }
 
                 $user_m = new \App\Models\UserAccount();
@@ -514,7 +547,9 @@ class Admin extends BaseController
 
                 $updateData = [
                     'fname' => $fname,
+                    'mname' => $mname,
                     'lname' => $lname,
+                    'suffix' => $suffix,
                     'username' => $username,
                     'email' => $email,
                     'dept' => $dept,
@@ -524,8 +559,20 @@ class Admin extends BaseController
                 if ($user_m->update($user->ID, $updateData)) {
                     $updatedUser = $user_m->find($user->ID);
                     $this->session->set('user', $updatedUser);
+                    
+                    $fullNameParts = [];
+                    if (!empty($updatedUser->fname)) $fullNameParts[] = $updatedUser->fname;
+                    if (!empty($updatedUser->mname)) $fullNameParts[] = $updatedUser->mname;
+                    if (!empty($updatedUser->lname)) $fullNameParts[] = $updatedUser->lname;
+                    if (!empty($updatedUser->suffix)) $fullNameParts[] = $updatedUser->suffix;
+                    $formattedFullName = implode(' ', $fullNameParts);
+
                     $data = [
-                        'fullName' => trim(($updatedUser->fname ?? '') . ' ' . ($updatedUser->lname ?? '')),
+                        'fullName' => $formattedFullName,
+                        'fname' => $updatedUser->fname ?? '',
+                        'mname' => $updatedUser->mname ?? '',
+                        'lname' => $updatedUser->lname ?? '',
+                        'suffix' => $updatedUser->suffix ?? '',
                         'email' => $updatedUser->email ?? '',
                         'username' => $updatedUser->username ?? '',
                     ];
@@ -655,6 +702,12 @@ class Admin extends BaseController
                     break;
                 }
 
+                // Encoders cannot archive a department
+                if ($user->user_lvl === 'ENCODER' && $deptStatus === 'ARCHIVED') {
+                    $message = 'Encoders are not permitted to archive a department.';
+                    break;
+                }
+
                 $existingDept = $dept_m
                     ->where('dept_name', $deptName)
                     ->where('ID !=', $department->ID)
@@ -781,6 +834,11 @@ class Admin extends BaseController
             }
 
             case 'delete_profile_department': {
+                if ($user->user_lvl === 'ENCODER') {
+                    $message = 'Encoders are not permitted to delete a department.';
+                    break;
+                }
+
                 if (($user->account_type ?? '') !== 'DEPARTMENT' || empty($user->entity_ref_id)) {
                     $message = 'No linked department found for this account.';
                     break;
@@ -908,6 +966,9 @@ class Admin extends BaseController
                     }
                 } else {
                     $builder = $brgy_m->orderBy('created_date', 'desc');
+                    if (($user->user_lvl === 'ENCODER' && $user->account_type === 'BARANGAY') || $isBrgyScopedAdmin) {
+                        $builder->where('ID', $user->entity_ref_id);
+                    }
 
                     // Non-privileged users cannot see archived barangays
                     if (!$canSeeArchived) {
@@ -1759,7 +1820,9 @@ class Admin extends BaseController
             case 'create_user': {
                 $user_m = new \App\Models\UserAccount();
                 $fname = $this->request->getPost('txtFirstName');
+                $mname = $this->request->getPost('txtMiddleName') ?: '';
                 $lname = $this->request->getPost('txtLastName');
+                $suffix = $this->request->getPost('txtSuffix') ?: '';
                 $usern = $this->request->getPost('txtUsername');
                 $email = $this->request->getPost('txtEmail');
                 $passw = $this->request->getPost('txtPassword');
@@ -1768,6 +1831,11 @@ class Admin extends BaseController
                 // #25 – account type & linked entity
                 $acct_type = $this->request->getPost('txtAccountType') ?: null;
                 $entity_ref = $this->request->getPost('txtEntityRef') ?: null;
+
+                if (empty($fname) || empty($mname) || empty($lname) || empty($usern) || empty($email) || empty($passw) || empty($acclvl)) {
+                    $message = 'Please fill in all required fields (First, Middle, and Last Names are required).';
+                    break;
+                }
 
                 // Nobody can create a DEVELOPER account
                 if ($acclvl === 'DEVELOPER') {
@@ -1826,7 +1894,9 @@ class Admin extends BaseController
                 } else {
                     $userData = [
                         'fname' => $fname,
+                        'mname' => $mname,
                         'lname' => $lname,
+                        'suffix' => $suffix,
                         'username' => $usern,
                         'pass' => password_hash($passw, PASSWORD_ARGON2ID),
                         'email' => $email,
@@ -2459,7 +2529,9 @@ class Admin extends BaseController
                 $user_m = new \App\Models\UserAccount();
                 $id = $this->request->getPost('id');
                 $fname = $this->request->getPost('editFirstName');
+                $mname = $this->request->getPost('editMiddleName') ?: '';
                 $lname = $this->request->getPost('editLastName');
+                $suffix = $this->request->getPost('editSuffix') ?: '';
                 $usern = $this->request->getPost('editUsername');
                 $email = $this->request->getPost('editEmail');
                 $acclvl = $this->request->getPost('editAccLevel');
@@ -2468,6 +2540,11 @@ class Admin extends BaseController
                 // #25 – account type & linked entity
                 $acct_type = $this->request->getPost('editAccountType') ?: null;
                 $entity_ref = $this->request->getPost('editEntityRef') ?: null;
+
+                if (empty($fname) || empty($mname) || empty($lname) || empty($usern) || empty($email) || empty($acclvl)) {
+                    $message = 'Please fill in all required fields (First, Middle, and Last Names are required).';
+                    break;
+                }
 
                 // Nobody can promote an account to DEVELOPER
                 if ($acclvl === 'DEVELOPER') {
@@ -2542,7 +2619,9 @@ class Admin extends BaseController
                     } else {
                         $data = [
                             'fname' => $fname,
+                            'mname' => $mname,
                             'lname' => $lname,
+                            'suffix' => $suffix,
                             'username' => $usern,
                             'email' => $email,
                             'user_lvl' => $acclvl,

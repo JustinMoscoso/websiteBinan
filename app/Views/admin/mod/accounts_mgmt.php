@@ -149,17 +149,28 @@
             <div class="modal-body p-4 bg-light-surface">
 
                 <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <label for="txtFirstName" class="form-label small fw-bold text-secondary">First Name <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="txtFirstName" name="txtFirstName"
                             placeholder="e.g. John" required>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
+                        <label for="txtMiddleName" class="form-label small fw-bold text-secondary">Middle Name <span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="txtMiddleName" name="txtMiddleName"
+                            placeholder="e.g. Smith" required>
+                    </div>
+                    <div class="col-md-3">
                         <label for="txtLastName" class="form-label small fw-bold text-secondary">Last Name <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="txtLastName" name="txtLastName"
                             placeholder="e.g. Doe" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="txtSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
+                        <input type="text" class="form-control" id="txtSuffix" name="txtSuffix"
+                            placeholder="e.g. Jr.">
                     </div>
                 </div>
 
@@ -250,17 +261,28 @@
                 <input type="hidden" id="editUserId" name="id">
 
                 <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <label for="editFirstName" class="form-label small fw-bold text-secondary">First Name <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="editFirstName" name="editFirstName"
                             placeholder="Update first name" required>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
+                        <label for="editMiddleName" class="form-label small fw-bold text-secondary">Middle Name <span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editMiddleName" name="editMiddleName"
+                            placeholder="Update middle name" required>
+                    </div>
+                    <div class="col-md-3">
                         <label for="editLastName" class="form-label small fw-bold text-secondary">Last Name <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="editLastName" name="editLastName"
                             placeholder="Update last name" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="editSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
+                        <input type="text" class="form-control" id="editSuffix" name="editSuffix"
+                            placeholder="Update suffix">
                     </div>
                 </div>
 

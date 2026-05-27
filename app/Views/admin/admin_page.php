@@ -154,16 +154,18 @@
       $privilegedRoles = ['DEVELOPER', 'SUPERADMIN'];
       $isDeptAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
       $isBrgyAdmin = ($user->user_lvl === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+      $isDeptEncoder = ($is_dept_encoder ?? false);
+      $isBrgyEncoder = ($is_brgy_encoder ?? false);
 
-      // ADMIN scoped to a department/barangay behaves like an entity account for sidebar
+      // ADMIN or ENCODER scoped to a department/barangay behaves like an entity account for sidebar
       $isEntityAccount = !in_array($user->user_lvl, $privilegedRoles)
-        && ($isDeptAdmin || $isBrgyAdmin
+        && ($isDeptAdmin || $isBrgyAdmin || $isDeptEncoder || $isBrgyEncoder
           || in_array($user->account_type ?? '', ['DEPARTMENT', 'BARANGAY']));
       $showBrgy = !in_array($user->user_lvl, $privilegedRoles)
-        ? ($user->account_type ?? '') !== 'DEPARTMENT' && !$isDeptAdmin && !$isBrgyAdmin
+        ? ($user->account_type ?? '') !== 'DEPARTMENT' && !$isDeptAdmin && !$isBrgyAdmin && !$isDeptEncoder && !$isBrgyEncoder
         : true;
       $showDept = !in_array($user->user_lvl, $privilegedRoles)
-        ? ($user->account_type ?? '') !== 'BARANGAY' && !$isBrgyAdmin && !$isDeptAdmin
+        ? ($user->account_type ?? '') !== 'BARANGAY' && !$isBrgyAdmin && !$isDeptAdmin && !$isBrgyEncoder && !$isDeptEncoder
         : true;
       ?>
 
