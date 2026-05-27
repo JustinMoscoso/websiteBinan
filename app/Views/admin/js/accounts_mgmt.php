@@ -335,13 +335,13 @@
         });
     });
 
-    function toggleStatus(userId, currentStatus) {
-        var newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-        var actionText = newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
+    function toggleStatus(userId, currentStatus, forcedStatus) {
+        var newStatus = nextRecordStatus(currentStatus, forcedStatus);
+        var actionText = statusActionText(newStatus);
 
         Swal.fire({
             heightAuto: false,
-            title: (newStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') + ' User',
+            title: statusActionTitle(newStatus, 'User'),
             text: 'Are you sure you want to ' + actionText + ' this user?',
             icon: 'question',
             showCancelButton: true,
@@ -356,7 +356,7 @@
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
-                            Swal.fire({ icon: 'success', title: 'Done', text: 'User ' + actionText + 'd.' });
+                            Swal.fire({ icon: 'success', title: 'Done', text: statusSuccessText('User', actionText) });
                         } else {
                             Swal.fire({ icon: 'error', title: 'Error', text: result.message });
                         }
@@ -496,7 +496,7 @@
                                 </a>
                             </li>`;
 
-                    if (userLevel !== 'ENCODER') {
+                    if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                         var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
                         html += `
@@ -511,13 +511,15 @@
                                     onclick="reset_password(${row.ID}, \`${row.fname} ${row.lname}\`)">
                                     <i class="bi bi-shield-lock me-1"></i> Reset Password
                                 </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="#" onclick="del(${row.ID})">
-                                    <i class="bi bi-trash me-1"></i> Delete User
-                                </a>
                             </li>`;
+                    }
+                    if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
+                        html += `<li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}', 'ACTIVE')"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</a></li>`;
+                    } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
+                        html += `<li><a class="dropdown-item text-warning" href="#" onclick="toggleStatus(${row.ID}, '${row.status}', 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
+                    }
+                    if (adminCanDelete(userLevel)) {
+                        html += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="del(${row.ID})"><i class="bi bi-trash me-1"></i> Delete User</a></li>`;
                     }
 
                     html += `</ul></div>`;

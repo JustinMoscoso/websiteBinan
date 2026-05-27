@@ -18,6 +18,15 @@
             </button>
         </li>
     <?php endif; ?>
+    <?php if (!empty($profile_barangay)): ?>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link font-weight-bold" id="edit-barangay-tab" data-bs-toggle="tab"
+                data-bs-target="#edit-barangay" type="button" role="tab" aria-controls="edit-barangay"
+                aria-selected="false">
+                Edit Barangay
+            </button>
+        </li>
+    <?php endif; ?>
 </ul>
 
 <div class="tab-content" id="profileTabsContent">
@@ -47,7 +56,9 @@
                             </div>
 
                             <div class="mb-4">
-                                <label for="profileDepartment" class="form-label">Current Department</label>
+                                <label for="profileDepartment" class="form-label">
+                                    <?= !empty($profile_barangay) ? 'Current Barangay' : 'Current Department' ?>
+                                </label>
                                 <input type="text" class="form-control" id="profileDepartment" name="department"
                                     value="<?= esc($current_department ?? '') ?>" placeholder="No department assigned"
                                     readonly>
@@ -433,7 +444,410 @@
             </div>
         </div> <!-- End Edit Department Tab Pane -->
     <?php endif; ?>
+
+    <?php if (!empty($profile_barangay)): ?>
+        <div class="tab-pane fade" id="edit-barangay" role="tabpanel" aria-labelledby="edit-barangay-tab">
+            <style>
+                .profile-barangay-layout {
+                    background: #f7f9fc;
+                    border: 1px solid #e3e8f0;
+                    border-radius: 8px;
+                    padding: 1.5rem;
+                }
+
+                .profile-barangay-card {
+                    max-width: 760px;
+                    margin: 0 auto;
+                    border: 1px solid #dfe5ef;
+                    border-radius: 8px;
+                    background: #ffffff;
+                    box-shadow: 0 0.5rem 1.5rem rgba(33, 40, 50, 0.08);
+                    overflow: hidden;
+                }
+
+                .profile-barangay-card__header {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 1rem;
+                    padding: 1.5rem;
+                    border-bottom: 1px solid #edf1f7;
+                }
+
+                .profile-barangay-card__identity {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    min-width: 0;
+                }
+
+                .profile-barangay-card__logo {
+                    border: 0;
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 8px;
+                    background: #e8f5ee;
+                    color: #1b4d3e;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex: 0 0 auto;
+                    font-size: 1.5rem;
+                    overflow: hidden;
+                    padding: 0;
+                    cursor: pointer;
+                    transition: box-shadow 0.15s ease, transform 0.15s ease;
+                }
+
+                .profile-barangay-card__logo:hover,
+                .profile-barangay-card__logo:focus {
+                    box-shadow: 0 0 0 0.2rem rgba(27, 77, 62, 0.18);
+                    outline: 0;
+                    transform: translateY(-1px);
+                }
+
+                .profile-barangay-card__logo img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+                .profile-barangay-card__title {
+                    color: #25364d;
+                    font-size: 1.45rem;
+                    font-weight: 800;
+                    line-height: 1.2;
+                    overflow-wrap: anywhere;
+                }
+
+                .profile-barangay-card__title.is-empty {
+                    color: #7b8798;
+                    font-style: italic;
+                }
+
+                .profile-barangay-card__body {
+                    padding: 1.5rem;
+                }
+
+                .brgy-info-area+.brgy-info-area {
+                    margin-top: 1.25rem;
+                    padding-top: 1.25rem;
+                    border-top: 1px solid #edf1f7;
+                }
+
+                .brgy-info-label {
+                    display: block;
+                    color: #697386;
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    letter-spacing: 0;
+                    text-transform: uppercase;
+                    margin-bottom: 0.5rem;
+                }
+
+                .brgy-captain-value {
+                    color: #26364d;
+                    font-size: 1.08rem;
+                    font-weight: 700;
+                    margin-bottom: 0;
+                }
+
+                .brgy-captain-value.is-unassigned {
+                    color: #7b8798;
+                    font-style: italic;
+                    font-weight: 600;
+                }
+
+                .profile-brgy-card .ql-toolbar.ql-snow {
+                    border-top-left-radius: 6px;
+                    border-top-right-radius: 6px;
+                    border: 1px solid #ced4da !important;
+                    background-color: #f8f9fa;
+                }
+
+                .profile-brgy-card .ql-container.ql-snow {
+                    border-bottom-left-radius: 6px;
+                    border-bottom-right-radius: 6px;
+                    border: 1px solid #ced4da !important;
+                    font-family: inherit;
+                }
+
+                .brgy-status-toggle {
+                    border: 0;
+                    background: transparent;
+                    padding: 0;
+                    cursor: pointer;
+                }
+
+                .brgy-status-toggle:focus {
+                    outline: 0;
+                    box-shadow: 0 0 0 0.2rem rgba(27, 77, 62, 0.18);
+                    border-radius: 999px;
+                }
+
+                .brgy-status-switch {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.65rem;
+                    border: 1px solid #dfe5ef;
+                    border-radius: 999px;
+                    background: #fff;
+                    padding: 0.35rem 0.75rem 0.35rem 0.4rem;
+                    color: #526173;
+                    font-weight: 800;
+                }
+
+                .brgy-status-switch__track {
+                    position: relative;
+                    width: 46px;
+                    height: 24px;
+                    border-radius: 999px;
+                    background: #d9e0ea;
+                    transition: background 0.15s ease;
+                    flex: 0 0 auto;
+                }
+
+                .brgy-status-switch__thumb {
+                    position: absolute;
+                    top: 3px;
+                    left: 3px;
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: #fff;
+                    box-shadow: 0 1px 4px rgba(33, 40, 50, 0.22);
+                    transition: transform 0.15s ease;
+                }
+
+                .brgy-status-switch.is-active {
+                    color: #17693a;
+                    border-color: #bfe7cf;
+                    background: #f6fff9;
+                }
+
+                .brgy-status-switch.is-active .brgy-status-switch__track {
+                    background: #2e9d5b;
+                }
+
+                .brgy-status-switch.is-active .brgy-status-switch__thumb {
+                    transform: translateX(22px);
+                }
+
+                .brgy-status-switch.is-inactive {
+                    color: #9d2424;
+                    border-color: #f2c4c4;
+                    background: #fff8f8;
+                }
+
+                @media (max-width: 575.98px) {
+                    .profile-barangay-layout {
+                        padding: 1rem;
+                    }
+
+                    .profile-barangay-card__header {
+                        flex-direction: column;
+                    }
+
+                    .profile-barangay-card__identity {
+                        align-items: flex-start;
+                    }
+                }
+            </style>
+
+            <div class="profile-barangay-layout mb-4" id="profileBarangayCard">
+                <div class="profile-barangay-card">
+                    <div class="profile-barangay-card__header">
+                        <div class="profile-barangay-card__identity">
+                            <button type="button" class="profile-barangay-card__logo" id="profileBrgyLogoButton"
+                                title="Change barangay logo" aria-label="Change barangay logo">
+                                <?php if (!empty($profile_barangay->img_logo)): ?>
+                                    <img id="profileBrgyLogoCell"
+                                        src="<?= site_url('admin/image/BARANGAY/' . $profile_barangay->img_logo) ?>" alt="">
+                                    <i id="profileBrgyLogoEmpty" class="fas fa-home d-none"></i>
+                                <?php else: ?>
+                                    <i id="profileBrgyLogoEmpty" class="fas fa-home"></i>
+                                    <img id="profileBrgyLogoCell" src="" alt="" class="d-none">
+                                <?php endif; ?>
+                            </button>
+                            <input type="file" class="d-none" id="profileBrgyCardLogoInput" accept="image/*">
+                            <div>
+                                <span class="brgy-info-label">Barangay Name</span>
+                                <?php $profileBrgyName = trim((string) ($profile_barangay->brgy_name ?? '')); ?>
+                                <div class="profile-barangay-card__title <?= $profileBrgyName === '' ? 'is-empty' : '' ?>"
+                                    id="profileBrgyNameCell">
+                                    <?= esc($profileBrgyName !== '' ? $profileBrgyName : 'Barangay name not set') ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                                <i class="fas fa-list mr-1"></i> Actions
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="#" id="editLinkedBarangayActionBtn">
+                                        <i class="fas fa-edit mr-1"></i> Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    <?php $nextBrgyStatus = ($profile_barangay->status ?? '') === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'; ?>
+                                    <a class="dropdown-item profile-brgy-status-action" href="#"
+                                        data-current-status="<?= esc($profile_barangay->status ?? '') ?>">
+                                        <i
+                                            class="fas fa-toggle-<?= ($profile_barangay->status ?? '') === 'ACTIVE' ? 'on' : 'off' ?> mr-1"></i>
+                                        <?= esc($nextBrgyStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') ?>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="profile-barangay-card__body">
+                        <div class="brgy-info-area">
+                            <span class="brgy-info-label">Barangay Captain</span>
+                            <?php $profileBrgyCaptain = trim((string) ($profile_barangay->brngy_capt ?? '')); ?>
+                            <div class="brgy-captain-value <?= $profileBrgyCaptain === '' ? 'is-unassigned' : '' ?>"
+                                id="profileBrgyCaptainCell">
+                                <?= esc($profileBrgyCaptain !== '' ? $profileBrgyCaptain : 'Unassigned') ?>
+                            </div>
+                        </div>
+
+                        <div class="brgy-info-area">
+                            <span class="brgy-info-label">Status</span>
+                            <?php
+                            $brgyStatus = $profile_barangay->status ?? '';
+                            $brgyStatusClass = $brgyStatus === 'ACTIVE' ? 'is-active' : ($brgyStatus === 'INACTIVE' ? 'is-inactive' : '');
+                            ?>
+                            <div id="profileBrgyStatusCell">
+                                <button type="button" class="brgy-status-toggle profile-brgy-status-action"
+                                    data-current-status="<?= esc($brgyStatus) ?>" aria-label="Toggle barangay status">
+                                    <span class="brgy-status-switch <?= esc($brgyStatusClass) ?>">
+                                        <span class="brgy-status-switch__track" aria-hidden="true">
+                                            <span class="brgy-status-switch__thumb"></span>
+                                        </span>
+                                        <span
+                                            class="brgy-status-switch__label"><?= esc($brgyStatus ? ucfirst(strtolower($brgyStatus)) : 'Unknown') ?></span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 </div> <!-- End Tab Content -->
+
+<?php if (!empty($profile_department) || !empty($profile_barangay)): ?>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<?php endif; ?>
+
+<?php if (!empty($profile_barangay)): ?>
+    <div class="modal fade" id="editLinkedBarangayModal" tabindex="-1" aria-labelledby="editLinkedBarangayModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg profile-brgy-card">
+                <form id="profileBarangayForm" enctype="multipart/form-data">
+                    <input type="hidden" id="profileBrgyId" name="id" value="<?= esc($profile_barangay->ID ?? '') ?>">
+
+                    <div class="modal-header text-white px-4 py-3" style="background-color: #1b4d3e;">
+                        <h5 class="modal-title fw-bold" id="editLinkedBarangayModalLabel" style="font-size: 1.1rem;">
+                            Edit Barangay
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="profileBrgyName" class="form-label small fw-bold text-secondary">Barangay
+                                    Name</label>
+                                <input type="text" class="form-control shadow-sm" id="profileBrgyName" name="editBrgy"
+                                    value="<?= esc($profile_barangay->brgy_name ?? '') ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="profileBrgyCaptain" class="form-label small fw-bold text-secondary">Barangay
+                                    Captain</label>
+                                <input type="text" class="form-control shadow-sm" id="profileBrgyCaptain" name="editCapt"
+                                    value="<?= esc($profile_barangay->brngy_capt ?? '') ?>" required>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <label class="form-label small fw-bold text-secondary">About</label>
+                                <div id="profileBrgyAboutEditor" style="height: 220px;">
+                                    <?= $profile_barangay->about ?? '' ?>
+                                </div>
+                                <input type="hidden" id="profileBrgyAbout" name="editAbout"
+                                    value="<?= esc($profile_barangay->about ?? '') ?>">
+                            </div>
+
+                            <div class="col-md-6 mt-2">
+                                <label class="form-label small fw-bold text-secondary">Mission</label>
+                                <div id="profileBrgyMissionEditor" style="height: 180px;">
+                                    <?= $profile_barangay->mission ?? '' ?>
+                                </div>
+                                <input type="hidden" id="profileBrgyMission" name="editMission"
+                                    value="<?= esc($profile_barangay->mission ?? '') ?>">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <label class="form-label small fw-bold text-secondary">Vision</label>
+                                <div id="profileBrgyVisionEditor" style="height: 180px;">
+                                    <?= $profile_barangay->vision ?? '' ?>
+                                </div>
+                                <input type="hidden" id="profileBrgyVision" name="editVision"
+                                    value="<?= esc($profile_barangay->vision ?? '') ?>">
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <label class="form-label small fw-bold text-secondary">Contact Information</label>
+                                <div id="profileBrgyContactEditor" style="height: 140px;">
+                                    <?= $profile_barangay->contact ?? '' ?>
+                                </div>
+                                <input type="hidden" id="profileBrgyContact" name="editContact"
+                                    value="<?= esc($profile_barangay->contact ?? '') ?>">
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <label class="form-label small fw-bold text-secondary">Barangay Staff</label>
+                                <div id="profileBrgyStaffEditor" style="height: 180px;">
+                                    <?= $profile_barangay->barangay_staff ?? '' ?>
+                                </div>
+                                <input type="hidden" id="profileBrgyStaff" name="editStaff"
+                                    value="<?= esc($profile_barangay->barangay_staff ?? '') ?>">
+                            </div>
+
+                            <div class="col-md-6 mt-2">
+                                <label for="profileBrgyLogo" class="form-label small fw-bold text-secondary">Barangay
+                                    Logo</label>
+                                <input type="file" class="form-control shadow-sm" id="profileBrgyLogo" name="editbrgyImg"
+                                    accept="image/*">
+                                <div id="profileBrgyLogoPreview" class="mt-2">
+                                    <?php if (!empty($profile_barangay->img_logo)): ?>
+                                        <img src="<?= site_url('admin/image/BARANGAY/' . $profile_barangay->img_logo) ?>"
+                                            alt="Current Barangay Logo" style="max-width: 120px; margin-top: 5px;">
+                                    <?php else: ?>
+                                        <small class="text-muted">No logo available.</small>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer bg-light px-4 py-3">
+                        <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                        <button id="btnProfileBarangay" type="submit" class="btn btn-success px-4">
+                            <i class="fas fa-save mr-1"></i> Update Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
     aria-hidden="true">

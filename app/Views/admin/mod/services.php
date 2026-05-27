@@ -1,4 +1,8 @@
-<?php $isDeptScopedAdmin = (($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT'); ?>
+<?php
+$isDeptScopedAdmin = (($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
+$isBrgyScopedAdmin = (($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+$isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
+?>
 
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
@@ -119,7 +123,7 @@
                             placeholder="Search service keyword...">
                     </div>
 
-                    <?php if (!$isDeptScopedAdmin): ?>
+                    <?php if (!$isEntityScopedAdmin): ?>
                         <div class="col-xl-2 col-lg-3 col-md-6">
                             <label for="searchCategory" class="form-label small fw-bold text-secondary">Scope Category</label>
                             <select class="form-select" name="category" id="searchCategory">
@@ -208,8 +212,8 @@
             <div class="modal-body p-4">
                 <div class="row g-3">
 
-                    <?php if ($isDeptScopedAdmin): ?>
-                        <input type="hidden" id="category" name="category" value="DEPT">
+                    <?php if ($isEntityScopedAdmin): ?>
+                        <input type="hidden" id="category" name="category" value="<?= $isBrgyScopedAdmin ? 'BRGY' : 'DEPT' ?>">
                         <div class="col-12">
                             <label for="serviceName" class="form-label small fw-bold text-secondary">Service Provision Name
                                 <span class="text-danger">*</span></label>
@@ -290,38 +294,44 @@
             <div class="modal-body p-4">
                 <div class="row g-3">
 
-                    <div class="col-md-6">
-                        <label for="editcategory" class="form-label small fw-bold text-secondary">Category Group Scope
-                            <span class="text-danger">*</span></label>
-                        <select class="form-select" id="editcategory" name="editcategory" required>
-                            <option value="" disabled>Choose classification...</option>
-                            <option value="BRGY">Barangay</option>
-                            <option value="DEPT">Department</option>
-                        </select>
-                    </div>
+                    <?php if ($isEntityScopedAdmin): ?>
+                        <input type="hidden" id="editcategory" name="editcategory" value="<?= $isBrgyScopedAdmin ? 'BRGY' : 'DEPT' ?>">
+                    <?php else: ?>
+                        <div class="col-md-6">
+                            <label for="editcategory" class="form-label small fw-bold text-secondary">Category Group Scope
+                                <span class="text-danger">*</span></label>
+                            <select class="form-select" id="editcategory" name="editcategory" required>
+                                <option value="" disabled>Choose classification...</option>
+                                <option value="BRGY">Barangay</option>
+                                <option value="DEPT">Department</option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
 
-                    <div class="col-md-6">
+                    <div class="<?= $isEntityScopedAdmin ? 'col-12' : 'col-md-6' ?>">
                         <label for="editServiceName" class="form-label small fw-bold text-secondary">Service Provision
                             Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="editServiceName" name="editServiceName"
                             placeholder="Enter service description..." required>
                     </div>
 
-                    <div class="col-12">
-                        <div id="editDeptFieldGroup" style="display:none;" class="mb-2">
-                            <label for="editDept" class="form-label small fw-bold text-secondary">Responsible Department
-                                Entity <span class="text-danger">*</span></label>
-                            <select id="editDept" name="editDept" class="form-select">
-                            </select>
-                        </div>
+                    <?php if (!$isEntityScopedAdmin): ?>
+                        <div class="col-12">
+                            <div id="editDeptFieldGroup" style="display:none;" class="mb-2">
+                                <label for="editDept" class="form-label small fw-bold text-secondary">Responsible Department
+                                    Entity <span class="text-danger">*</span></label>
+                                <select id="editDept" name="editDept" class="form-select">
+                                </select>
+                            </div>
 
-                        <div id="editBrgyFieldGroup" style="display:none;">
-                            <label for="editBrgy" class="form-label small fw-bold text-secondary">Responsible Barangay
-                                Ward <span class="text-danger">*</span></label>
-                            <select id="editBrgy" name="editBrgy" class="form-select">
-                            </select>
+                            <div id="editBrgyFieldGroup" style="display:none;">
+                                <label for="editBrgy" class="form-label small fw-bold text-secondary">Responsible Barangay
+                                    Ward <span class="text-danger">*</span></label>
+                                <select id="editBrgy" name="editBrgy" class="form-select">
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
                     <div class="col-12">
                         <label class="form-label small fw-bold text-secondary mb-1">Detailed Service Instructions &

@@ -16,13 +16,13 @@
     }
 
     // Toggle Status function
-    function toggleStatus(id, currentStatus) {
-        var newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-        var actionText = newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
+    function toggleStatus(id, currentStatus, forcedStatus) {
+        var newStatus = nextRecordStatus(currentStatus, forcedStatus);
+        var actionText = statusActionText(newStatus);
 
         Swal.fire({
             heightAuto: false,
-            title: (newStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') + ' Content',
+            title: statusActionTitle(newStatus, 'Content'),
             text: "Are you sure you want to " + actionText + " this content?",
             icon: 'question',
             showCancelButton: true,
@@ -50,7 +50,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
-                                text: 'Content ' + actionText + 'd successfully'
+                                text: statusSuccessText('Content', actionText)
                             });
                         } else {
                             Swal.fire({
@@ -238,15 +238,15 @@
                               <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
-                        if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
+                        if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
                             
                             actionHtml += `
-                                <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="#" onclick="deletePostContent(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
+                                <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
+                        actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
+                        actionHtml += renderDeleteAction(userLevel, row.ID, 'deletePostContent');
                         
                         actionHtml += `</ul></div>`;
                         return actionHtml;

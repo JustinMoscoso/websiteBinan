@@ -442,6 +442,9 @@ class Admin extends BaseController
         $canManageAbout = $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
         $canManageFullDisc = $isCIO || $isMayor || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
 
+        // Only DEVELOPER and SUPERADMIN can see archived records in data tables
+        $canSeeArchived = in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'], true);
+
         $currentUserFullName = trim(($user->fname ?? '') . ' ' . ($user->lname ?? ''));
 
         $log_m = new \App\Models\Audit();
@@ -831,6 +834,11 @@ class Admin extends BaseController
                         $builder->where('user_lvl !=', 'DEVELOPER');
                     }
 
+                    // Non-privileged users cannot see archived accounts
+                    if (!$canSeeArchived) {
+                        $builder->where('status !=', 'ARCHIVED');
+                    }
+
                     // Dept-scoped ADMIN: only see users from their own entity
                     if ($isDeptScopedAdmin) {
                         $builder->where('account_type', 'DEPARTMENT')
@@ -888,6 +896,11 @@ class Admin extends BaseController
                 } else {
                     $builder = $brgy_m->orderBy('created_date', 'desc');
 
+                    // Non-privileged users cannot see archived barangays
+                    if (!$canSeeArchived) {
+                        $builder->where('status !=', 'ARCHIVED');
+                    }
+
                     // Add partial match filters if provided
                     if (!empty($searchBrgy)) {
                         $builder->like('LOWER(brgy_name)', strtolower($searchBrgy));
@@ -927,6 +940,11 @@ class Admin extends BaseController
                         $builder->where('ID', $user->entity_ref_id);
                     }
 
+                    // Non-privileged users cannot see archived departments
+                    if (!$canSeeArchived) {
+                        $builder->where('status !=', 'ARCHIVED');
+                    }
+
                     if (!empty($status_filter)) {
                         $builder->where('status', $status_filter);
                     }
@@ -963,6 +981,11 @@ class Admin extends BaseController
                         $builder->where('ID', $user->entity_ref_id);
                     }
 
+                    // Non-privileged users cannot see archived departments
+                    if (!$canSeeArchived) {
+                        $builder->where('status !=', 'ARCHIVED');
+                    }
+
                     // Add partial match filters if provided
                     if (!empty($searchDept)) {
                         $builder->like('LOWER(dept_name)', strtolower($searchDept));
@@ -996,7 +1019,12 @@ class Admin extends BaseController
                         $message = 'Official not found';
                     }
                 } else {
-                    $co_d = $co_m->orderBy('ranking', 'ASC')->findAll();
+                    $co_builder = $co_m->orderBy('ranking', 'ASC');
+                    // Non-privileged users cannot see archived city officials
+                    if (!$canSeeArchived) {
+                        $co_builder->where('status !=', 'ARCHIVED');
+                    }
+                    $co_d = $co_builder->findAll();
                     foreach ($co_d as $cityoff) {
                         $data[] = $cityoff;
                     }
@@ -1030,6 +1058,11 @@ class Admin extends BaseController
                     $status_filter = $this->request->getPost('status');
 
                     $query = $con_m;
+
+                    // Non-privileged users cannot see archived post content
+                    if (!$canSeeArchived) {
+                        $query = $query->where('status !=', 'ARCHIVED');
+                    }
 
                     // Enforce ownership for restricted Mayor or CIO
                     $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
@@ -1124,9 +1157,12 @@ class Admin extends BaseController
                         $message = 'Content not found';
                     }
                 } else {
-                    $may_d = $may_m
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                    $may_builder = $may_m->orderBy('created_date', 'desc');
+                    // Non-privileged users cannot see archived mayor content
+                    if (!$canSeeArchived) {
+                        $may_builder->where('status !=', 'ARCHIVED');
+                    }
+                    $may_d = $may_builder->findAll();
                     foreach ($may_d as $mayorc) {
                         $data[] = $mayorc;
                     }
@@ -1159,6 +1195,11 @@ class Admin extends BaseController
 
                     // Build the query with filters
                     $query = $policy_m->where('category', 'FULLDISC');
+
+                    // Non-privileged users cannot see archived full disclosure policies
+                    if (!$canSeeArchived) {
+                        $query = $query->where('status !=', 'ARCHIVED');
+                    }
 
                     // Apply combined search filter
                     if (!empty($search)) {
@@ -1227,10 +1268,14 @@ class Admin extends BaseController
                         $message = 'Career not found';
                     }
                 } else {
-                    $career_d = $career_m
+                    $career_builder = $career_m
                         ->where('category', 'CAREER')
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                        ->orderBy('created_date', 'desc');
+                    // Non-privileged users cannot see archived career postings
+                    if (!$canSeeArchived) {
+                        $career_builder->where('status !=', 'ARCHIVED');
+                    }
+                    $career_d = $career_builder->findAll();
                     foreach ($career_d as $car) {
                         $data[] = $car;
                     }
@@ -1251,10 +1296,14 @@ class Admin extends BaseController
                         $message = 'File not found';
                     }
                 } else {
-                    $inv_d = $invest_m
+                    $invest_builder = $invest_m
                         ->where('category', 'INVEST')
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                        ->orderBy('created_date', 'desc');
+                    // Non-privileged users cannot see archived invest content
+                    if (!$canSeeArchived) {
+                        $invest_builder->where('status !=', 'ARCHIVED');
+                    }
+                    $inv_d = $invest_builder->findAll();
                     foreach ($inv_d as $inv) {
                         $data[] = $inv;
                     }
@@ -1297,6 +1346,11 @@ class Admin extends BaseController
                         $builder->where('service_content.dept_cont_ID', $user->entity_ref_id);
                     } elseif ($isBrgyScopedAdmin) {
                         $builder->where('service_content.brngy_cont_ID', $user->entity_ref_id);
+                    }
+
+                    // Non-privileged users cannot see archived services
+                    if (!$canSeeArchived) {
+                        $builder->where('service_content.status !=', 'ARCHIVED');
                     }
 
                     // Service Name filter
@@ -1387,6 +1441,11 @@ class Admin extends BaseController
                             ->where('hotlines.content_ref_id', $user->entity_ref_id);
                     }
 
+                    // Non-privileged users cannot see archived contacts
+                    if (!$canSeeArchived) {
+                        $builder->where('hotlines.status !=', 'ARCHIVED');
+                    }
+
                     if (!empty($query_param)) {
                         $builder->groupStart()
                             ->like('barangay_content.brgy_name', $query_param)
@@ -1428,10 +1487,14 @@ class Admin extends BaseController
                         $message = 'Career not found';
                     }
                 } else {
-                    $career_d = $career_m
+                    $career_builder2 = $career_m
                         ->where('category', 'CAREER')
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                        ->orderBy('created_date', 'desc');
+                    // Non-privileged users cannot see archived career postings
+                    if (!$canSeeArchived) {
+                        $career_builder2->where('status !=', 'ARCHIVED');
+                    }
+                    $career_d = $career_builder2->findAll();
                     foreach ($career_d as $car) {
                         $data[] = $car;
                     }
@@ -1452,9 +1515,12 @@ class Admin extends BaseController
                         $message = 'File not found';
                     }
                 } else {
-                    $abt_d = $about_m
-                        ->orderBy('created_date', 'desc')
-                        ->findAll();
+                    $about_builder = $about_m->orderBy('created_date', 'desc');
+                    // Non-privileged users cannot see archived about content
+                    if (!$canSeeArchived) {
+                        $about_builder->where('status !=', 'ARCHIVED');
+                    }
+                    $abt_d = $about_builder->findAll();
                     foreach ($abt_d as $inv) {
                         $data[] = $inv;
                     }
@@ -1464,7 +1530,12 @@ class Admin extends BaseController
             }
             case 'get_jobs': {
                 $job_m = new \App\Models\Job();
-                $jobs = $job_m->orderBy('created_date', 'desc')->findAll();
+                $jobs_builder = $job_m->orderBy('created_date', 'desc');
+                // Non-privileged users cannot see archived jobs
+                if (!$canSeeArchived) {
+                    $jobs_builder->where('status !=', 'ARCHIVED');
+                }
+                $jobs = $jobs_builder->findAll();
                 // Ensure each job has an 'ID' field (uppercase)
                 $jobs = array_map(function ($job) {
                     if (isset($job['ID']))
@@ -3147,9 +3218,12 @@ class Admin extends BaseController
                         $message = 'Map record not found';
                     }
                 } else {
-                    $map_d = $map_m
-                        ->orderBy('brgy_name', 'desc')
-                        ->findAll();
+                    $map_builder = $map_m->orderBy('brgy_name', 'desc');
+                    // Non-privileged users cannot see archived map records
+                    if (!$canSeeArchived) {
+                        $map_builder->where('status !=', 'ARCHIVED');
+                    }
+                    $map_d = $map_builder->findAll();
                     foreach ($map_d as $map) {
                         $data[] = $map;
                     }
