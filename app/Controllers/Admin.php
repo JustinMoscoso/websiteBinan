@@ -92,7 +92,7 @@ class Admin extends BaseController
         // Modes blocked for dept-scoped accounts
         $deptOnlyModes = ['cityOff']; // CIO has access to about and fullDisc, so we remove them from the base list if CIO is true. Wait, we can construct the list conditionally.
 
-        if (!$isCIO) {
+        if (!$isCIO && !$isMayor) {
             $deptOnlyModes[] = 'about';
         }
         if (!$isCIO && !$isMayor) {
@@ -133,7 +133,12 @@ class Admin extends BaseController
             return redirect()->to(base_url('admin/dashboard'));
         }
 
-        if ($isDeptScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['brgy', 'dept', 'contacts']))) {
+        $deptBlockedModes = array_merge($deptOnlyModes, ['brgy', 'dept']);
+        if (!$isMayor && !$isCIO) {
+            $deptBlockedModes[] = 'contacts';
+        }
+
+        if ($isDeptScopedAdmin && in_array($mode, $deptBlockedModes)) {
             return redirect()->to(base_url('admin/services'));
         }
         if ($isBrgyScopedAdmin && in_array($mode, array_merge($deptOnlyModes, ['dept']))) {
@@ -447,6 +452,8 @@ class Admin extends BaseController
 
         $canManageAbout = $isCIO || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
         $canManageFullDisc = $isCIO || $isMayor || in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']);
+        $isMayorDeptAdmin = $isDeptScopedAdmin && $isMayor;
+        $isSpecialDeptAdmin = $isDeptScopedAdmin && ($isMayor || $isHRDO || $isPESO || $isBPLO || $isCIO);
 
         // Only DEVELOPER and SUPERADMIN can see archived records in data tables
         $canSeeArchived = in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'], true);
@@ -2102,6 +2109,11 @@ class Admin extends BaseController
             }
 
             case 'create_postcontent': {
+                if ($isMayorDeptAdmin) {
+                    $message = 'Unauthorized: Mayor Office accounts can only read, update, and archive their own post content.';
+                    break;
+                }
+
                 $con_m = new \App\Models\Content();
                 $title = $this->request->getPost('title');
                 $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
@@ -2140,6 +2152,11 @@ class Admin extends BaseController
                 break;
             }
             case 'create_mayor': {
+                if ($isMayorDeptAdmin) {
+                    $message = "Unauthorized: Mayor Office accounts can only update and archive Mayor's Corner content.";
+                    break;
+                }
+
                 if (!$canManageMayor) {
                     $message = 'Unauthorized access.';
                     break;
@@ -3815,6 +3832,12 @@ class Admin extends BaseController
             }
 
             case 'delete_fulldiscpol': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
                 if (!$canManageFullDisc) {
                     $message = 'Unauthorized access. You do not have permission to delete content.';
                     $status = 0;
@@ -3837,6 +3860,12 @@ class Admin extends BaseController
             }
 
             case 'delete_contacts': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
                 if (!$isCIO && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
                     $message = 'Unauthorized access.';
                     $status = 0;
@@ -3874,6 +3903,12 @@ class Admin extends BaseController
             }
 
             case 'delete_invest': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
                 if (!$canManageInvest) {
                     $message = 'Unauthorized: Only the BPLO department can manage investment content.';
                     $status = 0;
@@ -3894,6 +3929,12 @@ class Admin extends BaseController
             }
 
             case 'delete_careers': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
                 // Only HRDO department and privileged roles can manage careers
                 if (!$canManageCareers) {
                     $message = 'Unauthorized: Only the HRDO department can manage career postings.';
@@ -3941,6 +3982,12 @@ class Admin extends BaseController
             }
 
             case 'delete_mayor': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
                 if (!$canManageMayor) {
                     $message = 'Unauthorized access.';
                     $status = 0;
@@ -3961,6 +4008,12 @@ class Admin extends BaseController
             }
 
             case 'delete_postcontent': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $status = 0;
+                    break;
+                }
+
                 $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
                 if (!$isMayorOrCIORestricted && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN'])) {
                     $message = 'Unauthorized access.';
@@ -4113,7 +4166,7 @@ class Admin extends BaseController
                     break;
                 }
 
-                if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'])) {
+                if (!in_array($statusVal, ['ACTIVE', 'INACTIVE', 'ARCHIVED'])) {
                     $message = 'Invalid status value';
                     break;
                 }
@@ -4139,6 +4192,11 @@ class Admin extends BaseController
                 break;
             }
             case 'delete_job': {
+                if ($isSpecialDeptAdmin) {
+                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    break;
+                }
+
                 if (!$canManageJobs) {
                     $message = 'Unauthorized: Only the PESO department can manage jobs.';
                     break;

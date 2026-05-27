@@ -8,9 +8,11 @@
       </ol>
     </nav>
   </div>
-  <button type="button" class="btn btn-theme shadow-sm px-4 fw-semibold transition-all" data-bs-toggle="modal" data-bs-target="#addModal">
-    <i class="bi bi-plus-circle me-2"></i>Add Content
-  </button>
+  <?php if (!(($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT' && !empty($is_mayor))): ?>
+    <button type="button" class="btn btn-theme shadow-sm px-4 fw-semibold transition-all" data-bs-toggle="modal" data-bs-target="#addModal">
+      <i class="bi bi-plus-circle me-2"></i>Add Content
+    </button>
+  <?php endif; ?>
 </div>
 
 <style>
