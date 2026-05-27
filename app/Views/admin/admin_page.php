@@ -160,7 +160,7 @@
         && ($isDeptAdmin || $isBrgyAdmin
           || in_array($user->account_type ?? '', ['DEPARTMENT', 'BARANGAY']));
       $showBrgy = !in_array($user->user_lvl, $privilegedRoles)
-        ? ($user->account_type ?? '') !== 'DEPARTMENT' && !$isDeptAdmin && !$isBrgyAdmin
+        ? ($user->account_type ?? '') !== 'DEPARTMENT' && !$isDeptAdmin
         : true;
       $showDept = !in_array($user->user_lvl, $privilegedRoles)
         ? ($user->account_type ?? '') !== 'BARANGAY' && !$isBrgyAdmin && !$isDeptAdmin
