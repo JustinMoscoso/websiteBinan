@@ -233,6 +233,7 @@ class Admin extends BaseController
                 $data['title'] = 'My Profile';
                 $data['current_department'] = '';
                 $data['profile_department'] = null;
+                $data['profile_barangay'] = null;
                 $data['profile_picture_url'] = !empty($user->profile_image)
                     ? site_url('admin/image/PROFILE/' . $user->profile_image)
                     : '';
@@ -241,6 +242,11 @@ class Admin extends BaseController
                     $department = $deptModel->find($user->entity_ref_id);
                     $data['profile_department'] = $department;
                     $data['current_department'] = $department->dept_name ?? '';
+                } elseif (!empty($user->entity_ref_id) && ($user->account_type ?? '') === 'BARANGAY') {
+                    $brgyModel = new \App\Models\Barangay();
+                    $barangay = $brgyModel->find($user->entity_ref_id);
+                    $data['profile_barangay'] = $barangay;
+                    $data['current_department'] = $barangay->brgy_name ?? '';
                 } elseif (!empty($user->dept)) {
                     $data['current_department'] = $user->dept;
                 }
