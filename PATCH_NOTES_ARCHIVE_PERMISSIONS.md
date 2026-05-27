@@ -111,5 +111,6 @@ Changes:
 - Department-scoped `ADMIN` linked to PESO can access Job Management with create, read, update/edit, and archive.
 - Department-scoped `ADMIN` linked to BPLO can access Invest with create, read, update/edit, and archive.
 - Edit Profile -> Edit Department remains available to department-scoped `ADMIN` accounts for their own linked department only.
+- Department-scoped `ADMIN` accounts are now restricted to only their assigned Content Management modules; unassigned modules are hidden from the sidebar and blocked by direct URL access.
 - Physical delete is blocked server-side for these department-scoped admin accounts; they should archive instead.
 - Job Management status updates now accept `ARCHIVED`.

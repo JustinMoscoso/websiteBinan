@@ -53,7 +53,7 @@ class Admin extends BaseController
 
         // Restrict accounts_mgmt access
         if ($mode === 'accounts_mgmt' && (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) || $isDeptScopedAdmin)) {
-            return redirect()->to(base_url($isDeptScopedAdmin ? 'admin/services' : 'admin/dashboard'));
+            return redirect()->to(base_url($isDeptScopedAdmin ? 'admin/profile' : 'admin/dashboard'));
         }
 
         // Restrict audit (System Logs) to DEVELOPER and SUPERADMIN only
@@ -86,6 +86,30 @@ class Admin extends BaseController
                 if (stripos($linkedDept->dept_name, 'Information Officer') !== false || stripos($linkedDept->dept_name, 'CIO') !== false) {
                     $isCIO = true;
                 }
+            }
+        }
+
+        if ($isDeptScopedAdmin) {
+            $deptAllowedModes = ['dashboard', 'profile'];
+
+            if ($isMayor) {
+                $deptAllowedModes = array_merge($deptAllowedModes, ['postcontent', 'mayor', 'fullDisc', 'contacts', 'about']);
+            }
+            if ($isHRDO) {
+                $deptAllowedModes[] = 'careers';
+            }
+            if ($isPESO) {
+                $deptAllowedModes[] = 'jobs';
+            }
+            if ($isBPLO) {
+                $deptAllowedModes[] = 'invest';
+            }
+            if ($isCIO) {
+                $deptAllowedModes = array_merge($deptAllowedModes, ['postcontent', 'mayor', 'fullDisc', 'contacts', 'about']);
+            }
+
+            if (!in_array($mode, array_unique($deptAllowedModes), true)) {
+                return redirect()->to(base_url('admin/profile'));
             }
         }
 
