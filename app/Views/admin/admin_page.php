@@ -196,7 +196,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (($user->account_type ?? '') !== 'DEPARTMENT' || $isDeptAdmin): ?>
+      <?php if (($user->account_type ?? '') !== 'DEPARTMENT'): ?>
         <li class="nav-item <?= $mode == 'services' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/services') ?>">
             <i class="fas fa-fw fa-certificate"></i>
