@@ -89,3 +89,26 @@ Changes:
 - Archive uses existing `status = 'ARCHIVED'`; records are not deleted from the database.
 - Restore sets the record back to `ACTIVE`.
 - Physical delete remains available only to Developer/Superadmin.
+
+## Patch Update: Department-Specific Admin Permissions
+
+Locations:
+
+- `app/Controllers/Admin.php`
+- `app/Views/admin/admin_page.php`
+- `app/Views/admin/mod/postcontent.php`
+- `app/Views/admin/mod/mayor.php`
+
+Changes:
+
+- Department-scoped `ADMIN` linked to Office of the City Mayor Officer can access:
+  - Post Content: read, update/edit, and archive own created records only; create and delete are blocked.
+  - Mayor's Corner: update/edit and archive records even if created by another user; create and delete are blocked.
+  - Full Disclosure Policy: create, read, update/edit, and archive.
+  - Contacts: create, read, update/edit, and archive.
+  - About/Homepage: create, read, update/edit, and archive.
+- Department-scoped `ADMIN` linked to HRDO can access Careers with create, read, update/edit, and archive.
+- Department-scoped `ADMIN` linked to PESO can access Job Management with create, read, update/edit, and archive.
+- Department-scoped `ADMIN` linked to BPLO can access Invest with create, read, update/edit, and archive.
+- Physical delete is blocked server-side for these department-scoped admin accounts; they should archive instead.
+- Job Management status updates now accept `ARCHIVED`.

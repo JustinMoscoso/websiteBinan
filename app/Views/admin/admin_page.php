@@ -172,7 +172,7 @@
         Content Management
       </div>
 
-      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_mayor ?? false) || ($is_cio ?? false))): ?>
+      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_mayor ?? false) || ($is_cio ?? false)): ?>
         <li class="nav-item <?= $mode == 'postcontent' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/postcontent') ?>">
             <i class="fas fa-fw fa-newspaper"></i>
@@ -187,7 +187,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_cio ?? false))): ?>
+      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_cio ?? false) || ($is_mayor ?? false)): ?>
         <li class="nav-item <?= $mode == 'about' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/about') ?>">
             <i class="fas fa-fw fa-info-circle"></i>
@@ -223,7 +223,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_hrdo ?? false))): ?>
+      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_hrdo ?? false)): ?>
         <li class="nav-item <?= $mode == 'careers' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/careers') ?>">
             <i class="fas fa-fw fa-briefcase"></i>
@@ -250,7 +250,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_peso ?? false))): ?>
+      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_peso ?? false)): ?>
         <li class="nav-item <?= $mode == 'jobs' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/jobs') ?>">
             <i class="fas fa-fw fa-user-md"></i>
@@ -259,7 +259,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_bplo ?? false))): ?>
+      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_bplo ?? false)): ?>
         <li class="nav-item <?= $mode == 'invest' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/invest') ?>">
             <i class="fas fa-fw fa-coins"></i>
@@ -268,7 +268,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (!$isDeptAdmin && (!$isEntityAccount || ($is_cio ?? false))): ?>
+      <?php if ((!$isDeptAdmin && !$isEntityAccount) || ($is_cio ?? false) || ($is_mayor ?? false)): ?>
         <li class="nav-item <?= $mode == 'contacts' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/contacts') ?>">
             <i class="fas fa-fw fa-phone"></i>
