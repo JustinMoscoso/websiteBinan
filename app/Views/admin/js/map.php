@@ -333,6 +333,61 @@
             }
         });
     }
+
+    function setMapStatus(id, status) {
+        const actionText = statusActionText(status);
+        Swal.fire({
+            title: statusActionTitle(status, 'Content'),
+            text: "Are you sure you want to " + actionText + " this content?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#27ae60',
+            cancelButtonColor: '#c0392b',
+            confirmButtonText: 'Yes',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("<?= site_url('admin/ajax/set_status_map') ?>",
+                    { id: id, status: status },
+                    function(result) {
+                        if (result.status == 1) {
+                            tblmap.ajax.reload(null, false);
+                            Swal.fire({ icon: 'success', title: 'Success', text: statusSuccessText('Content', actionText) });
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Error', text: result.msg || result.message });
+                        }
+                    },
+                    "json"
+                );
+            }
+        });
+    }
+
+    function deleteMap(id) {
+        Swal.fire({
+            title: 'Delete Map Record',
+            text: "Are you sure you want to delete this map record? This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#c0392b',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Delete',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("<?= site_url('admin/ajax/delete_map') ?>",
+                    { id: id },
+                    function(result) {
+                        if (result.status == 1) {
+                            tblmap.ajax.reload(null, false);
+                            Swal.fire({ icon: 'success', title: 'Deleted', text: 'Map record deleted successfully' });
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Error', text: result.message || result.msg });
+                        }
+                    },
+                    "json"
+                );
+            }
+        });
+    }
         var tblmap = $('#tblmap').DataTable({
             select: false,
             searching: true,
@@ -378,9 +433,17 @@
                                 '<ul class="dropdown-menu">' +
                                 '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>';
 
-                            if (userLevel !== 'ENCODER') {
+                            if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                                 actions += '<li><button type="button" class="dropdown-item" onclick="activate(' + row.ID + ')"><i class="fa-solid fa-check"></i> Activate</button></li>' +
                                            '<li><button type="button" class="dropdown-item" onclick="deactivate(' + row.ID + ')"><i class="fa-solid fa-xmark"></i> Deactivate</button></li>';
+                            }
+                            if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
+                                actions += '<li><button type="button" class="dropdown-item" onclick="setMapStatus(' + row.ID + ', &quot;ACTIVE&quot;)"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</button></li>';
+                            } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
+                                actions += '<li><button type="button" class="dropdown-item text-warning" onclick="setMapStatus(' + row.ID + ', &quot;ARCHIVED&quot;)"><i class="bi bi-archive me-1"></i> Archive</button></li>';
+                            }
+                            if (adminCanDelete(userLevel)) {
+                                actions += '<li><hr class="dropdown-divider"></li><li><button type="button" class="dropdown-item text-danger" onclick="deleteMap(' + row.ID + ')"><i class="bi bi-trash me-1"></i> Delete</button></li>';
                             }
 
                             actions += '</ul></div>';

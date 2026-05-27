@@ -6,6 +6,8 @@
     const userLevel = '<?= $user->user_lvl ?>'.toUpperCase();
     const userAccountType = '<?= $user->account_type ?? '' ?>'.toUpperCase();
     const isDeptScopedAdmin = userLevel === 'ADMIN' && userAccountType === 'DEPARTMENT';
+    const isBrgyScopedAdmin = userLevel === 'ADMIN' && userAccountType === 'BARANGAY';
+    const isEntityScopedAdmin = isDeptScopedAdmin || isBrgyScopedAdmin;
     console.log("Current User Role:", userLevel);
 
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
@@ -128,22 +130,22 @@
     $('#editcategory').on('change', function() {
         var selectedCategory = $(this).val();
         if (selectedCategory === 'DEPT') {
-            $('#editdeptGroup').show();
-            $('#editbrgyGroup').hide();
-            populateDepartmentDropdown($('#editDept'));
+            $('#editDeptFieldGroup').show();
+            $('#editBrgyFieldGroup').hide();
+            if ($('#editDept').length) populateDepartmentDropdown($('#editDept'));
         } else if (selectedCategory === 'BRGY') {
-            $('#editdeptGroup').hide();
-            $('#editbrgyGroup').show();
-            populateBrgyDropdown($('#editBrgy'));
+            $('#editDeptFieldGroup').hide();
+            $('#editBrgyFieldGroup').show();
+            if ($('#editBrgy').length) populateBrgyDropdown($('#editBrgy'));
         } else {
-            $('#editdeptGroup, #editbrgyGroup').hide();
+            $('#editDeptFieldGroup, #editBrgyFieldGroup').hide();
         }
     });
 
     // Reset Add modal on open
     $('#addModal').on('show.bs.modal', function (e) {
-        if (isDeptScopedAdmin) {
-            $('#category').val('DEPT');
+        if (isEntityScopedAdmin) {
+            $('#category').val(isBrgyScopedAdmin ? 'BRGY' : 'DEPT');
             $('#deptGroup, #brgyGroup').hide();
             return;
         }
@@ -281,16 +283,19 @@
                 $('#editModal').on('shown.bs.modal', function () {
                     if (editQuillContent) editQuillContent.root.innerHTML = res.content || '';
                 });
-                if (res.brngy_cont_ID) {
+                if (isEntityScopedAdmin) {
+                    $('#editcategory').val(isBrgyScopedAdmin ? 'BRGY' : 'DEPT');
+                    $('#editDeptFieldGroup, #editBrgyFieldGroup').hide();
+                } else if (res.brngy_cont_ID) {
                     $('#editcategory').val('BRGY').trigger('change');
-                    $('#editdeptGroup').hide();
-                    $('#editbrgyGroup').show();
+                    $('#editDeptFieldGroup').hide();
+                    $('#editBrgyFieldGroup').show();
                     populateBrgyDropdown($('#editBrgy'), res.brngy_cont_ID);
                     $('#editDept').val(null);
                 } else if (res.dept_cont_ID) {
                     $('#editcategory').val('DEPT').trigger('change');
-                    $('#editdeptGroup').show();
-                    $('#editbrgyGroup').hide();
+                    $('#editDeptFieldGroup').show();
+                    $('#editBrgyFieldGroup').hide();
                     populateDepartmentDropdown($('#editDept'), res.dept_cont_ID);
                     $('#editBrgy').val(null);
                 }
@@ -415,13 +420,13 @@
         });
     }
     // Toggle Status function
-    function toggleStatus(id, currentStatus) {
-        var newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-        var actionText = newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
+    function toggleStatus(id, currentStatus, forcedStatus) {
+        var newStatus = nextRecordStatus(currentStatus, forcedStatus);
+        var actionText = statusActionText(newStatus);
 
         Swal.fire({
             heightAuto: false,
-            title: (newStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') + ' Service',
+            title: statusActionTitle(newStatus, 'Service'),
             text: "Are you sure you want to " + actionText + " this service?",
             icon: 'question',
             showCancelButton: true,
@@ -449,7 +454,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
-                                text: 'Service ' + actionText + 'd successfully'
+                                text: statusSuccessText('Service', actionText)
                             });
                         } else {
                             Swal.fire({
@@ -600,7 +605,7 @@
                               <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
-                        if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
+                        if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
 
@@ -608,11 +613,8 @@
                                 <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
 
-                        if (userLevel === 'DEVELOPER') {
-                             actionHtml += `
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteService(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
-                        }
+                        actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
+                        actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteService');
 
                         actionHtml += `</ul></div>`;
                         return actionHtml;

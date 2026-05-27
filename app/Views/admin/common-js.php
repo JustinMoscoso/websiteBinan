@@ -35,5 +35,63 @@
         return monthNames[monthIndex] + ' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds + ' ' + ampm;
     }
 
+    function adminCanArchive(level) {
+        return ['ADMIN', 'SUPERADMIN', 'DEVELOPER'].includes((level || '').toUpperCase());
+    }
+
+    function adminCanRestore(level) {
+        return ['SUPERADMIN', 'DEVELOPER'].includes((level || '').toUpperCase());
+    }
+
+    function adminCanDelete(level) {
+        return adminCanRestore(level);
+    }
+
+    function renderArchiveRestoreAction(level, row, toggleFnName) {
+        const status = (row.status || '').toUpperCase();
+        if (status === 'ARCHIVED') {
+            if (!adminCanRestore(level)) {
+                return '';
+            }
+            return `<li><a class="dropdown-item" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}')"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</a></li>`;
+        }
+
+        if (!adminCanArchive(level)) {
+            return '';
+        }
+        return `<li><a class="dropdown-item text-warning" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}', 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
+    }
+
+    function renderDeleteAction(level, rowId, deleteFnName) {
+        if (!adminCanDelete(level)) {
+            return '';
+        }
+        return `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="${deleteFnName}(${rowId})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
+    }
+
+    function nextRecordStatus(currentStatus, forcedStatus) {
+        if (forcedStatus) {
+            return forcedStatus;
+        }
+        return currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+    }
+
+    function statusActionText(newStatus) {
+        if (newStatus === 'ARCHIVED') {
+            return 'archive';
+        }
+        return newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
+    }
+
+    function statusActionTitle(newStatus, noun) {
+        if (newStatus === 'ARCHIVED') {
+            return 'Archive ' + noun;
+        }
+        return (newStatus === 'ACTIVE' ? 'Activate ' : 'Deactivate ') + noun;
+    }
+
+    function statusSuccessText(noun, actionText) {
+        return noun + ' ' + (actionText === 'archive' ? 'archived' : actionText + 'd') + ' successfully';
+    }
 
 </script>

@@ -160,7 +160,7 @@
         && ($isDeptAdmin || $isBrgyAdmin
           || in_array($user->account_type ?? '', ['DEPARTMENT', 'BARANGAY']));
       $showBrgy = !in_array($user->user_lvl, $privilegedRoles)
-        ? ($user->account_type ?? '') !== 'DEPARTMENT' && !$isDeptAdmin
+        ? ($user->account_type ?? '') !== 'DEPARTMENT' && !$isDeptAdmin && !$isBrgyAdmin
         : true;
       $showDept = !in_array($user->user_lvl, $privilegedRoles)
         ? ($user->account_type ?? '') !== 'BARANGAY' && !$isBrgyAdmin && !$isDeptAdmin
@@ -277,7 +277,7 @@
         </li>
       <?php endif; ?>
 
-      <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) && !$isDeptAdmin): ?>
+      <?php if (in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) && !$isDeptAdmin && !$isBrgyAdmin): ?>
         <!-- Divider -->
         <hr class="sidebar-divider">
 

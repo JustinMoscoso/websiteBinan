@@ -20,6 +20,7 @@
             ['clean']
         ];
         const profileDeptEditors = {};
+        const profileBrgyEditors = {};
 
         function initProfileDepartmentEditors() {
             if (typeof Quill === 'undefined') {
@@ -62,6 +63,171 @@
                 }
             });
         }
+
+        function initProfileBarangayEditors() {
+            if (typeof Quill === 'undefined') {
+                return;
+            }
+
+            const editors = [
+                { key: 'about', editor: '#profileBrgyAboutEditor', input: '#profileBrgyAbout' },
+                { key: 'mission', editor: '#profileBrgyMissionEditor', input: '#profileBrgyMission' },
+                { key: 'vision', editor: '#profileBrgyVisionEditor', input: '#profileBrgyVision' },
+                { key: 'contact', editor: '#profileBrgyContactEditor', input: '#profileBrgyContact' },
+                { key: 'staff', editor: '#profileBrgyStaffEditor', input: '#profileBrgyStaff' }
+            ];
+
+            editors.forEach(function (config) {
+                if (!$(config.editor).length || profileBrgyEditors[config.key]) {
+                    return;
+                }
+
+                profileBrgyEditors[config.key] = new Quill(config.editor, {
+                    theme: 'snow',
+                    modules: { toolbar: profileDeptQuillToolbar }
+                });
+                profileBrgyEditors[config.key].root.innerHTML = $(config.input).val() || '';
+            });
+        }
+
+        function syncProfileBarangayEditors() {
+            const fieldMap = {
+                about: '#profileBrgyAbout',
+                mission: '#profileBrgyMission',
+                vision: '#profileBrgyVision',
+                contact: '#profileBrgyContact',
+                staff: '#profileBrgyStaff'
+            };
+
+            Object.keys(fieldMap).forEach(function (key) {
+                if (profileBrgyEditors[key]) {
+                    $(fieldMap[key]).val(profileBrgyEditors[key].root.innerHTML);
+                }
+            });
+        }
+
+        function renderBarangayStatus(status) {
+            let badgeClass = '';
+            if (status === 'ACTIVE') {
+                badgeClass = 'is-active';
+            } else if (status === 'INACTIVE') {
+                badgeClass = 'is-inactive';
+            }
+
+            const label = status ? status.charAt(0) + status.slice(1).toLowerCase() : 'Unknown';
+            return '<button type="button" class="brgy-status-toggle profile-brgy-status-action" data-current-status="' + status + '" aria-label="Toggle barangay status">' +
+                '<span class="brgy-status-switch ' + badgeClass + '">' +
+                '<span class="brgy-status-switch__track" aria-hidden="true">' +
+                '<span class="brgy-status-switch__thumb"></span>' +
+                '</span>' +
+                '<span class="brgy-status-switch__label">' + label + '</span>' +
+                '</span>' +
+                '</button>';
+        }
+
+        function updateBarangayActionStatus(status) {
+            const nextStatus = status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+            const icon = status === 'ACTIVE' ? 'on' : 'off';
+
+            $('.profile-brgy-status-action').attr('data-current-status', status);
+            $('.profile-brgy-status-action.dropdown-item').html(
+                '<i class="fas fa-toggle-' + icon + ' mr-1"></i> ' +
+                (nextStatus === 'ACTIVE' ? 'Activate' : 'Deactivate')
+            );
+        }
+
+        function buildProfileBarangayFormData(extraData) {
+            syncProfileBarangayEditors();
+
+            const formData = new FormData();
+            formData.set('id', $('#profileBrgyId').val() || '');
+            formData.set('editBrgy', $('#profileBrgyName').val() || '');
+            formData.set('editCapt', $('#profileBrgyCaptain').val() || '');
+            formData.set('editAbout', $('#profileBrgyAbout').val() || '');
+            formData.set('editMission', $('#profileBrgyMission').val() || '');
+            formData.set('editVision', $('#profileBrgyVision').val() || '');
+            formData.set('editContact', $('#profileBrgyContact').val() || '');
+            formData.set('editStaff', $('#profileBrgyStaff').val() || '');
+
+            if (extraData) {
+                Object.keys(extraData).forEach(function (key) {
+                    formData.set(key, extraData[key]);
+                });
+            }
+
+            return formData;
+        }
+
+        function applyProfileBarangayCardUpdate(previewImage) {
+            const brgyName = $('#profileBrgyName').val() || '';
+            const brgyCaptain = $('#profileBrgyCaptain').val() || '';
+
+            $('#profileDepartment').val(brgyName);
+            $('#profileBrgyNameCell')
+                .text(brgyName || 'Barangay name not set')
+                .toggleClass('is-empty', !brgyName);
+            $('#profileBrgyCaptainCell')
+                .text(brgyCaptain || 'Unassigned')
+                .toggleClass('is-unassigned', !brgyCaptain);
+
+            if (previewImage) {
+                $('#profileBrgyLogoEmpty').addClass('d-none');
+                $('#profileBrgyLogoCell').attr('src', previewImage).removeClass('d-none');
+            }
+
+            $('#profileBrgyLogo').val('');
+            $('#profileBrgyCardLogoInput').val('');
+        }
+
+        function submitProfileBarangayUpdate(formData, options) {
+            const settings = $.extend({
+                successMessage: 'Barangay saved.',
+                errorMessage: 'Unable to update barangay. Please try again.',
+                closeModal: false,
+                previewImage: null,
+                $button: null
+            }, options || {});
+
+            if (settings.$button) {
+                settings.$button.prop('disabled', true);
+            }
+
+            $.ajax({
+                url: "<?= site_url('admin/ajax/update_barangay') ?>",
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    const saved = response.status == 1;
+                    showProfileMessage(saved, response.message || settings.successMessage);
+                    if (saved) {
+                        applyProfileBarangayCardUpdate(settings.previewImage || $('#profileBrgyLogoPreview img').attr('src'));
+                        if (settings.closeModal) {
+                            $('#editLinkedBarangayModal').modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    showProfileMessage(false, settings.errorMessage);
+                },
+                complete: function () {
+                    if (settings.$button) {
+                        settings.$button.prop('disabled', false);
+                    }
+                }
+            });
+        }
+
+        $('#editLinkedBarangayActionBtn').on('click', function (e) {
+            e.preventDefault();
+            $('#editLinkedBarangayModal').modal('show');
+        });
+
+        $('#editLinkedBarangayModal').on('shown.bs.modal', function () {
+            initProfileBarangayEditors();
+        });
 
         $('#editLinkedDepartmentActionBtn').on('click', function (e) {
             e.preventDefault();
@@ -228,6 +394,109 @@
             $('#profileDeptOrgChartPreview').html(
                 '<img src="' + previewUrl + '" alt="Organizational chart preview" style="max-width: 160px; max-height: 160px; object-fit: contain;">'
             );
+        });
+
+        $('#profileBrgyLogo').on('change', function () {
+            const file = this.files && this.files[0] ? this.files[0] : null;
+            if (!file) {
+                return;
+            }
+
+            const previewUrl = URL.createObjectURL(file);
+            $('#profileBrgyLogoPreview').html(
+                '<img src="' + previewUrl + '" alt="Barangay logo preview" style="max-width: 120px; margin-top: 5px;">'
+            );
+        });
+
+        $('#profileBarangayForm').on('submit', function (e) {
+            e.preventDefault();
+            initProfileBarangayEditors();
+            syncProfileBarangayEditors();
+
+            const formData = new FormData(this);
+            const imageFile = formData.get('editbrgyImg');
+            const maxImageSizeMB = 4;
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+            if (!formData.get('editBrgy') || !formData.get('editCapt') || !formData.get('editAbout') ||
+                !formData.get('editMission') || !formData.get('editVision') || !formData.get('editContact')) {
+                showProfileMessage(false, 'Please fill in all required fields.');
+                return;
+            }
+
+            if (imageFile && imageFile.size > 0) {
+                if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
+                    showProfileMessage(false, 'Logo image size should not exceed 4 MB.');
+                    return;
+                }
+
+                if (!validImageTypes.includes(imageFile.type)) {
+                    showProfileMessage(false, 'Please upload a valid logo image file.');
+                    return;
+                }
+            }
+
+            submitProfileBarangayUpdate(formData, {
+                closeModal: true,
+                $button: $('#btnProfileBarangay')
+            });
+        });
+
+        $('#profileBrgyLogoButton').on('click', function () {
+            $('#profileBrgyCardLogoInput').trigger('click');
+        });
+
+        $('#profileBrgyCardLogoInput').on('change', function () {
+            const file = this.files && this.files[0] ? this.files[0] : null;
+            if (!file) {
+                return;
+            }
+
+            const maxImageSizeMB = 4;
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (file.size > maxImageSizeMB * 1024 * 1024) {
+                showProfileMessage(false, 'Logo image size should not exceed 4 MB.');
+                return;
+            }
+
+            if (!validImageTypes.includes(file.type)) {
+                showProfileMessage(false, 'Please upload a valid logo image file.');
+                return;
+            }
+
+            const previewUrl = URL.createObjectURL(file);
+            submitProfileBarangayUpdate(buildProfileBarangayFormData({ editbrgyImg: file }), {
+                successMessage: 'Barangay logo updated.',
+                errorMessage: 'Unable to update barangay logo. Please try again.',
+                previewImage: previewUrl
+            });
+        });
+
+        $(document).on('click', '.profile-brgy-status-action', function (e) {
+            e.preventDefault();
+
+            const currentStatus = $(this).attr('data-current-status') || '';
+            const nextStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+            const brgyId = $('#profileBrgyId').val() || '';
+
+            $.ajax({
+                url: "<?= site_url('admin/ajax/set_status_barangay') ?>",
+                type: 'POST',
+                data: { id: brgyId, status: nextStatus },
+                dataType: 'json',
+                success: function (response) {
+                    const saved = response.status == 1;
+                    showProfileMessage(saved, response.message || 'Barangay status updated.');
+                    if (saved) {
+                        const savedStatus = response.data && response.data.status ? response.data.status : nextStatus;
+                        $('#profileBrgyStatusCell').html(renderBarangayStatus(savedStatus));
+                        updateBarangayActionStatus(savedStatus);
+                    }
+                },
+                error: function () {
+                    showProfileMessage(false, 'Unable to update barangay status. Please try again.');
+                }
+            });
         });
 
         function renderDepartmentStatus(status) {
