@@ -1,6 +1,6 @@
 <?php
-$isDeptScopedAdmin = (($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT');
-$isBrgyScopedAdmin = (($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'BARANGAY');
+$isDeptScopedAdmin = (in_array($user->user_lvl ?? '', ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'DEPARTMENT');
+$isBrgyScopedAdmin = (in_array($user->user_lvl ?? '', ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'BARANGAY');
 $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 ?>
 

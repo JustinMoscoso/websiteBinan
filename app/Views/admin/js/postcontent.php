@@ -135,12 +135,12 @@
             {
                 buttonId: 'btnAdd',
                 instanceName: 'postcontentAddDesc',
-                hiddenInputId: 'desc'
+                hiddenInputId: 'addDescHidden'
             },
             {
                 buttonId: 'btnEdit',
                 instanceName: 'postcontentEditDesc',
-                hiddenInputId: 'editDesc'
+                hiddenInputId: 'editDescHidden'
             }
         ]
     });
@@ -151,7 +151,7 @@
             {
                 modalId: 'editModal',
                 instanceName: 'postcontentEditDesc',
-                contentField: 'editDesc'
+                contentField: 'editDescHidden'
             }
         ]
     });
@@ -288,7 +288,7 @@
         let formData = new FormData(form);
 
         // Form validation
-        if (!formData.get('title') || !formData.get('desc') || !formData.get('newsImg') || !formData.get('content_category')) {
+        if (!formData.get('title') || !formData.get('desc') || !formData.get('content_category')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
@@ -418,7 +418,7 @@
         let formData = new FormData(form);
 
         // Form validation
-        if (!formData.get('editTitle') || !formData.get('editDesc') || !formData.get('editNewsImg') || !formData.get('edit_content_category')) {
+        if (!formData.get('editTitle') || !formData.get('editDesc') || !formData.get('edit_content_category')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',

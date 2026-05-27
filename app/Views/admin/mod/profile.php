@@ -38,9 +38,18 @@
                         <form id="profileDetailsForm">
                             <div class="mb-3">
                                 <label for="profileFullName" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="profileFullName" name="fullName"
-                                    value="<?= esc(trim(($user->fname ?? '') . ' ' . ($user->lname ?? ''))) ?>"
-                                    required>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="profileFullName" name="fullName"
+                                        value="<?= esc(trim(implode(' ', array_filter([$user->fname ?? '', $user->mname ?? '', $user->lname ?? '', $user->suffix ?? ''], 'strlen')))) ?>"
+                                        readonly required>
+                                    <button class="btn btn-outline-secondary" type="button" id="btnEditName" data-bs-toggle="modal" data-bs-target="#editNameModal">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="profileFname" name="fname" value="<?= esc($user->fname ?? '') ?>">
+                                <input type="hidden" id="profileMname" name="mname" value="<?= esc($user->mname ?? '') ?>">
+                                <input type="hidden" id="profileLname" name="lname" value="<?= esc($user->lname ?? '') ?>">
+                                <input type="hidden" id="profileSuffix" name="suffix" value="<?= esc($user->suffix ?? '') ?>">
                             </div>
 
                             <div class="mb-3">
@@ -393,6 +402,7 @@
                                         <?= esc($nextDeptStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') ?>
                                     </a>
                                 </li>
+                                <?php if ($user->user_lvl !== 'ENCODER'): ?>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -401,6 +411,7 @@
                                         <i class="fas fa-trash mr-1"></i> Delete
                                     </a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                         </div>
                     </div>
@@ -748,9 +759,8 @@
     <div class="modal fade" id="editLinkedBarangayModal" tabindex="-1" aria-labelledby="editLinkedBarangayModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content border-0 shadow-lg profile-brgy-card">
-                <form id="profileBarangayForm" enctype="multipart/form-data">
-                    <input type="hidden" id="profileBrgyId" name="id" value="<?= esc($profile_barangay->ID ?? '') ?>">
+            <form id="profileBarangayForm" class="modal-content border-0 shadow-lg profile-brgy-card" enctype="multipart/form-data">
+                <input type="hidden" id="profileBrgyId" name="id" value="<?= esc($profile_barangay->ID ?? '') ?>">
 
                     <div class="modal-header text-white px-4 py-3" style="background-color: #1b4d3e;">
                         <h5 class="modal-title fw-bold" id="editLinkedBarangayModalLabel" style="font-size: 1.1rem;">
@@ -843,8 +853,7 @@
                             <i class="fas fa-save mr-1"></i> Update Changes
                         </button>
                     </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 <?php endif; ?>
@@ -884,9 +893,8 @@
 <?php if (!empty($profile_department)): ?>
     <div class="modal fade" id="editLinkedDepartmentModal" tabindex="-1" aria-labelledby="editLinkedDepartmentModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <form id="profileDepartmentForm" enctype="multipart/form-data">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <form id="profileDepartmentForm" class="modal-content" enctype="multipart/form-data">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editLinkedDepartmentModalLabel">Edit Department</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -909,7 +917,9 @@
                             <select class="form-select" id="profileDeptStatus" name="status" required>
                                 <option value="ACTIVE" <?= ($profile_department->status ?? '') === 'ACTIVE' ? 'selected' : '' ?>>Active</option>
                                 <option value="INACTIVE" <?= ($profile_department->status ?? '') === 'INACTIVE' ? 'selected' : '' ?>>Inactive</option>
+                                <?php if ($user->user_lvl !== 'ENCODER'): ?>
                                 <option value="ARCHIVED" <?= ($profile_department->status ?? '') === 'ARCHIVED' ? 'selected' : '' ?>>Archived</option>
+                                <?php endif; ?>
                             </select>
                         </div>
 
@@ -985,9 +995,54 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="modal-footer bg-light px-4 py-3 border-top w-100">
+                        <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fas fa-save mr-1"></i> Update Changes
+                        </button>
+                    </div>
 
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 <?php endif; ?>
+
+<!-- Edit Name Modal -->
+<div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="dlgFirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="dlgFirstName" required>
+                    <div class="invalid-feedback">First name is required.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="dlgMiddleName" class="form-label">Middle Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="dlgMiddleName" required>
+                    <div class="invalid-feedback">Middle name is required.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="dlgLastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="dlgLastName" required>
+                    <div class="invalid-feedback">Last name is required.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="dlgSuffix" class="form-label">Suffix (e.g. Jr., III) <span class="text-muted">(Optional)</span></label>
+                    <input type="text" class="form-control" id="dlgSuffix">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="btnSaveNameDlg">
+                    <i class="fas fa-save mr-1"></i> Apply
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

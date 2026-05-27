@@ -113,7 +113,7 @@
     }
 
     // Initialize Quill editors
-    var quillPerData = new Quill('#perdata', {
+    var quillPerData = new Quill('#addPerdataEditor', {
         modules: {
             toolbar: [
                 // Removed font and size dropdowns
@@ -131,7 +131,7 @@
         theme: 'snow'
     });
 
-    var quillEditPerData = new Quill('#editperdata', {
+    var quillEditPerData = new Quill('#editperdataEditor', {
         modules: {
             toolbar: [
                 // Removed font and size dropdowns
