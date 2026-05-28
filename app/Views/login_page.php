@@ -16,17 +16,17 @@
   <?php pre_styles('admin'); ?>
 
   <style>
-    /* Corporate Forest Green Color Identity Variable Matrix */
     :root {
       --theme-dark-green: #113329;
       --theme-mid-green: #1b4d3e;
       --theme-light-green: #2d6a4f;
       --theme-accent: #20c997;
-      --glass-panel-light: rgba(255, 255, 255, 0.96);
+      --glass-panel-light: rgba(255, 255, 255, 0.98);
     }
 
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f4f7f5;
     }
 
     /* Background Setup */
@@ -45,20 +45,19 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle, rgba(17, 51, 41, 0.15) 0%, rgba(10, 26, 21, 0.35) 100%);
-      backdrop-filter: blur(2px);
+      background: radial-gradient(circle, rgba(17, 51, 41, 0.4) 0%, rgba(10, 26, 21, 0.7) 100%);
+      backdrop-filter: blur(4px);
       z-index: -1;
     }
 
-    /* UPDATED: Solid Black Border Architecture */
+    /* INDUSTRY STANDARD: Responsive Container Architecture */
     .login-container-wrapper {
-      max-width: 1010px;
+      max-width: 960px;
       width: 100%;
-      border-radius: 20px;
-      /* Changed border color to a solid, distinct black */
-      border: 1.5px solid #000000 !important;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.12) !important;
       background: transparent;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3) !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
     }
 
     /* Left Hand Side Corporate Branding Container Segment */
@@ -66,8 +65,7 @@
       background: linear-gradient(145deg, var(--theme-dark-green) 0%, var(--theme-mid-green) 100%);
       position: relative;
       overflow: hidden;
-      /* Changed internal divider line to black to match the outer frame */
-      border-right: 1.5px solid #000000;
+      border-right: 1px solid rgba(0, 0, 0, 0.12);
     }
 
     .branding-side-panel::before {
@@ -81,12 +79,6 @@
       left: -70px;
     }
 
-    .brand-subtext {
-      color: #e2ebe7 !important;
-      font-weight: 400;
-      letter-spacing: 0.025em;
-    }
-
     /* Right Hand Side Refined Soft Panel */
     .login-form-side {
       background: var(--glass-panel-light) !important;
@@ -96,20 +88,20 @@
     .custom-input-group {
       border-radius: 8px;
       overflow: hidden;
-      transition: all 0.25s ease;
-      border: 1px solid #c9d1cc;
+      transition: all 0.2s ease;
+      border: 1px solid #ced4da;
       background-color: #ffffff;
     }
 
     .custom-input-group:focus-within {
       border-color: var(--theme-light-green);
-      box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.12);
+      box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.18);
     }
 
     .custom-input-group .input-group-text {
-      background-color: #f1f5f3;
+      background-color: #f8f9fa;
       border: none;
-      color: #52635a;
+      color: #495057;
       padding-left: 16px;
       padding-right: 16px;
     }
@@ -117,13 +109,10 @@
     .custom-input-group .form-control {
       border: none;
       padding: 12px 14px;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      /* Industry standard minimum for iOS zoom prevention */
       background-color: transparent;
-      color: #1e2924;
-    }
-
-    .custom-input-group .form-control::placeholder {
-      color: #8fa096;
+      color: #212529;
     }
 
     .custom-input-group .form-control:focus {
@@ -132,72 +121,73 @@
       background-color: transparent;
     }
 
-    .forgot-link-node {
-      color: var(--theme-mid-green);
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-
-    .forgot-link-node:hover {
-      color: var(--theme-light-green);
-      text-decoration: none;
-      opacity: 0.85;
-    }
-
     .theme-login-action-btn {
       background-color: var(--theme-mid-green);
       color: #ffffff;
       font-weight: 600;
-      padding: 13px 24px;
+      padding: 12px 24px;
       border-radius: 8px;
       border: none;
-      transition: all 0.2s ease-in-out;
-      letter-spacing: 0.01em;
+      transition: all 0.2s ease;
     }
 
     .theme-login-action-btn:hover {
       background-color: var(--theme-dark-green);
       color: #ffffff;
-      transform: translateY(-1px);
-      box-shadow: 0 5px 15px rgba(17, 51, 41, 0.25);
     }
 
-    .theme-login-action-btn:active {
-      transform: translateY(0);
+    /* Mobile specific adjustments to ensure smooth UX */
+    @media (max-width: 575.98px) {
+      .login-container-wrapper {
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+      }
+
+      .login-form-side {
+        padding: 2rem 1.5rem !important;
+      }
+
+      .custom-input-group .form-control {
+        font-size: 16px;
+        /* Explicitly forces mobile Safari not to zoom in */
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="backgroundlogin d-flex align-items-center justify-content-center min-vh-100 p-3 p-md-4">
+  <div class="backgroundlogin d-flex align-items-center justify-content-center min-vh-100 p-3 p-sm-4">
 
-    <div class="login-container-wrapper row shadow-2xl overflow-hidden mx-0">
+    <div class="login-container-wrapper row overflow-hidden mx-0">
 
       <div
         class="col-lg-5 branding-side-panel d-none d-lg-flex flex-column justify-content-center align-items-center text-white p-5">
         <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="brand-logo mb-4 img-fluid"
-          style="max-height: 150px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));" alt="Biñan Logo">
-        <h1 class="h3 fw-bold mb-2 tracking-wide text-center" style="letter-spacing: 0.05em;">BIÑAN CITY ADMIN</h1>
-
-
+          style="max-height: 140px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));" alt="Biñan Logo">
+        <h1 class="h4 fw-bold mb-2 text-center" style="letter-spacing: 0.05em; color: #ffffff;">BIÑAN CITY ADMIN</h1>
       </div>
 
-      <div class="col-lg-7 login-form-side p-4 p-sm-5 d-flex align-items-center">
-        <div class="w-100 py-2">
+      <div class="col-lg-7 login-form-side p-4 p-md-5 d-flex align-items-center">
+        <div class="w-100">
 
-          <div class="mb-4 pb-2">
-            <h2 class="fw-bold text-dark mb-1" style="color: #0b1411 !important;">Welcome Back</h2>
+          <div class="mb-4">
+            <div class="d-lg-none text-center mb-4">
+              <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="mb-3" style="max-height: 80px;"
+                alt="Biñan Logo">
+              <h2 class="h5 fw-bold text-dark mb-1">BIÑAN CITY ADMIN</h2>
+              <p class="text-muted small">Official Content Management System</p>
+              <hr class="my-4 opacity-25">
+            </div>
 
+            <h2 class="fw-bold text-dark mb-1 d-none d-lg-block">Welcome Back</h2>
+            <p class="text-secondary small d-none d-lg-block">Please enter your administrative credentials.</p>
           </div>
 
           <form method="post" autocomplete="off">
 
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-secondary mb-2"
-                style="color: #43534a !important;">Username</label>
+            <div class="mb-3">
+              <label for="txtUser" class="form-label small fw-bold text-secondary mb-2">Username</label>
               <div class="input-group custom-input-group">
                 <span class="input-group-text">
                   <i class='bx bxs-user fs-5'></i>
@@ -207,9 +197,8 @@
               </div>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label small fw-bold text-secondary mb-2"
-                style="color: #43534a !important;">Password</label>
+            <div class="mb-4">
+              <label for="txtPass" class="form-label small fw-bold text-secondary mb-2">Password</label>
               <div class="input-group custom-input-group">
                 <span class="input-group-text">
                   <i class='bx bxs-lock-alt fs-5'></i>
@@ -219,28 +208,28 @@
               </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-4 pt-1">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="check"
-                  style="cursor: pointer; border-color: #adbdae;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="form-check m-0">
+                <input class="form-check-input" type="checkbox" id="check" style="cursor: pointer;">
                 <label class="form-check-label small text-secondary user-select-none" for="check"
-                  style="cursor: pointer; color: #52635a !important;">
+                  style="cursor: pointer;">
                   Remember me
                 </label>
+              </div>
+            </div>
 
+            <div class="d-grid gap-2">
+              <button id="btnLoad" class="btn theme-login-action-btn d-none" type="button" disabled>
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Verifying Credentials...
+              </button>
 
-                <div class="d-grid gap-2 mt-4 pt-2">
+              <button id="btnLogin" class="btn theme-login-action-btn" type="submit">
+                <i class='bx bx-log-in-circle me-2 align-middle fs-5'></i>
+                <span class="align-middle">Login</span>
+              </button>
+            </div>
 
-                  <button id="btnLoad" class="btn theme-login-action-btn d-none" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Verifying Credentials Parameters...
-                  </button>
-
-                  <button id="btnLogin" class="btn theme-login-action-btn" type="submit">
-                    <i class='bx bx-log-in-circle me-2 align-middle fs-5'></i><span class="align-middle">Login</span>
-                  </button>
-
-                </div>
           </form>
 
         </div>
@@ -250,8 +239,9 @@
 
   </div>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-      class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
 
   <?php
   pre_scripts('admin');

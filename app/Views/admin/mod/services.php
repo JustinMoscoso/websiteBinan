@@ -15,10 +15,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
             </ol>
         </nav>
     </div>
-    <button type="button" class="btn btn-theme shadow-sm px-4 fw-semibold transition-all" data-bs-toggle="modal"
-        data-bs-target="#addModal">
-        <i class="bi bi-plus-circle me-2"></i>Add Service
-    </button>
+
 </div>
 
 <style>
@@ -116,49 +113,58 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
             <form id="serviceSearchForm">
                 <div class="row g-3 align-items-end">
 
-                    <div class="col-xl-4 col-lg-3 col-md-12">
+                    <div class="<?= !$isEntityScopedAdmin ? 'col-xl-3' : 'col-xl-6' ?> col-lg-4 col-md-12">
                         <label for="service_name" class="form-label small fw-bold text-secondary">Service Query
                             Title</label>
-                        <input type="text" class="form-control" name="service_name" id="service_name"
-                            placeholder="Search service keyword...">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control border-start-0" name="service_name" id="service_name"
+                                placeholder="Search service keyword..." style="height: 38px;">
+                        </div>
                     </div>
 
                     <?php if (!$isEntityScopedAdmin): ?>
-                        <div class="col-xl-2 col-lg-3 col-md-6">
+                        <div class="col-xl-2 col-lg-2 col-md-6">
                             <label for="searchCategory" class="form-label small fw-bold text-secondary">Scope Category</label>
-                            <select class="form-select" name="category" id="searchCategory">
+                            <select class="form-select bg-light border-secondary-subtle" name="category" id="searchCategory"
+                                style="height: 38px; cursor: pointer;">
                                 <option selected value="">All Categories</option>
                                 <option value="BARANGAY">Barangay</option>
                                 <option value="DEPARTMENT">Department</option>
                             </select>
                         </div>
 
-                        <div class="col-xl-2 col-lg-3 col-md-6">
+                        <div class="col-xl-2 col-lg-2 col-md-6">
                             <label class="form-label small fw-bold text-secondary">Assigned Unit</label>
 
                             <div id="searchBrgyGroup" style="display: none;">
-                                <select class="form-select" name="brgy" id="searchBrgy">
+                                <select class="form-select bg-light border-secondary-subtle" name="brgy" id="searchBrgy"
+                                    style="height: 38px; cursor: pointer;">
                                     <option value="">Select Barangay...</option>
                                 </select>
                             </div>
 
                             <div id="searchDeptGroup" style="display: none;">
-                                <select class="form-select" name="dept" id="searchDept">
+                                <select class="form-select bg-light border-secondary-subtle" name="dept" id="searchDept"
+                                    style="height: 38px; cursor: pointer;">
                                     <option value="">Select Dept...</option>
                                 </select>
                             </div>
 
                             <div id="searchDefaultGroup">
-                                <select class="form-select" disabled>
+                                <select class="form-select bg-light border-secondary-subtle" disabled style="height: 38px;">
                                     <option value="">Choose category first</option>
                                 </select>
                             </div>
                         </div>
                     <?php endif; ?>
 
-                    <div class="col-xl-2 col-lg-3 col-md-6">
+                    <div class="col-xl-2 col-lg-2 col-md-6">
                         <label for="status" class="form-label small fw-bold text-secondary">Publishing Status</label>
-                        <select class="form-select" name="status" id="status">
+                        <select class="form-select bg-light border-secondary-subtle" name="status" id="status"
+                            style="height: 38px; cursor: pointer;">
                             <option selected value="">All Statuses</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
@@ -166,18 +172,27 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                         </select>
                     </div>
 
-                    <div class="col-xl-2 col-lg-12 col-md-6 d-flex gap-2">
-                        <button type="reset" class="btn btn-light border w-50 fw-semibold" style="height: 38px;">
-                            Clear
-                        </button>
-                        <button type="submit" class="btn btn-theme w-50 fw-semibold" id="searchBtn" style="height: 38px;">
-                            Search
-                        </button>
+                    <div class="<?= !$isEntityScopedAdmin ? 'col-xl-3' : 'col-xl-4' ?> col-lg-4 col-md-12">
+                        <div class="d-flex gap-2 w-100">
+                            <button type="reset" class="btn btn-light border flex-grow-1 fw-semibold" style="height: 38px;">
+                                Clear
+                            </button>
+
+                            <button type="submit" class="btn btn-theme flex-grow-1 fw-semibold shadow-sm" id="searchBtn"
+                                style="height: 38px;">
+                                Search
+                            </button>
+
+                            <button type="button" class="btn btn-theme shadow-sm fw-semibold text-nowrap flex-grow-1"
+                                data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                <i class="bi bi-plus-circle me-1"></i>Add Service
+                            </button>
+                        </div>
                     </div>
 
                 </div>
             </form>
-        </div>
+        </div>f
     </div>
 <?php endif; ?>
 
@@ -213,7 +228,8 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                 <div class="row g-3">
 
                     <?php if ($isEntityScopedAdmin): ?>
-                        <input type="hidden" id="category" name="category" value="<?= $isBrgyScopedAdmin ? 'BRGY' : 'DEPT' ?>">
+                        <input type="hidden" id="category" name="category"
+                            value="<?= $isBrgyScopedAdmin ? 'BRGY' : 'DEPT' ?>">
                         <div class="col-12">
                             <label for="serviceName" class="form-label small fw-bold text-secondary">Service Provision Name
                                 <span class="text-danger">*</span></label>
@@ -295,7 +311,8 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                 <div class="row g-3">
 
                     <?php if ($isEntityScopedAdmin): ?>
-                        <input type="hidden" id="editcategory" name="editcategory" value="<?= $isBrgyScopedAdmin ? 'BRGY' : 'DEPT' ?>">
+                        <input type="hidden" id="editcategory" name="editcategory"
+                            value="<?= $isBrgyScopedAdmin ? 'BRGY' : 'DEPT' ?>">
                     <?php else: ?>
                         <div class="col-md-6">
                             <label for="editcategory" class="form-label small fw-bold text-secondary">Category Group Scope

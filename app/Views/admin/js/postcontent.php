@@ -44,7 +44,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_postcontent') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -91,7 +91,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_postcontent') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -167,7 +167,7 @@
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_postcontent'); ?>",
             "type": "POST",
-            "data": function(d) {
+            "data": function (d) {
                 d.search = $('input[name="search"]').val();
                 d.category = $('select[name="category"]').val();
                 d.status = $('select[name="status"]').val();
@@ -180,7 +180,7 @@
                 }
             }
         },
-        initComplete: function() {
+        initComplete: function () {
             var searchInput = $('#tblnews_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -199,15 +199,15 @@
                     return formatDate(date);
                 }
             },
-            { "title": "Title", "data": "title"},
-            { "title": "Author Name", "data": "author", width: '15%'},
+            { "title": "Title", "data": "title" },
+            { "title": "Author Name", "data": "author", width: '15%' },
             { "title": "Category", "data": "category", "className": "dt-center" },
             {
                 "title": "Image", "data": "file_loc", "className": "dt-center", width: '15%',
                 "render": function (data, type, row) {
                     return '<img id="img_loc" class="img-fluid mt-3" src="<?php echo base_url('admin/image/POSTCONTENT/') ?>' + data + '">';
                 }
-            },  
+            },
             {
                 "title": "Status",
                 "data": "status",
@@ -233,7 +233,7 @@
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -242,13 +242,13 @@
                         if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-                            
+
                             actionHtml += `
                                 <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
                         actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
                         actionHtml += renderDeleteAction(userLevel, row.ID, 'deletePostContent');
-                        
+
                         actionHtml += `</ul></div>`;
                         return actionHtml;
                     } else {
@@ -259,31 +259,31 @@
         ]
     });
 
-        var sltdRow = null;
+    var sltdRow = null;
 
-        $('#tblnews tbody').on('mouseover', 'tr', function () {
-            sltdRow = tbl.row(this).data();
+    $('#tblnews tbody').on('mouseover', 'tr', function () {
+        sltdRow = tbl.row(this).data();
     });
 
     // Search form submit: reload table with filters
-    $('#docSearchForm').on('submit', function(e) {
+    $('#docSearchForm').on('submit', function (e) {
         e.preventDefault();
         console.log('Search button clicked, reloading table...');
         tbl.ajax.reload();
     });
     // Clear filters: reload table
-    $('#docSearchForm').on('reset', function() {
+    $('#docSearchForm').on('reset', function () {
         console.log('Clear Filters button clicked, reloading table...');
-        setTimeout(function() {
+        setTimeout(function () {
             tbl.ajax.reload();
         }, 0);
     });
 
     // Add new post content
-    $('#btnAdd').on('click', function() {
+    $('#btnAdd').on('click', function () {
         // Update Quill content before form submission
         QuillManager.updateQuillFormContent();
-        
+
         let form = $('#addForm')[0];
         let formData = new FormData(form);
 
@@ -304,17 +304,17 @@
                 title: 'Validation Error',
                 text: 'Please upload an image.'
             });
-            return; 
+            return;
         }
-        
-        const maxImageSizeMB = 4; 
+
+        const maxImageSizeMB = 4;
         if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
                 text: `Image size should not exceed ${maxImageSizeMB} MB.`
             });
-            return; 
+            return;
         }
 
         const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -324,7 +324,7 @@
                 title: 'Validation Error',
                 text: 'Please upload a valid image file (jpg, png, gif).'
             });
-            return; 
+            return;
         }
 
         Swal.fire({
@@ -345,7 +345,7 @@
             data: formData,
             contentType: false,
             processData: false,
-            success: function(result) {
+            success: function (result) {
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
                     $('#addModal').modal('hide');
@@ -364,7 +364,7 @@
                     tbl.ajax.reload(null, false);
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -410,10 +410,10 @@
 
 
     // Function to submit the edit user form
-    $('#btnEdit').click(function() {
+    $('#btnEdit').click(function () {
         // Update Quill content before form submission
         QuillManager.updateQuillFormContent();
-        
+
         let form = $('#editForm')[0];
         let formData = new FormData(form);
 
@@ -433,7 +433,7 @@
             data: formData,
             processData: false,
             contentType: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.status === 1) {
                     Swal.fire({
                         icon: 'success',
@@ -451,7 +451,7 @@
                     });
                 }
             },
-            error: function() {
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',

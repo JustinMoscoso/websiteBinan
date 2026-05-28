@@ -25,8 +25,8 @@
 
     // Patch: Reverse the year list in the yearpicker dropdown so latest years appear first
     function reverseYearpickerList(inputId) {
-        $(inputId).on('focus', function() {
-            setTimeout(function() {
+        $(inputId).on('focus', function () {
+            setTimeout(function () {
                 var $ul = $(inputId).siblings('.yearpicker-dropdown').find('.yearpicker-year');
                 var $years = $ul.children('li');
                 $ul.html($years.get().reverse());
@@ -51,7 +51,7 @@
     function toggleQuarterField(show, modalType = 'add') {
         const quarterField = modalType === 'add' ? '#qtr' : '#editqtr';
         const quarterLabel = modalType === 'add' ? 'label[for="qtr"]' : 'label[for="editqtr"]';
-        
+
         if (show) {
             $(quarterField).closest('.form-group').show();
             $(quarterField).prop('required', true);
@@ -63,21 +63,21 @@
     }
 
     // Handle file category change in Add Modal
-    $('#fileCategory').on('change', function() {
+    $('#fileCategory').on('change', function () {
         const selectedCategory = $(this).val();
         const isAnnual = isAnnualCategory(selectedCategory);
         toggleQuarterField(!isAnnual, 'add');
     });
 
     // Handle file category change in Edit Modal
-    $('#editFileCategory').on('change', function() {
+    $('#editFileCategory').on('change', function () {
         const selectedCategory = $(this).val();
         const isAnnual = isAnnualCategory(selectedCategory);
         toggleQuarterField(!isAnnual, 'edit');
     });
 
     // Initialize quarter field visibility when Add modal opens
-    $('#addModal').on('shown.bs.modal', function() {
+    $('#addModal').on('shown.bs.modal', function () {
         const selectedCategory = $('#fileCategory').val();
         if (selectedCategory) {
             const isAnnual = isAnnualCategory(selectedCategory);
@@ -108,7 +108,7 @@
                     title: 'Validation Error',
                     text: 'Please fill in all required fields.'
                 });
-                return; 
+                return;
             }
         }
 
@@ -171,11 +171,11 @@
                     $('#editFileCategory')[0].selectize.setValue(res.file_category); // Set the value for selectize
                     $('#edityr').val(res.year);
                     $('#editqtr').val(res.quarter);
-                    
+
                     // Handle quarter field visibility based on category
                     const isAnnual = isAnnualCategory(res.file_category);
                     toggleQuarterField(!isAnnual, 'edit');
-                    
+
                     $('#editModal').modal('show');
                 } else {
                     Swal.fire({
@@ -216,7 +216,7 @@
                     title: 'Validation Error',
                     text: 'Please fill in all required fields.'
                 });
-                return; 
+                return;
             }
         }
         $.ajax({
@@ -282,7 +282,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_fulldiscpol') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -330,7 +330,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_fulldiscpol') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -363,14 +363,14 @@
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_fulldiscpol'); ?>",
             "type": "POST",
-            "data": function(d) {
+            "data": function (d) {
                 d.search = $('input[name="search"]').val();
                 d.frequency = $('select[name="frequency"]').val();
                 d.file_category = $('select[name="file_category"]').val();
                 d.status = $('select[name="status"]').val();
             }
         },
-        initComplete: function() {
+        initComplete: function () {
             var searchInput = $('#tblfdp_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -423,10 +423,10 @@
                     console.log("Rendering actions for row:", row.ID, "detected userLevel:", userLevel);
                     if (userLevel !== 'VIEWER') {
                         var fileUrl = "<?php echo base_url('admin/preview_file/FULLDISC/'); ?>" + encodeURIComponent(row.file_name);
-                        
+
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -437,13 +437,13 @@
                         if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-                            
+
                             actionHtml += `
                                 <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i>${statusText}</a></li>`;
                         }
                         actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
                         actionHtml += renderDeleteAction(userLevel, row.ID, 'deletePol');
-                        
+
                         actionHtml += `</ul></div>`;
                         return actionHtml;
                     } else {
@@ -461,35 +461,35 @@
     });
 
     // Attach a submit handler to the Document form
-$('#docSearchForm').on('submit', function(e) {
-    e.preventDefault(); // stop page reload
+    $('#docSearchForm').on('submit', function (e) {
+        e.preventDefault(); // stop page reload
 
-    // Grab values
-    const query      = $('[name="search"]').val().trim();
-    const frequency  = $('[name="frequency"]').val();
-    const category   = $('[name="file_category"]').val();
-    const status     = $('[name="status"]').val();
+        // Grab values
+        const query = $('[name="search"]').val().trim();
+        const frequency = $('[name="frequency"]').val();
+        const category = $('[name="file_category"]').val();
+        const status = $('[name="status"]').val();
 
-    console.log("Searching for:", query, "Frequency:", frequency, "Category:", category, "Status:", status);
+        console.log("Searching for:", query, "Frequency:", frequency, "Category:", category, "Status:", status);
 
-    // Example: reload your DataTable with filters
-    tbl.ajax.reload();
-});
+        // Example: reload your DataTable with filters
+        tbl.ajax.reload();
+    });
 
-// Clear Filters button
-$('#docSearchForm button[type="reset"]').on('click', function() {
-    // reset form fields
-    $('#docSearchForm')[0].reset();
+    // Clear Filters button
+    $('#docSearchForm button[type="reset"]').on('click', function () {
+        // reset form fields
+        $('#docSearchForm')[0].reset();
 
-    // also clear individual inputs if needed
-    $('[name="search"]').val('');
-    $('[name="frequency"]').val('');
-    $('[name="file_category"]').val('');
-    $('[name="status"]').val('');
+        // also clear individual inputs if needed
+        $('[name="search"]').val('');
+        $('[name="frequency"]').val('');
+        $('[name="file_category"]').val('');
+        $('[name="status"]').val('');
 
-    // reload table back to default
-    tbl.ajax.reload();
-});
+        // reload table back to default
+        tbl.ajax.reload();
+    });
 
 
 </script>

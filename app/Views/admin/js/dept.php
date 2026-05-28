@@ -42,7 +42,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_dept') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             deptTable.ajax.reload(null, false);
@@ -89,7 +89,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_dept') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             deptTable.ajax.reload(null, false);
@@ -113,65 +113,65 @@
 
     // Quill toolbar options
     var quillToolbarOptions = [
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'align': [] }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link'],
-      ['clean']
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'align': [] }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['link'],
+        ['clean']
     ];
 
     // Add Modal Quill editors
     var quillAbout, quillMission, quillVision, quillPolicy, quillContact;
     $('#addModal').on('shown.bs.modal', function () {
-      if (!quillAbout) {
-        quillAbout = new Quill('#quillAbout', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      if (!quillMission) {
-        quillMission = new Quill('#quillMission', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      if (!quillVision) {
-        quillVision = new Quill('#quillVision', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      if (!quillPolicy) {
-        quillPolicy = new Quill('#quillPolicy', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      if (!quillContact) {
-        quillContact = new Quill('#quillContact', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      
-      // Add image preview on file input change for Add modal
-      $('#deptImg').off('change').on('change', function() {
-          const file = this.files[0];
-          const preview = $('#addDeptLogoPreview');
-          if (file) {
-              const reader = new FileReader();
-              reader.onload = function(e) {
-                  preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-              };
-              reader.readAsDataURL(file);
-          } else {
-              preview.html('');
-          }
-      });
-      
-      // Add org chart preview on file input change for Add modal
-      $('#deptOrgChart').off('change').on('change', function() {
-          const file = this.files[0];
-          const preview = $('#addDeptOrgChartPreview');
-          if (file) {
-              const reader = new FileReader();
-              reader.onload = function(e) {
-                  preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-              };
-              reader.readAsDataURL(file);
-          } else {
-              preview.html('');
-          }
-      });
+        if (!quillAbout) {
+            quillAbout = new Quill('#quillAbout', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!quillMission) {
+            quillMission = new Quill('#quillMission', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!quillVision) {
+            quillVision = new Quill('#quillVision', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!quillPolicy) {
+            quillPolicy = new Quill('#quillPolicy', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!quillContact) {
+            quillContact = new Quill('#quillContact', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+
+        // Add image preview on file input change for Add modal
+        $('#deptImg').off('change').on('change', function () {
+            const file = this.files[0];
+            const preview = $('#addDeptLogoPreview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.html('');
+            }
+        });
+
+        // Add org chart preview on file input change for Add modal
+        $('#deptOrgChart').off('change').on('change', function () {
+            const file = this.files[0];
+            const preview = $('#addDeptOrgChartPreview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.html('');
+            }
+        });
     });
-    
+
     // Clear image preview when Add Modal closes
-    $('#addModal').on('hidden.bs.modal', function() {
+    $('#addModal').on('hidden.bs.modal', function () {
         $('#addDeptLogoPreview').html('');
         $('#addDeptOrgChartPreview').html('');
     });
@@ -179,52 +179,52 @@
     // Edit Modal Quill editors
     var editQuillAbout, editQuillMission, editQuillVision, editQuillPolicy, editQuillContact;
     $('#editModal').on('shown.bs.modal', function () {
-      if (!editQuillAbout) {
-        editQuillAbout = new Quill('#editQuillAbout', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      if (!editQuillMission) {
-        editQuillMission = new Quill('#editQuillMission', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      if (!editQuillVision) {
-        editQuillVision = new Quill('#editQuillVision', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      if (!editQuillPolicy) {
-        editQuillPolicy = new Quill('#editQuillPolicy', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
-      if (!editQuillContact) {
-        editQuillContact = new Quill('#editQuillContact', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
+        if (!editQuillAbout) {
+            editQuillAbout = new Quill('#editQuillAbout', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!editQuillMission) {
+            editQuillMission = new Quill('#editQuillMission', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!editQuillVision) {
+            editQuillVision = new Quill('#editQuillVision', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!editQuillPolicy) {
+            editQuillPolicy = new Quill('#editQuillPolicy', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!editQuillContact) {
+            editQuillContact = new Quill('#editQuillContact', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
     });
 
     // On Add submit, copy Quill HTML to hidden inputs
     $('#btnAdd').on('click', function () {
-      if (quillAbout && quillMission && quillVision && quillPolicy && quillContact) {
-        $('#txtAbout').val(quillAbout.root.innerHTML);
-        $('#txtMission').val(quillMission.root.innerHTML);
-        $('#txtVision').val(quillVision.root.innerHTML);
-        $('#txtPolicy').val(quillPolicy.root.innerHTML);
-        $('#txtContact').val(quillContact.root.innerHTML);
-      }
-      // Validation: check Quill content is not empty
-      if (
-        quillAbout.root.innerHTML.trim() === '' ||
-        quillAbout.root.innerHTML === '<p><br></p>' ||
-        quillMission.root.innerHTML.trim() === '' ||
-        quillMission.root.innerHTML === '<p><br></p>' ||
-        quillVision.root.innerHTML.trim() === '' ||
-        quillVision.root.innerHTML === '<p><br></p>' ||
-        quillPolicy.root.innerHTML.trim() === '' ||
-        quillPolicy.root.innerHTML === '<p><br></p>' ||
-        quillContact.root.innerHTML.trim() === '' ||
-        quillContact.root.innerHTML === '<p><br></p>'
-      ) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Validation Error',
-          text: 'Please fill in all required fields.'
-        });
-        return;
-      }
+        if (quillAbout && quillMission && quillVision && quillPolicy && quillContact) {
+            $('#txtAbout').val(quillAbout.root.innerHTML);
+            $('#txtMission').val(quillMission.root.innerHTML);
+            $('#txtVision').val(quillVision.root.innerHTML);
+            $('#txtPolicy').val(quillPolicy.root.innerHTML);
+            $('#txtContact').val(quillContact.root.innerHTML);
+        }
+        // Validation: check Quill content is not empty
+        if (
+            quillAbout.root.innerHTML.trim() === '' ||
+            quillAbout.root.innerHTML === '<p><br></p>' ||
+            quillMission.root.innerHTML.trim() === '' ||
+            quillMission.root.innerHTML === '<p><br></p>' ||
+            quillVision.root.innerHTML.trim() === '' ||
+            quillVision.root.innerHTML === '<p><br></p>' ||
+            quillPolicy.root.innerHTML.trim() === '' ||
+            quillPolicy.root.innerHTML === '<p><br></p>' ||
+            quillContact.root.innerHTML.trim() === '' ||
+            quillContact.root.innerHTML === '<p><br></p>'
+        ) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'Please fill in all required fields.'
+            });
+            return;
+        }
 
         let form = $('#addForm')[0];
         let formData = new FormData(form);
@@ -236,7 +236,7 @@
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
             });
-            return; 
+            return;
         }
 
         // Image validation
@@ -247,16 +247,16 @@
                 title: 'Validation Error',
                 text: 'Please upload a department logo.'
             });
-            return; 
+            return;
         }
-        const maxImageSizeMB = 4; 
+        const maxImageSizeMB = 4;
         if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
                 text: `Image size should not exceed ${maxImageSizeMB} MB.`
             });
-            return; 
+            return;
         }
 
         const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -266,7 +266,7 @@
                 title: 'Validation Error',
                 text: 'Please upload a valid image file (jpg, png, gif).'
             });
-            return; 
+            return;
         }
 
         Swal.fire({
@@ -341,32 +341,32 @@
                         if (editQuillPolicy) editQuillPolicy.root.innerHTML = res.quality_policy || '';
                         if (editQuillContact) editQuillContact.root.innerHTML = res.contact || '';
                     });
-                    
+
                     // Show current image in preview
                     $('#editDeptLogoPreview').html(
                         res.img_logo
                             ? `<img src="<?php echo base_url('admin/image/DEPT/') ?>${res.img_logo}" alt="Current Department Logo" style="max-width: 120px; margin-top: 5px;">`
                             : '<small>No logo available.</small>'
                     );
-                    
+
                     // Show current org chart in preview
                     $('#editDeptOrgChartPreview').html(
                         res.org_chart_img
                             ? `<img src="<?php echo base_url('admin/image/DEPT/') ?>${res.org_chart_img}" alt="Current Organizational Chart" style="max-width: 120px; margin-top: 5px;">`
                             : '<small>No org chart available.</small>'
                     );
-                    
+
                     // Reset file inputs
                     $('#editdeptImg').val('');
                     $('#editdeptOrgChart').val('');
-                    
+
                     // Add image preview on file input change for Edit modal
-                    $('#editdeptImg').off('change').on('change', function() {
+                    $('#editdeptImg').off('change').on('change', function () {
                         const file = this.files[0];
                         const preview = $('#editDeptLogoPreview');
                         if (file) {
                             const reader = new FileReader();
-                            reader.onload = function(e) {
+                            reader.onload = function (e) {
                                 preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
                             };
                             reader.readAsDataURL(file);
@@ -379,14 +379,14 @@
                             }
                         }
                     });
-                    
+
                     // Add org chart preview on file input change for Edit modal
-                    $('#editdeptOrgChart').off('change').on('change', function() {
+                    $('#editdeptOrgChart').off('change').on('change', function () {
                         const file = this.files[0];
                         const preview = $('#editDeptOrgChartPreview');
                         if (file) {
                             const reader = new FileReader();
-                            reader.onload = function(e) {
+                            reader.onload = function (e) {
                                 preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
                             };
                             reader.readAsDataURL(file);
@@ -399,7 +399,7 @@
                             }
                         }
                     });
-                    
+
                     $('#editModal').modal('show');
                 } else {
                     Swal.fire({
@@ -520,20 +520,20 @@
     });
 
     var deptTable = $('#tbldept').DataTable({
-    select: false,
-    searching: true,
-    ordering: true,
-    "order": [],
-    pageLength: 10,
-    processing: true,
-    ajax: {
-        url: "<?php echo base_url('admin/ajax/get_departments'); ?>",
-        type: "POST",
-        dataSrc: function(json) {
-            return json.data || [];
-        }
-    },
-    initComplete: function() {
+        select: false,
+        searching: true,
+        ordering: true,
+        "order": [],
+        pageLength: 10,
+        processing: true,
+        ajax: {
+            url: "<?php echo base_url('admin/ajax/get_departments'); ?>",
+            type: "POST",
+            dataSrc: function (json) {
+                return json.data || [];
+            }
+        },
+        initComplete: function () {
             var searchInput = $('#tbldept_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -543,31 +543,31 @@
                 'margin-left': '10px'       // Add space from the "Search:" label
             });
         },
-    columns: [
-        { "title": "Department ID", "data": "ID", "visible": false },
-        { "title": "Dept. Name", "data": "dept_name", width: '30%' },
-        { 
-            "title": "Logo", "data": "img_logo", "className": "dt-center",
-            "render": function (data, type, row) {
-                return '<img id="img_logo" class="img-fluid mt-3" src="<?php echo base_url('admin/image/DEPT/') ?>' + data + '">';
-            }
-        },
-        { "title": "Officer in Charge", "data": "head", width: '25%' },
-        {
-            "title": "Status",
-            "data": "status",
-            "className": "dt-center",
-            width: '10%',
-            "render": function (data, type, row) {
-                if (data == 'ACTIVE') {
-                    return '<span class="badge bg-success">Active</span>';
-                } else if (data == 'INACTIVE') {
-                    return '<span class="badge bg-danger">Inactive</span>';
-                } else {
-                    return '<span class="badge bg-secondary">Archived</span>';
+        columns: [
+            { "title": "Department ID", "data": "ID", "visible": false },
+            { "title": "Dept. Name", "data": "dept_name", width: '30%' },
+            {
+                "title": "Logo", "data": "img_logo", "className": "dt-center",
+                "render": function (data, type, row) {
+                    return '<img id="img_logo" class="img-fluid mt-3" src="<?php echo base_url('admin/image/DEPT/') ?>' + data + '">';
                 }
-            }
-        },
+            },
+            { "title": "Officer in Charge", "data": "head", width: '25%' },
+            {
+                "title": "Status",
+                "data": "status",
+                "className": "dt-center",
+                width: '10%',
+                "render": function (data, type, row) {
+                    if (data == 'ACTIVE') {
+                        return '<span class="badge bg-success">Active</span>';
+                    } else if (data == 'INACTIVE') {
+                        return '<span class="badge bg-danger">Inactive</span>';
+                    } else {
+                        return '<span class="badge bg-secondary">Archived</span>';
+                    }
+                }
+            },
             {
                 "title": "Actions",
                 "data": "ID",
@@ -577,7 +577,7 @@
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -586,13 +586,13 @@
                         if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-                            
+
                             actionHtml += `
                                 <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
                         actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
                         actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteDept');
-                        
+
                         actionHtml += `</ul></div>`;
                         return actionHtml;
                     } else {
@@ -609,57 +609,57 @@
         sltdRow = deptTable.row(this).data();
     });
 
-// Attach a submit handler to the form
-$('#departmentSearchForm').on('submit', function(e) {
-    e.preventDefault(); // stop page reload
-    applyDeptFilters(); // run your search logic
-});
+    // Attach a submit handler to the form
+    $('#departmentSearchForm').on('submit', function (e) {
+        e.preventDefault(); // stop page reload
+        applyDeptFilters(); // run your search logic
+    });
 
-// Optional: Clear Filters button
-$('#departmentSearchForm button[type="reset"]').on('click', function() {
-    // reset form fields
-    $('#departmentSearchForm')[0].reset();
-});
+    // Optional: Clear Filters button
+    $('#departmentSearchForm button[type="reset"]').on('click', function () {
+        // reset form fields
+        $('#departmentSearchForm')[0].reset();
+    });
 
 
-function applyDeptFilters() {
-    var searchTerm = $('#searchDept').val().trim().toLowerCase();
-    var statusFilter = $('select[name="deptStatus"]').val();
-    
-    // Custom filtering function for combined search
-    $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var row = deptTable.row(dataIndex).data();
-            var searchMatch = true;
-            var statusMatch = true;
-            
-            // Combined search for both department name and officer (case-insensitive)
-            if (searchTerm) {
-                var deptName = row.dept_name.toLowerCase();
-                var officerName = row.head.toLowerCase();
-                
-                // Check if search term matches either department name or officer name
-                if (!deptName.includes(searchTerm) && !officerName.includes(searchTerm)) {
-                    searchMatch = false;
+    function applyDeptFilters() {
+        var searchTerm = $('#searchDept').val().trim().toLowerCase();
+        var statusFilter = $('select[name="deptStatus"]').val();
+
+        // Custom filtering function for combined search
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var row = deptTable.row(dataIndex).data();
+                var searchMatch = true;
+                var statusMatch = true;
+
+                // Combined search for both department name and officer (case-insensitive)
+                if (searchTerm) {
+                    var deptName = row.dept_name.toLowerCase();
+                    var officerName = row.head.toLowerCase();
+
+                    // Check if search term matches either department name or officer name
+                    if (!deptName.includes(searchTerm) && !officerName.includes(searchTerm)) {
+                        searchMatch = false;
+                    }
                 }
-            }
-            
-            // Exact match for status
-            if (statusFilter) {
-                statusMatch = row.status === statusFilter;
-            }
-            
-            return searchMatch && statusMatch;
-        }
-    );
-    
-    deptTable.draw();
-    $.fn.dataTable.ext.search.pop(); // Remove filter after applying
-}
 
-// Clear filters button
-$('#departmentSearchForm button[type="reset"]').click(function() {
-    $('#departmentSearchForm')[0].reset();
-    deptTable.search('').columns().search('').draw();
-});
+                // Exact match for status
+                if (statusFilter) {
+                    statusMatch = row.status === statusFilter;
+                }
+
+                return searchMatch && statusMatch;
+            }
+        );
+
+        deptTable.draw();
+        $.fn.dataTable.ext.search.pop(); // Remove filter after applying
+    }
+
+    // Clear filters button
+    $('#departmentSearchForm button[type="reset"]').click(function () {
+        $('#departmentSearchForm')[0].reset();
+        deptTable.search('').columns().search('').draw();
+    });
 </script>

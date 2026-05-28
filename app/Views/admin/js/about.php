@@ -22,7 +22,7 @@
                 elementId: 'quillDesc',
                 instanceName: 'aboutAddDesc',
                 modalId: 'addModal',
-                shouldInit: function() {
+                shouldInit: function () {
                     return $('#DescGroup').is(':visible');
                 }
             },
@@ -30,7 +30,7 @@
                 elementId: 'editQuillDesc',
                 instanceName: 'aboutEditDesc',
                 modalId: 'editModal',
-                shouldInit: function() {
+                shouldInit: function () {
                     return $('#EditDescGroup').is(':visible');
                 }
             }
@@ -65,7 +65,7 @@
     });
 
     // Hide show input fields depending on chosen section
-    $('#content_category').on('change', function() {
+    $('#content_category').on('change', function () {
         var selectedCategory = $(this).val();
         if (selectedCategory === 'Content' || selectedCategory === 'Home Page' || selectedCategory === 'Emergency Hotlines') {
             $('#DescGroup').show();
@@ -85,7 +85,7 @@
         }
     });
 
-    $('#edit_content_category').on('change', function() {
+    $('#edit_content_category').on('change', function () {
         var selectedCategory = $(this).val();
         if (selectedCategory === 'Content' || selectedCategory === 'Home Page' || selectedCategory === 'Emergency Hotlines') {
             $('#EditDescGroup').show();
@@ -105,10 +105,10 @@
         }
     });
 
-    $('#btnAdd').on('click', function() {
+    $('#btnAdd').on('click', function () {
         // Update Quill content before form submission
         QuillManager.updateQuillFormContent();
-        
+
         let form = $('#addForm')[0];
         let formData = new FormData(form);
         let selectedCategory = formData.get('content_category');
@@ -144,17 +144,17 @@
                     title: 'Validation Error',
                     text: 'Please upload an image.'
                 });
-                return; 
+                return;
             }
 
-            const maxImageSizeMB = 4; 
+            const maxImageSizeMB = 4;
             if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Validation Error',
                     text: `Image size should not exceed ${maxImageSizeMB} MB.`
                 });
-                return; 
+                return;
             }
 
             const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -164,7 +164,7 @@
                     title: 'Validation Error',
                     text: 'Please upload a valid image file (jpg, png, gif).'
                 });
-                return; 
+                return;
             }
         } else if (selectedCategory === 'Home Page' || selectedCategory === 'Content' || selectedCategory === 'Emergency Hotlines') {
             if (!description) {
@@ -199,7 +199,7 @@
             data: formData,
             contentType: false,
             processData: false,
-            success: function(result) {
+            success: function (result) {
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
                     $('#addModal').modal('hide');
@@ -218,7 +218,7 @@
                     tbl.ajax.reload(null, false);
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -241,9 +241,9 @@
                     $('#edit_content_category').val(res.section);
                     $('#EditTxtTitle').val(res.title);
 
-                    if(res.section != 'Header') {
+                    if (res.section != 'Header') {
                         $('#EditDescGroup').show();
-                        if(res.section === 'History') {
+                        if (res.section === 'History') {
                             $('#EditAboutImgGrp').show();
                         } else {
                             $('#EditAboutImgGrp').hide();
@@ -253,7 +253,7 @@
                         $('#EditDescGroup, #EditAboutImgGrp').hide();
                     }
                     $('#editModal').modal('show');
-                    
+
                     // Set Quill editor content after modal is shown
                     $('#editModal').on('shown.bs.modal', function () {
                         if (res.section != 'Header') {
@@ -288,10 +288,10 @@
         });
     }
 
-    $('#btnEdit').click(function() {
+    $('#btnEdit').click(function () {
         // Update Quill content before form submission
         QuillManager.updateQuillFormContent();
-        
+
         let form = $('#editForm')[0];
         let formData = new FormData(form);
         let selectedCategory = formData.get('edit_content_category');
@@ -308,7 +308,7 @@
             });
             return; // Stop further execution if validation fails
         }
-        
+
         if (selectedCategory === 'History') {
             // Description validation
             if (!description) {
@@ -327,17 +327,17 @@
                     title: 'Validation Error',
                     text: 'Please upload an image.'
                 });
-                return; 
+                return;
             }
 
-            const maxImageSizeMB = 4; 
+            const maxImageSizeMB = 4;
             if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Validation Error',
                     text: `Image size should not exceed ${maxImageSizeMB} MB.`
                 });
-                return; 
+                return;
             }
 
             const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -347,7 +347,7 @@
                     title: 'Validation Error',
                     text: 'Please upload a valid image file (jpg, png, gif).'
                 });
-                return; 
+                return;
             }
         } else if (selectedCategory === 'Home Page' || selectedCategory === 'Content' || selectedCategory === 'Emergency Hotlines') {
             if (!description) {
@@ -370,7 +370,7 @@
             data: formData,
             processData: false,
             contentType: false,
-            success: function(response) {
+            success: function (response) {
                 if (response.status === 1) {
                     Swal.fire({
                         icon: 'success',
@@ -388,7 +388,7 @@
                     });
                 }
             },
-            error: function() {
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -427,14 +427,14 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_about') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
-                            text: statusSuccessText('Content', actionText)
+                                text: statusSuccessText('Content', actionText)
                             });
                         } else {
                             Swal.fire({
@@ -473,7 +473,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_about') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -514,7 +514,7 @@
                 }
             }
         },
-        initComplete: function() {
+        initComplete: function () {
             var searchInput = $('#tblabout_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -526,26 +526,26 @@
         },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
-            { "title": "Section", "data": "section"},
-            { "title": "Title", "data": "title", width: '15%'},
-            { 
-                "title": "Description", 
-                "data": "description", 
-                "className": "dt-head-center dt-body-justify",  
+            { "title": "Section", "data": "section" },
+            { "title": "Title", "data": "title", width: '15%' },
+            {
+                "title": "Description",
+                "data": "description",
+                "className": "dt-head-center dt-body-justify",
                 width: '30%',
                 "render": function (data, type, row) {
                     return data ? data : '-';
                 }
             },
             {
-                "title": "Image", 
-                "data": "about_img", 
-                "className": "dt-center", 
+                "title": "Image",
+                "data": "about_img",
+                "className": "dt-center",
                 width: '15%',
                 "render": function (data, type, row) {
                     return data ? '<img id="img_loc" class="img-fluid mt-3" src="<?php echo base_url('admin/image/ABOUT/') ?>' + data + '">' : '-';
                 }
-            },  
+            },
             {
                 "title": "Status",
                 "data": "status",
@@ -571,7 +571,7 @@
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -580,14 +580,14 @@
                         if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-                            
+
                             actionHtml += `
                                 <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
 
                         actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
                         actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteAbout');
-                        
+
                         actionHtml += `</ul></div>`;
                         return actionHtml;
                     } else {
