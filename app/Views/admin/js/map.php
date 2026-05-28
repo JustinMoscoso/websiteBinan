@@ -399,6 +399,22 @@
                 "url": "<?= base_url('admin/ajax/get_map') ?>",
                 "type": "POST"
             },
+            initComplete: function () {
+                var searchInput = $('#tblmap_filter input[type="search"]');
+                searchInput.attr('placeholder', 'Search maps...');
+                searchInput.addClass('form-control form-control-sm d-inline-block');
+                searchInput.css({
+                    'width': '250px',
+                    'margin-left': '0.5rem'
+                });
+                
+                var lengthSelect = $('#tblmap_length select');
+                lengthSelect.addClass('form-select form-select-sm d-inline-block');
+                lengthSelect.css({
+                    'width': 'auto',
+                    'margin': '0 0.5rem'
+                });
+            },
             columns: [
                 { "title": "ID", "data": "ID", "visible": false },
                 { "title": "Barangay Name", "data": "brgy_name", width: '30%' },
@@ -411,12 +427,13 @@
                     "className": "dt-center",
                     width: '10%',
                     "render": function (data) {
-                        if (data === 'ACTIVE') {
-                            return '<span class="badge bg-success">Active</span>';
-                        } else if (data === 'INACTIVE') {
-                            return '<span class="badge bg-danger">Inactive</span>';
+                        var status = data;
+                        if (status == 'ACTIVE') {
+                            return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
+                        } else if (status == 'INACTIVE') {
+                            return '<span class="status-badge status-badge-inactive"><span class="status-dot status-dot-inactive"></span>Inactive</span>';
                         } else {
-                            return '<span class="badge bg-secondary">Archived</span>';
+                            return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>Archived</span>';
                         }
                     }
                 },
@@ -426,24 +443,26 @@
                     "className": "dt-center",
                     "render": function (data, type, row) {
                         if (userLevel !== 'VIEWER') {
-                            var actions = '<div class="btn-group">' +
-                                '<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">' +
-                                'Actions' +
-                                '</button>' +
-                                '<ul class="dropdown-menu">' +
-                                '<li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(' + row.ID + ')"><i class="fa-solid fa-pen-to-square"></i> Manage</button></li>';
+                            var actions = `<div class="dropdown">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                                <i class="bi bi-list"></i> Actions
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Manage</a></li>`;
 
                             if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
-                                actions += '<li><button type="button" class="dropdown-item" onclick="activate(' + row.ID + ')"><i class="fa-solid fa-check"></i> Activate</button></li>' +
-                                           '<li><button type="button" class="dropdown-item" onclick="deactivate(' + row.ID + ')"><i class="fa-solid fa-xmark"></i> Deactivate</button></li>';
+                                var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
+                                var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
+                                var statusFunc = row.status === 'ACTIVE' ? 'deactivate' : 'activate';
+                                actions += `<li><a class="dropdown-item" href="#" onclick="${statusFunc}(${row.ID})"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                             }
                             if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
-                                actions += '<li><button type="button" class="dropdown-item" onclick="setMapStatus(' + row.ID + ', &quot;ACTIVE&quot;)"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</button></li>';
+                                actions += `<li><a class="dropdown-item" href="#" onclick="setMapStatus(${row.ID}, 'ACTIVE')"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</a></li>`;
                             } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
-                                actions += '<li><button type="button" class="dropdown-item text-warning" onclick="setMapStatus(' + row.ID + ', &quot;ARCHIVED&quot;)"><i class="bi bi-archive me-1"></i> Archive</button></li>';
+                                actions += `<li><a class="dropdown-item text-warning" href="#" onclick="setMapStatus(${row.ID}, 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
                             }
                             if (adminCanDelete(userLevel)) {
-                                actions += '<li><hr class="dropdown-divider"></li><li><button type="button" class="dropdown-item text-danger" onclick="deleteMap(' + row.ID + ')"><i class="bi bi-trash me-1"></i> Delete</button></li>';
+                                actions += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="deleteMap(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
                             }
 
                             actions += '</ul></div>';
@@ -462,5 +481,5 @@
             sltdRow = tblmap.row(this).data();
         });
 
-            console.log('DataTable for #tblmap initialized successfully');
+        console.log('DataTable for #tblmap initialized successfully');
 </script>

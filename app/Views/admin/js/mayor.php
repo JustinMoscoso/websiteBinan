@@ -386,12 +386,18 @@
         },
         initComplete: function () {
             var searchInput = $('#tblmayor_filter input[type="search"]');
-            searchInput.attr('placeholder', 'Search Category...');
-            searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+            searchInput.attr('placeholder', 'Search executive profile...');
+            searchInput.addClass('form-control form-control-sm d-inline-block');
             searchInput.css({
-                'width': '350px',           // Make it wider
-                'border': '2px solid #388e3c', // Distinct brand-green border
-                'margin-left': '10px'       // Add space from the "Search:" label
+                'width': '250px',
+                'margin-left': '0.5rem'
+            });
+            
+            var lengthSelect = $('#tblmayor_length select');
+            lengthSelect.addClass('form-select form-select-sm d-inline-block');
+            lengthSelect.css({
+                'width': 'auto',
+                'margin': '0 0.5rem'
             });
         },
         columns: [
@@ -430,11 +436,11 @@
                 "render": function (data, type, row) {
                     var status = data;
                     if (status == 'ACTIVE') {
-                        return '<span class="badge bg-success">Active</span>';
+                        return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
                     } else if (status == 'INACTIVE') {
-                        return '<span class="badge bg-danger">Inactive</span>';
+                        return '<span class="status-badge status-badge-inactive"><span class="status-dot status-dot-inactive"></span>Inactive</span>';
                     } else {
-                        return '<span class="badge bg-secondary">Archived</span>';
+                        return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>Archived</span>';
                     }
                 }
             },
@@ -447,7 +453,7 @@
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
