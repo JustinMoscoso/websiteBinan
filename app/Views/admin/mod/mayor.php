@@ -106,6 +106,75 @@
     }
 </style>
 
+<?php if (in_array($user->user_lvl, ['ADMIN', 'SUPERADMIN', 'DEVELOPER'])): ?>
+<div class="card card-premium mb-4 border-start border-4"
+    style="border-start-color: var(--theme-mid-green) !important;">
+
+    <div class="card-body p-4">
+        <form id="mayorSearchForm">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-xl-4 col-lg-4 col-md-12">
+                    <label class="form-label small fw-bold text-secondary">Search Keyword</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" name="search"
+                            placeholder="Search Section / Mayor Name...">
+                    </div>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-6">
+                    <label class="form-label small fw-bold text-secondary">Category Filter</label>
+                    <select class="form-select bg-light border-secondary-subtle" name="category"
+                        style="height: 38px; cursor: pointer;">
+                        <option selected value="">All Sections</option>
+                        <option value="Personal Data">Personal Data</option>
+                        <option value="Awards">Awards</option>
+                        <option value="Years Service">Years Service</option>
+                        <option value="Gallery">Gallery</option>
+                        <option value="Home Page">Home Page</option>
+                    </select>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-6">
+                    <label class="form-label small fw-bold text-secondary">Publication Status</label>
+                    <select class="form-select bg-light border-secondary-subtle" name="status"
+                        style="height: 38px; cursor: pointer;">
+                        <option selected value="">All Statuses</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
+                        <option value="ARCHIVED">Archived</option>
+                    </select>
+                </div>
+
+                <div class="col-xl-4 col-lg-4 col-md-12">
+                    <div class="d-flex gap-2 w-100">
+                        <button type="reset" class="btn btn-outline-secondary flex-grow-1 fw-semibold"
+                            style="height: 38px;">
+                            Clear
+                        </button>
+                        <button type="submit" class="btn btn-outline-success flex-grow-1 fw-semibold shadow-sm"
+                            id="mayorSearchBtn" style="height: 38px;">
+                            Search
+                        </button>
+                        <?php if (!(($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT' && !empty($is_mayor))): ?>
+                            <button type="button" class="btn btn-success shadow-sm fw-semibold text-nowrap flex-grow-1"
+                                data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                <i class="bi bi-plus-circle me-1"></i>Add Content
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+<?php endif; ?>
+
 <section class="section">
     <div class="row">
         <div class="col-12">

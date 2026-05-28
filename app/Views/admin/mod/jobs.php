@@ -86,6 +86,70 @@
     .transition-all { transition: all 0.2s ease; }
 </style>
 
+<?php if (in_array($user->user_lvl, ['ADMIN', 'SUPERADMIN', 'DEVELOPER'])): ?>
+<div class="card card-premium mb-4 border-start border-4"
+    style="border-start-color: var(--theme-mid-green) !important;">
+
+    <div class="card-body p-4">
+        <form id="jobsSearchForm">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-xl-4 col-lg-4 col-md-12">
+                    <label class="form-label small fw-bold text-secondary">Search Keyword</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" name="search"
+                            placeholder="Search Title / Company / Email...">
+                    </div>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-6">
+                    <label class="form-label small fw-bold text-secondary">Job Type Filter</label>
+                    <select class="form-select bg-light border-secondary-subtle" name="type"
+                        style="height: 38px; cursor: pointer;">
+                        <option selected value="">All Types</option>
+                        <option value="Full Time">Full Time</option>
+                        <option value="Part Time">Part Time</option>
+                    </select>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-6">
+                    <label class="form-label small fw-bold text-secondary">Publication Status</label>
+                    <select class="form-select bg-light border-secondary-subtle" name="status"
+                        style="height: 38px; cursor: pointer;">
+                        <option selected value="">All Statuses</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
+                        <option value="ARCHIVED">Archived</option>
+                    </select>
+                </div>
+
+                <div class="col-xl-4 col-lg-4 col-md-12">
+                    <div class="d-flex gap-2 w-100">
+                        <button type="reset" class="btn btn-outline-secondary flex-grow-1 fw-semibold"
+                            style="height: 38px;">
+                            Clear
+                        </button>
+                        <button type="submit" class="btn btn-outline-success flex-grow-1 fw-semibold shadow-sm"
+                            id="jobsSearchBtn" style="height: 38px;">
+                            Search
+                        </button>
+                        <button type="button" class="btn btn-success shadow-sm fw-semibold text-nowrap flex-grow-1"
+                            data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                            <i class="bi bi-plus-circle me-1"></i>Add Job
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+<?php endif; ?>
+
 <section class="section">
     <div class="row">
         <div class="col-12">

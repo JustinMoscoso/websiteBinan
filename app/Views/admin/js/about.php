@@ -506,6 +506,11 @@
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_about'); ?>",
             "type": "POST",
+            "data": function (d) {
+                d.search_kw = $('form#aboutSearchForm input[name="search"]').val();
+                d.section   = $('form#aboutSearchForm select[name="section"]').val();
+                d.status    = $('form#aboutSearchForm select[name="status"]').val();
+            },
             "dataSrc": function (json) {
                 if (json.data && Array.isArray(json.data)) {
                     return json.data;
@@ -602,6 +607,16 @@
 
     $('#tblabout tbody').on('mouseover', 'tr', function () {
         sltdRow = tbl.row(this).data();
+    });
+
+    // Advanced Search form — submit reloads table with filters
+    $('#aboutSearchForm').on('submit', function (e) {
+        e.preventDefault();
+        tbl.ajax.reload();
+    });
+    // Clear filters — reset then reload
+    $('#aboutSearchForm').on('reset', function () {
+        setTimeout(function () { tbl.ajax.reload(); }, 0);
     });
 
 

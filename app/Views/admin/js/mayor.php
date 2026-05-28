@@ -367,6 +367,11 @@
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_mayor'); ?>",
             "type": "POST",
+            "data": function (d) {
+                d.search_kw = $('form#mayorSearchForm input[name="search"]').val();
+                d.category  = $('form#mayorSearchForm select[name="category"]').val();
+                d.status    = $('form#mayorSearchForm select[name="status"]').val();
+            },
             "dataSrc": function (json) {
                 if (json.data && Array.isArray(json.data)) {
                     return json.data.map(function (item) {
@@ -472,5 +477,15 @@
 
     $('#tblmayor tbody').on('mouseover', 'tr', function () {
         sltdRow = tbl.row(this).data();
+    });
+
+    // Advanced Search form — submit reloads table with filters
+    $('#mayorSearchForm').on('submit', function (e) {
+        e.preventDefault();
+        tbl.ajax.reload();
+    });
+    // Clear filters — reset then reload
+    $('#mayorSearchForm').on('reset', function () {
+        setTimeout(function () { tbl.ajax.reload(); }, 0);
     });
 </script>

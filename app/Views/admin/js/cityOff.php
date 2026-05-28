@@ -778,6 +778,11 @@
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_cityoff'); ?>",
             "type": "POST",
+            "data": function (d) {
+                d.search_kw = $('form#cityoffSearchForm input[name="search"]').val();
+                d.position  = $('form#cityoffSearchForm select[name="position"]').val();
+                d.status    = $('form#cityoffSearchForm select[name="status"]').val();
+            },
             "dataSrc": function (json) {
                 if (json.data && Array.isArray(json.data)) {
                     return json.data;
@@ -891,5 +896,15 @@
 
     $('#tbloff tbody').on('mouseover', 'tr', function () {
         sltdRow = tbl.row(this).data();
+    });
+
+    // Advanced Search form — submit reloads table with filters
+    $('#cityoffSearchForm').on('submit', function (e) {
+        e.preventDefault();
+        tbl.ajax.reload();
+    });
+    // Clear filters — reset then reload
+    $('#cityoffSearchForm').on('reset', function () {
+        setTimeout(function () { tbl.ajax.reload(); }, 0);
     });
 </script>
