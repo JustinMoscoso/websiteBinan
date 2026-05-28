@@ -473,17 +473,21 @@
             {
                 title: 'Account Type', data: 'account_type', className: 'dt-center', defaultContent: 'System',
                 render: function (data) {
-                    if (data === 'DEPARTMENT') return '<span class="badge bg-primary">Department</span>';
-                    if (data === 'BARANGAY') return '<span class="badge bg-info text-dark">Barangay</span>';
-                    return '<span class="badge bg-secondary">System</span>';
+                    if (data === 'DEPARTMENT') {
+                        return '<span class="status-badge acctype-badge-dept"><span class="status-dot acctype-dot-dept"></span>Department</span>';
+                    }
+                    if (data === 'BARANGAY') {
+                        return '<span class="status-badge acctype-badge-brgy"><span class="status-dot acctype-dot-brgy"></span>Barangay</span>';
+                    }
+                    return '<span class="status-badge acctype-badge-system"><span class="status-dot acctype-dot-system"></span>System</span>';
                 }
             },
             {
                 title: 'Status', data: 'status', className: 'dt-center', width: '10%',
                 render: function (data) {
-                    if (data === 'ACTIVE') return '<span class="badge bg-success">Active</span>';
-                    if (data === 'INACTIVE') return '<span class="badge bg-danger">Inactive</span>';
-                    return '<span class="badge bg-secondary">Archived</span>';
+                    if (data === 'ACTIVE') return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
+                    if (data === 'INACTIVE') return '<span class="status-badge status-badge-inactive"><span class="status-dot status-dot-inactive"></span>Inactive</span>';
+                    return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>Archived</span>';
                 }
             },
             {
@@ -539,9 +543,19 @@
         ],
         initComplete: function () {
             var searchInput = $('#tbluser_filter input[type="search"]');
-            searchInput.attr('placeholder', 'Search User\u2026');
-            searchInput.removeClass('form-control-sm');
-            searchInput.css({ width: '350px', border: '2px solid #388e3c', marginLeft: '10px' });
+            searchInput.attr('placeholder', 'Search accounts...');
+            searchInput.addClass('form-control form-control-sm d-inline-block');
+            searchInput.css({
+                'width': '250px',
+                'margin-left': '0.5rem'
+            });
+            
+            var lengthSelect = $('#tbluser_length select');
+            lengthSelect.addClass('form-select form-select-sm d-inline-block');
+            lengthSelect.css({
+                'width': 'auto',
+                'margin': '0 0.5rem'
+            });
         }
     });
 

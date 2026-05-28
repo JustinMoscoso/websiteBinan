@@ -27,19 +27,111 @@
         background: #ffffff;
     }
 
-    /* Standout styling for DataTables filtering tools if embedded within this page structure */
-    .dataTables_filter input[type="search"] {
-        width: 320px !important;
-        border: 2px solid var(--theme-mid-green) !important;
-        border-radius: 8px !important;
-        padding: 6px 12px !important;
-        font-size: 0.95rem !important;
-        margin-left: 10px !important;
-        outline: none;
+    /* SB Admin 2 Data Table Custom Styles */
+    .card-sb {
+        border: 1px solid #e3e6f0;
+        border-radius: 0.35rem;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+        background-color: #fff;
     }
 
-    .dataTables_filter input[type="search"]:focus {
-        box-shadow: 0 0 0 0.25rem rgba(45, 106, 79, 0.25) !important;
+    .card-sb-header {
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: #f8f9fc;
+        border-bottom: 1px solid #e3e6f0;
+        border-top-left-radius: calc(0.35rem - 1px);
+        border-top-right-radius: calc(0.35rem - 1px);
+    }
+
+    #tblaudit {
+        border-collapse: collapse !important;
+        background-color: #ffffff !important;
+    }
+
+    #tblaudit th {
+        background-color: #f8f9fc !important;
+        color: var(--theme-dark-green) !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+        border: 1px solid #e3e6f0 !important;
+        padding: 12px 16px;
+    }
+
+    #tblaudit td {
+        padding: 14px 16px;
+        vertical-align: middle;
+        border: 1px solid #e3e6f0 !important;
+        background-color: inherit !important;
+    }
+
+    /* Clean, soft table row backgrounds overriding DataTables/Bootstrap defaults */
+    #tblaudit tbody tr {
+        background-color: #ffffff !important;
+        transition: background-color 0.15s ease-in-out;
+    }
+
+    #tblaudit tbody tr:hover {
+        background-color: #eef6f0 !important; /* Soft premium green highlight on hover */
+    }
+
+    /* Custom Integrated Search Box Filters for DataTables matching SB Admin 2 */
+    .dataTables_length label,
+    .dataTables_filter label {
+        color: #858796;
+        font-weight: normal;
+        font-size: 0.875rem;
+    }
+
+    .dataTables_length select {
+        background-color: #fff;
+        border: 1px solid #d1d3e2;
+        border-radius: 0.35rem;
+        padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+        line-height: 1.5;
+        color: #6e707e;
+        vertical-align: middle;
+        font-size: 0.875rem;
+        height: 38px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .dataTables_length select:focus {
+        border-color: var(--theme-mid-green);
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.25);
+    }
+
+    .dataTables_filter input {
+        background-color: #fff;
+        border: 1px solid #d1d3e2;
+        border-radius: 0.35rem;
+        padding: 0.375rem 0.75rem;
+        line-height: 1.5;
+        color: #6e707e;
+        font-size: 0.875rem;
+        height: 38px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .dataTables_filter input:focus {
+        border-color: var(--theme-mid-green);
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.25);
+    }
+
+    .dataTables_info {
+        color: #858796;
+        font-size: 0.875rem;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        background: transparent !important;
     }
 </style>
 
@@ -91,10 +183,16 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="card card-premium mb-4">
-                <div class="card-body p-4">
+            <!-- SB Admin 2 Styled Card -->
+            <div class="card shadow mb-4 border-top border-4" style="border-top-color: var(--theme-mid-green) !important;">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
+                    <h6 class="m-0 font-weight-bold text-success">
+                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Audit Log Directory
+                    </h6>
+                </div>
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table id="tblaudit" class="table table-hover align-middle mb-0" cellspacing="0" width="100%">
+                        <table id="tblaudit" class="table table-bordered table-hover align-middle mb-0" cellspacing="0" width="100%">
                         </table>
                     </div>
                 </div>

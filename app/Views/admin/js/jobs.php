@@ -71,12 +71,18 @@
             },
             initComplete: function () {
                 var searchInput = $('#tbljobs_filter input[type="search"]');
-                searchInput.attr('placeholder', 'Search Category...');
-                searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
+                searchInput.attr('placeholder', 'Search jobs...');
+                searchInput.addClass('form-control form-control-sm d-inline-block');
                 searchInput.css({
-                    'width': '350px',           // Make it wider
-                    'border': '2px solid #388e3c', // Distinct brand-green border
-                    'margin-left': '10px'       // Add space from the "Search:" label
+                    'width': '250px',
+                    'margin-left': '0.5rem'
+                });
+                
+                var lengthSelect = $('#tbljobs_length select');
+                lengthSelect.addClass('form-select form-select-sm d-inline-block');
+                lengthSelect.css({
+                    'width': 'auto',
+                    'margin': '0 0.5rem'
                 });
             },
             "columns": [
@@ -102,8 +108,14 @@
                     "data": "type",
                     "render": function (data, type, row) {
                         if (type === 'display') {
-                            var badgeClass = data === 'Full Time' ? 'bg-primary' : 'bg-info';
-                            return '<span class="badge ' + badgeClass + '">' + (data || 'N/A') + '</span>';
+                            if (!data) return 'N/A';
+                            if (data === 'Full Time') {
+                                return '<span class="status-badge jobtype-badge-fulltime"><span class="status-dot jobtype-dot-fulltime"></span>Full Time</span>';
+                            } else if (data === 'Part Time') {
+                                return '<span class="status-badge jobtype-badge-parttime"><span class="status-dot jobtype-dot-parttime"></span>Part Time</span>';
+                            } else {
+                                return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>' + data + '</span>';
+                            }
                         }
                         return data;
                     }
@@ -121,10 +133,18 @@
                 {
                     "title": "Status",
                     "data": "status",
+                    "className": "dt-center",
+                    width: '10%',
                     "render": function (data, type, row) {
                         if (type === 'display') {
-                            var badgeClass = data === 'ACTIVE' ? 'bg-success' : 'bg-secondary';
-                            return '<span class="badge ' + badgeClass + '">' + data + '</span>';
+                            var status = data;
+                            if (status == 'ACTIVE') {
+                                return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
+                            } else if (status == 'INACTIVE') {
+                                return '<span class="status-badge status-badge-inactive"><span class="status-dot status-dot-inactive"></span>Inactive</span>';
+                            } else {
+                                return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>Archived</span>';
+                            }
                         }
                         return data;
                     }

@@ -52,6 +52,21 @@
                 (pageInfo.end) + ' of ' + pageInfo.recordsDisplay + ' entries'
             );
         });
+
+        var searchInput = $('#tblaudit_filter input[type="search"]');
+        searchInput.attr('placeholder', 'Search audit logs...');
+        searchInput.addClass('form-control form-control-sm d-inline-block');
+        searchInput.css({
+            'width': '250px',
+            'margin-left': '0.5rem'
+        });
+        
+        var lengthSelect = $('#tblaudit_length select');
+        lengthSelect.addClass('form-select form-select-sm d-inline-block');
+        lengthSelect.css({
+            'width': 'auto',
+            'margin': '0 0.5rem'
+        });
     }
 });
 
