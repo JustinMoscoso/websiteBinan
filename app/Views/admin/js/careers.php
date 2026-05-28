@@ -263,7 +263,12 @@
         processing: true,
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_career'); ?>",
-            "type": "POST"
+            "type": "POST",
+            "data": function (d) {
+                d.search_kw = $('form#careerSearchForm input[name="search"]').val();
+                d.level     = $('form#careerSearchForm select[name="level"]').val();
+                d.status    = $('form#careerSearchForm select[name="status"]').val();
+            }
         },
         initComplete: function () {
             var searchInput = $('#tblcareer_filter input[type="search"]');
@@ -355,5 +360,14 @@
         sltdRow = tbl.row(this).data();
     });
 
+    // Advanced Search form — submit reloads table with filters
+    $('#careerSearchForm').on('submit', function (e) {
+        e.preventDefault();
+        tbl.ajax.reload();
+    });
+    // Clear filters — reset then reload
+    $('#careerSearchForm').on('reset', function () {
+        setTimeout(function () { tbl.ajax.reload(); }, 0);
+    });
 
 </script>

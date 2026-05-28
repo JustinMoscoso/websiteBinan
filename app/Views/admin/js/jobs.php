@@ -55,6 +55,11 @@
             "ajax": {
                 "url": "<?php echo site_url('admin/ajax/get_jobs'); ?>",
                 "type": "POST",
+                "data": function (d) {
+                    d.search_kw = $('form#jobsSearchForm input[name="search"]').val();
+                    d.type      = $('form#jobsSearchForm select[name="type"]').val();
+                    d.status    = $('form#jobsSearchForm select[name="status"]').val();
+                },
                 "dataSrc": function (json) {
                     if (json.status === 1) {
                         return json.data;
@@ -508,6 +513,15 @@
             window.currentEditJobId = null;
         });
 
+        // Advanced Search form — submit reloads table with filters
+        $('#jobsSearchForm').on('submit', function (e) {
+            e.preventDefault();
+            table.ajax.reload();
+        });
+        // Clear filters — reset then reload
+        $('#jobsSearchForm').on('reset', function () {
+            setTimeout(function () { table.ajax.reload(); }, 0);
+        });
 
     });
 </script>

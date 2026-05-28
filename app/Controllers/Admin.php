@@ -1093,10 +1093,29 @@ class Admin extends BaseController
                         $message = 'Official not found';
                     }
                 } else {
+                    $search_kw      = $this->request->getPost('search_kw');
+                    $position_filter = $this->request->getPost('position');
+                    $status_filter  = $this->request->getPost('status');
+
                     $co_builder = $co_m->orderBy('ranking', 'ASC');
                     // Non-privileged users cannot see archived city officials
                     if (!$canSeeArchived) {
                         $co_builder->where('status !=', 'ARCHIVED');
+                    }
+                    // Keyword filter
+                    if (!empty($search_kw)) {
+                        $co_builder->groupStart()
+                            ->like('off_name', $search_kw)
+                            ->orLike('off_position', $search_kw)
+                            ->groupEnd();
+                    }
+                    // Position dropdown filter
+                    if (!empty($position_filter)) {
+                        $co_builder->where('off_position', $position_filter);
+                    }
+                    // Status dropdown filter
+                    if (!empty($status_filter)) {
+                        $co_builder->where('status', $status_filter);
                     }
                     $co_d = $co_builder->findAll();
                     foreach ($co_d as $cityoff) {
@@ -1231,10 +1250,29 @@ class Admin extends BaseController
                         $message = 'Content not found';
                     }
                 } else {
+                    $search_kw       = $this->request->getPost('search_kw');
+                    $category_filter = $this->request->getPost('category');
+                    $status_filter   = $this->request->getPost('status');
+
                     $may_builder = $may_m->orderBy('created_date', 'desc');
                     // Non-privileged users cannot see archived mayor content
                     if (!$canSeeArchived) {
                         $may_builder->where('status !=', 'ARCHIVED');
+                    }
+                    // Keyword filter (section / mayor_name)
+                    if (!empty($search_kw)) {
+                        $may_builder->groupStart()
+                            ->like('section', $search_kw)
+                            ->orLike('mayor_name', $search_kw)
+                            ->groupEnd();
+                    }
+                    // Category / Section dropdown filter
+                    if (!empty($category_filter)) {
+                        $may_builder->where('section', $category_filter);
+                    }
+                    // Status dropdown filter
+                    if (!empty($status_filter)) {
+                        $may_builder->where('status', $status_filter);
                     }
                     $may_d = $may_builder->findAll();
                     foreach ($may_d as $mayorc) {
@@ -1342,12 +1380,31 @@ class Admin extends BaseController
                         $message = 'Career not found';
                     }
                 } else {
+                    $search_kw    = $this->request->getPost('search_kw');
+                    $level_filter = $this->request->getPost('level');
+                    $status_filter = $this->request->getPost('status');
+
                     $career_builder = $career_m
                         ->where('category', 'CAREER')
                         ->orderBy('created_date', 'desc');
                     // Non-privileged users cannot see archived career postings
                     if (!$canSeeArchived) {
                         $career_builder->where('status !=', 'ARCHIVED');
+                    }
+                    // Keyword filter (publication_date / file_name)
+                    if (!empty($search_kw)) {
+                        $career_builder->groupStart()
+                            ->like('file_name', $search_kw)
+                            ->orLike('publication_date', $search_kw)
+                            ->groupEnd();
+                    }
+                    // Level dropdown filter
+                    if ($level_filter !== null && $level_filter !== '') {
+                        $career_builder->where('level', $level_filter);
+                    }
+                    // Status dropdown filter
+                    if (!empty($status_filter)) {
+                        $career_builder->where('status', $status_filter);
                     }
                     $career_d = $career_builder->findAll();
                     foreach ($career_d as $car) {
@@ -1370,12 +1427,31 @@ class Admin extends BaseController
                         $message = 'File not found';
                     }
                 } else {
+                    $search_kw       = $this->request->getPost('search_kw');
+                    $category_filter = $this->request->getPost('category');
+                    $status_filter   = $this->request->getPost('status');
+
                     $invest_builder = $invest_m
                         ->where('category', 'INVEST')
                         ->orderBy('created_date', 'desc');
                     // Non-privileged users cannot see archived invest content
                     if (!$canSeeArchived) {
                         $invest_builder->where('status !=', 'ARCHIVED');
+                    }
+                    // Keyword filter (file_category / file_name)
+                    if (!empty($search_kw)) {
+                        $invest_builder->groupStart()
+                            ->like('file_category', $search_kw)
+                            ->orLike('file_name', $search_kw)
+                            ->groupEnd();
+                    }
+                    // Category dropdown filter
+                    if (!empty($category_filter)) {
+                        $invest_builder->where('file_category', $category_filter);
+                    }
+                    // Status dropdown filter
+                    if (!empty($status_filter)) {
+                        $invest_builder->where('status', $status_filter);
                     }
                     $inv_d = $invest_builder->findAll();
                     foreach ($inv_d as $inv) {
@@ -1589,10 +1665,29 @@ class Admin extends BaseController
                         $message = 'File not found';
                     }
                 } else {
+                    $search_kw      = $this->request->getPost('search_kw');
+                    $section_filter = $this->request->getPost('section');
+                    $status_filter  = $this->request->getPost('status');
+
                     $about_builder = $about_m->orderBy('created_date', 'desc');
                     // Non-privileged users cannot see archived about content
                     if (!$canSeeArchived) {
                         $about_builder->where('status !=', 'ARCHIVED');
+                    }
+                    // Keyword filter (title / description)
+                    if (!empty($search_kw)) {
+                        $about_builder->groupStart()
+                            ->like('title', $search_kw)
+                            ->orLike('description', $search_kw)
+                            ->groupEnd();
+                    }
+                    // Section dropdown filter
+                    if (!empty($section_filter)) {
+                        $about_builder->where('section', $section_filter);
+                    }
+                    // Status dropdown filter
+                    if (!empty($status_filter)) {
+                        $about_builder->where('status', $status_filter);
                     }
                     $abt_d = $about_builder->findAll();
                     foreach ($abt_d as $inv) {
@@ -1604,10 +1699,31 @@ class Admin extends BaseController
             }
             case 'get_jobs': {
                 $job_m = new \App\Models\Job();
+
+                $search_kw    = $this->request->getPost('search_kw');
+                $type_filter  = $this->request->getPost('type');
+                $status_filter = $this->request->getPost('status');
+
                 $jobs_builder = $job_m->orderBy('created_date', 'desc');
                 // Non-privileged users cannot see archived jobs
                 if (!$canSeeArchived) {
                     $jobs_builder->where('status !=', 'ARCHIVED');
+                }
+                // Keyword filter (title / company / email)
+                if (!empty($search_kw)) {
+                    $jobs_builder->groupStart()
+                        ->like('title', $search_kw)
+                        ->orLike('company', $search_kw)
+                        ->orLike('email', $search_kw)
+                        ->groupEnd();
+                }
+                // Job type dropdown filter
+                if (!empty($type_filter)) {
+                    $jobs_builder->where('type', $type_filter);
+                }
+                // Status dropdown filter
+                if (!empty($status_filter)) {
+                    $jobs_builder->where('status', $status_filter);
                 }
                 $jobs = $jobs_builder->findAll();
                 // Ensure each job has an 'ID' field (uppercase)

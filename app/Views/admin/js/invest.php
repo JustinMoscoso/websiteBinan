@@ -264,7 +264,12 @@
         processing: true,
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_invest'); ?>",
-            "type": "POST"
+            "type": "POST",
+            "data": function (d) {
+                d.search_kw = $('form#investSearchForm input[name="search"]').val();
+                d.category  = $('form#investSearchForm select[name="category"]').val();
+                d.status    = $('form#investSearchForm select[name="status"]').val();
+            }
         },
         initComplete: function () {
             var searchInput = $('#tblinvest_filter input[type="search"]');
@@ -349,6 +354,16 @@
 
     $('#tblinvest tbody').on('mouseover', 'tr', function () {
         sltdRow = tbl.row(this).data();
+    });
+
+    // Advanced Search form — submit reloads table with filters
+    $('#investSearchForm').on('submit', function (e) {
+        e.preventDefault();
+        tbl.ajax.reload();
+    });
+    // Clear filters — reset then reload
+    $('#investSearchForm').on('reset', function () {
+        setTimeout(function () { tbl.ajax.reload(); }, 0);
     });
 
 
