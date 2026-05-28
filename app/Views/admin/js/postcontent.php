@@ -11,9 +11,38 @@
     }
 
     if (userLevel === 'VIEWER') {
-        // Viewer can only read
-        $('input, select, button').prop('disabled', true);
-        $('.btn-close').prop('disabled', false); // Allow closing modals
+        // Hide add/save buttons on the page layout level
+        $('[data-bs-target="#addModal"]').hide();
+
+        // Lock down elements inside modals when shown
+        $(document).on('show.bs.modal', '.modal', function () {
+            var $modal = $(this);
+            // Disable all input and form controls
+            $modal.find('input, select, textarea, button').prop('disabled', true);
+            // Re-enable close/dismiss buttons so viewer can close the modal
+            $modal.find('button[data-bs-dismiss="modal"], .btn-close, a[data-bs-dismiss="modal"]').prop('disabled', false);
+            // Hide all action/save buttons except close/dismiss buttons
+            $modal.find('button, input[type="submit"], input[type="button"], a.btn').not('[data-bs-dismiss="modal"], .btn-close').hide();
+            // Hide file inputs
+            $modal.find('input[type="file"]').hide();
+        });
+
+        // Lock down Quill editors (prevent typing and hide toolbars)
+        $(document).on('show.bs.modal shown.bs.modal', '.modal', function () {
+            var $modal = $(this);
+            $modal.find('.ql-editor').attr('contenteditable', 'false');
+            $modal.find('.ql-toolbar').hide();
+            
+            // Re-enforce lock down after a short delay for dynamic content loading
+            setTimeout(function() {
+                $modal.find('.ql-editor').attr('contenteditable', 'false');
+                $modal.find('.ql-toolbar').hide();
+            }, 100);
+            setTimeout(function() {
+                $modal.find('.ql-editor').attr('contenteditable', 'false');
+                $modal.find('.ql-toolbar').hide();
+            }, 500);
+        });
     }
 
     // Toggle Status function

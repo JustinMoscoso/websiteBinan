@@ -362,10 +362,11 @@
                     <div class="profile-department-card__header">
                         <div class="profile-department-card__identity">
                             <button type="button" class="profile-department-card__logo" id="profileDeptLogoButton"
-                                title="Change department logo" aria-label="Change department logo">
+                                title="Change department logo" aria-label="Change department logo"
+                                <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
                                 <?php if (!empty($profile_department->img_logo)): ?>
                                     <img id="profileDeptLogoCell"
-                                        src="<?= site_url('admin/image/DEPT/' . $profile_department->img_logo) ?>" alt="">
+                                         src="<?= site_url('admin/image/DEPT/' . $profile_department->img_logo) ?>" alt="">
                                     <i id="profileDeptLogoEmpty" class="fas fa-shield-alt d-none"></i>
                                 <?php else: ?>
                                     <i id="profileDeptLogoEmpty" class="fas fa-shield-alt"></i>
@@ -382,6 +383,11 @@
                                 </div>
                             </div>
                         </div>
+                        <?php if (($user->user_lvl ?? '') === 'VIEWER'): ?>
+                            <a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" id="editLinkedDepartmentActionBtn" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        <?php else: ?>
                         <div class="dropdown">
                             <?php $nextDeptStatus = ($profile_department->status ?? '') === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'; ?>
                             <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
@@ -414,8 +420,9 @@
                                 <?php endif; ?>
                             </ul>
                         </div>
+                        <?php endif; ?>
                     </div>
-
+ 
                     <div class="profile-department-card__body">
                         <div class="dept-info-area">
                             <span class="dept-info-label">Officer in Charge</span>
@@ -430,7 +437,7 @@
                                 Assign Officer
                             </a>
                         </div>
-
+ 
                         <div class="dept-info-area">
                             <span class="dept-info-label">Status</span>
                             <div id="profileDeptStatusCell">
@@ -439,7 +446,8 @@
                                 $deptStatusClass = $deptStatus === 'ACTIVE' ? 'is-active' : ($deptStatus === 'INACTIVE' ? 'is-inactive' : '');
                                 ?>
                                 <button type="button" class="dept-status-toggle profile-dept-status-action"
-                                    data-current-status="<?= esc($deptStatus) ?>" aria-label="Toggle department status">
+                                    data-current-status="<?= esc($deptStatus) ?>" aria-label="Toggle department status"
+                                    <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
                                     <span class="dept-status-switch <?= esc($deptStatusClass) ?>">
                                         <span class="dept-status-switch__track" aria-hidden="true">
                                             <span class="dept-status-switch__thumb"></span>
@@ -670,10 +678,11 @@
                     <div class="profile-barangay-card__header">
                         <div class="profile-barangay-card__identity">
                             <button type="button" class="profile-barangay-card__logo" id="profileBrgyLogoButton"
-                                title="Change barangay logo" aria-label="Change barangay logo">
+                                title="Change barangay logo" aria-label="Change barangay logo"
+                                <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
                                 <?php if (!empty($profile_barangay->img_logo)): ?>
                                     <img id="profileBrgyLogoCell"
-                                        src="<?= site_url('admin/image/BARANGAY/' . $profile_barangay->img_logo) ?>" alt="">
+                                         src="<?= site_url('admin/image/BARANGAY/' . $profile_barangay->img_logo) ?>" alt="">
                                     <i id="profileBrgyLogoEmpty" class="fas fa-home d-none"></i>
                                 <?php else: ?>
                                     <i id="profileBrgyLogoEmpty" class="fas fa-home"></i>
@@ -690,6 +699,11 @@
                                 </div>
                             </div>
                         </div>
+                        <?php if (($user->user_lvl ?? '') === 'VIEWER'): ?>
+                            <a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" id="editLinkedBarangayActionBtn" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        <?php else: ?>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
                                 data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
@@ -712,8 +726,9 @@
                                 </li>
                             </ul>
                         </div>
+                        <?php endif; ?>
                     </div>
-
+ 
                     <div class="profile-barangay-card__body">
                         <div class="brgy-info-area">
                             <span class="brgy-info-label">Barangay Captain</span>
@@ -723,7 +738,7 @@
                                 <?= esc($profileBrgyCaptain !== '' ? $profileBrgyCaptain : 'Unassigned') ?>
                             </div>
                         </div>
-
+ 
                         <div class="brgy-info-area">
                             <span class="brgy-info-label">Status</span>
                             <?php
@@ -732,7 +747,8 @@
                             ?>
                             <div id="profileBrgyStatusCell">
                                 <button type="button" class="brgy-status-toggle profile-brgy-status-action"
-                                    data-current-status="<?= esc($brgyStatus) ?>" aria-label="Toggle barangay status">
+                                    data-current-status="<?= esc($brgyStatus) ?>" aria-label="Toggle barangay status"
+                                    <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
                                     <span class="brgy-status-switch <?= esc($brgyStatusClass) ?>">
                                         <span class="brgy-status-switch__track" aria-hidden="true">
                                             <span class="brgy-status-switch__thumb"></span>
