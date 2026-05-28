@@ -175,8 +175,10 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 
     /* Premium Modern Status Badge Styles */
     .status-badge {
-        display: inline-flex;
-        align-items-center;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
         gap: 6px;
         padding: 6px 12px;
         font-size: 0.72rem;
@@ -209,7 +211,9 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        display: inline-block;
+        display: inline-block !important;
+        vertical-align: middle !important;
+        margin-top: 1px;
     }
     
     .status-dot-active {
