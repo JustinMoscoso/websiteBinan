@@ -48,7 +48,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_contact') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -95,7 +95,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_contacts') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -535,7 +535,7 @@
                 return json.data;
             }
         },
-        initComplete: function() {
+        initComplete: function () {
             var searchInput = $('#tblhotlines_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -588,7 +588,7 @@
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -597,13 +597,13 @@
                         if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-                            
+
                             actionHtml += `
                                 <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
                         actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
                         actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteContact');
-                        
+
                         actionHtml += `</ul></div>`;
                         return actionHtml;
                     } else {
@@ -620,32 +620,32 @@
     });
 
     // Attach a submit handler to the Contact form
-$('#contactSearchForm').on('submit', function(e) {
-    e.preventDefault(); // stop page reload
+    $('#contactSearchForm').on('submit', function (e) {
+        e.preventDefault(); // stop page reload
 
-    // Grab values
-    const query   = $('#searchContact').val().trim();
-    const category = $('[name="contactCategory"]').val();
-    const status   = $('[name="contactStatus"]').val();
+        // Grab values
+        const query = $('#searchContact').val().trim();
+        const category = $('[name="contactCategory"]').val();
+        const status = $('[name="contactStatus"]').val();
 
-    console.log("Searching for:", query, "Category:", category, "Status:", status);
+        console.log("Searching for:", query, "Category:", category, "Status:", status);
 
-    // Example: reload your DataTable with filters
-    tbl.ajax.reload();
-});
+        // Example: reload your DataTable with filters
+        tbl.ajax.reload();
+    });
 
-// Clear Filters button
-$('#contactSearchForm button[type="reset"]').on('click', function() {
-    // reset form fields
-    $('#contactSearchForm')[0].reset();
+    // Clear Filters button
+    $('#contactSearchForm button[type="reset"]').on('click', function () {
+        // reset form fields
+        $('#contactSearchForm')[0].reset();
 
-    // also clear individual inputs if needed
-    $('#searchContact').val('');
-    $('[name="contactCategory"]').val('');
-    $('[name="contactStatus"]').val('');
+        // also clear individual inputs if needed
+        $('#searchContact').val('');
+        $('[name="contactCategory"]').val('');
+        $('[name="contactStatus"]').val('');
 
-    // reload table back to default
-    tbl.ajax.reload();
-});
+        // reload table back to default
+        tbl.ajax.reload();
+    });
 
 </script>

@@ -49,7 +49,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_invest') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -96,7 +96,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_invest') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -128,7 +128,7 @@
                 title: 'Validation Error',
                 text: 'Please fill in all required fields and upload a file.'
             });
-            return; 
+            return;
         }
 
         Swal.fire({
@@ -218,7 +218,7 @@
                 title: 'Validation Error',
                 text: 'Please select a file category.'
             });
-            return; 
+            return;
         }
 
         $.ajax({
@@ -266,7 +266,7 @@
             "url": "<?php echo base_url('admin/ajax/get_invest'); ?>",
             "type": "POST"
         },
-        initComplete: function() {
+        initComplete: function () {
             var searchInput = $('#tblinvest_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -279,7 +279,8 @@
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
             { "title": "File Category", "data": "file_category", width: '30%' },
-            { "title": "Date Created", "data": "created_date",
+            {
+                "title": "Date Created", "data": "created_date",
                 "render": function (data, type, row) {
                     var date = new Date(data);
                     return formatDate(date);
@@ -318,7 +319,7 @@
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -327,13 +328,13 @@
                         if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-                            
+
                             actionHtml += `
                                 <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
                         actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
                         actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteInvest');
-                        
+
                         actionHtml += `</ul></div>`;
                         return actionHtml;
                     } else {

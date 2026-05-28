@@ -42,7 +42,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_career') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -89,7 +89,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_careers') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -129,7 +129,7 @@
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
             });
-            return; 
+            return;
         }
 
         Swal.fire({
@@ -218,7 +218,7 @@
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
             });
-            return; 
+            return;
         }
         $.ajax({
             url: '<?php echo site_url('admin/ajax/update_career'); ?>',
@@ -265,7 +265,7 @@
             "url": "<?php echo base_url('admin/ajax/get_career'); ?>",
             "type": "POST"
         },
-                initComplete: function() {
+        initComplete: function () {
             var searchInput = $('#tblcareer_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -277,17 +277,19 @@
         },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
-            { "title": "Level", "data": "level",
-                "render": function(data, type, row) {
+            {
+                "title": "Level", "data": "level",
+                "render": function (data, type, row) {
                     if (data == 1) return 'Level 1';
                     if (data == 2) return 'Level 2';
                     return '-';
                 }
             },
-            { "title": "Publication Date", "data": "publication_date",
-                "render": function(data, type, row) {
+            {
+                "title": "Publication Date", "data": "publication_date",
+                "render": function (data, type, row) {
                     return moment(data).format('MMMM D, YYYY');
-                    }
+                }
             },
             {
                 "title": "File", "data": "file_name",
@@ -321,7 +323,7 @@
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -330,13 +332,13 @@
                         if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                             var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
                             var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-                            
+
                             actionHtml += `
                                 <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
                         actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
                         actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteCareer');
-                        
+
                         actionHtml += `</ul></div>`;
                         return actionHtml;
                     } else {

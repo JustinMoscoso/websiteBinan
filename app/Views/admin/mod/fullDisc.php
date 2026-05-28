@@ -9,10 +9,7 @@
             </ol>
         </nav>
     </div>
-    <button type="button" class="btn btn-theme shadow-sm px-4 fw-semibold transition-all" data-bs-toggle="modal"
-        data-bs-target="#addModal">
-        <i class="bi bi-file-earmark-plus me-2"></i>Add Policy
-    </button>
+
 </div>
 
 <style>
@@ -106,25 +103,35 @@
             <form id="docSearchForm">
                 <div class="row g-3 align-items-end">
 
+                    <!-- Search Query -->
                     <div class="col-xl-3 col-lg-3 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Query</label>
-                        <input type="text" class="form-control filter-input" name="search"
-                            placeholder="Search File Name / Year...">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control border-start-0 filter-input" name="search"
+                                placeholder="Search File Name / Year..." style="height: 38px;">
+                        </div>
                     </div>
 
+                    <!-- Frequency -->
                     <div class="col-xl-2 col-lg-2 col-md-4">
                         <label class="form-label small fw-bold text-secondary">Frequency</label>
-                        <select class="form-select filter-input" name="frequency">
-                            <option selected value="">- Frequency -</option>
+                        <select class="form-select bg-light border-secondary-subtle filter-input" name="frequency"
+                            style="height: 38px; cursor: pointer;">
+                            <option selected value="">All Frequencies</option>
                             <option value="ANNUAL">Annual</option>
                             <option value="QUARTERLY">Quarterly</option>
                         </select>
                     </div>
 
-                    <div class="col-xl-4 col-lg-3 col-md-5">
+                    <!-- File Category -->
+                    <div class="col-xl-3 col-lg-3 col-md-8">
                         <label class="form-label small fw-bold text-secondary">File Category</label>
-                        <select class="form-select filter-input" name="file_category" style="font-size: 0.85rem;">
-                            <option selected value="">- File Category -</option>
+                        <select class="form-select bg-light border-secondary-subtle filter-input" name="file_category"
+                            style="height: 38px; cursor: pointer; font-size: 0.85rem;">
+                            <option selected value="">All Categories</option>
                             <optgroup label="Annual Reports">
                                 <option value="Annual Budget Report">Annual Budget Report</option>
                                 <option value="Annual Procurement Plan or Procurement List">Annual Procurement Plan or
@@ -154,24 +161,35 @@
                         </select>
                     </div>
 
-                    <div class="col-xl-1 col-lg-2 col-md-3">
+                    <!-- Status -->
+                    <div class="col-xl-1 col-lg-2 col-md-4">
                         <label class="form-label small fw-bold text-secondary">Status</label>
-                        <select class="form-select filter-input" name="status">
-                            <option selected value="">- Status -</option>
+                        <select class="form-select bg-light border-secondary-subtle filter-input" name="status"
+                            style="height: 38px; cursor: pointer;">
+                            <option selected value="">All</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                         </select>
                     </div>
 
-                    <div class="col-xl-2 col-lg-2 col-md-12 d-flex gap-2">
-                        <button type="reset" class="btn btn-light filter-input fw-semibold text-secondary w-50"
-                            style="height: 40px; padding: 0;">
-                            Clear
-                        </button>
-                        <button type="submit" class="btn btn-theme fw-semibold w-50" id="searchBtn"
-                            style="height: 40px; padding: 0;">
-                            Search
-                        </button>
+                    <!-- Action Buttons Container (Clear, Search, Add Policy) -->
+                    <div class="col-xl-3 col-lg-2 col-md-8">
+                        <div class="d-flex gap-2 w-100">
+                            <button type="reset" class="btn btn-light border flex-grow-1 fw-semibold text-secondary"
+                                style="height: 38px;">
+                                Clear
+                            </button>
+
+                            <button type="submit" class="btn btn-theme flex-grow-1 fw-semibold shadow-sm" id="searchBtn"
+                                style="height: 38px;">
+                                Search
+                            </button>
+
+                            <button type="button" class="btn btn-theme shadow-sm fw-semibold text-nowrap flex-grow-1"
+                                data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                <i class="bi bi-file-earmark-plus me-1"></i>Add Policy
+                            </button>
+                        </div>
                     </div>
 
                 </div>
@@ -199,7 +217,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">Add Policy</h5>
+                Add Policy
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>

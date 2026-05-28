@@ -20,9 +20,9 @@
             toolbar: [
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
                 [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
                 ['link'],
@@ -38,9 +38,9 @@
             toolbar: [
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
                 [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
                 ['link'],
@@ -55,9 +55,9 @@
             toolbar: [
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
                 [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
                 ['link'],
@@ -73,9 +73,9 @@
             toolbar: [
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
                 [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
                 ['link'],
@@ -90,9 +90,9 @@
             toolbar: [
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
                 [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
                 ['link'],
@@ -108,9 +108,9 @@
             toolbar: [
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
                 [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
                 ['link'],
@@ -149,7 +149,7 @@
     });
 
     // Add Carousel Images Preview and Validation for Add Form
-    $('#offcaroimg').on('change', function() {
+    $('#offcaroimg').on('change', function () {
         const files = this.files;
         const preview = $('#addCarouselPreview');
         preview.empty();
@@ -165,7 +165,7 @@
         Array.from(files).forEach(file => {
             if (file && file.type.match('image.*')) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     preview.append('<img src="' + e.target.result + '" style="max-width: 100px; margin: 5px;">');
                 };
                 reader.readAsDataURL(file);
@@ -173,7 +173,7 @@
         });
     });
 
-    $('#btnAdd').off('click').on('click', function() {
+    $('#btnAdd').off('click').on('click', function () {
         let form = $('#addForm')[0];
         let formData = new FormData(form);
 
@@ -301,149 +301,121 @@
         });
     });
 
-  // Edit function
-function edit(coId) {
-    $.ajax({
-        url: '<?php echo site_url('admin/ajax/get_cityoff'); ?>',
-        method: 'POST',
-        data: { id: coId },
-        success: function (response) {
-            if (response.status === 1) {
-                let official = response.data;
-                $('#editCOId').val(official.ID);
-                $('#editoffname').val(official.off_name);
-                $('#editoffpos').val(official.off_position).change();
-                
-                if (official.ranking) {
-                    $('#editRankField').show();
-                    $('#editoffrank').val(official.ranking);
-                } else {
-                    $('#editRankField').hide();
-                }
-                $('#edit_years_of_service').val(official.years_of_service);
-                $('#edit_personal_data').val(official.personal_data);
-                $('#edit_awards').val(official.awards);
+    // Edit function
+    function edit(coId) {
+        $.ajax({
+            url: '<?php echo site_url('admin/ajax/get_cityoff'); ?>',
+            method: 'POST',
+            data: { id: coId },
+            success: function (response) {
+                if (response.status === 1) {
+                    let official = response.data;
+                    $('#editCOId').val(official.ID);
+                    $('#editoffname').val(official.off_name);
+                    $('#editoffpos').val(official.off_position).change();
 
-                let carouselPreview = $('#carouselPreview');
-                carouselPreview.empty();
-                
-                // Initialize current images count and store existing images
-                window.currentCarouselImages = official.carouselimages ? official.carouselimages.split(',').filter(image => image.trim() !== '') : [];
-                window.currentCarouselImagesCount = window.currentCarouselImages.length;
-                
-                if (window.currentCarouselImages.length > 0) {
-                    window.currentCarouselImages.forEach((image, index) => {
-                        if (image) {
-                            let imgElement = `
+                    if (official.ranking) {
+                        $('#editRankField').show();
+                        $('#editoffrank').val(official.ranking);
+                    } else {
+                        $('#editRankField').hide();
+                    }
+                    $('#edit_years_of_service').val(official.years_of_service);
+                    $('#edit_personal_data').val(official.personal_data);
+                    $('#edit_awards').val(official.awards);
+
+                    let carouselPreview = $('#carouselPreview');
+                    carouselPreview.empty();
+
+                    // Initialize current images count and store existing images
+                    window.currentCarouselImages = official.carouselimages ? official.carouselimages.split(',').filter(image => image.trim() !== '') : [];
+                    window.currentCarouselImagesCount = window.currentCarouselImages.length;
+
+                    if (window.currentCarouselImages.length > 0) {
+                        window.currentCarouselImages.forEach((image, index) => {
+                            if (image) {
+                                let imgElement = `
                                 <div style="display: inline-block; margin: 5px;" class="image-container">
                                     <img src="<?php echo base_url('admin/image/CITYOFFICIAL/') ?>${image}" alt="Carousel Image" style="max-width: 100px; margin: 5px;">
                                     <br><small>${image}</small>
                                     <button class="btn btn-danger btn-sm remove-image" data-image="${image}" style="margin-top: 5px;">Remove</button>
                                 </div>
                             `;
-                            carouselPreview.append(imgElement);
-                        }
+                                carouselPreview.append(imgElement);
+                            }
+                        });
+                    } else {
+                        carouselPreview.html('<small>No carousel images available.</small>');
+                    }
+
+                    // Use event delegation to handle remove button clicks with confirmation
+                    carouselPreview.off('click', '.remove-image').on('click', '.remove-image', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        let imageName = $(this).data('image');
+                        console.log('Remove button clicked for image:', imageName);
+
+                        // Show confirmation prompt
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Are you sure?',
+                            text: `Do you really want to remove the image "${imageName}"?`,
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, remove it!',
+                            cancelButtonText: 'No, keep it',
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                removeImage(coId, imageName);
+                            }
+                        });
                     });
+
+                    $('#editModal').modal('show');
                 } else {
-                    carouselPreview.html('<small>No carousel images available.</small>');
-                }
-
-                // Use event delegation to handle remove button clicks with confirmation
-                carouselPreview.off('click', '.remove-image').on('click', '.remove-image', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    let imageName = $(this).data('image');
-                    console.log('Remove button clicked for image:', imageName);
-
-                    // Show confirmation prompt
                     Swal.fire({
-                        icon: 'warning',
-                        title: 'Are you sure?',
-                        text: `Do you really want to remove the image "${imageName}"?`,
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, remove it!',
-                        cancelButtonText: 'No, keep it',
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            removeImage(coId, imageName);
-                        }
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Official not found.'
                     });
-                });
-
-                $('#editModal').modal('show');
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message || 'Official not found.'
-                });
-            }
-        },
-        error: function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Unable to fetch official details. Please try again later.'
-            });
-        }
-    });
-}
-
-// Example removeImage function (adjust based on your actual implementation)
-function removeImage(coId, imageName) {
-    $.ajax({
-        url: '<?php echo site_url('admin/ajax/remove_carousel_image'); ?>',
-        method: 'POST',
-        data: { id: coId, image: imageName },
-        dataType: 'json',
-        success: function (response) {
-            console.log('Remove image response:', response);
-            if (response.status === 1) {
-                // Remove the image element from the preview
-                $(`.image-container:contains(${imageName})`).remove();
-                // Update the current images array and count
-                window.currentCarouselImages = window.currentCarouselImages.filter(img => img !== imageName);
-                window.currentCarouselImagesCount = window.currentCarouselImages.length;
-                console.log('Updated current images:', window.currentCarouselImages);
-                console.log('Updated count:', window.currentCarouselImagesCount);
-                // If no images remain, show the placeholder
-                if (window.currentCarouselImagesCount === 0) {
-                    $('#carouselPreview').html('<small>No carousel images available.</small>');
                 }
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Image removed successfully.'
-                });
-            } else {
+            },
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: response.message || 'Failed to remove image.'
+                    text: 'Unable to fetch official details. Please try again later.'
                 });
             }
-        },
-        error: function (xhr, status, error) {
-            console.log('AJAX Error:', status, error, xhr.responseText);
-            // Attempt to parse the response manually
-            try {
-                const response = JSON.parse(xhr.responseText);
+        });
+    }
+
+    // Example removeImage function (adjust based on your actual implementation)
+    function removeImage(coId, imageName) {
+        $.ajax({
+            url: '<?php echo site_url('admin/ajax/remove_carousel_image'); ?>',
+            method: 'POST',
+            data: { id: coId, image: imageName },
+            dataType: 'json',
+            success: function (response) {
+                console.log('Remove image response:', response);
                 if (response.status === 1) {
-                    // Handle success even if jQuery failed to parse
+                    // Remove the image element from the preview
                     $(`.image-container:contains(${imageName})`).remove();
+                    // Update the current images array and count
                     window.currentCarouselImages = window.currentCarouselImages.filter(img => img !== imageName);
                     window.currentCarouselImagesCount = window.currentCarouselImages.length;
                     console.log('Updated current images:', window.currentCarouselImages);
                     console.log('Updated count:', window.currentCarouselImagesCount);
+                    // If no images remain, show the placeholder
                     if (window.currentCarouselImagesCount === 0) {
                         $('#carouselPreview').html('<small>No carousel images available.</small>');
                     }
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Image removed successfully (manual parse).'
+                        text: 'Image removed successfully.'
                     });
                 } else {
                     Swal.fire({
@@ -452,225 +424,253 @@ function removeImage(coId, imageName) {
                         text: response.message || 'Failed to remove image.'
                     });
                 }
-            } catch (e) {
-                console.log('Manual parse failed:', e);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to remove image. Check console for details.'
-                });
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX Error:', status, error, xhr.responseText);
+                // Attempt to parse the response manually
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.status === 1) {
+                        // Handle success even if jQuery failed to parse
+                        $(`.image-container:contains(${imageName})`).remove();
+                        window.currentCarouselImages = window.currentCarouselImages.filter(img => img !== imageName);
+                        window.currentCarouselImagesCount = window.currentCarouselImages.length;
+                        console.log('Updated current images:', window.currentCarouselImages);
+                        console.log('Updated count:', window.currentCarouselImagesCount);
+                        if (window.currentCarouselImagesCount === 0) {
+                            $('#carouselPreview').html('<small>No carousel images available.</small>');
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Image removed successfully (manual parse).'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message || 'Failed to remove image.'
+                        });
+                    }
+                } catch (e) {
+                    console.log('Manual parse failed:', e);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Unable to remove image. Check console for details.'
+                    });
+                }
             }
-        }
-    });
-}
-
-$('#btnEdit').click(function() {
-    let form = $('#editForm')[0];
-    let formData = new FormData(form);
-
-    // Extract Quill content
-    let quillContentPersonalData = quillEditPersonalData.root.innerHTML;
-    let quillContentYearsOfService = quillEditYearsOfServiceData.root.innerHTML;
-    let quillContentEditAwards = quillEditAwards.root.innerHTML;
-    formData.append('edit_personal_data', quillContentPersonalData);
-    formData.append('edit_years_of_service', quillContentYearsOfService);
-    formData.append('edit_awards', quillContentEditAwards);
-
-    // Field validation
-    if (!formData.get('editoffname') || !formData.get('editoffpos') || 
-        quillContentPersonalData === '<p><br></p>' || 
-        quillContentYearsOfService === '<p><br></p>' || 
-        quillContentEditAwards === '<p><br></p>') {
-        Swal.fire({
-            icon: 'error',
-            title: 'Validation Error',
-            text: 'Please fill in all required fields.'
         });
-        return;
     }
 
-    // Carousel image validation
-    const newCarouselImages = formData.getAll('carousel_images[]');
-    const validNewImages = newCarouselImages.filter(file => file.size > 0);
-    const currentImagesCount = window.currentCarouselImagesCount || 0;
-    const totalImagesAfterUpload = currentImagesCount + validNewImages.length;
+    $('#btnEdit').click(function () {
+        let form = $('#editForm')[0];
+        let formData = new FormData(form);
 
-    if (totalImagesAfterUpload > 3) {
-        const allowedNewImages = 3 - currentImagesCount;
-        Swal.fire({
-            icon: 'warning',
-            title: 'Image Limit Exceeded',
-            text: `You can only have a maximum of 3 carousel images. You currently have ${currentImagesCount} image(s) and can only add ${allowedNewImages} more.`,
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
+        // Extract Quill content
+        let quillContentPersonalData = quillEditPersonalData.root.innerHTML;
+        let quillContentYearsOfService = quillEditYearsOfServiceData.root.innerHTML;
+        let quillContentEditAwards = quillEditAwards.root.innerHTML;
+        formData.append('edit_personal_data', quillContentPersonalData);
+        formData.append('edit_years_of_service', quillContentYearsOfService);
+        formData.append('edit_awards', quillContentEditAwards);
 
-    Swal.fire({
-        title: 'Please wait...',
-        showConfirmButton: false,
-        backdrop: true,
-        allowEscapeKey: () => !Swal.isLoading(),
-        allowOutsideClick: () => !Swal.isLoading(),
-        willOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
-    $.ajax({
-        url: '<?php echo site_url('admin/ajax/update_cityoff'); ?>',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            if (response.status === 1) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: response.message || 'City Official updated successfully.'
-                }).then(() => {
-                    $('#editModal').modal('hide');
-                    tbl.ajax.reload(null, false);
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message || 'Failed to update city official.'
-                });
-            }
-        },
-        error: function(xhr, status, error) {
-            console.log('AJAX Error:', xhr.responseText, status, error);
+        // Field validation
+        if (!formData.get('editoffname') || !formData.get('editoffpos') ||
+            quillContentPersonalData === '<p><br></p>' ||
+            quillContentYearsOfService === '<p><br></p>' ||
+            quillContentEditAwards === '<p><br></p>') {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Unable to update city official. Please try again.'
+                title: 'Validation Error',
+                text: 'Please fill in all required fields.'
             });
+            return;
         }
-    });
-});
 
-function edit(coId) {
-    // Clear edit form Quill editors to prevent stale data
-    quillEditPersonalData.setText('');
-    quillEditYearsOfServiceData.setText('');
-    quillEditAwards.setText('');
+        // Carousel image validation
+        const newCarouselImages = formData.getAll('carousel_images[]');
+        const validNewImages = newCarouselImages.filter(file => file.size > 0);
+        const currentImagesCount = window.currentCarouselImagesCount || 0;
+        const totalImagesAfterUpload = currentImagesCount + validNewImages.length;
 
-    $.ajax({
-        url: '<?php echo site_url('admin/ajax/get_cityoff'); ?>',
-        method: 'POST',
-        data: { id: coId },
-        success: function (response) {
-            if (response.status === 1) {
-                let official = response.data;
-                $('#editCOId').val(official.ID);
-                $('#editoffname').val(official.off_name);
-                $('#editoffpos').val(official.off_position).trigger('change');
-                
-                if (official.ranking) {
-                    $('#editRankField').show();
-                    $('#editoffrank').val(official.ranking);
+        if (totalImagesAfterUpload > 3) {
+            const allowedNewImages = 3 - currentImagesCount;
+            Swal.fire({
+                icon: 'warning',
+                title: 'Image Limit Exceeded',
+                text: `You can only have a maximum of 3 carousel images. You currently have ${currentImagesCount} image(s) and can only add ${allowedNewImages} more.`,
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Please wait...',
+            showConfirmButton: false,
+            backdrop: true,
+            allowEscapeKey: () => !Swal.isLoading(),
+            allowOutsideClick: () => !Swal.isLoading(),
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '<?php echo site_url('admin/ajax/update_cityoff'); ?>',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.status === 1) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message || 'City Official updated successfully.'
+                    }).then(() => {
+                        $('#editModal').modal('hide');
+                        tbl.ajax.reload(null, false);
+                    });
                 } else {
-                    $('#editRankField').hide();
-                    $('#editoffrank').val('');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Failed to update city official.'
+                    });
                 }
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX Error:', xhr.responseText, status, error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Unable to update city official. Please try again.'
+                });
+            }
+        });
+    });
 
-                // Populate Quill editors for Edit form
-                quillEditPersonalData.root.innerHTML = official.personal_data || '';
-                quillEditYearsOfServiceData.root.innerHTML = official.years_of_service || '';
-                quillEditAwards.root.innerHTML = official.awards || '';
+    function edit(coId) {
+        // Clear edit form Quill editors to prevent stale data
+        quillEditPersonalData.setText('');
+        quillEditYearsOfServiceData.setText('');
+        quillEditAwards.setText('');
 
-                let carouselPreview = $('#carouselPreview');
-                carouselPreview.empty();
-                
-                window.currentCarouselImages = official.carouselimages ? official.carouselimages.split(',').filter(image => image.trim() !== '') : [];
-                window.currentCarouselImagesCount = window.currentCarouselImages.length;
-                
-                if (window.currentCarouselImages.length > 0) {
-                    window.currentCarouselImages.forEach((image) => {
-                        if (image) {
-                            let imgElement = `
+        $.ajax({
+            url: '<?php echo site_url('admin/ajax/get_cityoff'); ?>',
+            method: 'POST',
+            data: { id: coId },
+            success: function (response) {
+                if (response.status === 1) {
+                    let official = response.data;
+                    $('#editCOId').val(official.ID);
+                    $('#editoffname').val(official.off_name);
+                    $('#editoffpos').val(official.off_position).trigger('change');
+
+                    if (official.ranking) {
+                        $('#editRankField').show();
+                        $('#editoffrank').val(official.ranking);
+                    } else {
+                        $('#editRankField').hide();
+                        $('#editoffrank').val('');
+                    }
+
+                    // Populate Quill editors for Edit form
+                    quillEditPersonalData.root.innerHTML = official.personal_data || '';
+                    quillEditYearsOfServiceData.root.innerHTML = official.years_of_service || '';
+                    quillEditAwards.root.innerHTML = official.awards || '';
+
+                    let carouselPreview = $('#carouselPreview');
+                    carouselPreview.empty();
+
+                    window.currentCarouselImages = official.carouselimages ? official.carouselimages.split(',').filter(image => image.trim() !== '') : [];
+                    window.currentCarouselImagesCount = window.currentCarouselImages.length;
+
+                    if (window.currentCarouselImages.length > 0) {
+                        window.currentCarouselImages.forEach((image) => {
+                            if (image) {
+                                let imgElement = `
                                 <div style="display: inline-block; margin: 5px;" class="image-container">
                                     <img src="<?php echo base_url('admin/image/CITYOFFICIAL/') ?>${image}" alt="Carousel Image" style="max-width: 100px; margin: 5px;">
                                     <br><small>${image}</small>
                                     <button class="btn btn-danger btn-sm remove-image" data-image="${image}" style="margin-top: 5px;">Remove</button>
                                 </div>
                             `;
-                            carouselPreview.append(imgElement);
-                        }
-                    });
-                } else {
-                    carouselPreview.html('<small>No carousel images available.</small>');
-                }
-
-                carouselPreview.off('click', '.remove-image').on('click', '.remove-image', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    let imageName = $(this).data('image');
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Are you sure?',
-                        text: `Do you really want to remove the image "${imageName}"?`,
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, remove it!',
-                        cancelButtonText: 'No, keep it',
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            removeImage(coId, imageName);
-                        }
-                    });
-                });
-
-                // Show current image in preview
-                $('#editImagePreview').html(
-                    official.img_loc
-                        ? `<img src="<?php echo base_url('admin/image/CITYOFFICIAL/') ?>${official.img_loc}" alt="Current Image" style="max-width: 120px; margin-top: 5px;">`
-                        : '<small>No image available.</small>'
-                );
-                // Reset file input
-                $('#editoffimg').val('');
-                // Add image preview on file input change
-                $('#editoffimg').off('change').on('change', function() {
-                    const file = this.files[0];
-                    const preview = $('#editImagePreview');
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                        };
-                        reader.readAsDataURL(file);
+                                carouselPreview.append(imgElement);
+                            }
+                        });
                     } else {
-                        // If no file, show the original image again (if any)
-                        if (official.img_loc) {
-                            preview.html(`<img src="<?php echo base_url('admin/image/CITYOFFICIAL/') ?>${official.img_loc}" alt="Current Image" style="max-width: 120px; margin-top: 5px;">`);
-                        } else {
-                            preview.html('<small>No image available.</small>');
-                        }
+                        carouselPreview.html('<small>No carousel images available.</small>');
                     }
-                });
 
-                $('#editModal').modal('show');
-            } else {
+                    carouselPreview.off('click', '.remove-image').on('click', '.remove-image', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        let imageName = $(this).data('image');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Are you sure?',
+                            text: `Do you really want to remove the image "${imageName}"?`,
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, remove it!',
+                            cancelButtonText: 'No, keep it',
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                removeImage(coId, imageName);
+                            }
+                        });
+                    });
+
+                    // Show current image in preview
+                    $('#editImagePreview').html(
+                        official.img_loc
+                            ? `<img src="<?php echo base_url('admin/image/CITYOFFICIAL/') ?>${official.img_loc}" alt="Current Image" style="max-width: 120px; margin-top: 5px;">`
+                            : '<small>No image available.</small>'
+                    );
+                    // Reset file input
+                    $('#editoffimg').val('');
+                    // Add image preview on file input change
+                    $('#editoffimg').off('change').on('change', function () {
+                        const file = this.files[0];
+                        const preview = $('#editImagePreview');
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            // If no file, show the original image again (if any)
+                            if (official.img_loc) {
+                                preview.html(`<img src="<?php echo base_url('admin/image/CITYOFFICIAL/') ?>${official.img_loc}" alt="Current Image" style="max-width: 120px; margin-top: 5px;">`);
+                            } else {
+                                preview.html('<small>No image available.</small>');
+                            }
+                        }
+                    });
+
+                    $('#editModal').modal('show');
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Official not found.'
+                    });
+                }
+            },
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: response.message || 'Official not found.'
+                    text: 'Unable to fetch official details. Please try again later.'
                 });
             }
-        },
-        error: function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Unable to fetch official details. Please try again later.'
-            });
-        }
-    });
-}
+        });
+    }
     // Toggle Status function
     function toggleStatus(id, currentStatus, forcedStatus) {
         var newStatus = nextRecordStatus(currentStatus, forcedStatus);
@@ -699,7 +699,7 @@ function edit(coId) {
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_cityoff') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -745,7 +745,7 @@ function edit(coId) {
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_cityoff') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -786,8 +786,8 @@ function edit(coId) {
                 }
             }
         },
-        
-        initComplete: function() {
+
+        initComplete: function () {
             var searchInput = $('#tbloff_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -799,29 +799,33 @@ function edit(coId) {
         },
         columns: [
             { "title": "City Official ID", "data": "ID", "visible": false },
-            { "title": "Rank", "data": "ranking", "className": "dt-center", width: '5%',
+            {
+                "title": "Rank", "data": "ranking", "className": "dt-center", width: '5%',
                 "render": function (data, type, row) {
                     return data ? data : '-'; // Display "-" if data is null
                 }
             },
             { "title": "Official Name", "data": "off_name" },
-            { "title": "Position",  "data": "off_position", width: '15%' },
-            { "title": "Years of Service", "data": "years_of_service", width: '10%',
-                "render": function(data, type, row) {
+            { "title": "Position", "data": "off_position", width: '15%' },
+            {
+                "title": "Years of Service", "data": "years_of_service", width: '10%',
+                "render": function (data, type, row) {
                     if (!data) return '-';
                     let text = data.replace(/<[^>]+>/g, ''); // Remove HTML tags
                     return text.length > 80 ? text.substring(0, 80) + '...' : text;
                 }
             },
-            { "title": "Personal Data", "data": "personal_data", width: '20%',
-                "render": function(data, type, row) {
+            {
+                "title": "Personal Data", "data": "personal_data", width: '20%',
+                "render": function (data, type, row) {
                     if (!data) return '-';
                     let text = data.replace(/<[^>]+>/g, ''); // Remove HTML tags
                     return text.length > 80 ? text.substring(0, 80) + '...' : text;
                 }
             },
-            { "title": "Awards", "data": "awards", width: '20%',
-                "render": function(data, type, row) {
+            {
+                "title": "Awards", "data": "awards", width: '20%',
+                "render": function (data, type, row) {
                     if (!data) return '-';
                     let text = data.replace(/<[^>]+>/g, ''); // Remove HTML tags
                     return text.length > 80 ? text.substring(0, 80) + '...' : text;
@@ -832,7 +836,7 @@ function edit(coId) {
                 "render": function (data, type, row) {
                     return '<img id="img_loc" class="img-fluid mt-3" src="<?php echo base_url('admin/image/CITYOFFICIAL/') ?>' + data + '">';
                 }
-            },    
+            },
             {
                 "title": "Status",
                 "data": "status",
@@ -858,7 +862,7 @@ function edit(coId) {
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -880,7 +884,7 @@ function edit(coId) {
                         return '-';
                     }
                 }
-            },        ]
+            },]
     });
 
     var sltdRow = null;

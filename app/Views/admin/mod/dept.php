@@ -9,10 +9,7 @@
             </ol>
         </nav>
     </div>
-    <button type="button" class="btn btn-theme shadow-sm px-4 fw-semibold transition-all" data-bs-toggle="modal"
-        data-bs-target="#addModal">
-        <i class="bi bi-plus-lg me-2"></i>Add Department
-    </button>
+
 </div>
 
 <style>
@@ -125,31 +122,50 @@
 <?php if (!in_array($user->user_lvl, ['VIEWER', 'ENCODER'])): ?>
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
-            <form id="departmentSearchForm">
+            <form id="barangaySearchForm">
                 <div class="row g-3 align-items-end">
-                    <div class="col-lg-7 col-md-12">
-                        <label class="form-label small fw-bold text-secondary">Search query</label>
-                        <input type="text" class="form-control filter-input" id="searchDept"
-                            placeholder="Search Department / Officer...">
+
+                    <div class="col-xl-5 col-lg-5 col-md-12">
+                        <label class="form-label small fw-bold text-secondary">Search Query</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control border-start-0 filter-input" id="searchBrgy"
+                                placeholder="Search Barangay / Captain..." style="height: 38px;">
+                        </div>
                     </div>
-                    <div class="col-lg-3 col-md-6">
+
+                    <div class="col-xl-3 col-lg-3 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
-                        <select class="form-select filter-input" name="deptStatus">
-                            <option selected value="">- Status -</option>
+                        <select class="form-select bg-light border-secondary-subtle filter-input" name="status"
+                            style="height: 38px; cursor: pointer;">
+                            <option selected value="">All Statuses</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>
                         </select>
                     </div>
-                    <div class="col-lg-2 col-md-6 d-flex gap-2">
-                        <button type="reset" class="btn btn-light w-100 filter-input fw-semibold text-secondary"
-                            style="height:40px;">
-                            Clear
-                        </button>
-                        <button type="submit" class="btn btn-theme w-100 fw-semibold" id="searchBtn" style="height:40px;">
-                            Search
-                        </button>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="d-flex gap-2 w-100">
+                            <button type="reset" class="btn btn-light border flex-grow-1 fw-semibold text-secondary"
+                                style="height: 38px;">
+                                Clear
+                            </button>
+
+                            <button type="submit" class="btn btn-theme flex-grow-1 fw-semibold shadow-sm" id="searchBtn"
+                                style="height: 38px;">
+                                Search
+                            </button>
+
+                            <button type="button" class="btn btn-theme shadow-sm fw-semibold text-nowrap flex-grow-1"
+                                data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                <i class="bi bi-plus-lg me-1"></i>Add Department
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </form>
         </div>

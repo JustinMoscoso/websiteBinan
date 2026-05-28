@@ -43,7 +43,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_mayor') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -90,7 +90,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_mayor') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -119,9 +119,9 @@
                 // Removed font and size dropdowns
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
                 [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
                 ['link'], // removed image, video
@@ -137,9 +137,9 @@
                 // Removed font and size dropdowns
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
                 [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
                 ['link'], // removed image, video
@@ -152,7 +152,7 @@
 
 
     // Show/hide the "Name of Mayor" input based on the selected category
-    $('#content_category').on('change', function() {
+    $('#content_category').on('change', function () {
         if ($(this).val() === 'Personal Data') {
             $('#myrname').closest('.form-group').show();
         } else {
@@ -162,7 +162,7 @@
 
 
     // Add Mayor's Content
-    $('#btnAdd').on('click', function() {
+    $('#btnAdd').on('click', function () {
         let form = $('#addForm')[0];
         let formData = new FormData(form);
 
@@ -282,57 +282,57 @@
 
 
     $('#btnEdit').click(function () {
-    Swal.fire({
-        title: 'Please wait...',
-        showConfirmButton: false,
-        backdrop: true,
-        scrollbarPadding: false,
-        allowEscapeKey: () => !Swal.isLoading(),
-        allowOutsideClick: () => !Swal.isLoading(),
-        willOpen: () => {
-            Swal.showLoading();
-        }
-    });
+        Swal.fire({
+            title: 'Please wait...',
+            showConfirmButton: false,
+            backdrop: true,
+            scrollbarPadding: false,
+            allowEscapeKey: () => !Swal.isLoading(),
+            allowOutsideClick: () => !Swal.isLoading(),
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
-    let formData = new FormData($('#editForm')[0]);
+        let formData = new FormData($('#editForm')[0]);
 
-    // Extract the content from the Quill editors
-    let quillContentPerData = quillEditPerData.root.innerHTML;
-    formData.append('editperdata', quillContentPerData);
+        // Extract the content from the Quill editors
+        let quillContentPerData = quillEditPerData.root.innerHTML;
+        formData.append('editperdata', quillContentPerData);
 
-    $.ajax({
-        url: '<?php echo site_url('admin/ajax/update_mayor'); ?>',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            if (response.status === 1) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: response.message
-                }).then(() => {
-                    $('#editModal').modal('hide');
-                    tbl.ajax.reload();
-                });
-            } else {
+        $.ajax({
+            url: '<?php echo site_url('admin/ajax/update_mayor'); ?>',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.status === 1) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message
+                    }).then(() => {
+                        $('#editModal').modal('hide');
+                        tbl.ajax.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message
+                    });
+                }
+            },
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: response.message
+                    text: 'Unable to update Mayor\'s Content. Please try again later.'
                 });
             }
-        },
-        error: function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Unable to update Mayor\'s Content. Please try again later.'
-            });
-        }
+        });
     });
-});
 
 
     // Function to preview selected images in edit modal
@@ -379,7 +379,7 @@
                 }
             }
         },
-        initComplete: function() {
+        initComplete: function () {
             var searchInput = $('#tblmayor_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm'); // Standard size is more visible than small
@@ -392,7 +392,7 @@
         columns: [
             { "title": "ID", "data": "ID", "className": "dt-center", width: '20%', "visible": false },
             { "title": "Section", "data": "section", "className": "dt-body-justify", width: '10%' },
-            { 
+            {
                 "title": "Content", "data": "content", "className": "dt-body-justify", width: '50%',
                 "render": function (data, type, row) {
                     // Strip HTML tags for length check
@@ -403,7 +403,7 @@
                     return '<div class="quill-editor-default" style="height: auto;">' + text + '</div>';
                 }
             },
-            { 
+            {
                 "title": "Image", "data": "mayor_img", "className": "dt-center", width: '20%',
                 "render": function (data, type, row) {
                     var imageHtml = '';

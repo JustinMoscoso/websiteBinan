@@ -1,5 +1,5 @@
 <script>
-    $(document).ready(function(){ 
+    $(document).ready(function () {
         // placeholder for ready block
     });
 
@@ -111,7 +111,7 @@
     }
 
     // Show/hide department or barangay dropdowns based on category selection
-    $('#category').on('change', function() {
+    $('#category').on('change', function () {
         var selectedCategory = $(this).val();
         if (selectedCategory === 'DEPT') {
             $('#deptGroup').show();
@@ -127,7 +127,7 @@
     });
 
     // Same for edit modal
-    $('#editcategory').on('change', function() {
+    $('#editcategory').on('change', function () {
         var selectedCategory = $(this).val();
         if (selectedCategory === 'DEPT') {
             $('#editDeptFieldGroup').show();
@@ -164,32 +164,32 @@
 
     // Quill toolbar options
     var quillToolbarOptions = [
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'align': [] }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link'],
-      ['clean']
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'align': [] }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['link'],
+        ['clean']
     ];
 
     // Add Modal Quill editor
     var quillContent;
     // Initialize on 'show' (before animation) so Quill is ready immediately
     $('#addModal').on('show.bs.modal', function () {
-      if (!quillContent) {
-        quillContent = new Quill('#quillContent', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
+        if (!quillContent) {
+            quillContent = new Quill('#quillContent', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
     });
 
     // Edit Modal Quill editor
     var editQuillContent;
     $('#editModal').on('show.bs.modal', function () {
-      if (!editQuillContent) {
-        editQuillContent = new Quill('#editQuillContent', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-      }
+        if (!editQuillContent) {
+            editQuillContent = new Quill('#editQuillContent', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
     });
 
     // Save new service
-    $('#btnAdd').on('click', function() {
+    $('#btnAdd').on('click', function () {
         let form = $('#addForm')[0];
         let formData = new FormData(form);
 
@@ -235,7 +235,7 @@
             data: formData,
             contentType: false,
             processData: false,
-            success: function(result) {
+            success: function (result) {
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
                     if ($('#txtDept')[0] && $('#txtDept')[0].selectize) $('#txtDept')[0].selectize.clear();
@@ -257,7 +257,7 @@
                     tbl.ajax.reload(null, false);
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -269,54 +269,54 @@
 
     // Function to handle edit button click
     function edit(id) {
-    $.ajax({
-        url: '<?php echo site_url('admin/ajax/get_services'); ?>',
-        method: 'POST',
-        data: { id: id },
-        success: function (response) {
-            if (response.status === 1) {
-                let res = response.data;
-                $('#editId').val(res.ID);
-                $('#editServiceName').val(res.serv_name);
-                $('#editContent').val(res.content);
-                // Set Quill editor content after initialization
-                $('#editModal').on('shown.bs.modal', function () {
-                    if (editQuillContent) editQuillContent.root.innerHTML = res.content || '';
-                });
-                if (isEntityScopedAdmin) {
-                    $('#editcategory').val(isBrgyScopedAdmin ? 'BRGY' : 'DEPT');
-                    $('#editDeptFieldGroup, #editBrgyFieldGroup').hide();
-                } else if (res.brngy_cont_ID) {
-                    $('#editcategory').val('BRGY').trigger('change');
-                    $('#editDeptFieldGroup').hide();
-                    $('#editBrgyFieldGroup').show();
-                    populateBrgyDropdown($('#editBrgy'), res.brngy_cont_ID);
-                    $('#editDept').val(null);
-                } else if (res.dept_cont_ID) {
-                    $('#editcategory').val('DEPT').trigger('change');
-                    $('#editDeptFieldGroup').show();
-                    $('#editBrgyFieldGroup').hide();
-                    populateDepartmentDropdown($('#editDept'), res.dept_cont_ID);
-                    $('#editBrgy').val(null);
+        $.ajax({
+            url: '<?php echo site_url('admin/ajax/get_services'); ?>',
+            method: 'POST',
+            data: { id: id },
+            success: function (response) {
+                if (response.status === 1) {
+                    let res = response.data;
+                    $('#editId').val(res.ID);
+                    $('#editServiceName').val(res.serv_name);
+                    $('#editContent').val(res.content);
+                    // Set Quill editor content after initialization
+                    $('#editModal').on('shown.bs.modal', function () {
+                        if (editQuillContent) editQuillContent.root.innerHTML = res.content || '';
+                    });
+                    if (isEntityScopedAdmin) {
+                        $('#editcategory').val(isBrgyScopedAdmin ? 'BRGY' : 'DEPT');
+                        $('#editDeptFieldGroup, #editBrgyFieldGroup').hide();
+                    } else if (res.brngy_cont_ID) {
+                        $('#editcategory').val('BRGY').trigger('change');
+                        $('#editDeptFieldGroup').hide();
+                        $('#editBrgyFieldGroup').show();
+                        populateBrgyDropdown($('#editBrgy'), res.brngy_cont_ID);
+                        $('#editDept').val(null);
+                    } else if (res.dept_cont_ID) {
+                        $('#editcategory').val('DEPT').trigger('change');
+                        $('#editDeptFieldGroup').show();
+                        $('#editBrgyFieldGroup').hide();
+                        populateDepartmentDropdown($('#editDept'), res.dept_cont_ID);
+                        $('#editBrgy').val(null);
+                    }
+                    $('#editModal').modal('show');
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Service not found.'
+                    });
                 }
-                $('#editModal').modal('show');
-            } else {
+            },
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: response.message || 'Service not found.'
+                    text: 'Unable to fetch details. Please try again later.'
                 });
             }
-        },
-        error: function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Unable to fetch details. Please try again later.'
-            });
-        }
-    });
-}
+        });
+    }
     // Function to submit the edit form
     $('#btnEdit').click(function () {
         let form = $('#editForm')[0];
@@ -397,7 +397,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_services') ?>",
-                    {id: servId, 'status': 'ACTIVE'},
+                    { id: servId, 'status': 'ACTIVE' },
                     function (result) {
                         if (result.status == 1) {
                             $('.modal').modal('hide');
@@ -447,7 +447,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/set_status_services') ?>",
-                    {id: id, 'status': newStatus},
+                    { id: id, 'status': newStatus },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -493,7 +493,7 @@
                     }
                 });
                 $.post("<?php echo site_url('admin/ajax/delete_services') ?>",
-                    {id: id},
+                    { id: id },
                     function (result) {
                         if (result.status == 1) {
                             tbl.ajax.reload(null, false);
@@ -518,27 +518,27 @@
 
     //datatable
     var tbl = $('#tblservice').DataTable({
-    select: false,
-    searching: true,
-    ordering: true,
-    "order": [],
-    pageLength: 10,
-    processing: true,
-    ajax: {
-        "url": "<?php echo base_url('admin/ajax/get_services'); ?>",
-        "type": "POST",
-        "data": function(d) {
-            d.service_name = $('#service_name').val();
-            d.category = $('#searchCategory').val();
-            d.brgy = $('#searchBrgy').val();
-            d.dept = $('#searchDept').val();
-            d.status = $('#status').val();
+        select: false,
+        searching: true,
+        ordering: true,
+        "order": [],
+        pageLength: 10,
+        processing: true,
+        ajax: {
+            "url": "<?php echo base_url('admin/ajax/get_services'); ?>",
+            "type": "POST",
+            "data": function (d) {
+                d.service_name = $('#service_name').val();
+                d.category = $('#searchCategory').val();
+                d.brgy = $('#searchBrgy').val();
+                d.dept = $('#searchDept').val();
+                d.status = $('#status').val();
+            },
+            "dataSrc": function (json) {
+                return json.data;
+            }
         },
-        "dataSrc": function(json) {
-            return json.data;
-        }
-    },
-    initComplete: function() {
+        initComplete: function () {
             var searchInput = $('#tblservice_filter input[type="search"]');
             searchInput.attr('placeholder', 'Search Category...');
             searchInput.removeClass('form-control-sm');
@@ -550,7 +550,7 @@
         },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
-            { 
+            {
                 "title": "Created", "data": "created_date",
                 "render": function (data, type, row) {
                     var date = new Date(data);
@@ -558,16 +558,18 @@
                 },
                 "visible": false
             },
-            { "title": "Category", "data": "brngy_cont_ID", width: '25%',
+            {
+                "title": "Category", "data": "brngy_cont_ID", width: '25%',
                 "render": function (data, type, row) {
                     if (row.brgy_name === null)
                         return row.dept_name;
-                    else 
+                    else
                         return row.brgy_name;
-                    }
-             },
-            { "title": "Services", "data": "serv_name"},
-            { "title": "Content", "data": "content", "className": "dt-head-center dt-body-justify", width: '35%',
+                }
+            },
+            { "title": "Services", "data": "serv_name" },
+            {
+                "title": "Content", "data": "content", "className": "dt-head-center dt-body-justify", width: '35%',
                 "render": function (data, type, row) {
                     if (!data) return '—';
                     // Strip HTML tags from Quill-generated content for plain-text display in table
@@ -577,8 +579,8 @@
                     return text.length > 120 ? text.substring(0, 120) + '…' : text;
                 }
             },
-            { 
-                "title": "Status", 
+            {
+                "title": "Status",
                 "data": "status",
                 "render": function (data, type, row) {
                     var status = data;
@@ -599,7 +601,7 @@
                     if (userLevel !== 'VIEWER') {
                         let actionHtml = `
                             <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                                 <i class="bi bi-list"></i> Actions
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end">
@@ -631,71 +633,71 @@
         sltdRow = tbl.row(this).data();
     });
 
-  // Search filter functionality
-$('#searchCategory').on('change', function() {
-    var selectedCategory = $(this).val();
-    $('#searchDeptGroup, #searchBrgyGroup, #searchDefaultGroup').hide();
-    if (selectedCategory === 'BARANGAY') {
-        $('#searchBrgyGroup').show();
-        populateBrgyDropdown($('#searchBrgy'));
-    } else if (selectedCategory === 'DEPARTMENT') {
-        $('#searchDeptGroup').show();
-        populateDepartmentDropdown($('#searchDept'));
-    } else {
-        $('#searchDefaultGroup').show();
-    }
-});
-
-// Submit handler for search form
-$('#serviceSearchForm').on('submit', function(e) {
-    e.preventDefault();
-    
-    const searchBtn = $(this).find('button[type="submit"]');
-    const originalBtnText = searchBtn.html();
-    searchBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...');
-    
-    tbl.ajax.reload(function() {
-        searchBtn.html(originalBtnText);
-    });
-});
-
-// Reset handler
-$('#serviceSearchForm').on('reset', function() {
-    $('#searchDeptGroup, #searchBrgyGroup').hide();
-    $('#searchDefaultGroup').show();
-    $('#searchCategory').val('').trigger('change');
-    
-    if ($('#searchBrgy')[0].selectize) $('#searchBrgy')[0].selectize.clear();
-    if ($('#searchDept')[0].selectize) $('#searchDept')[0].selectize.clear();
-    
-    $('#service_name').val('');
-    $('#status').val('');
-    
-    tbl.ajax.url('<?php echo base_url('admin/ajax/get_services'); ?>').load();
-    
-    return false;
-});
-
-// Reusable function for both search mechanisms
-function reloadTableWithFilters(filters, searchBtn) {
-    const originalBtnText = searchBtn.html();
-    searchBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...');
-    
-    let formData = new FormData();
-    for (const key in filters) {
-        if (filters[key]) {
-            formData.append(key, filters[key]);
+    // Search filter functionality
+    $('#searchCategory').on('change', function () {
+        var selectedCategory = $(this).val();
+        $('#searchDeptGroup, #searchBrgyGroup, #searchDefaultGroup').hide();
+        if (selectedCategory === 'BARANGAY') {
+            $('#searchBrgyGroup').show();
+            populateBrgyDropdown($('#searchBrgy'));
+        } else if (selectedCategory === 'DEPARTMENT') {
+            $('#searchDeptGroup').show();
+            populateDepartmentDropdown($('#searchDept'));
+        } else {
+            $('#searchDefaultGroup').show();
         }
-    }
-    
-    tbl.ajax.url('<?php echo base_url('admin/ajax/get_services'); ?>')
-        .data(formData)
-        .load(function(json) {
+    });
+
+    // Submit handler for search form
+    $('#serviceSearchForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const searchBtn = $(this).find('button[type="submit"]');
+        const originalBtnText = searchBtn.html();
+        searchBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...');
+
+        tbl.ajax.reload(function () {
             searchBtn.html(originalBtnText);
-            console.log("Filtered results:", json.data);
-        }, function(xhr, status, error) {
-            searchBtn.html(originalBtnText);
-            console.error("Search error:", status, error);
         });
-}
+    });
+
+    // Reset handler
+    $('#serviceSearchForm').on('reset', function () {
+        $('#searchDeptGroup, #searchBrgyGroup').hide();
+        $('#searchDefaultGroup').show();
+        $('#searchCategory').val('').trigger('change');
+
+        if ($('#searchBrgy')[0].selectize) $('#searchBrgy')[0].selectize.clear();
+        if ($('#searchDept')[0].selectize) $('#searchDept')[0].selectize.clear();
+
+        $('#service_name').val('');
+        $('#status').val('');
+
+        tbl.ajax.url('<?php echo base_url('admin/ajax/get_services'); ?>').load();
+
+        return false;
+    });
+
+    // Reusable function for both search mechanisms
+    function reloadTableWithFilters(filters, searchBtn) {
+        const originalBtnText = searchBtn.html();
+        searchBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...');
+
+        let formData = new FormData();
+        for (const key in filters) {
+            if (filters[key]) {
+                formData.append(key, filters[key]);
+            }
+        }
+
+        tbl.ajax.url('<?php echo base_url('admin/ajax/get_services'); ?>')
+            .data(formData)
+            .load(function (json) {
+                searchBtn.html(originalBtnText);
+                console.log("Filtered results:", json.data);
+            }, function (xhr, status, error) {
+                searchBtn.html(originalBtnText);
+                console.error("Search error:", status, error);
+            });
+    }
 </script>
