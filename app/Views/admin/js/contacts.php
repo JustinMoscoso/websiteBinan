@@ -591,32 +591,32 @@
                 "title": "Actions",
                 "data": "ID",
                 "className": "dt-center",
-                "visible": userLevel !== 'VIEWER',
                 "render": function (data, type, row) {
-                    if (userLevel !== 'VIEWER') {
-                        let actionHtml = `
-                            <div class="dropdown">
-                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
-                                <i class="bi bi-list"></i> Actions
-                              </button>
-                              <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
-
-                        if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
-                            var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
-                            var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-
-                            actionHtml += `
-                                <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
-                        }
-                        actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
-                        actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteContact');
-
-                        actionHtml += `</ul></div>`;
-                        return actionHtml;
-                    } else {
-                        return '-';
+                    if (userLevel === 'VIEWER') {
+                        return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </a>`;
                     }
+                    let actionHtml = `
+                        <div class="dropdown">
+                          <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                            <i class="bi bi-list"></i> Actions
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+
+                    if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
+                        var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
+                        var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
+
+                        actionHtml += `
+                            <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
+                    }
+                    actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
+                    actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteContact');
+
+                    actionHtml += `</ul></div>`;
+                    return actionHtml;
                 }
             }
         ]

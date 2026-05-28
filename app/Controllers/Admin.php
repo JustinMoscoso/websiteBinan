@@ -47,13 +47,13 @@ class Admin extends BaseController
             $this->session->set('user', $user);
         }
 
-        // Department-scoped ADMIN/ENCODER: restrict to profile, services, and dashboard
-        $isDeptScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'DEPARTMENT');
-        $isBrgyScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'BARANGAY');
+        // Department-scoped ADMIN/ENCODER/VIEWER: restrict to profile, services, and dashboard
+        $isDeptScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER', 'VIEWER']) && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER', 'VIEWER']) && ($user->account_type ?? '') === 'BARANGAY');
 
-        // Encoder accounts scoped to a specific department or barangay
-        $isDeptScopedEncoder = ($user->user_lvl === 'ENCODER' && ($user->account_type ?? '') === 'DEPARTMENT');
-        $isBrgyScopedEncoder = ($user->user_lvl === 'ENCODER' && ($user->account_type ?? '') === 'BARANGAY');
+        // Encoder/Viewer accounts scoped to a specific department or barangay
+        $isDeptScopedEncoder = (in_array($user->user_lvl, ['ENCODER', 'VIEWER']) && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedEncoder = (in_array($user->user_lvl, ['ENCODER', 'VIEWER']) && ($user->account_type ?? '') === 'BARANGAY');
 
         // Restrict accounts_mgmt access
         if ($mode === 'accounts_mgmt' && (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN', 'ADMIN']) || $isDeptScopedAdmin)) {
@@ -428,9 +428,9 @@ class Admin extends BaseController
             $this->session->set('user', $user);
         }
 
-        // Helper flags for scoped-ADMIN/ENCODER enforcement
-        $isDeptScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'DEPARTMENT');
-        $isBrgyScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER']) && ($user->account_type ?? '') === 'BARANGAY');
+        // Helper flags for scoped-ADMIN/ENCODER/VIEWER enforcement
+        $isDeptScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER', 'VIEWER']) && ($user->account_type ?? '') === 'DEPARTMENT');
+        $isBrgyScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER', 'VIEWER']) && ($user->account_type ?? '') === 'BARANGAY');
 
         // Determine if user belongs to HRDO, PESO, BPLO, Mayor, or CIO department
         $isHRDO = false;

@@ -492,9 +492,12 @@
             },
             {
                 title: 'Actions', data: 'ID', className: 'dt-center',
-                visible: userLevel !== 'VIEWER',
                 render: function (data, type, row) {
-                    if (userLevel === 'VIEWER') return '-';
+                    if (userLevel === 'VIEWER') {
+                        return `<a class="btn btn-sm btn-outline-primary d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </a>`;
+                    }
 
                     let html = `
                     <div class="dropdown">

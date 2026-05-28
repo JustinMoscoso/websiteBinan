@@ -442,34 +442,35 @@
                     "data": "ID",
                     "className": "dt-center",
                     "render": function (data, type, row) {
-                        if (userLevel !== 'VIEWER') {
-                            var actions = `<div class="dropdown">
-                              <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
-                                <i class="bi bi-list"></i> Actions
-                              </button>
-                              <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Manage</a></li>`;
-
-                            if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
-                                var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
-                                var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-                                var statusFunc = row.status === 'ACTIVE' ? 'deactivate' : 'activate';
-                                actions += `<li><a class="dropdown-item" href="#" onclick="${statusFunc}(${row.ID})"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
-                            }
-                            if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
-                                actions += `<li><a class="dropdown-item" href="#" onclick="setMapStatus(${row.ID}, 'ACTIVE')"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</a></li>`;
-                            } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
-                                actions += `<li><a class="dropdown-item text-warning" href="#" onclick="setMapStatus(${row.ID}, 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
-                            }
-                            if (adminCanDelete(userLevel)) {
-                                actions += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="deleteMap(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
-                            }
-
-                            actions += '</ul></div>';
-                            return actions;
-                        } else {
-                            return '-';
+                        if (userLevel === 'VIEWER') {
+                            return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </a>`;
                         }
+                        var actions = `<div class="dropdown">
+                          <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                            <i class="bi bi-list"></i> Actions
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Manage</a></li>`;
+
+                        if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
+                            var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
+                            var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
+                            var statusFunc = row.status === 'ACTIVE' ? 'deactivate' : 'activate';
+                            actions += `<li><a class="dropdown-item" href="#" onclick="${statusFunc}(${row.ID})"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
+                        }
+                        if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
+                            actions += `<li><a class="dropdown-item" href="#" onclick="setMapStatus(${row.ID}, 'ACTIVE')"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</a></li>`;
+                        } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
+                            actions += `<li><a class="dropdown-item text-warning" href="#" onclick="setMapStatus(${row.ID}, 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
+                        }
+                        if (adminCanDelete(userLevel)) {
+                            actions += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="deleteMap(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
+                        }
+
+                        actions += '</ul></div>';
+                        return actions;
                     }
                 }
             ]

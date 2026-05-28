@@ -154,6 +154,11 @@
                     "data": null,
                     "orderable": false,
                     "render": function (data, type, row) {
+                        if (userLevel === 'VIEWER') {
+                            return `<a class="btn btn-sm btn-outline-success view-job d-inline-flex align-items-center justify-content-center" href="#" data-id="${row.ID}" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </a>`;
+                        }
                         let actionHtml = `
                         <div class="dropdown">
                           <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
