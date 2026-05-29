@@ -2,7 +2,7 @@
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Post Content Management</h1>
         <nav>
-            <ol class="breadcrumb mb-0" style="font-size: 0.85rem;">
+            <ol class="breadcrumb mb-0 bg-transparent p-2" style="font-size: 0.85rem;">
                 <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard') ?>"
                         class="text-decoration-none text-muted">Dashboard</a></li>
                 <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Post Content Management</li>
@@ -90,7 +90,8 @@
     }
 
     #tblnews tbody tr:hover {
-        background-color: #eef6f0 !important; /* Soft premium green highlight on hover */
+        background-color: #eef6f0 !important;
+        /* Soft premium green highlight on hover */
     }
 
     /* Custom Integrated Search Box Filters for DataTables matching SB Admin 2 */
@@ -165,19 +166,19 @@
         border-radius: 30px;
         border: 1px solid transparent;
     }
-    
+
     .status-badge-active {
         background-color: #e8f5e9;
         color: #2e7d32;
         border-color: #c8e6c9;
     }
-    
+
     .status-badge-inactive {
         background-color: #ffebee;
         color: #c62828;
         border-color: #ffcdd2;
     }
-    
+
     .status-badge-archived {
         background-color: #f5f5f5;
         color: #616161;
@@ -191,17 +192,17 @@
         display: inline-block !important;
         vertical-align: middle !important;
     }
-    
+
     .status-dot-active {
         background-color: #2e7d32;
         box-shadow: 0 0 6px #2e7d32;
     }
-    
+
     .status-dot-inactive {
         background-color: #c62828;
         box-shadow: 0 0 6px #c62828;
     }
-    
+
     .status-dot-archived {
         background-color: #616161;
     }
@@ -242,9 +243,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Keyword</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0 text-muted">
-                                <i class="bi bi-search"></i>
-                            </span>
+
                             <input type="text" class="form-control border-start-0" name="search"
                                 placeholder="Search Title / Author / Year...">
                         </div>
@@ -272,23 +271,32 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <div class="d-flex gap-2 w-100">
-                            <button type="reset" class="btn btn-outline-secondary flex-grow-1 fw-semibold"
-                                style="height: 38px;">
-                                Clear
-                            </button>
+                        <div class="row g-2">
 
-                            <button type="submit" class="btn btn-outline-success flex-grow-1 fw-semibold shadow-sm"
-                                id="searchBtn" style="height: 38px;">
-                                Search
-                            </button>
+                            <div class="col-12 col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
+                                    Clear
+                                </button>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
+                                    style="height: 38px;">
+                                    Search
+                                </button>
+                            </div>
 
                             <?php if (!(($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT' && !empty($is_mayor))): ?>
-                                <button type="button" class="btn btn-success shadow-sm fw-semibold text-nowrap flex-grow-1"
-                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
-                                    <i class="bi bi-plus-circle me-1"></i>Add Content
-                                </button>
+                                <div class="col-12 col-md-4">
+                                    <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
+                                        data-bs-toggle="modal" data-bs-target="#addModal"
+                                        style="height: 38px; background:#16a085; border-color:#16a085;">
+                                        <i class="bi bi-plus-circle me-1"></i>
+                                        Add Record
+                                    </button>
+                                </div>
                             <?php endif; ?>
+
                         </div>
                     </div>
 
@@ -303,7 +311,8 @@
     <div class="row">
         <div class="col-12">
             <!-- SB Admin 2 Styled Card -->
-            <div class="card shadow mb-4 border-top border-4" style="border-top-color: var(--theme-mid-green) !important;">
+            <div class="card shadow mb-4 border-top border-4"
+                style="border-top-color: var(--theme-mid-green) !important;">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
                     <h6 class="m-0 font-weight-bold text-success">
                         <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Post Content Records

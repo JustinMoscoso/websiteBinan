@@ -9,10 +9,6 @@
       </ol>
     </nav>
   </div>
-  <button type="button" class="btn btn-theme shadow-sm px-4 fw-semibold transition-all" data-bs-toggle="modal"
-    data-bs-target="#addModal">
-    <i class="bi bi-plus-circle me-2"></i>Add Content
-  </button>
 </div>
 
 <style>
@@ -65,165 +61,166 @@
 
   /* SB Admin 2 Data Table Custom Styles */
   .card-sb {
-      border: 1px solid #e3e6f0;
-      border-radius: 0.35rem;
-      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
-      background-color: #fff;
+    border: 1px solid #e3e6f0;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+    background-color: #fff;
   }
 
   .card-sb-header {
-      padding: 0.75rem 1.25rem;
-      margin-bottom: 0;
-      background-color: #f8f9fc;
-      border-bottom: 1px solid #e3e6f0;
-      border-top-left-radius: calc(0.35rem - 1px);
-      border-top-right-radius: calc(0.35rem - 1px);
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+    border-top-left-radius: calc(0.35rem - 1px);
+    border-top-right-radius: calc(0.35rem - 1px);
   }
 
   #tblinvest {
-      border-collapse: collapse !important;
-      background-color: #ffffff !important;
+    border-collapse: collapse !important;
+    background-color: #ffffff !important;
   }
 
   #tblinvest th {
-      background-color: #f8f9fc !important;
-      color: var(--theme-dark-green) !important;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 0.5px;
-      border: 1px solid #e3e6f0 !important;
-      padding: 12px 16px;
+    background-color: #f8f9fc !important;
+    color: var(--theme-dark-green) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    border: 1px solid #e3e6f0 !important;
+    padding: 12px 16px;
   }
 
   #tblinvest td {
-      padding: 14px 16px;
-      vertical-align: middle;
-      border: 1px solid #e3e6f0 !important;
-      background-color: inherit !important;
+    padding: 14px 16px;
+    vertical-align: middle;
+    border: 1px solid #e3e6f0 !important;
+    background-color: inherit !important;
   }
 
   /* Clean, soft table row backgrounds overriding DataTables/Bootstrap defaults */
   #tblinvest tbody tr {
-      background-color: #ffffff !important;
-      transition: background-color 0.15s ease-in-out;
+    background-color: #ffffff !important;
+    transition: background-color 0.15s ease-in-out;
   }
 
   #tblinvest tbody tr:hover {
-      background-color: #eef6f0 !important; /* Soft premium green highlight on hover */
+    background-color: #eef6f0 !important;
+    /* Soft premium green highlight on hover */
   }
 
   /* Custom Integrated Search Box Filters for DataTables matching SB Admin 2 */
   .dataTables_length label,
   .dataTables_filter label {
-      color: #858796;
-      font-weight: normal;
-      font-size: 0.875rem;
+    color: #858796;
+    font-weight: normal;
+    font-size: 0.875rem;
   }
 
   .dataTables_length select {
-      background-color: #fff;
-      border: 1px solid #d1d3e2;
-      border-radius: 0.35rem;
-      padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-      line-height: 1.5;
-      color: #6e707e;
-      vertical-align: middle;
-      font-size: 0.875rem;
-      height: 38px;
-      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: #fff;
+    border: 1px solid #d1d3e2;
+    border-radius: 0.35rem;
+    padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+    line-height: 1.5;
+    color: #6e707e;
+    vertical-align: middle;
+    font-size: 0.875rem;
+    height: 38px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   }
 
   .dataTables_length select:focus {
-      border-color: var(--theme-mid-green);
-      outline: 0;
-      box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.25);
+    border-color: var(--theme-mid-green);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.25);
   }
 
   .dataTables_filter input {
-      background-color: #fff;
-      border: 1px solid #d1d3e2;
-      border-radius: 0.35rem;
-      padding: 0.375rem 0.75rem;
-      line-height: 1.5;
-      color: #6e707e;
-      font-size: 0.875rem;
-      height: 38px;
-      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: #fff;
+    border: 1px solid #d1d3e2;
+    border-radius: 0.35rem;
+    padding: 0.375rem 0.75rem;
+    line-height: 1.5;
+    color: #6e707e;
+    font-size: 0.875rem;
+    height: 38px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   }
 
   .dataTables_filter input:focus {
-      border-color: var(--theme-mid-green);
-      outline: 0;
-      box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.25);
+    border-color: var(--theme-mid-green);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.25);
   }
 
   .dataTables_info {
-      color: #858796;
-      font-size: 0.875rem;
+    color: #858796;
+    font-size: 0.875rem;
   }
 
   .dataTables_paginate .paginate_button {
-      padding: 0 !important;
-      margin: 0 !important;
-      border: none !important;
-      background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
   }
 
   /* Premium Modern Status Badge Styles */
   .status-badge {
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      line-height: 1 !important;
-      gap: 6px;
-      padding: 6px 12px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-radius: 30px;
-      border: 1px solid transparent;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 30px;
+    border: 1px solid transparent;
   }
-  
+
   .status-badge-active {
-      background-color: #e8f5e9;
-      color: #2e7d32;
-      border-color: #c8e6c9;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-color: #c8e6c9;
   }
-  
+
   .status-badge-inactive {
-      background-color: #ffebee;
-      color: #c62828;
-      border-color: #ffcdd2;
+    background-color: #ffebee;
+    color: #c62828;
+    border-color: #ffcdd2;
   }
-  
+
   .status-badge-archived {
-      background-color: #f5f5f5;
-      color: #616161;
-      border-color: #e0e0e0;
+    background-color: #f5f5f5;
+    color: #616161;
+    border-color: #e0e0e0;
   }
 
   .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      display: inline-block !important;
-      vertical-align: middle !important;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block !important;
+    vertical-align: middle !important;
   }
-  
+
   .status-dot-active {
-      background-color: #2e7d32;
-      box-shadow: 0 0 6px #2e7d32;
+    background-color: #2e7d32;
+    box-shadow: 0 0 6px #2e7d32;
   }
-  
+
   .status-dot-inactive {
-      background-color: #c62828;
-      box-shadow: 0 0 6px #c62828;
+    background-color: #c62828;
+    box-shadow: 0 0 6px #c62828;
   }
-  
+
   .status-dot-archived {
-      background-color: #616161;
+    background-color: #616161;
   }
 
   /* Prevent text compression issues across long category dropdown entries */
@@ -238,72 +235,71 @@
 </style>
 
 <?php if (in_array($user->user_lvl, ['ADMIN', 'SUPERADMIN', 'DEVELOPER'])): ?>
-<div class="card card-premium mb-4 border-start border-4"
+  <div class="card card-premium mb-4 border-start border-4"
     style="border-start-color: var(--theme-mid-green) !important;">
 
     <div class="card-body p-4">
-        <form id="investSearchForm">
-            <div class="row g-3 align-items-end">
+      <form id="investSearchForm">
+        <div class="row g-3 align-items-end">
 
-                <div class="col-xl-4 col-lg-4 col-md-12">
-                    <label class="form-label small fw-bold text-secondary">Search Keyword</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0 text-muted">
-                            <i class="bi bi-search"></i>
-                        </span>
-                        <input type="text" class="form-control border-start-0" name="search"
-                            placeholder="Search Category / File Name...">
-                    </div>
-                </div>
-
-                <div class="col-xl-2 col-lg-2 col-md-6">
-                    <label class="form-label small fw-bold text-secondary">Category Filter</label>
-                    <select class="form-select bg-light border-secondary-subtle" name="category"
-                        style="height: 38px; cursor: pointer;">
-                        <option selected value="">All Categories</option>
-                        <option value="Local Revenue Code">Local Revenue Code</option>
-                        <option value="Local Investment and Incentive Code">Local Investment and Incentive Code</option>
-                        <option value="Market Value">Market Value</option>
-                        <option value="Cost of Doing Business">Cost of Doing Business</option>
-                        <option value="Investment Opportunities and Priorities">Investment Opportunities and Priorities</option>
-                        <option value="Business Directory">Business Directory</option>
-                        <option value="Safety Seal Certification">Safety Seal Certification</option>
-                    </select>
-                </div>
-
-                <div class="col-xl-2 col-lg-2 col-md-6">
-                    <label class="form-label small fw-bold text-secondary">Publication Status</label>
-                    <select class="form-select bg-light border-secondary-subtle" name="status"
-                        style="height: 38px; cursor: pointer;">
-                        <option selected value="">All Statuses</option>
-                        <option value="ACTIVE">Active</option>
-                        <option value="INACTIVE">Inactive</option>
-                        <option value="ARCHIVED">Archived</option>
-                    </select>
-                </div>
-
-                <div class="col-xl-4 col-lg-4 col-md-12">
-                    <div class="d-flex gap-2 w-100">
-                        <button type="reset" class="btn btn-outline-secondary flex-grow-1 fw-semibold"
-                            style="height: 38px;">
-                            Clear
-                        </button>
-                        <button type="submit" class="btn btn-outline-success flex-grow-1 fw-semibold shadow-sm"
-                            id="investSearchBtn" style="height: 38px;">
-                            Search
-                        </button>
-                        <button type="button" class="btn btn-success shadow-sm fw-semibold text-nowrap flex-grow-1"
-                            data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
-                            <i class="bi bi-plus-circle me-1"></i>Add Content
-                        </button>
-                    </div>
-                </div>
-
+          <div class="col-xl-4 col-lg-4 col-md-12">
+            <label class="form-label small fw-bold text-secondary">Search Keyword</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted">
+                <i class="bi bi-search"></i>
+              </span>
+              <input type="text" class="form-control border-start-0" name="search"
+                placeholder="Search Category / File Name...">
             </div>
-        </form>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6">
+            <label class="form-label small fw-bold text-secondary">Category Filter</label>
+            <select class="form-select bg-light border-secondary-subtle" name="category"
+              style="height: 38px; cursor: pointer;">
+              <option selected value="">All Categories</option>
+              <option value="Local Revenue Code">Local Revenue Code</option>
+              <option value="Local Investment and Incentive Code">Local Investment and Incentive Code</option>
+              <option value="Market Value">Market Value</option>
+              <option value="Cost of Doing Business">Cost of Doing Business</option>
+              <option value="Investment Opportunities and Priorities">Investment Opportunities and Priorities</option>
+              <option value="Business Directory">Business Directory</option>
+              <option value="Safety Seal Certification">Safety Seal Certification</option>
+            </select>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6">
+            <label class="form-label small fw-bold text-secondary">Publication Status</label>
+            <select class="form-select bg-light border-secondary-subtle" name="status"
+              style="height: 38px; cursor: pointer;">
+              <option selected value="">All Statuses</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+              <option value="ARCHIVED">Archived</option>
+            </select>
+          </div>
+
+          <div class="col-xl-4 col-lg-4 col-md-12">
+            <div class="d-grid gap-2">
+              <button type="reset" class="btn btn-outline-secondary flex-grow-1 fw-semibold" style="height: 38px;">
+                Clear
+              </button>
+              <button type="submit" class="btn btn-outline-success flex-grow-1 fw-semibold shadow-sm" id="investSearchBtn"
+                style="height: 38px;">
+                Search
+              </button>
+              <button type="button" class="btn btn-success shadow-sm fw-semibold text-nowrap flex-grow-1"
+                data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                <i class="bi bi-plus-circle me-1"></i>Add Record
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </form>
     </div>
 
-</div>
+  </div>
 <?php endif; ?>
 
 <section class="section">

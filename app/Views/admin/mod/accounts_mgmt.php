@@ -81,7 +81,8 @@
     }
 
     #tbluser tbody tr:hover {
-        background-color: #eef6f0 !important; /* Soft premium green highlight on hover */
+        background-color: #eef6f0 !important;
+        /* Soft premium green highlight on hover */
     }
 
     /* Custom Integrated Search Box Filters for DataTables matching SB Admin 2 */
@@ -156,19 +157,19 @@
         border-radius: 30px;
         border: 1px solid transparent;
     }
-    
+
     .status-badge-active {
         background-color: #e8f5e9;
         color: #2e7d32;
         border-color: #c8e6c9;
     }
-    
+
     .status-badge-inactive {
         background-color: #ffebee;
         color: #c62828;
         border-color: #ffcdd2;
     }
-    
+
     .status-badge-archived {
         background-color: #f5f5f5;
         color: #616161;
@@ -182,17 +183,17 @@
         display: inline-block !important;
         vertical-align: middle !important;
     }
-    
+
     .status-dot-active {
         background-color: #2e7d32;
         box-shadow: 0 0 6px #2e7d32;
     }
-    
+
     .status-dot-inactive {
         background-color: #c62828;
         box-shadow: 0 0 6px #c62828;
     }
-    
+
     .status-dot-archived {
         background-color: #616161;
     }
@@ -203,13 +204,13 @@
         color: #7b1fa2;
         border-color: #e1bee7;
     }
-    
+
     .acctype-badge-brgy {
         background-color: #fff8e1;
         color: #b7791f;
         border-color: #ffe082;
     }
-    
+
     .acctype-badge-system {
         background-color: #f5f5f5;
         color: #616161;
@@ -220,12 +221,12 @@
         background-color: #7b1fa2;
         box-shadow: 0 0 6px #7b1fa2;
     }
-    
+
     .acctype-dot-brgy {
         background-color: #b7791f;
         box-shadow: 0 0 6px #b7791f;
     }
-    
+
     .acctype-dot-system {
         background-color: #616161;
     }
@@ -273,7 +274,7 @@
 
                     <div class="col-xl-3 col-lg-2 col-md-12 d-flex gap-2 justify-content-lg-end">
                         <button type="reset"
-                            class="btn btn-outline-danger w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
+                            class="btn btn-outline-secondary w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
                             <i class="bi bi-x-circle"></i> Clear
                         </button>
                         <button type="submit"
@@ -303,7 +304,8 @@
             </div>
 
             <!-- SB Admin 2 Styled Card -->
-            <div class="card shadow mb-4 border-top border-4" style="border-top-color: var(--theme-mid-green) !important;">
+            <div class="card shadow mb-4 border-top border-4"
+                style="border-top-color: var(--theme-mid-green) !important;">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
                     <h6 class="m-0 font-weight-bold text-success">
                         <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>User Account Directory
@@ -311,7 +313,8 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="tbluser" class="table table-bordered table-hover align-middle mb-0" cellspacing="0" width="100%">
+                        <table id="tbluser" class="table table-bordered table-hover align-middle mb-0" cellspacing="0"
+                            width="100%">
                         </table>
                     </div>
                 </div>
@@ -356,8 +359,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="txtSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
-                        <input type="text" class="form-control" id="txtSuffix" name="txtSuffix"
-                            placeholder="e.g. Jr.">
+                        <input type="text" class="form-control" id="txtSuffix" name="txtSuffix" placeholder="e.g. Jr.">
                     </div>
                 </div>
 

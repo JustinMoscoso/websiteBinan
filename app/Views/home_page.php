@@ -389,121 +389,72 @@
 	EMERGENCY HOTLINES
 ========================================= -->
 
-	<section class="py-5 hotline-section" style="
-	background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 100%);
-">
+	<section class="py-5 hotline-section"
+		style="background-image: url('<?= base_url('assets/img/Emergency_Hotline/emergencyBack.png') ?>');">>
 
 		<div class="container hotline-container">
 
-			<!-- HEADER -->
 			<div class="text-center hotline-header">
-
 				<span class="badge rounded-pill hotline-top-label">
-
 					24/7 PUBLIC SAFETY SERVICES
-
 				</span>
-
 				<h2 class="fw-bold text-white hotline-main-title">
-
 					Emergency Hotlines
-
 				</h2>
-
 				<p class="text-light hotline-subtitle">
-
 					Quick access to emergency response and public safety services
 					within the City of Biñan.
-
 				</p>
-
 			</div>
 
-			<!-- HOTLINE LIST -->
-			<div class="d-flex flex-column hotline-list">
+			<div class="row g-3 hotline-grid-wrapper">
 
 				<?php if (!empty($emergency_hotlines)): ?>
 
 					<?php foreach ($emergency_hotlines as $hotline): ?>
-
 						<?php
-
 						$icon = 'fas fa-phone-alt';
 						$image = 'assets/img/default.png';
 
-						// POLICE
 						if (stripos($hotline->title, 'Police') !== false) {
 							$icon = 'fas fa-shield-alt';
 							$image = 'assets/img/Emergency_Hotline/PNP.png';
-						}
-
-						// FIRE
-						elseif (stripos($hotline->title, 'Fire') !== false) {
+						} elseif (stripos($hotline->title, 'Fire') !== false) {
 							$icon = 'fas fa-fire-extinguisher';
 							$image = 'assets/img/Emergency_Hotline/BFP.jpg';
-						}
-
-						// HOSPITAL
-						elseif (stripos($hotline->title, 'Hospital') !== false) {
+						} elseif (stripos($hotline->title, 'Hospital') !== false) {
 							$icon = 'fas fa-hospital';
 							$image = 'assets/img/Emergency_Hotline/BCH.jpg';
-						}
-
-						// DISASTER
-						elseif (stripos($hotline->title, 'Disaster') !== false) {
+						} elseif (stripos($hotline->title, 'Disaster') !== false) {
 							$icon = 'fas fa-exclamation-triangle';
 							$image = 'assets/img/Emergency_Hotline/BCDRRM.jpg';
 						}
-
 						?>
 
-						<!-- HOTLINE ROW -->
-						<div class="row mx-1 hotline-row align-items-stretch">
+						<div class="col-lg-6 col-12">
 
-							<!-- LOGO -->
-							<div class="col-lg-2 col-md-3 col-12 hotline-col">
+							<div class="row mx-0 hotline-row align-items-center h-100">
 
-								<div class="h-100 d-flex align-items-center justify-content-center">
-
+								<div class="col-3 d-flex align-items-center justify-content-center hotline-col">
 									<div class="hotline-logo-box">
-
 										<img src="<?= base_url($image) ?>" alt="Hotline Image" class="hotline-logo">
-
 									</div>
-
 								</div>
 
-							</div>
-
-							<!-- TITLE -->
-							<div class="col-lg-5 col-md-5 col-12 hotline-col d-flex">
-
-								<div class="hotline-title-wrapper w-100">
-
-									<h4 class="fw-bold text-dark mb-0 hotline-title">
-
-										<?= htmlspecialchars($hotline->title) ?>
-
-									</h4>
-
+								<div class="col-5 d-flex align-items-center hotline-col">
+									<div class="hotline-title-wrapper w-100">
+										<h6 class="fw-bold text-dark mb-0 hotline-title">
+											<?= htmlspecialchars($hotline->title) ?>
+										</h6>
+									</div>
 								</div>
 
-							</div>
-							<!-- CONTACT -->
-							<div class="col-lg-4 col-md-4 col-12">
-
-								<div class="h-100 d-flex align-items-center px-2 py-4">
-
-									<div class="w-100">
-
+								<div class="col-4 d-flex align-items-center hotline-desc-col">
+									<div class="w-100 hotline-description-wrapper">
 										<div class="hotline-description">
-
 											<?= $hotline->description ?>
-
 										</div>
-
 									</div>
-
 								</div>
 
 							</div>
@@ -511,180 +462,226 @@
 						</div>
 
 					<?php endforeach; ?>
-
 				<?php endif; ?>
 
 			</div>
 
-			<!-- BUTTON -->
 			<div class="text-center hotline-button-wrapper">
-
 				<a href="<?= base_url('/hotlines') ?>" class="btn btn-outline-light hotline-btn fw-semibold">
-
 					<i class="fas fa-phone-alt me-2"></i>
 					View Complete Hotline Directory
-
 				</a>
-
 			</div>
 
 		</div>
 
 	</section>
 
-	<!-- HOTLINE STYLES -->
 	<style>
 		/* SECTION */
 		.hotline-section {
-			padding-top: 80px !important;
-			padding-bottom: 80px !important;
+			position: relative;
+			padding-top: 60px !important;
+			padding-bottom: 60px !important;
+			/* Reference your image source here dynamically via PHP or static path */
+			background-image: url('<?= base_url("assets/img/Emergency_Hotline/emergencyBack.png") ?>');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			z-index: 1;
+		}
+
+		/* Dark Overlay/Opacity layer to make text readable */
+		.hotline-section::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			/* Adjust the 0.85 opacity value below to make the photo lighter or darker */
+			background-color: rgba(20, 20, 20, 0.68);
+			z-index: -1;
 		}
 
 		.hotline-container {
-			max-width: 1400px;
+			max-width: 1200px;
+			/* Widened slightly to give 2 side-by-side cards breathing room */
 		}
 
 		/* HEADER */
 		.hotline-header {
-			margin-bottom: 60px;
+			margin-bottom: 40px;
 		}
 
 		.hotline-top-label {
 			background: rgba(255, 255, 255, 0.10);
 			color: white;
-			font-size: 13px;
+			font-size: 11px;
 			letter-spacing: 0.5px;
-			padding: 12px 24px;
-			margin-bottom: 20px;
+			padding: 8px 18px;
+			margin-bottom: 15px;
 			display: inline-block;
 		}
 
 		.hotline-main-title {
-			font-size: clamp(2rem, 4vw, 3rem);
-			margin-bottom: 18px;
+			font-size: clamp(1.75rem, 3vw, 2.25rem);
+			margin-bottom: 12px;
 		}
 
 		.hotline-subtitle {
-			max-width: 750px;
+			max-width: 650px;
 			margin: auto;
 			opacity: 0.8;
-			font-size: 1.05rem;
-			line-height: 1.8;
+			font-size: 0.95rem;
+			line-height: 1.6;
 		}
 
-		/* LIST */
-		.hotline-list {
-			gap: 20px;
+		/* GRID LIST CONTAINER wrapper */
+		.hotline-grid-wrapper {
+			margin-bottom: 0;
 		}
 
-		/* ROW */
+		/* CARD CONTAINER ROW */
 		.hotline-row {
-			background: #ffffff;
-			border: 2px solid #dcdfe3;
-			border-radius: 12px;
+			background: white;
+			/* Cream background color */
+			border: 1px solid #dcdfe3;
+			border-radius: 8px;
 			overflow: hidden;
+			padding-top: 14px;
+			padding-bottom: 14px;
 			transition: all 0.25s ease;
 		}
 
 		.hotline-row:hover {
-			transform: translateY(-4px);
-			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+			transform: translateY(-2px);
+			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
 			border-color: #c9ced6;
 		}
 
-		/* COLUMN */
+		/* COLUMNS */
 		.hotline-col {
 			position: relative;
-			padding-top: 10px;
-			padding-bottom: 10px;
 		}
 
-		/* CUSTOM VERTICAL LINE */
+		/* VERTICAL SEPARATOR LINE */
 		.hotline-col::after {
 			content: "";
 			position: absolute;
-
-			top: 25px;
-			bottom: 25px;
-
+			top: 4px;
+			bottom: 4px;
 			right: 0;
-			width: 2px;
-
-			background: #dcdfe3;
+			width: 1px;
+			background: #e2e5e9;
 		}
 
-		/* LOGO */
+		/* LOGO BOX */
 		.hotline-logo-box {
-			width: 110px;
-			height: 110px;
-			border-radius: 10px;
-			border: 2px solid #e5e7eb;
+			width: 44px;
+			height: 44px;
+			border-radius: 6px;
+			border: 1px solid #e5e7eb;
 			background: #f8f9fa;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			flex-shrink: 0;
 		}
 
 		.hotline-logo {
-			width: 80px;
-			height: 80px;
+			width: 32px;
+			height: 32px;
 			object-fit: contain;
 		}
 
 		.hotline-title-wrapper {
-			width: 100%;
-			height: 100%;
-
 			display: flex;
 			align-items: center;
-			justify-content: center;
-
-			text-align: center;
+			padding-left: 8px;
+			padding-right: 4px;
 		}
 
 		.hotline-title {
 			margin: 0;
+			font-size: 0.88rem;
+			/* Scaled down slightly to fit 2-column layouts beautifully */
+			line-height: 1.4;
+			color: #212529;
+		}
+
+		/* DESCRIPTION / PHONE NUMBERS */
+		.hotline-description-wrapper {
+			padding-left: 10px;
+		}
+
+		.hotline-description {
+			font-size: 13px;
+			font-weight: 500;
+			color: #333333;
 			line-height: 1.5;
 		}
 
-		.hotline-row {
-			min-height: 180px;
-		}
-
-		/* DESCRIPTION */
-		.hotline-description {
-			font-size: 15px;
-			line-height: 1.8;
-			color: #5f6368;
-		}
-
-		/* BUTTON */
+		/* FOOTER DIRECTORY BUTTON */
 		.hotline-button-wrapper {
-			margin-top: 50px;
+			margin-top: 45px;
 		}
 
 		.hotline-btn {
-			padding: 15px 38px !important;
+			padding: 10px 28px !important;
 			border-radius: 999px;
-			font-size: 15px;
+			font-size: 14px;
 			letter-spacing: 0.4px;
 			transition: all 0.3s ease;
 		}
 
-		.hotline-btn:hover {
-			transform: translateY(-2px);
+		/* RESPONSIVE LAYOUT FALLBACKS */
+		@media (max-width: 991px) {
+			.hotline-title {
+				font-size: 0.85rem;
+			}
+
+			.hotline-description {
+				font-size: 12px;
+			}
 		}
 
-		/* RESPONSIVE */
-		@media (max-width: 991px) {
-
+		@media (max-width: 575px) {
 			.hotline-col::after {
 				display: none;
 			}
 
+			.hotline-title-wrapper {
+				padding-left: 0;
+			}
+
+			.hotline-description-wrapper {
+				padding: 8px 0 0 0;
+			}
+
+			.hotline-row {
+				padding: 12px;
+			}
+
+			/* Stack sections vertically only on extra small mobile screens */
+			.hotline-row>div {
+				width: 100% !important;
+				max-width: 100% !important;
+				flex: 0 0 100% !important;
+				text-align: center;
+				justify-content: center !important;
+			}
+
+			.hotline-title-wrapper {
+				justify-content: center;
+				margin: 8px 0;
+			}
+
+			.hotline-logo-box {
+				margin: auto;
+			}
 		}
 	</style>
-
 	</div>
 
 	<?php include "footer.php"; ?>
