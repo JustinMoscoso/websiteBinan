@@ -2,7 +2,7 @@
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Barangay Management</h1>
         <nav>
-            <ol class="breadcrumb mb-0" style="font-size: 0.85rem;">
+            <ol class="breadcrumb mb-0 bg-transparent p-2" style="font-size: 0.85rem;">
                 <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard') ?>"
                         class="text-decoration-none text-muted">Dashboard</a></li>
                 <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Barangay Management</li>
@@ -105,7 +105,8 @@
     }
 
     #tblbrgy tbody tr:hover {
-        background-color: #eef6f0 !important; /* Soft premium green highlight on hover */
+        background-color: #eef6f0 !important;
+        /* Soft premium green highlight on hover */
     }
 
     /* Custom Integrated Search Box Filters for DataTables matching SB Admin 2 */
@@ -180,19 +181,19 @@
         border-radius: 30px;
         border: 1px solid transparent;
     }
-    
+
     .status-badge-active {
         background-color: #e8f5e9;
         color: #2e7d32;
         border-color: #c8e6c9;
     }
-    
+
     .status-badge-inactive {
         background-color: #ffebee;
         color: #c62828;
         border-color: #ffcdd2;
     }
-    
+
     .status-badge-archived {
         background-color: #f5f5f5;
         color: #616161;
@@ -206,17 +207,17 @@
         display: inline-block !important;
         vertical-align: middle !important;
     }
-    
+
     .status-dot-active {
         background-color: #2e7d32;
         box-shadow: 0 0 6px #2e7d32;
     }
-    
+
     .status-dot-inactive {
         background-color: #c62828;
         box-shadow: 0 0 6px #c62828;
     }
-    
+
     .status-dot-archived {
         background-color: #616161;
     }
@@ -250,9 +251,7 @@
                     <div class="col-xl-5 col-lg-5 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Query</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0 text-muted">
-                                <i class="bi bi-search"></i>
-                            </span>
+
                             <input type="text" class="form-control border-start-0 filter-input" id="searchBrgy"
                                 placeholder="Search Barangay / Captain..." style="height: 38px;">
                         </div>
@@ -269,22 +268,34 @@
                         </select>
                     </div>
 
-                    <div class="col-xl-4 col-lg-4 col-md-6">
-                        <div class="d-flex gap-2 w-100">
-                            <button type="reset" class="btn btn-light border flex-grow-1 fw-semibold text-secondary"
-                                style="height: 38px;">
-                                Clear
-                            </button>
+                    <div class="col-xl-4 col-lg-4 col-md-12">
+                        <div class="row g-2">
 
-                            <button type="submit" class="btn btn-theme flex-grow-1 fw-semibold shadow-sm" id="searchBtn"
-                                style="height: 38px;">
-                                Search
-                            </button>
+                            <!-- Clear -->
+                            <div class="col-4">
+                                <button type="reset" class="btn btn-danger border w-100 fw-semibold text-white"
+                                    style="height: 38px;">
+                                    Clear
+                                </button>
+                            </div>
 
-                            <button type="button" class="btn btn-theme shadow-sm fw-semibold text-nowrap flex-grow-1"
-                                data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
-                                <i class="bi bi-plus-lg me-1"></i>Add Barangay
-                            </button>
+                            <!-- Search -->
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
+                                    style="height: 38px;">
+                                    Search
+                                </button>
+                            </div>
+
+                            <!-- Add Record -->
+                            <div class="col-4">
+                                <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
+                                    data-bs-toggle="modal" data-bs-target="#addModal">
+                                    <i class="bi bi-plus-lg me-1"></i>
+                                    Add Record
+                                </button>
+                            </div>
+
                         </div>
                     </div>
 
@@ -298,7 +309,8 @@
     <div class="row">
         <div class="col-12">
             <!-- SB Admin 2 Styled Card -->
-            <div class="card shadow mb-4 border-top border-4" style="border-top-color: var(--theme-mid-green) !important;">
+            <div class="card shadow mb-4 border-top border-4"
+                style="border-top-color: var(--theme-mid-green) !important;">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
                     <h6 class="m-0 font-weight-bold text-success">
                         <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Barangay Directory

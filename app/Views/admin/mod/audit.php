@@ -74,7 +74,8 @@
     }
 
     #tblaudit tbody tr:hover {
-        background-color: #eef6f0 !important; /* Soft premium green highlight on hover */
+        background-color: #eef6f0 !important;
+        /* Soft premium green highlight on hover */
     }
 
     /* Custom Integrated Search Box Filters for DataTables matching SB Admin 2 */
@@ -163,7 +164,7 @@
 
                     <div class="col-xl-3 col-lg-3 col-md-6 d-flex gap-2 justify-content-md-end">
                         <button type="reset"
-                            class="btn btn-outline-danger w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
+                            class="btn btn-outline-secondary w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
                             <i class="bi bi-trash"></i> Clear
                         </button>
                         <button type="button"
@@ -184,7 +185,8 @@
         <div class="col-lg-12">
 
             <!-- SB Admin 2 Styled Card -->
-            <div class="card shadow mb-4 border-top border-4" style="border-top-color: var(--theme-mid-green) !important;">
+            <div class="card shadow mb-4 border-top border-4"
+                style="border-top-color: var(--theme-mid-green) !important;">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
                     <h6 class="m-0 font-weight-bold text-success">
                         <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Audit Log Directory
@@ -192,7 +194,8 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="tblaudit" class="table table-bordered table-hover align-middle mb-0" cellspacing="0" width="100%">
+                        <table id="tblaudit" class="table table-bordered table-hover align-middle mb-0" cellspacing="0"
+                            width="100%">
                         </table>
                     </div>
                 </div>
