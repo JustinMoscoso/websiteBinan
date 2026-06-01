@@ -95,6 +95,9 @@ $routes->get('/test-jobs', 'Home::test_jobs');
 $routes->get('email-queue/process', 'EmailQueueController::process');
 
 // Define a group of routes with common prefix ('/admin')
+$routes->addRedirect('auth', 'auth/login');
+$routes->addRedirect('admin', 'auth/login');
+
 $routes->group('admin', function ($routes) {
     $routes->get('dashboard', 'Admin::mode/dashboard');
     $routes->get('accounts_mgmt', 'Admin::mode/accounts_mgmt');
