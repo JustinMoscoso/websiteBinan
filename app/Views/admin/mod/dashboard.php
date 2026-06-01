@@ -141,11 +141,12 @@
 
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card card-premium metric-card metric-info h-100 py-2 position-relative">
-            <div class="card-body py-3">
+           <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
                     <div class="col me-2">
-                        <div class="text-xs fw-bold text-info text-uppercase tracking-wider mb-1">
-                            Announcements <span id="filter-text" class="text-muted fw-normal lowercase">| Today</span>
+                        <div class="text-xs fw-bold text-uppercase tracking-wider mb-1">
+                            <a href="http://localhost/websitebinan/public/announcementcontent/34" class="text-info text-decoration-none">Announcements</a>
+                            <span id="filter-text" class="text-muted fw-normal lowercase">| Today</span>
                         </div>
                         <div class="h4 mb-0 fw-bold text-dark" id="content-count">0</div>
                     </div>
@@ -171,11 +172,11 @@
 
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card card-premium metric-card metric-warning h-100 py-2 position-relative" id="news-card">
-            <div class="card-body py-3">
+          <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
                     <div class="col me-2">
                         <div class="text-xs fw-bold text-warning text-uppercase tracking-wider mb-1">
-                            Recent Press Articles <span id="news-filter" class="text-muted fw-normal lowercase">|
+                            <a href="http://localhost/websitebinan/public/newsevents/1" class="text-warning text-decoration-none">Recent Press Articles</a> <span id="news-filter" class="text-muted fw-normal lowercase">|
                                 Today</span>
                         </div>
                         <div class="h4 mb-0 fw-bold text-dark" id="news-count">
