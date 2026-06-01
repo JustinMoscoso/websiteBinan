@@ -934,7 +934,9 @@
                                 <option value="ACTIVE" <?= ($profile_department->status ?? '') === 'ACTIVE' ? 'selected' : '' ?>>Active</option>
                                 <option value="INACTIVE" <?= ($profile_department->status ?? '') === 'INACTIVE' ? 'selected' : '' ?>>Inactive</option>
                                 <?php if ($user->user_lvl !== 'ENCODER'): ?>
-                                <option value="ARCHIVED" <?= ($profile_department->status ?? '') === 'ARCHIVED' ? 'selected' : '' ?>>Archived</option>
+                                <?php if (in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)): ?>
+                                    <option value="ARCHIVED" <?= ($profile_department->status ?? '') === 'ARCHIVED' ? 'selected' : '' ?>>Archived</option>
+                                <?php endif; ?>
                                 <?php endif; ?>
                             </select>
                         </div>

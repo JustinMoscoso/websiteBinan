@@ -255,7 +255,9 @@
                             <option selected value="">— Status Profile —</option>
                             <option value="ACTIVE">Active Only</option>
                             <option value="INACTIVE">Inactive Only</option>
-                            <option value="ARCHIVED">Archived / Suspended</option>
+                            <?php if (in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)): ?>
+                                <option value="ARCHIVED">Archived / Suspended</option>
+                            <?php endif; ?>
                         </select>
                     </div>
 

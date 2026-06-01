@@ -286,7 +286,9 @@
                             <option selected value="">All Statuses</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
-                            <option value="ARCHIVED">Archived</option>
+                            <?php if (in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)): ?>
+                                <option value="ARCHIVED">Archived</option>
+                            <?php endif; ?>
                         </select>
                     </div>
 
