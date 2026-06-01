@@ -558,6 +558,10 @@
         ajax: {
             url: "<?php echo base_url('admin/ajax/get_departments'); ?>",
             type: "POST",
+            data: function (d) {
+                d.searchDept = $('#searchDept').val().trim();
+                d.status = $('#deptStatus').val();
+            },
             dataSrc: function (json) {
                 return json.data || [];
             }
@@ -644,57 +648,14 @@
         sltdRow = deptTable.row(this).data();
     });
 
-    // Attach a submit handler to the form
+    // Server-side department filters
     $('#departmentSearchForm').on('submit', function (e) {
-        e.preventDefault(); // stop page reload
-        applyDeptFilters(); // run your search logic
+        e.preventDefault();
+        deptTable.ajax.reload();
     });
 
-    // Optional: Clear Filters button
     $('#departmentSearchForm button[type="reset"]').on('click', function () {
-        // reset form fields
         $('#departmentSearchForm')[0].reset();
-    });
-
-
-    function applyDeptFilters() {
-        var searchTerm = $('#searchDept').val().trim().toLowerCase();
-        var statusFilter = $('select[name="deptStatus"]').val();
-
-        // Custom filtering function for combined search
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                var row = deptTable.row(dataIndex).data();
-                var searchMatch = true;
-                var statusMatch = true;
-
-                // Combined search for both department name and officer (case-insensitive)
-                if (searchTerm) {
-                    var deptName = row.dept_name.toLowerCase();
-                    var officerName = row.head.toLowerCase();
-
-                    // Check if search term matches either department name or officer name
-                    if (!deptName.includes(searchTerm) && !officerName.includes(searchTerm)) {
-                        searchMatch = false;
-                    }
-                }
-
-                // Exact match for status
-                if (statusFilter) {
-                    statusMatch = row.status === statusFilter;
-                }
-
-                return searchMatch && statusMatch;
-            }
-        );
-
-        deptTable.draw();
-        $.fn.dataTable.ext.search.pop(); // Remove filter after applying
-    }
-
-    // Clear filters button
-    $('#departmentSearchForm button[type="reset"]').click(function () {
-        $('#departmentSearchForm')[0].reset();
-        deptTable.search('').columns().search('').draw();
+        deptTable.ajax.reload();
     });
 </script>

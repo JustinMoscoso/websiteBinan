@@ -1033,8 +1033,8 @@ class Admin extends BaseController
             }
             case 'get_departments': {
                 $deptId = $this->request->getPost('id');
-                $searchDept = $this->request->getPost('searchDept');
-                $searchOfficer = $this->request->getPost('searchOfficer');
+                $searchDept = trim((string) $this->request->getPost('searchDept'));
+                $searchOfficer = trim((string) $this->request->getPost('searchOfficer'));
                 $status = $this->request->getPost('status');
 
                 $dept_m = new \App\Models\Department();
@@ -1060,12 +1060,14 @@ class Admin extends BaseController
                         $builder->where('status !=', 'ARCHIVED');
                     }
 
-                    // Add partial match filters if provided
-                    if (!empty($searchDept)) {
-                        $builder->like('LOWER(dept_name)', strtolower($searchDept));
-                    }
-                    if (!empty($searchOfficer)) {
-                        $builder->like('LOWER(officer_in_charge)', strtolower($searchOfficer));
+                    // One query box searches both the department name and the officer in charge.
+                    if ($searchDept !== '') {
+                        $builder->groupStart()
+                            ->like('dept_name', $searchDept)
+                            ->orLike('head', $searchDept)
+                            ->groupEnd();
+                    } elseif ($searchOfficer !== '') {
+                        $builder->like('head', $searchOfficer);
                     }
                     if (!empty($status)) {
                         $builder->where('status', $status);
@@ -1380,7 +1382,7 @@ class Admin extends BaseController
                         $message = 'Career not found';
                     }
                 } else {
-                    $search_kw    = $this->request->getPost('search_kw');
+                    $search_kw    = trim((string) $this->request->getPost('search_kw'));
                     $level_filter = $this->request->getPost('level');
                     $status_filter = $this->request->getPost('status');
 
@@ -1391,11 +1393,14 @@ class Admin extends BaseController
                     if (!$canSeeArchived) {
                         $career_builder->where('status !=', 'ARCHIVED');
                     }
-                    // Keyword filter (publication_date / file_name)
-                    if (!empty($search_kw)) {
+                    // Keyword filter: match file name and both raw/formatted publication dates.
+                    if ($search_kw !== '') {
                         $career_builder->groupStart()
                             ->like('file_name', $search_kw)
                             ->orLike('publication_date', $search_kw)
+                            ->orLike("DATE_FORMAT(publication_date, '%M %e, %Y')", $search_kw, 'both', null, false)
+                            ->orLike("DATE_FORMAT(publication_date, '%M')", $search_kw, 'both', null, false)
+                            ->orLike("DATE_FORMAT(publication_date, '%b')", $search_kw, 'both', null, false)
                             ->groupEnd();
                     }
                     // Level dropdown filter

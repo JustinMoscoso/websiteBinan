@@ -238,21 +238,22 @@
 <?php if (!in_array($user->user_lvl, ['VIEWER', 'ENCODER'])): ?>
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
-            <form id="barangaySearchForm">
+            <form id="departmentSearchForm">
                 <div class="row g-3 align-items-end">
 
                     <div class="col-xl-5 col-lg-5 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Query</label>
                         <div class="input-group">
 
-                            <input type="text" class="form-control border-start-0 filter-input" id="searchBrgy"
-                                placeholder="Search Barangay / Captain..." style="height: 38px;">
+                            <input type="text" class="form-control border-start-0 filter-input" id="searchDept"
+                                name="searchDept"
+                                placeholder="Search Department / Officer..." style="height: 38px;">
                         </div>
                     </div>
 
                     <div class="col-xl-3 col-lg-3 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
-                        <select class="form-select bg-light border-secondary-subtle filter-input" name="status"
+                        <select class="form-select bg-light border-secondary-subtle filter-input" id="deptStatus" name="deptStatus"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Statuses</option>
                             <option value="ACTIVE">Active</option>
