@@ -2,7 +2,7 @@
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Contacts Management</h1>
         <nav>
-            <ol class="breadcrumb mb-0" style="font-size: 0.85rem;">
+            <ol class="breadcrumb mb-0 bg-transparent p-2" style="font-size: 0.85rem;">
                 <li class="breadcrumb-item"><a href="<?= base_url('/dashboard') ?>"
                         class="text-decoration-none text-muted">Dashboard</a></li>
                 <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Contacts Management</li>
@@ -11,206 +11,8 @@
     </div>
 </div>
 
-<style>
-    /* Admin UI Layout Theme Variable Definitions */
-    :root {
-        --theme-dark-green: #1b4d3e;
-        --theme-mid-green: #2d6a4f;
-        --theme-light-green: #d8f3dc;
-        --theme-accent: #20c997;
-    }
 
-    /* Core Action Element Configurations */
-    .btn-theme {
-        background-color: var(--theme-dark-green);
-        color: #ffffff;
-        border: 1px solid var(--theme-dark-green);
-        border-radius: 6px;
-    }
-
-    .btn-theme:hover {
-        background-color: var(--theme-mid-green);
-        color: #ffffff;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
-    }
-
-    /* Premium Containers Standard Theme Configuration */
-    .card-premium {
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-        background: #ffffff;
-    }
-
-    /* SB Admin 2 Data Table Custom Styles */
-    .card-sb {
-        border: 1px solid #e3e6f0;
-        border-radius: 0.35rem;
-        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
-        background-color: #fff;
-    }
-
-    .card-sb-header {
-        padding: 0.75rem 1.25rem;
-        margin-bottom: 0;
-        background-color: #f8f9fc;
-        border-bottom: 1px solid #e3e6f0;
-        border-top-left-radius: calc(0.35rem - 1px);
-        border-top-right-radius: calc(0.35rem - 1px);
-    }
-
-    #tblhotlines {
-        border-collapse: collapse !important;
-        background-color: #ffffff !important;
-    }
-
-    #tblhotlines th {
-        background-color: #f8f9fc !important;
-        color: var(--theme-dark-green) !important;
-        font-weight: 700;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        letter-spacing: 0.5px;
-        border: 1px solid #e3e6f0 !important;
-        padding: 12px 16px;
-    }
-
-    #tblhotlines td {
-        padding: 14px 16px;
-        vertical-align: middle;
-        border: 1px solid #e3e6f0 !important;
-        background-color: inherit !important;
-    }
-
-    /* Clean, soft table row backgrounds overriding DataTables/Bootstrap defaults */
-    #tblhotlines tbody tr {
-        background-color: #ffffff !important;
-        transition: background-color 0.15s ease-in-out;
-    }
-
-    #tblhotlines tbody tr:hover {
-        background-color: #eef6f0 !important;
-        /* Soft premium green highlight on hover */
-    }
-
-    /* Custom Integrated Search Box Filters for DataTables matching SB Admin 2 */
-    .dataTables_length label,
-    .dataTables_filter label {
-        color: #858796;
-        font-weight: normal;
-        font-size: 0.875rem;
-    }
-
-    .dataTables_length select {
-        background-color: #fff;
-        border: 1px solid #d1d3e2;
-        border-radius: 0.35rem;
-        padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-        line-height: 1.5;
-        color: #6e707e;
-        vertical-align: middle;
-        font-size: 0.875rem;
-        height: 38px;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-
-    .dataTables_length select:focus {
-        border-color: var(--theme-mid-green);
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.25);
-    }
-
-    .dataTables_filter input {
-        background-color: #fff;
-        border: 1px solid #d1d3e2;
-        border-radius: 0.35rem;
-        padding: 0.375rem 0.75rem;
-        line-height: 1.5;
-        color: #6e707e;
-        font-size: 0.875rem;
-        height: 38px;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-
-    .dataTables_filter input:focus {
-        border-color: var(--theme-mid-green);
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.25);
-    }
-
-    .dataTables_info {
-        color: #858796;
-        font-size: 0.875rem;
-    }
-
-    .dataTables_paginate .paginate_button {
-        padding: 0 !important;
-        margin: 0 !important;
-        border: none !important;
-        background: transparent !important;
-    }
-
-    /* Premium Modern Status Badge Styles */
-    .status-badge {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        line-height: 1 !important;
-        gap: 6px;
-        padding: 6px 12px;
-        font-size: 0.72rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        border-radius: 30px;
-        border: 1px solid transparent;
-    }
-
-    .status-badge-active {
-        background-color: #e8f5e9;
-        color: #2e7d32;
-        border-color: #c8e6c9;
-    }
-
-    .status-badge-inactive {
-        background-color: #ffebee;
-        color: #c62828;
-        border-color: #ffcdd2;
-    }
-
-    .status-badge-archived {
-        background-color: #f5f5f5;
-        color: #616161;
-        border-color: #e0e0e0;
-    }
-
-    .status-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        display: inline-block !important;
-        vertical-align: middle !important;
-    }
-
-    .status-dot-active {
-        background-color: #2e7d32;
-        box-shadow: 0 0 6px #2e7d32;
-    }
-
-    .status-dot-inactive {
-        background-color: #c62828;
-        box-shadow: 0 0 6px #c62828;
-    }
-
-    .status-dot-archived {
-        background-color: #616161;
-    }
-
-    .transition-all {
-        transition: all 0.2s ease;
-    }
-</style>
+<link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
 
 <?php if ($user->user_lvl !== 'VIEWER'): ?>
     <div class="card card-premium mb-4">
@@ -226,7 +28,7 @@
 
                     <div class="col-xl-2.5 col-lg-3 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Section Category</label>
-                        <select class="form-select" name="contactCategory">
+                        <select class="form-control form-select" name="contactCategory">
                             <option selected value="">- Category -</option>
                             <option value="BRGY">Barangay</option>
                             <option value="DEPT">Department</option>
@@ -236,7 +38,7 @@
 
                     <div class="col-xl-2.5 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
-                        <select class="form-select" name="contactStatus">
+                        <select class="form-control form-select" name="contactStatus">
                             <option selected value="">- Status -</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
@@ -244,15 +46,24 @@
                         </select>
                     </div>
 
-                    <div class="col-xl-2 col-lg-3 col-md-12 d-flex gap-2">
-                        <button type="reset" class="btn btn-light fw-semibold text-secondary w-50"
-                            style="height: 40px; padding: 0;">
-                            Clear
-                        </button>
-                        <button type="submit" class="btn btn-theme fw-semibold w-50" id="searchBtn"
-                            style="height: 40px; padding: 0;">
-                            Search
-                        </button>
+                    <div class="col-xl-4 col-lg-4 col-md-12">
+                        <div class="row g-2">
+
+                            <div class="col-12 col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
+                                    Clear
+                                </button>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
+                                    style="height: 38px;">
+                                    Search
+                                </button>
+                            </div>
+
+
+                        </div>
                     </div>
 
                 </div>

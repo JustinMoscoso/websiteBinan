@@ -6,15 +6,6 @@
 </div>
 
 <style>
-    /* Admin UI Layout Theme Variable Definitions */
-    :root {
-        --theme-dark-green: #1b4d3e;
-        --theme-mid-green: #2d6a4f;
-        --theme-light-green: #d8f3dc;
-        --theme-accent: #20c997;
-        --theme-surface-bg: #f8f9fa;
-    }
-
     /* Premium Component Containers Card Design */
     .card-premium {
         border: none;

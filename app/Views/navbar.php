@@ -103,13 +103,13 @@ if (strpos($currentURL, '/home') == true) {
   document.getElementById('citcharterpdf').addEventListener('click', function (e) {
     e.preventDefault();
     const pdfUrl = '<?= base_url('assets/2024-CITIZENS-CHARTER_9th-Edition.pdf') ?> ';
-  window.open(pdfUrl, '_blank');
-});
+    window.open(pdfUrl, '_blank');
+  });
 
   document.getElementById('orgchartpdf').addEventListener('click', function (e) {
     e.preventDefault();
     const pdfUrl = '<?= base_url('assets/BCH-Organizational-Chart-as-of-February-15-2023.pdf') ?> ';
-  window.open(pdfUrl, '_blank');
-});
+    window.open(pdfUrl, '_blank');
+  });
 </script>
 <!-- NavBar End -->

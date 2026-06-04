@@ -32,13 +32,13 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -217,7 +217,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tblnews_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({

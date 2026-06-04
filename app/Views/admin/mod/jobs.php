@@ -2,7 +2,7 @@
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Job Management</h1>
         <nav>
-            <ol class="breadcrumb mb-0" style="font-size: 0.85rem;">
+            <ol class="breadcrumb bg-transparent p-2 mb-0" style="font-size: 0.85rem;">
                 <li class="breadcrumb-item"><a href="<?= base_url('/dashboard') ?>"
                         class="text-decoration-none text-muted">Dashboard</a></li>
                 <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Job Management</li>
@@ -12,14 +12,6 @@
 </div>
 
 <style>
-    /* Admin UI Layout Theme Variable Definitions */
-    :root {
-        --theme-dark-green: #1b4d3e;
-        --theme-mid-green: #2d6a4f;
-        --theme-light-green: #d8f3dc;
-        --theme-accent: #20c997;
-    }
-
     /* Core Action Element Configurations */
     .btn-theme {
         background-color: var(--theme-dark-green);
@@ -236,15 +228,7 @@
         border-color: #b2ebf2;
     }
 
-    .jobtype-dot-fulltime {
-        background-color: #0d47a1;
-        box-shadow: 0 0 6px #0d47a1;
-    }
 
-    .jobtype-dot-parttime {
-        background-color: #006064;
-        box-shadow: 0 0 6px #006064;
-    }
 
     /* Clean Info Text Field Styling for View Modals */
     .view-field-box {
@@ -271,9 +255,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Keyword</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0 text-muted">
-                                <i class="bi bi-search"></i>
-                            </span>
+
                             <input type="text" class="form-control border-start-0" name="search"
                                 placeholder="Search Title / Company / Email...">
                         </div>
@@ -281,7 +263,7 @@
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Job Type Filter</label>
-                        <select class="form-select bg-light border-secondary-subtle" name="type"
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="type"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Types</option>
                             <option value="Full Time">Full Time</option>
@@ -291,7 +273,7 @@
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Publication Status</label>
-                        <select class="form-select bg-light border-secondary-subtle" name="status"
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Statuses</option>
                             <option value="ACTIVE">Active</option>
@@ -301,19 +283,26 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <div class="d-grid gap-2">
-                            <button type="reset" class="btn btn-outline-secondary flex-grow-1 fw-semibold"
-                                style="height: 38px;">
-                                Clear
-                            </button>
-                            <button type="submit" class="btn btn-outline-success flex-grow-1 fw-semibold shadow-sm"
-                                id="jobsSearchBtn" style="height: 38px;">
-                                Search
-                            </button>
-                            <button type="button" class="btn btn-success shadow-sm fw-semibold text-nowrap flex-grow-1"
-                                data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
-                                <i class="bi bi-plus-circle me-1"></i>Add Record
-                            </button>
+                        <div class="row g-2">
+                            <div class="col-12 col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 flex-grow-1 fw-semibold"
+                                    style="height: 38px;">
+                                    Clear
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm"
+                                    id="jobsSearchBtn" style="height: 38px;">
+                                    Search
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="button"
+                                    class="btn btn-success w-100 shadow-sm fw-semibold text-nowrap flex-grow-1"
+                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    <i class="bi bi-plus-circle me-1"></i>Add Record
+                                </button>
+                            </div>
                         </div>
                     </div>
 

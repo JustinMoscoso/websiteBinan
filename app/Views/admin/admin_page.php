@@ -20,12 +20,15 @@
 ========================================= */
 
     /* SIDEBAR */
+    #wrapper {
+      display: flex;
+    }
 
     .sidebar {
-      min-height: 100vh;
-      background: linear-gradient(180deg,
-          #1B4332 0%,
-          #2D6A4F 100%) !important;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
     }
 
     /* BRAND */
@@ -43,13 +46,16 @@
     }
 
     /* NAV LINKS */
+    .sidebar .nav-item {
+      width: 100%;
+    }
 
     .sidebar .nav-item .nav-link {
-      border-radius: 12px;
+      width: calc(100% - 10px);
       margin: 4px 10px;
       padding: 12px 16px;
-      transition: 0.25s ease;
-      color: rgba(255, 255, 255, 0.85) !important;
+      border-radius: 12px;
+      box-sizing: border-box;
     }
 
     /* ICONS */
@@ -64,7 +70,7 @@
     .sidebar .nav-item .nav-link:hover {
       background: rgba(255, 255, 255, 0.10);
       color: #fff !important;
-      transform: translateX(3px);
+      transform: translateX(1px);
     }
 
     /* ACTIVE */
@@ -125,7 +131,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: #1B4332;">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center"
@@ -319,7 +325,7 @@
       <div id="content">
 
         <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow-sm">
 
           <!-- Sidebar Toggle (Topbar) -->
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">

@@ -1,7 +1,7 @@
 <div class="pagetitle mb-4 pb-2 border-bottom">
     <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">System Audit Logs</h1>
     <nav>
-        <ol class="breadcrumb mb-0">
+        <ol class="breadcrumb mb-0 bg-transparent p-2">
             <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard') ?>" class="text-decoration-none"
                     style="color: #2d6a4f;">Dashboard</a></li>
             <li class="breadcrumb-item active">System Logs</li>
@@ -147,8 +147,7 @@
 
                     <div class="col-xl-7 col-lg-6 col-md-12">
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i
-                                    class="bi bi-search"></i></span>
+
                             <input type="text" class="form-control border-start-0 ps-0" id="searchAction"
                                 placeholder="Search by action, user, or details..." name="search_query">
                         </div>
@@ -156,20 +155,19 @@
 
                     <div class="col-xl-2 col-lg-3 col-md-6">
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i
-                                    class="bi bi-calendar3"></i></span>
+
                             <input type="date" class="form-control border-start-0 ps-0" id="searchDate">
                         </div>
                     </div>
 
                     <div class="col-xl-3 col-lg-3 col-md-6 d-flex gap-2 justify-content-md-end">
                         <button type="reset"
-                            class="btn btn-outline-secondary w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
+                            class="btn btn-danger w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
                             <i class="bi bi-trash"></i> Clear
                         </button>
                         <button type="button"
-                            class="btn text-white w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold"
-                            id="searchBtn" style="background-color: var(--theme-mid-green);">
+                            class="btn btn-primary text-white w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold"
+                            id="searchBtn">
                             <i class="bi bi-filter"></i> Search
                         </button>
                     </div>
