@@ -36,7 +36,7 @@
                                 <div class="timeline-arrow"></div>
                                 <div class="row">
                                     <a class="col-lg-9 col-md-9" style="text-decoration: none; color: black;">
-                                        <h2 class="h5 mb-0" style="color: #004600; font-size: 40px;">
+                                        <h2 class="mb-2 font-weight-bold" style="color: #004600; font-size: calc(1.35rem + 1vw);">
                                             <?= htmlspecialchars($item->title) ?>
                                         </h2>
                                         <div class="text-small mt-2 font-weight-light" style="text-align: justify;">

@@ -31,6 +31,37 @@
       overflow-y: auto;
     }
 
+    /* Mobile drawer style for sidebar */
+    @media (max-width: 767.98px) {
+      .sidebar {
+        position: fixed !important;
+        top: 0;
+        bottom: 0;
+        left: -224px;
+        width: 224px !important;
+        height: 100vh !important;
+        z-index: 1050;
+        transition: left 0.25s ease-in-out;
+        display: flex !important;
+      }
+      .sidebar.toggled {
+        left: 0 !important;
+      }
+      .sidebar-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1040;
+        display: none;
+      }
+      body.sidebar-toggled .sidebar-backdrop {
+        display: block;
+      }
+    }
+
     /* BRAND */
 
     .sidebar-brand {
@@ -424,6 +455,17 @@
     echo view('admin' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . $mode, $jsViewData);
   }
   ?>
-</body>
 
+  <!-- Sidebar Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <script>
+    $(document).ready(function() {
+      $('#sidebarBackdrop').on('click', function() {
+        $('body').removeClass('sidebar-toggled');
+        $('.sidebar').removeClass('toggled');
+      });
+    });
+  </script>
+</body>
 </html>

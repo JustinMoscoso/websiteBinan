@@ -73,8 +73,7 @@ include "navbar.php"
 
     .barangays .barangay-item h3 {
         margin: 0;
-        margin: 0;
-        font-size: 35px;
+        font-size: calc(1.35rem + 1vw);
         font-weight: 700;
         color: #388E3C;
         padding-bottom: 10px;

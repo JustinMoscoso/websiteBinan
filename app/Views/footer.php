@@ -130,10 +130,10 @@
             <!-- Logos Row (centered above copyright) -->
             <div class="row mt-4">
                 <div class="col-12">
-                    <div class="d-flex justify-content-center align-items-center py-3">
-                        <img src="<?= base_url('assets/img/transparency.png') ?>" class="img-fluid me-3" style="height: 60px; object-fit: contain;" alt="Transparency Seal">
-                        <img src="<?= base_url('assets/img/republic.png') ?>" class="img-fluid me-3" style="height: 60px; object-fit: contain;" alt="Republic Seal">
-                        <img src="<?= base_url('assets/img/iso.png') ?>" class="img-fluid" style="height: 60px; object-fit: contain;" alt="ISO Certified">
+                    <div class="d-flex flex-wrap justify-content-center align-items-center py-3">
+                        <img src="<?= base_url('assets/img/transparency.png') ?>" class="img-fluid m-2" style="height: 60px; object-fit: contain;" alt="Transparency Seal">
+                        <img src="<?= base_url('assets/img/republic.png') ?>" class="img-fluid m-2" style="height: 60px; object-fit: contain;" alt="Republic Seal">
+                        <img src="<?= base_url('assets/img/iso.png') ?>" class="img-fluid m-2" style="height: 60px; object-fit: contain;" alt="ISO Certified">
                     </div>
                 </div>
             </div>

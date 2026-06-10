@@ -35,8 +35,8 @@ function include_header($title, $breadcrumbs = null) {
 </style>
 <header>
     <div class="header breadcrumbs d-flex align-items-center">
-        <div class="container position-relative d-flex justify-content-between align-items-center" data-aos="fade">
-            <h2><?= htmlspecialchars($title) ?></h2>
+        <div class="container position-relative d-flex flex-column flex-md-row justify-content-between align-items-center" data-aos="fade">
+            <h2 class="mb-2 mb-md-0"><?= htmlspecialchars($title) ?></h2>
             <ol class="breadcrumb">
                 <?php foreach ($breadcrumbs as $index => $crumb): ?>
                     <?php if ($index > 0): ?>

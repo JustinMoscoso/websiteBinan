@@ -31,7 +31,6 @@
 			<div class="container py-5">
 				<div class="hero-content">
 					<img class="img-fluid mx-auto d-block hero-img-responsive"
-						style="height: auto; width: 70%; max-width: 900px; padding: 3rem 1.5rem; margin-top: 6rem;"
 						src="assets/img/hero4.png" alt="Biñan City Hero Image">
 					<!-- <h2 class="hero-subtitle" style="font-size: 3rem;">Mabuhay!</h2>
 					<h1 class="hero-title" style="font-size: 4rem; font-family: 'Poppins'">Welcome to the City of Biñan</h1>

@@ -659,6 +659,16 @@
 
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
+  .equal-cards-row {
+    flex-direction: column;
+  }
+  .equal-cards-row .col-md-4,
+  .equal-cards-row .col-md-8 {
+    flex: none;
+    max-width: 100%;
+    width: 100%;
+  }
+
   .modal-dialog {
     margin: 1rem;
     max-width: calc(100% - 2rem);
@@ -675,7 +685,7 @@
   }
 
   .content-carousel-area {
-    min-height: 300px;
+    height: 300px !important;
   }
 
   .modal-compact .simple-modal-image {

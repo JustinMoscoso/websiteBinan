@@ -137,8 +137,8 @@
                 <h5 class="modal-title" id="previewModalLabel">File Preview</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="previewBody" style="min-height: 500px; text-align: center;">
-                <iframe id="previewIframe" style="width: 100%; height: 500px;" frameborder="0"></iframe>
+             <div class="modal-body" id="previewBody" style="min-height: auto; text-align: center; padding: 1rem;">
+                <iframe id="previewIframe" style="width: 100%; height: 500px; max-height: 70vh;" frameborder="0"></iframe>
                 <p id="unsupportedMsg" class="text-muted" style="display:none;">This file type cannot be previewed. Please download to view.</p>
             </div>
             </div>

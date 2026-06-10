@@ -34,7 +34,7 @@
 
   <!-- ======= departments Section ======= -->
   <section id="departments" class="departments">
-    <div class="container py-5" style="margin-top: -90px;">
+    <div class="container py-5">
       <div class="row justify-content-center">
 
       <!--Echo from database department-->
