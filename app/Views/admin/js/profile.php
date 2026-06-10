@@ -9,8 +9,12 @@
         });
 
         // Lock down elements inside modals when shown
+        // BUT allow the editNameModal so viewers can still edit their own name
         $(document).on('show.bs.modal', '.modal', function () {
             var $modal = $(this);
+            if ($modal.attr('id') === 'editNameModal') {
+                return; // Allow editNameModal for viewers
+            }
             // Disable all input and form controls
             $modal.find('input, select, textarea, button').prop('disabled', true);
             // Re-enable close/dismiss buttons so viewer can close the modal
@@ -22,8 +26,12 @@
         });
 
         // Lock down Quill editors (prevent typing and hide toolbars)
+        // BUT skip editNameModal
         $(document).on('show.bs.modal shown.bs.modal', '.modal', function () {
             var $modal = $(this);
+            if ($modal.attr('id') === 'editNameModal') {
+                return; // Allow editNameModal for viewers
+            }
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
             

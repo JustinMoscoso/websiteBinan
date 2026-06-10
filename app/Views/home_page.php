@@ -78,7 +78,7 @@
 					<?php endif; ?>
 
 					<div class="text-center text-md-start mt-4">
-						<a href="<?= base_url('/mayor') ?>" class="mayorbtn btn btn-outline-success fw-bold">
+						<a href="<?= base_url('/mayor') ?>" class="mayorbtn btn fw-bold">
 							Go to Mayor's Profile
 						</a>
 					</div>

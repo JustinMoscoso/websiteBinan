@@ -20,7 +20,7 @@ function pre_styles($mode = 'default')
             site_url("assets/admin/vendor/bootstrap-icons/bootstrap-icons.css"),
             site_url("assets/admin/vendor/quill/quill.snow.css"),
             site_url("assets/admin/vendor/quill/quill.bubble.css"),
-            site_url("assets/css/stylesheet.css?v=2"),
+            site_url("assets/css/stylesheet.css?v=3"),
             site_url("assets/css/hotlines.css?v=2"),
             site_url("assets/css/contact_page.css?v=" . time()),
             site_url("assets/css/fulldisc_page.css?v=" . time()),
