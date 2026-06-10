@@ -1,3 +1,11 @@
+<style>
+    /* Responsive height for profile picture card */
+    @media (min-width: 992px) {
+        .h-lg-100 {
+            height: 100% !important;
+        }
+    }
+</style>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Account Settings</h1>
 </div>
@@ -32,7 +40,7 @@
 <div class="tab-content" id="profileTabsContent">
     <div class="tab-pane fade show active" id="edit-profile" role="tabpanel" aria-labelledby="edit-profile-tab">
         <div class="card shadow mb-4">
-            <div class="card-body p-4">
+            <div class="card-body p-3 p-md-4">
                 <div class="row">
                     <div class="col-lg-7">
                         <form id="profileDetailsForm">
@@ -73,17 +81,19 @@
                                     readonly>
                             </div>
 
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save mr-1"></i> Save Profile
-                            </button>
-                            <button type="button" class="btn btn-outline-success ml-2" id="showPasswordFormBtn">
-                                <i class="fas fa-key mr-1"></i> Change Password
-                            </button>
+                            <div class="d-flex flex-column flex-sm-row">
+                                <button type="submit" class="btn btn-success mb-2 mb-sm-0 mr-sm-2">
+                                    <i class="fas fa-save mr-1"></i> Save Profile
+                                </button>
+                                <button type="button" class="btn btn-outline-success" id="showPasswordFormBtn">
+                                    <i class="fas fa-key mr-1"></i> Change Password
+                                </button>
+                            </div>
                         </form>
                     </div>
 
                     <div class="col-lg-5 mt-4 mt-lg-0">
-                        <div class="border rounded p-4 bg-light h-100 text-center">
+                        <div class="border rounded p-4 bg-light h-lg-100 text-center">
                             <div class="mb-3">
                                 <?php if (!empty($profile_picture_url)): ?>
                                     <img id="profilePicturePreview" src="<?= esc($profile_picture_url) ?>"
