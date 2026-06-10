@@ -47,13 +47,13 @@
                            
 
                             <!-- Search -->
-                            <div class="col-4">
+                            <div class="col-12 col-md-4">
                                 <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
                                     style="height: 38px;">
                                     Search
                                 </button>
                             </div>
-                             <div class="col-4">
+                            <div class="col-12 col-md-4">
                                 <button type="reset" class="btn btn-danger border w-100 fw-semibold text-white"
                                     style="height: 38px;">
                                     Clear
@@ -61,10 +61,10 @@
                             </div>
 
                             <!-- Add Record -->
-                            <div class="col-4">
+                            <div class="col-12 col-md-4">
                                 <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
-                                    data-bs-toggle="modal" data-bs-target="#addModal">
-                                    <i class="bi bi-plus-lg me-1"></i>
+                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    <i class="bi bi-plus-circle me-1"></i>
                                     Add Record
                                 </button>
                             </div>

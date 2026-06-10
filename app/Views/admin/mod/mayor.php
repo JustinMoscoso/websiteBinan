@@ -75,13 +75,12 @@
                             </div>
 
 
-                                <div class="col-12 col-md-4">
-                                    <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
-                                        data-bs-toggle="modal" data-bs-target="#addModal" ">
-                                      
-                                                                                                                Add Record
-                                                                                                            </button>
-                                                                                                        </div>
+                            <div class="col-12 col-md-4">
+                                <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
+                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    <i class="bi bi-plus-circle me-1"></i>Add Record
+                                </button>
+                            </div>
 
                                                             </div>
                                                         </div>
