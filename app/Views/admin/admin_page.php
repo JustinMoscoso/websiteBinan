@@ -46,6 +46,8 @@
       }
       .sidebar.toggled {
         left: 0 !important;
+        width: 224px !important;
+        overflow-y: auto !important;
       }
       .sidebar-backdrop {
         position: fixed;
@@ -539,10 +541,34 @@
 
   <script>
     $(document).ready(function() {
+      var sidebarOpen = false;
+
+      // Track explicit user clicks on toggle buttons
+      $(document).on('click', '#sidebarToggle, #sidebarToggleTop', function() {
+        sidebarOpen = !sidebarOpen;
+      });
+
+      // Track clicks on backdrop to dismiss sidebar
       $('#sidebarBackdrop').on('click', function() {
         $('body').removeClass('sidebar-toggled');
         $('.sidebar').removeClass('toggled');
+        sidebarOpen = false;
       });
+
+      // Prevent SB Admin 2 from forcing the sidebar open on small screens / window resizes
+      $(window).on('resize', function() {
+        if ($(window).width() < 768 && !sidebarOpen) {
+          $('body').removeClass('sidebar-toggled');
+          $('.sidebar').removeClass('toggled');
+        }
+      });
+
+      // Initialize closed state on initial mobile load
+      if ($(window).width() < 768) {
+        $('body').removeClass('sidebar-toggled');
+        $('.sidebar').removeClass('toggled');
+        sidebarOpen = false;
+      }
     });
   </script>
 </body>
