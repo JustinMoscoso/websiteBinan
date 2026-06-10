@@ -223,7 +223,7 @@
                 }
             ],
             "order": [[2, "desc"]], // Sort by publication date descending
-            "responsive": true,
+            "responsive": false,
             "language": {
                 "emptyTable": "No jobs found",
                 "info": "Showing _START_ to _END_ of _TOTAL_ jobs",
