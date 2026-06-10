@@ -153,6 +153,84 @@
     body {
       background: #f5f7fb;
     }
+
+    /* =========================================
+       GLOBAL RESPONSIVE OVERRIDES
+       ========================================= */
+    @media (max-width: 767.98px) {
+      .topbar {
+        padding: 0.5rem 1rem !important;
+      }
+      .container-fluid {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+      }
+      .card-body {
+        padding: 1rem !important;
+      }
+      /* Ensure tables scroll horizontally on mobile */
+      .table-responsive {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      /* Prevent Quill editor toolbars from overflowing */
+      .ql-toolbar.ql-snow {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        padding: 4px 6px !important;
+      }
+      .ql-toolbar.ql-snow .ql-formats {
+        margin-right: 4px !important;
+        margin-bottom: 4px !important;
+        display: inline-flex !important;
+        flex-wrap: wrap !important;
+      }
+      /* Make DataTable search and page size filters responsive */
+      .dataTables_filter {
+        width: 100% !important;
+        text-align: left !important;
+        margin-top: 0.5rem;
+      }
+      .dataTables_filter label {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        align-items: flex-start !important;
+      }
+      .dataTables_filter input[type="search"] {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-top: 0.25rem !important;
+      }
+      .dataTables_length {
+        width: 100% !important;
+        text-align: left !important;
+      }
+      .dataTables_length label {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        justify-content: space-between !important;
+      }
+      /* Align modal buttons nicely on mobile */
+      .modal-footer {
+        display: flex !important;
+        flex-direction: column-reverse !important;
+        gap: 0.5rem;
+        padding: 1rem !important;
+      }
+      .modal-footer .btn {
+        width: 100% !important;
+        margin: 0 !important;
+      }
+      .modal-body {
+        padding: 1rem !important;
+      }
+      .modal-header {
+        padding: 1rem !important;
+      }
+    }
   </style>
 </head>
 
