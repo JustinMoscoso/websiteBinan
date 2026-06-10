@@ -29,9 +29,7 @@
                         </label>
 
                         <div class="input-group">
-
-
-                            <input type="text" class="form-control" name="search" placeholder="Search File Name / Year...">
+                            <input type="text" class="form-control" name="search" placeholder="Search File Name / Year..." style="height: 38px;">
                         </div>
                     </div>
 
@@ -41,7 +39,7 @@
                             Frequency
                         </label>
 
-                        <select class="form-control form-select" name="frequency">
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="frequency" style="height: 38px; cursor: pointer;">
                             <option value="">All Frequencies</option>
                             <option value="ANNUAL">Annual</option>
                             <option value="QUARTERLY">Quarterly</option>
@@ -54,7 +52,7 @@
                             File Category
                         </label>
 
-                        <select class="form-control form-select" name="file_category">
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="file_category" style="height: 38px; cursor: pointer;">
                             <option value="">All Categories</option>
 
                             <optgroup label="Annual Reports">
@@ -111,7 +109,7 @@
                             Status
                         </label>
 
-                        <select class="form-control form-select" name="status">
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="status" style="height: 38px; cursor: pointer;">
                             <option value="">All</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
@@ -119,35 +117,35 @@
                     </div>
 
                     <!-- Buttons Row -->
-                    <div class="col-12">
-                        <hr class="my-1">
+                    <div class="col-12 mt-2">
+                        <hr class="my-2" style="border-color: #adb5bd; opacity: 1;">
 
-                        <div class="row g-2 justify-content-end pt-2">
-
-                            <div class="col-12 col-md-4 col-lg-2">
-                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
-                                    <i class="bi bi-arrow-counterclockwise me-1"></i>
-                                    Clear
-                                </button>
+                        <div class="row justify-content-end pt-2">
+                            <div class="col-xl-4 col-lg-4 col-md-12">
+                                <div class="row g-2">
+                                    <div class="col-12 col-md-4">
+                                        <button type="submit" id="searchBtn" class="btn btn-primary w-100 fw-semibold shadow-sm"
+                                            style="height: 38px;">
+                                            <i class="bi bi-search me-1"></i>
+                                            Search
+                                        </button>
+                                    </div>
+                                     <div class="col-12 col-md-4">
+                                        <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
+                                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                                            Clear
+                                        </button>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
+                                            data-bs-toggle="modal" data-bs-target="#addModal"
+                                            style="height: 38px; background:#16a085; border-color:#16a085;">
+                                            <i class="bi bi-plus-circle me-1"></i>
+                                            Add Record
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="col-12 col-md-4 col-lg-2">
-                                <button type="submit" id="searchBtn" class="btn btn-primary w-100 fw-semibold shadow-sm"
-                                    style="height: 38px;">
-                                    <i class="bi bi-search me-1"></i>
-                                    Search
-                                </button>
-                            </div>
-
-                            <div class="col-12 col-md-4 col-lg-2">
-                                <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
-                                    data-bs-toggle="modal" data-bs-target="#addModal"
-                                    style="height: 38px; background:#16a085; border-color:#16a085;">
-                                    <i class="bi bi-plus-circle me-1"></i>
-                                    Add Record
-                                </button>
-                            </div>
-
                         </div>
                     </div>
 
@@ -182,56 +180,67 @@
     <div class="modal-dialog modal-dialog-centered">
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                Add Policy
+                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
+                    <i class="bi bi-plus-circle me-2"></i>Add Policy
+                </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
 
             <div class="modal-body p-4">
                 <div class="row g-3">
-                    <div class="col-xl-4-5 col-lg-4 col-md-5">
+
+                    <div class="col-12">
                         <label class="form-label small fw-bold text-secondary">File Category</label>
-                        <select class="form-select filter-input" name="file_category">
+                        <select class="form-control form-select shadow-sm" id="fileCategory" name="fileCategory" required>
                             <option value="" selected disabled>Choose Category</option>
                             <optgroup label="Annual Reports">
                                 <option value="Annual Budget Report">Annual Budget Report</option>
-                                <option value="Annual Procurement Plan or Procurement List">Annual Procurement Plan or
-                                    Procurement List</option>
+                                <option value="Annual Procurement Plan or Procurement List">Annual Procurement Plan or Procurement List</option>
                                 <option value="Supplemental Procurement Plan">Supplemental Procurement Plan</option>
-                                <option value="Annual Gender and Development Accomplishment Report">Annual Gender and
-                                    Development Accomplishment Report</option>
+                                <option value="Annual Gender and Development Accomplishment Report">Annual Gender and Development Accomplishment Report</option>
                             </optgroup>
                             <optgroup label="Quarterly Reports">
-                                <option value="Quarterly Statement of Cash Flow">Quarterly Statement of Cash Flow
-                                </option>
-                                <option value="Statement of Receipts and Expenditures">Statement of Receipts and
-                                    Expenditures</option>
-                                <option value="20% Component of the Internal Revenue Allotment Utilization">20%
-                                    Component of the Internal Revenue Allotment Utilization</option>
-                                <option value="Local Disaster Risk Reduction and Management Fund Utilization">Local
-                                    Disaster Risk Reduction and Management Fund Utilization</option>
-                                <option value="Report of Special Education Fund Utilization">Report of Special Education
-                                    Fund Utilization</option>
+                                <option value="Quarterly Statement of Cash Flow">Quarterly Statement of Cash Flow</option>
+                                <option value="Statement of Receipts and Expenditures">Statement of Receipts and Expenditures</option>
+                                <option value="20% Component of the Internal Revenue Allotment Utilization">20% Component of the Internal Revenue Allotment Utilization</option>
+                                <option value="Local Disaster Risk Reduction and Management Fund Utilization">Local Disaster Risk Reduction and Management Fund Utilization</option>
+                                <option value="Report of Special Education Fund Utilization">Report of Special Education Fund Utilization</option>
                                 <option value="Trust Fund (PDAF) Utilization">Trust Fund (PDAF) Utilization</option>
                                 <option value="Unliquidated Cash Advances">Unliquidated Cash Advances</option>
-                                <option value="Bid Results on Civil Works and Goods and Services">Bid Results on Civil
-                                    Works and Goods and Services</option>
+                                <option value="Bid Results on Civil Works and Goods and Services">Bid Results on Civil Works and Goods and Services</option>
                                 <option value="Manpower Complement">Manpower Complement</option>
-                                <option value="Annual Statement of Indebtedness, Payments and Balances">Annual Statement
-                                    of Indebtedness, Payments and Balances</option>
+                                <option value="Annual Statement of Indebtedness, Payments and Balances">Annual Statement of Indebtedness, Payments and Balances</option>
                             </optgroup>
                         </select>
                     </div>
 
                     <div class="col-md-6">
                         <label for="yr" class="form-label small fw-bold text-secondary">Year</label>
-                        <input type="text" class="yearpicker form-control shadow-sm" id="yr" name="yr"
-                            placeholder="Select Year" required>
+                        <select class="form-control form-select shadow-sm" id="yr" name="yr" required>
+                            <option value="" selected disabled>Select Year</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                        </select>
                     </div>
 
                     <div class="col-md-6">
                         <label for="qtr" class="form-label small fw-bold text-secondary">Quarter</label>
-                        <select class="form-select shadow-sm" id="qtr" name="qtr" required>
+                        <select class="form-control form-select shadow-sm" id="qtr" name="qtr" required>
                             <option value="" selected disabled>Choose Quarter</option>
                             <option value="First">First Quarter</option>
                             <option value="Second">Second Quarter</option>
@@ -240,13 +249,13 @@
                         </select>
                     </div>
 
-                    <div class="col-12 mt-2">
+                    <div class="col-12">
                         <label for="policyFile" class="form-label small fw-bold text-secondary">Upload Document</label>
                         <input type="file" class="form-control shadow-sm" id="policyFile" name="policyFile"
                             accept=".pdf,.xls,.xlsx" required>
-                        <div class="form-text text-muted" style="font-size: 0.78rem;">Accepted formats: PDF, XLS, XLSX
-                        </div>
+                        <div class="form-text text-muted" style="font-size: 0.78rem;">Accepted formats: PDF, XLS, XLSX</div>
                     </div>
+
                 </div>
             </div>
 
@@ -257,6 +266,7 @@
         </form>
     </div>
 </div>
+
 
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -274,7 +284,7 @@
                     <div class="col-12">
                         <label for="editFileCategory" class="form-label small fw-bold text-secondary">File
                             Category</label>
-                        <select class="form-select shadow-sm" id="editFileCategory" name="editFileCategory" required>
+                        <select class="form-control form-select shadow-sm" id="editFileCategory" name="editFileCategory" required>
                             <optgroup label="Annual Reports">
                                 <option value="Annual Budget Report">Annual Budget Report</option>
                                 <option value="Annual Procurement Plan or Procurement List">Annual Procurement Plan or
@@ -307,12 +317,30 @@
 
                     <div class="col-md-6">
                         <label for="edityr" class="form-label small fw-bold text-secondary">Year</label>
-                        <input type="text" class="yearpicker form-control shadow-sm" id="edityr" name="edityr" required>
+                        <select class="form-control form-select shadow-sm" id="edityr" name="edityr" required>
+                            <option value="" disabled>Select Year</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                        </select>
                     </div>
 
                     <div class="col-md-6">
                         <label for="editqtr" class="form-label small fw-bold text-secondary">Quarter</label>
-                        <select class="form-select shadow-sm" id="editqtr" name="editqtr" required>
+                        <select class="form-control form-select shadow-sm" id="editqtr" name="editqtr" required>
                             <option value="First">First Quarter</option>
                             <option value="Second">Second Quarter</option>
                             <option value="Third">Third Quarter</option>

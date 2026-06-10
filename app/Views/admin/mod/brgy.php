@@ -20,7 +20,7 @@
             <form id="barangaySearchForm">
                 <div class="row g-3 align-items-end">
 
-                    <div class="col-xl-5 col-lg-5 col-md-12">
+                    <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Query</label>
                         <div class="input-group">
 
@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-3 col-lg-3 col-md-6">
+                    <div class="col-xl-4 col-lg-4 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle filter-input" name="status"
                             style="height: 38px; cursor: pointer;">
@@ -40,22 +40,23 @@
                         </select>
                     </div>
 
-                    <div class="col-xl-4 col-lg-4 col-md-12">
+                    <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="row g-2">
 
                             <!-- Clear -->
-                            <div class="col-4">
-                                <button type="reset" class="btn btn-danger border w-100 fw-semibold text-white"
-                                    style="height: 38px;">
-                                    Clear
-                                </button>
-                            </div>
+                           
 
                             <!-- Search -->
                             <div class="col-4">
                                 <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
                                     style="height: 38px;">
                                     Search
+                                </button>
+                            </div>
+                             <div class="col-4">
+                                <button type="reset" class="btn btn-danger border w-100 fw-semibold text-white"
+                                    style="height: 38px;">
+                                    Clear
                                 </button>
                             </div>
 

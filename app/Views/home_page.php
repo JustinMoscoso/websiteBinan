@@ -421,19 +421,19 @@
 							$image = 'assets/img/Emergency_Hotline/PNP.png';
 						} elseif (stripos($hotline->title, 'Fire') !== false) {
 							$icon = 'fas fa-fire-extinguisher';
-							$image = 'assets/img/Emergency_Hotline/BFP.jpg';
+							$image = 'assets/img/Emergency_Hotline/BFP.png';
 						} elseif (stripos($hotline->title, 'Hospital') !== false) {
 							$icon = 'fas fa-hospital';
-							$image = 'assets/img/Emergency_Hotline/BCH.jpg';
+							$image = 'assets/img/Emergency_Hotline/BCH.png';
 						} elseif (stripos($hotline->title, 'Disaster') !== false) {
 							$icon = 'fas fa-exclamation-triangle';
-							$image = 'assets/img/Emergency_Hotline/BCDRRM.jpg';
+							$image = 'assets/img/Emergency_Hotline/BCDRRM.png';
 						}
 						?>
 
 						<div class="col-lg-6 col-12">
 
-							<div class="row mx-0 hotline-row align-items-center h-100">
+							<div class="row mx-0 hotline-row h-100">
 
 								<div class="col-3 d-flex align-items-center justify-content-center hotline-col">
 									<div class="hotline-logo-box">
@@ -571,18 +571,17 @@
 			position: absolute;
 			top: 4px;
 			bottom: 4px;
-			right: 0;
+			right: 2px;
 			width: 1px;
-			background: #e2e5e9;
+			background: #000000ff;
 		}
 
 		/* LOGO BOX */
 		.hotline-logo-box {
-			width: 44px;
-			height: 44px;
+			width: 85px;
+			height: 85px;
 			border-radius: 6px;
-			border: 1px solid #e5e7eb;
-			background: #f8f9fa;
+			background: transparent;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -590,8 +589,8 @@
 		}
 
 		.hotline-logo {
-			width: 32px;
-			height: 32px;
+			width: 85px;
+			height: 85px;
 			object-fit: contain;
 		}
 
@@ -612,7 +611,9 @@
 
 		/* DESCRIPTION / PHONE NUMBERS */
 		.hotline-description-wrapper {
-			padding-left: 10px;
+			padding-left: 0;
+			padding-right: 0;
+			text-align: center;
 		}
 
 		.hotline-description {
@@ -620,6 +621,16 @@
 			font-weight: 500;
 			color: #333333;
 			line-height: 1.5;
+			text-align: center;
+		}
+
+		.hotline-description p {
+			text-align: center !important;
+			margin-bottom: 0.25rem;
+		}
+
+		.hotline-description p:last-child {
+			margin-bottom: 0;
 		}
 
 		/* FOOTER DIRECTORY BUTTON */

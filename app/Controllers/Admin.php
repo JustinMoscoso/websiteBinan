@@ -47,6 +47,10 @@ class Admin extends BaseController
             $this->session->set('user', $user);
         }
 
+        if (isset($user->user_lvl)) {
+            $user->user_lvl = strtoupper(trim($user->user_lvl));
+        }
+
         // Department-scoped ADMIN/ENCODER/VIEWER: restrict to profile, services, and dashboard
         $isDeptScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER', 'VIEWER']) && ($user->account_type ?? '') === 'DEPARTMENT');
         $isBrgyScopedAdmin = (in_array($user->user_lvl, ['ADMIN', 'ENCODER', 'VIEWER']) && ($user->account_type ?? '') === 'BARANGAY');
@@ -426,6 +430,10 @@ class Admin extends BaseController
         if ($freshUser) {
             $user = $freshUser;
             $this->session->set('user', $user);
+        }
+
+        if (isset($user->user_lvl)) {
+            $user->user_lvl = strtoupper(trim($user->user_lvl));
         }
 
         // Helper flags for scoped-ADMIN/ENCODER/VIEWER enforcement
@@ -1135,7 +1143,8 @@ class Admin extends BaseController
                     if ($news) {
                         // If restricted Mayor or CIO, check ownership
                         $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
-                        if ($isMayorOrCIORestricted && $news->author !== $currentUserFullName) {
+                        $deptNames = $this->getDepartmentUserNames($user);
+                        if ($isMayorOrCIORestricted && !in_array($news->author, $deptNames)) {
                             $message = 'Unauthorized: You can only view your own created data.';
                         } else {
                             $data = $news;
@@ -1160,7 +1169,12 @@ class Admin extends BaseController
                     // Enforce ownership for restricted Mayor or CIO
                     $isMayorOrCIORestricted = ($isMayor || $isCIO) && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
                     if ($isMayorOrCIORestricted) {
-                        $query = $query->where('author', $currentUserFullName);
+                        $deptNames = $this->getDepartmentUserNames($user);
+                        if (!empty($deptNames)) {
+                            $query = $query->whereIn('author', $deptNames);
+                        } else {
+                            $query = $query->where('author', $currentUserFullName);
+                        }
                     }
 
                     if (!empty($search)) {
@@ -2237,11 +2251,6 @@ class Admin extends BaseController
             }
 
             case 'create_postcontent': {
-                if ($isMayorDeptAdmin) {
-                    $message = 'Unauthorized: Mayor Office accounts can only read, update, and archive their own post content.';
-                    break;
-                }
-
                 $con_m = new \App\Models\Content();
                 $title = $this->request->getPost('title');
                 $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
@@ -2280,10 +2289,6 @@ class Admin extends BaseController
                 break;
             }
             case 'create_mayor': {
-                if ($isMayorDeptAdmin) {
-                    $message = "Unauthorized: Mayor Office accounts can only update and archive Mayor's Corner content.";
-                    break;
-                }
 
                 if (!$canManageMayor) {
                     $message = 'Unauthorized access.';
@@ -3155,7 +3160,8 @@ class Admin extends BaseController
 
                 if ($ne_dt) {
                     $isMayorRestricted = $isMayor && !$isCIO && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
-                    if ($isMayorRestricted && $ne_dt->author !== $currentUserFullName) {
+                    $deptNames = $this->getDepartmentUserNames($user);
+                    if ($isMayorRestricted && !in_array($ne_dt->author, $deptNames)) {
                         $message = 'Unauthorized: You can only update your own created data.';
                         break;
                     }
@@ -3931,7 +3937,8 @@ class Admin extends BaseController
                 $isMayorRestricted = $isMayor && !$isCIO && !in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN']);
                 if ($isMayorRestricted) {
                     $post = $anns_m->find($id);
-                    if ($post && $post->author !== $currentUserFullName) {
+                    $deptNames = $this->getDepartmentUserNames($user);
+                    if ($post && !in_array($post->author, $deptNames)) {
                         $message = 'Unauthorized: You can only archive your own created data.';
                         break;
                     }
@@ -4162,7 +4169,8 @@ class Admin extends BaseController
 
                 if ($isMayorRestricted) {
                     $post = $con_m->find($id);
-                    if ($post && $post->author !== $currentUserFullName) {
+                    $deptNames = $this->getDepartmentUserNames($user);
+                    if ($post && !in_array($post->author, $deptNames)) {
                         $message = 'Unauthorized: You can only delete your own created data.';
                         $status = 0;
                         break;
@@ -4434,11 +4442,15 @@ class Admin extends BaseController
                     'updated_date' => date('Y-m-d H:i:s'),
                 ];
 
-                if ($job_m->update($id, $data)) {
-                    $status = 1;
-                    $message = 'Job status updated successfully';
-                } else {
-                    $message = 'Failed to update job status';
+                try {
+                    if ($job_m->update($id, $data)) {
+                        $status = 1;
+                        $message = 'Job status updated successfully';
+                    } else {
+                        $message = 'Failed to update job status';
+                    }
+                } catch (\Exception $e) {
+                    $message = 'Database error: ' . $e->getMessage();
                 }
                 break;
             }
@@ -4547,6 +4559,29 @@ class Admin extends BaseController
         }
 
         return true;
+    }
+
+    private function getDepartmentUserNames($user): array
+    {
+        $names = [];
+        $currentName = trim(($user->fname ?? '') . ' ' . ($user->lname ?? ''));
+        if ($currentName !== '') {
+            $names[] = $currentName;
+        }
+
+        if (!empty($user->entity_ref_id) && ($user->account_type ?? '') === 'DEPARTMENT') {
+            $user_m = new \App\Models\UserAccount();
+            $deptUsers = $user_m->where('account_type', 'DEPARTMENT')
+                                 ->where('entity_ref_id', $user->entity_ref_id)
+                                 ->findAll();
+            foreach ($deptUsers as $du) {
+                $name = trim(($du->fname ?? '') . ' ' . ($du->lname ?? ''));
+                if ($name !== '') {
+                    $names[] = $name;
+                }
+            }
+        }
+        return array_unique(array_filter($names));
     }
 
     private function recordValue($record, string $field)

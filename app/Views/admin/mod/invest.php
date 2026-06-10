@@ -59,15 +59,16 @@
 
           <div class="col-xl-4 col-lg-4 col-md-12">
             <div class="row g-2">
-              <div class="col-12 col-md-4">
-                <button type="reset" class="btn btn-danger w-100 flex-grow-1 fw-semibold" style="height: 38px;">
-                  Clear
-                </button>
-              </div>
+              
               <div class="col-12 col-md-4">
                 <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm" id="investSearchBtn"
                   style="height: 38px;">
                   Search
+                </button>
+              </div>
+              <div class="col-12 col-md-4">
+                <button type="reset" class="btn btn-danger w-100 flex-grow-1 fw-semibold" style="height: 38px;">
+                  Clear
                 </button>
               </div>
               <div class="col-12 col-md-4">
@@ -124,7 +125,7 @@
           <div class="col-12">
             <label for="fileCategory" class="form-label small fw-bold text-secondary">File Category <span
                 class="text-danger">*</span></label>
-            <select class="form-select shadow-sm invest-select-menu" id="fileCategory" name="fileCategory" required>
+            <select class="form-control form-select shadow-sm invest-select-menu" id="fileCategory" name="fileCategory" required>
               <option value="" selected disabled>Select classifications...</option>
               <option value="Local Revenue Code">Local Revenue Code</option>
               <option value="Local Investment and Incentive Code">Local Investment and Incentive Code</option>
@@ -173,7 +174,7 @@
           <div class="col-12">
             <label for="editFileCategory" class="form-label small fw-bold text-secondary">File Category <span
                 class="text-danger">*</span></label>
-            <select class="form-select shadow-sm invest-select-menu" id="editFileCategory" name="editFileCategory"
+            <select class="form-control form-select shadow-sm invest-select-menu" id="editFileCategory" name="editFileCategory"
               required>
               <option value="" disabled>Select classifications...</option>
               <option value="Local Revenue Code">Local Revenue Code</option>

@@ -25,9 +25,9 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
             <form id="serviceSearchForm">
-                <div class="row g-3 align-items-end">
+                <div class="row g-3">
 
-                    <div class="<?= !$isEntityScopedAdmin ? 'col-xl-3' : 'col-xl-6' ?> col-lg-4 col-md-12">
+                    <div class="<?= !$isEntityScopedAdmin ? 'col-xl-4' : 'col-xl-9' ?> col-lg-6 col-md-12">
                         <label for="service_name" class="form-label small fw-bold text-secondary">Service Query
                             Title</label>
                         <div class="input-group">
@@ -38,7 +38,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                     </div>
 
                     <?php if (!$isEntityScopedAdmin): ?>
-                        <div class="col-xl-2 col-lg-2 col-md-6">
+                        <div class="col-xl-3 col-lg-3 col-md-6">
                             <label for="searchCategory" class="form-label small fw-bold text-secondary">Scope Category</label>
                             <select class="form-control form-select bg-light border-secondary-subtle" name="category"
                                 id="searchCategory" style="height: 38px; cursor: pointer;">
@@ -48,18 +48,18 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             </select>
                         </div>
 
-                        <div class="col-xl-2 col-lg-2 col-md-6">
+                        <div class="col-xl-3 col-lg-3 col-md-6">
                             <label class="form-label small fw-bold text-secondary">Assigned Unit</label>
 
                             <div id="searchBrgyGroup" style="display: none;">
-                                <select class="form-select bg-light border-secondary-subtle" name="brgy" id="searchBrgy"
+                                <select class="form-control form-select bg-light border-secondary-subtle" name="brgy" id="searchBrgy"
                                     style="height: 38px; cursor: pointer;">
                                     <option value="">Select Barangay...</option>
                                 </select>
                             </div>
 
                             <div id="searchDeptGroup" style="display: none;">
-                                <select class="form-select bg-light border-secondary-subtle" name="dept" id="searchDept"
+                                <select class="form-control form-select bg-light border-secondary-subtle" name="dept" id="searchDept"
                                     style="height: 38px; cursor: pointer;">
                                     <option value="">Select Dept...</option>
                                 </select>
@@ -74,7 +74,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                         </div>
                     <?php endif; ?>
 
-                    <div class="col-xl-2 col-lg-2 col-md-6">
+                    <div class="<?= !$isEntityScopedAdmin ? 'col-xl-2' : 'col-xl-3' ?> col-lg-3 col-md-6">
                         <label for="status" class="form-label small fw-bold text-secondary">Publishing Status</label>
                         <select class="form-control form-select bg-light border-secondary-subtle" name="status" id="status"
                             style="height: 38px; cursor: pointer;">
@@ -85,33 +85,36 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                         </select>
                     </div>
 
-                    <div class="<?= !$isEntityScopedAdmin ? 'col-xl-3' : 'col-xl-4' ?> col-lg-4 col-md-12">
-                        <div class="row g-2">
+                    <!-- Buttons Row -->
+                    <div class="col-12 mt-2">
+                        <hr class="my-2" style="border-color: #adb5bd; opacity: 1;">
 
-                            <!-- Clear -->
-                            <div class="col-4">
-                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
-                                    Clear
-                                </button>
+                        <div class="row justify-content-end pt-2">
+                            <div class="col-xl-4 col-lg-4 col-md-12">
+                                <div class="row g-2">
+                                    <div class="col-12 col-md-4">
+                                        <button type="submit" id="searchBtn" class="btn btn-primary w-100 fw-semibold shadow-sm"
+                                            style="height: 38px;">
+                                            <i class="bi bi-search me-1"></i>
+                                            Search
+                                        </button>
+                                    </div>
+                                     <div class="col-12 col-md-4">
+                                        <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
+                                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                                            Clear
+                                        </button>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
+                                            data-bs-toggle="modal" data-bs-target="#addModal"
+                                            style="height: 38px; background:#16a085; border-color:#16a085;">
+                                            <i class="bi bi-plus-circle me-1"></i>
+                                            Add Record
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-
-                            <!-- Search -->
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
-                                    style="height: 38px;">
-                                    Search
-                                </button>
-                            </div>
-
-                            <!-- Add Service -->
-                            <div class="col-4">
-                                <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
-                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
-                                    <i class="bi bi-plus-circle me-1"></i>
-                                    Add Record
-                                </button>
-                            </div>
-
                         </div>
                     </div>
 
@@ -190,7 +193,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <div id="deptGroup" style="display:none;">
                                 <label for="txtDept" class="form-label small fw-bold text-secondary">Responsible Department
                                     Entity <span class="text-danger">*</span></label>
-                                <select id="txtDept" name="txtDept" class="form-select">
+                                <select id="txtDept" name="txtDept" class="form-control form-select">
                                     <option selected disabled value="">Choose regional department...</option>
                                 </select>
                             </div>
@@ -198,7 +201,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <div id="brgyGroup" style="display:none;">
                                 <label for="txtBrgy" class="form-label small fw-bold text-secondary">Responsible Barangay
                                     Ward <span class="text-danger">*</span></label>
-                                <select id="txtBrgy" name="txtBrgy" class="form-select">
+                                <select id="txtBrgy" name="txtBrgy" class="form-control form-select">
                                     <option selected disabled value="">Choose community ward...</option>
                                 </select>
                             </div>
@@ -269,14 +272,14 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <div id="editDeptFieldGroup" style="display:none;" class="mb-2">
                                 <label for="editDept" class="form-label small fw-bold text-secondary">Responsible Department
                                     Entity <span class="text-danger">*</span></label>
-                                <select id="editDept" name="editDept" class="form-select">
+                                <select id="editDept" name="editDept" class="form-control form-select">
                                 </select>
                             </div>
 
                             <div id="editBrgyFieldGroup" style="display:none;">
                                 <label for="editBrgy" class="form-label small fw-bold text-secondary">Responsible Barangay
                                     Ward <span class="text-danger">*</span></label>
-                                <select id="editBrgy" name="editBrgy" class="form-select">
+                                <select id="editBrgy" name="editBrgy" class="form-control form-select">
                                 </select>
                             </div>
                         </div>

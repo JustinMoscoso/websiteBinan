@@ -18,17 +18,16 @@
                 <i class="bi bi-funnel-fill me-2" style="color: var(--theme-mid-green);"></i>Data Directory Filtering
             </h6>
             <form id="userSearchForm">
-                <div class="row g-3 align-items-center">
+                <div class="row g-3 align-items-end">
 
-                    <div class="col-xl-5 col-lg-4 col-md-12">
-                        <div class="input-group">
-
-                            <input type="text" class="form-control border-start-0 ps-0" id="searchUser"
-                                placeholder="Search accounts by username or legal name...">
-                        </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12">
+                        <label class="form-label small fw-bold text-secondary">Search Account</label>
+                        <input type="text" class="form-control" id="searchUser"
+                            placeholder="Search accounts by username or legal name...">
                     </div>
 
-                    <div class="col-xl-2 col-lg-3 col-md-6">
+                    <div class="col-xl-2 col-lg-2 col-md-6">
+                        <label class="form-label small fw-bold text-secondary">Status Profile</label>
                         <select class="form-control form-select" id="searchStatus">
                             <option selected value="">— Status Profile —</option>
                             <option value="ACTIVE">Active Only</option>
@@ -37,7 +36,8 @@
                         </select>
                     </div>
 
-                    <div class="col-xl-2 col-lg-3 col-md-6">
+                    <div class="col-xl-2 col-lg-2 col-md-6">
+                        <label class="form-label small fw-bold text-secondary">Authority Level</label>
                         <select class="form-control form-select" id="searchUserLevel">
                             <option selected value="">— Authority Level —</option>
                             <?php if ($user->user_lvl === 'DEVELOPER'): ?>
@@ -50,17 +50,28 @@
                         </select>
                     </div>
 
-                    <div class="col-xl-3 col-lg-2 col-md-12 d-flex gap-2 justify-content-lg-end">
+                    <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="row g-2">
-                            <button type="reset"
-                                class="btn btn-danger w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
-                                <i class="bi bi-x-circle"></i> Clear
-                            </button>
-                            <button type="submit"
-                                class="btn text-white w-50 py-2 btn-primary text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold"
-                                id="searchBtn"">
-                            Search
-                        </button>
+                           
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm"
+                                    id="searchBtn" style="height: 38px;">
+                                    Search
+                                </button>
+                            </div>
+                             <div class="col-12 col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 flex-grow-1 fw-semibold"
+                                    style="height: 38px;">
+                                    Clear
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="button"
+                                    class="btn btn-success w-100 shadow-sm fw-semibold text-nowrap flex-grow-1"
+                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    <i class="bi bi-person-plus-fill me-1"></i>Add Account
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -74,13 +85,6 @@
                             <div class="row">
                                 <div class="col-lg-12">
 
-                                    <div class="text-end mb-3">
-                                        <button type="button"
-                                            class="btn text-white btn-success shadow-sm px-4 fw-semibold d-inline-flex align-items-center gap-2"
-                                            data-bs-toggle="modal" data-bs-target="#addModal">
-                                            <i class="bi bi-person-plus-fill"></i> Add New User Account
-                                        </button>
-                                    </div>
 
                                     <!-- SB Admin 2 Styled Card -->
                                     <div class="card shadow mb-4 border-top border-4"
@@ -222,7 +226,7 @@
                                                         class="form-label small fw-bold text-secondary">Linked
                                                         Enterprise
                                                         Context Node <span class="text-danger">*</span></label>
-                                                    <select id="txtEntityRef" name="txtEntityRef" class="form-select">
+                                                    <select id="txtEntityRef" name="txtEntityRef" class="form-control">
                                                         <option value="" disabled selected>— Select contextual entity
                                                             node
                                                             link —</option>

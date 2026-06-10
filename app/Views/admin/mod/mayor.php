@@ -59,11 +59,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="row g-2">
 
-                            <div class="col-12 col-md-4">
-                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
-                                    Clear
-                                </button>
-                            </div>
+                           
 
 
                             <div class="col-12 col-md-4">
@@ -72,9 +68,13 @@
                                     Search
                                 </button>
                             </div>
+                             <div class="col-12 col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
+                                    Clear
+                                </button>
+                            </div>
 
 
-                            <?php if (!(($user->user_lvl ?? '') === 'ADMIN' && ($user->account_type ?? '') === 'DEPARTMENT' && !empty($is_mayor))): ?>
                                 <div class="col-12 col-md-4">
                                     <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
                                         data-bs-toggle="modal" data-bs-target="#addModal" ">
@@ -82,7 +82,6 @@
                                                                                                                 Add Record
                                                                                                             </button>
                                                                                                         </div>
-                                                                <?php endif; ?>
 
                                                             </div>
                                                         </div>

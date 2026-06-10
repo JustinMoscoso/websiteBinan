@@ -12,6 +12,10 @@
 </div>
 
 <style>
+    :root {
+        --theme-dark-green: #1b4d3e;
+        --theme-mid-green: #2d6a4f;
+    }
     /* Core Action Element Configurations */
     .btn-theme {
         background-color: var(--theme-dark-green);
@@ -220,12 +224,14 @@
         background-color: #e3f2fd;
         color: #0d47a1;
         border-color: #bbdefb;
+        padding-right: 24px;
     }
 
     .jobtype-badge-parttime {
         background-color: #e0f7fa;
         color: #006064;
         border-color: #b2ebf2;
+        padding-right: 24px;
     }
 
 
@@ -284,16 +290,17 @@
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="row g-2">
-                            <div class="col-12 col-md-4">
-                                <button type="reset" class="btn btn-danger w-100 flex-grow-1 fw-semibold"
-                                    style="height: 38px;">
-                                    Clear
-                                </button>
-                            </div>
+                           
                             <div class="col-12 col-md-4">
                                 <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm"
                                     id="jobsSearchBtn" style="height: 38px;">
                                     Search
+                                </button>
+                            </div>
+                             <div class="col-12 col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 flex-grow-1 fw-semibold"
+                                    style="height: 38px;">
+                                    Clear
                                 </button>
                             </div>
                             <div class="col-12 col-md-4">
@@ -365,7 +372,7 @@
                     <div class="col-md-6">
                         <label for="type" class="form-label small fw-bold text-secondary">Job Type <span
                                 class="text-danger">*</span></label>
-                        <select class="form-select shadow-sm" id="type" name="type" required>
+                        <select class="form-control form-select shadow-sm" id="type" name="type" required>
                             <option value="" selected disabled>Select Job Type</option>
                             <option value="Full Time">Full Time</option>
                             <option value="Part Time">Part Time</option>
@@ -434,7 +441,7 @@
                     <div class="col-md-6">
                         <label for="editType" class="form-label small fw-bold text-secondary">Job Type <span
                                 class="text-danger">*</span></label>
-                        <select class="form-select shadow-sm" id="editType" name="type" required>
+                        <select class="form-control form-select shadow-sm" id="editType" name="type" required>
                             <option value="Full Time">Full Time</option>
                             <option value="Part Time">Part Time</option>
                         </select>
@@ -461,15 +468,7 @@
                         <input type="hidden" id="editDescription" name="description" required>
                     </div>
 
-                    <?php if (!in_array($user->user_lvl, ['ENCODER', 'VIEWER'])): ?>
-                        <div class="col-md-6">
-                            <label for="editStatus" class="form-label small fw-bold text-secondary">Listing Status</label>
-                            <select class="form-select shadow-sm" id="editStatus" name="status">
-                                <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option>
-                            </select>
-                        </div>
-                    <?php endif; ?>
+
                 </div>
             </div>
 

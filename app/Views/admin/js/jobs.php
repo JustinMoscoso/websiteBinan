@@ -135,15 +135,16 @@
                 {
                     "title": "Job Type",
                     "data": "type",
+                    "className": "dt-center",
                     "render": function (data, type, row) {
                         if (type === 'display') {
-                            if (!data) return 'N/A';
+                            if (!data) return '<div class="d-flex justify-content-center">N/A</div>';
                             if (data === 'Full Time') {
-                                return '<span class="status-badge jobtype-badge-fulltime"><span class="status-dot jobtype-dot-fulltime"></span>Full Time</span>';
+                                return '<div class="d-flex justify-content-center"><span class="status-badge jobtype-badge-fulltime"><span class="status-dot jobtype-dot-fulltime"></span>Full Time</span></div>';
                             } else if (data === 'Part Time') {
-                                return '<span class="status-badge jobtype-badge-parttime"><span class="status-dot jobtype-dot-parttime"></span>Part Time</span>';
+                                return '<div class="d-flex justify-content-center"><span class="status-badge jobtype-badge-parttime"><span class="status-dot jobtype-dot-parttime"></span>Part Time</span></div>';
                             } else {
-                                return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>' + data + '</span>';
+                                return '<div class="d-flex justify-content-center"><span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>' + data + '</span></div>';
                             }
                         }
                         return data;
@@ -341,7 +342,6 @@
                         $('#editPublicationDate').val(job.publication_date);
                         $('#editEmail').val(job.email);
                         $('#editDescription').val(job.description);
-                        $('#editStatus').val(job.status);
 
                         // Debug: Log the job ID being set
                         console.log('Setting job ID:', job.ID);

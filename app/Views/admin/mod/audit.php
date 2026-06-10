@@ -145,7 +145,7 @@
             <form id="auditLogSearchForm">
                 <div class="row g-3 align-items-center">
 
-                    <div class="col-xl-7 col-lg-6 col-md-12">
+                    <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0 ps-0" id="searchAction"
@@ -153,23 +153,29 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-2 col-lg-3 col-md-6">
+                    <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="input-group">
 
                             <input type="date" class="form-control border-start-0 ps-0" id="searchDate">
                         </div>
                     </div>
 
-                    <div class="col-xl-3 col-lg-3 col-md-6 d-flex gap-2 justify-content-md-end">
-                        <button type="reset"
-                            class="btn btn-danger w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
-                            <i class="bi bi-trash"></i> Clear
-                        </button>
-                        <button type="button"
-                            class="btn btn-primary text-white w-50 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold"
-                            id="searchBtn">
-                            <i class="bi bi-filter"></i> Search
-                        </button>
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="row g-2 justify-content-end">
+                            <div class="col-6">
+                                <button type="button"
+                                    class="btn btn-primary text-white w-100 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold"
+                                    id="searchBtn">
+                                    <i class="bi bi-filter"></i> Search
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                 <button type="reset"
+                                    class="btn btn-danger w-100 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
+                                    <i class="bi bi-trash"></i> Clear
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                 </div>

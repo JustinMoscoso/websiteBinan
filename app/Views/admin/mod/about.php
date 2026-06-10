@@ -58,16 +58,18 @@
                         <div class="row g-2">
 
 
-                            <div class="col-12 col-md-4">
-                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
-                                    Clear
-                                </button>
-                            </div>
+                            
 
                             <div class="col-12 col-md-4">
                                 <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm"
                                     id="aboutSearchBtn" style="height: 38px;">
                                     Search
+                                </button>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
+                                    Clear
                                 </button>
                             </div>
 

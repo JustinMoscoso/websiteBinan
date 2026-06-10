@@ -49,21 +49,6 @@
         placeholder: 'Choose file category',
         allowClear: true
     });
-    $('#yr').yearpicker();
-    $('#edityr').yearpicker();
-
-    // Patch: Reverse the year list in the yearpicker dropdown so latest years appear first
-    function reverseYearpickerList(inputId) {
-        $(inputId).on('focus', function () {
-            setTimeout(function () {
-                var $ul = $(inputId).siblings('.yearpicker-dropdown').find('.yearpicker-year');
-                var $years = $ul.children('li');
-                $ul.html($years.get().reverse());
-            }, 10); // Wait for yearpicker to render
-        });
-    }
-    reverseYearpickerList('#yr');
-    reverseYearpickerList('#edityr');
 
     // Function to check if file category is annual
     function isAnnualCategory(category) {
@@ -82,10 +67,10 @@
         const quarterLabel = modalType === 'add' ? 'label[for="qtr"]' : 'label[for="editqtr"]';
 
         if (show) {
-            $(quarterField).closest('.form-group').show();
+            $(quarterField).closest('.col-md-6').show();
             $(quarterField).prop('required', true);
         } else {
-            $(quarterField).closest('.form-group').hide();
+            $(quarterField).closest('.col-md-6').hide();
             $(quarterField).prop('required', false);
             $(quarterField).val(''); // Clear the value
         }

@@ -27,7 +27,7 @@ class Filters extends BaseConfig
             'visitcounter' => ['except' => ['admin/*']],
         ],
         'after' => [
-            'toolbar',
+     //       'toolbar',
         ],
     ];
 

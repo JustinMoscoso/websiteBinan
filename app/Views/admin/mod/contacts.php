@@ -20,13 +20,13 @@
             <form id="contactSearchForm">
                 <div class="row g-3 align-items-end">
 
-                    <div class="col-xl-5 col-lg-4 col-md-12">
+                    <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Contact / Office</label>
                         <input type="text" class="form-control" id="searchContact"
                             placeholder="Search Contact / Office Name...">
                     </div>
 
-                    <div class="col-xl-2.5 col-lg-3 col-md-6">
+                    <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Section Category</label>
                         <select class="form-control form-select" name="contactCategory">
                             <option selected value="">- Category -</option>
@@ -36,7 +36,7 @@
                         </select>
                     </div>
 
-                    <div class="col-xl-2.5 col-lg-2 col-md-6">
+                    <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select" name="contactStatus">
                             <option selected value="">- Status -</option>
@@ -48,21 +48,26 @@
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="row g-2">
-
+                           
                             <div class="col-12 col-md-4">
-                                <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
-                                    Clear
-                                </button>
-                            </div>
-
-                            <div class="col-12 col-md-4">
-                                <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
-                                    style="height: 38px;">
+                                <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm"
+                                    id="searchBtn" style="height: 38px;">
                                     Search
                                 </button>
                             </div>
-
-
+                             <div class="col-12 col-md-4">
+                                <button type="reset" class="btn btn-danger w-100 flex-grow-1 fw-semibold"
+                                    style="height: 38px;">
+                                    Clear
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="button"
+                                    class="btn btn-success w-100 shadow-sm fw-semibold text-nowrap flex-grow-1"
+                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    <i class="bi bi-plus-circle me-1"></i>Add Record
+                                </button>
+                            </div>
                         </div>
                     </div>
 

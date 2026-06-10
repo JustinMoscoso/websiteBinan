@@ -52,7 +52,7 @@
     }
 
     // Initialize selectize for all selects
-    $('#txtDept, #editDept, #txtBrgy, #editBrgy, #searchBrgy, #searchDept').selectize({
+    $('#txtDept, #editDept, #txtBrgy, #editBrgy').selectize({
         sortField: 'text',
         allowClear: true
     });
