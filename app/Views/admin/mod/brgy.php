@@ -44,7 +44,7 @@
                         <div class="row g-2">
 
                             <!-- Clear -->
-                           
+
 
                             <!-- Search -->
                             <div class="col-12 col-md-4">
@@ -106,7 +106,7 @@
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">Create New Barangay</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                    aria-label="Cancel"></button>
             </div>
 
             <div class="modal-body p-4">
@@ -162,7 +162,7 @@
 
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Close</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Barangay</button>
+                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
         </form>
     </div>

@@ -35,7 +35,7 @@
             <label class="form-label small fw-bold text-secondary">Category Filter</label>
             <select class="form-control form-select bg-light border-secondary-subtle" name="category"
               style="height: 38px; cursor: pointer;">
-              <option selected value="">All Categories</option>
+              <option selected value="">- Category -</option>
               <option value="Local Revenue Code">Local Revenue Code</option>
               <option value="Local Investment and Incentive Code">Local Investment and Incentive Code</option>
               <option value="Market Value">Market Value</option>
@@ -47,10 +47,10 @@
           </div>
 
           <div class="col-xl-2 col-lg-2 col-md-6">
-            <label class="form-label small fw-bold text-secondary">Publication Status</label>
+            <label class="form-label small fw-bold text-secondary">Status</label>
             <select class="form-control form-select bg-light border-secondary-subtle" name="status"
               style="height: 38px; cursor: pointer;">
-              <option selected value="">All Statuses</option>
+              <option selected value="">- Status -</option>
               <option value="ACTIVE">Active</option>
               <option value="INACTIVE">Inactive</option>
               <option value="ARCHIVED">Archived</option>
@@ -59,7 +59,7 @@
 
           <div class="col-xl-4 col-lg-4 col-md-12">
             <div class="row g-2">
-              
+
               <div class="col-12 col-md-4">
                 <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm" id="investSearchBtn"
                   style="height: 38px;">
@@ -125,7 +125,8 @@
           <div class="col-12">
             <label for="fileCategory" class="form-label small fw-bold text-secondary">File Category <span
                 class="text-danger">*</span></label>
-            <select class="form-control form-select shadow-sm invest-select-menu" id="fileCategory" name="fileCategory" required>
+            <select class="form-control form-select shadow-sm invest-select-menu" id="fileCategory" name="fileCategory"
+              required>
               <option value="" selected disabled>Select classifications...</option>
               <option value="Local Revenue Code">Local Revenue Code</option>
               <option value="Local Investment and Incentive Code">Local Investment and Incentive Code</option>
@@ -174,8 +175,8 @@
           <div class="col-12">
             <label for="editFileCategory" class="form-label small fw-bold text-secondary">File Category <span
                 class="text-danger">*</span></label>
-            <select class="form-control form-select shadow-sm invest-select-menu" id="editFileCategory" name="editFileCategory"
-              required>
+            <select class="form-control form-select shadow-sm invest-select-menu" id="editFileCategory"
+              name="editFileCategory" required>
               <option value="" disabled>Select classifications...</option>
               <option value="Local Revenue Code">Local Revenue Code</option>
               <option value="Local Investment and Incentive Code">Local Investment and Incentive Code</option>

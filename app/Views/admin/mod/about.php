@@ -58,7 +58,7 @@
                         <div class="row g-2">
 
 
-                            
+
 
                             <div class="col-12 col-md-4">
                                 <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm"
@@ -130,7 +130,7 @@
                 <div class="row g-3">
 
                     <div class="col-md-6">
-                        <label for="content_category" class="form-label small fw-bold text-secondary">Target Placement
+                        <label for="content_category" class="form-label small fw-bold text-secondary">
                             Category <span class="text-danger">*</span></label>
                         <select class="form-select" id="content_category" name="content_category" required>
                             <option selected disabled value="">Select placement block...</option>
@@ -173,7 +173,7 @@
 
             <div class="modal-footer bg-light px-4 py-3 border-top">
                 <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Content</button>
+                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
 
         </form>

@@ -165,7 +165,7 @@
         class="col-lg-5 branding-side-panel d-none d-lg-flex flex-column justify-content-center align-items-center text-white p-5">
         <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="brand-logo mb-4 img-fluid"
           style="max-height: 140px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));" alt="Biñan Logo">
-        <h1 class="h4 fw-bold mb-2 text-center" style="letter-spacing: 0.05em; color: #ffffff;">BIÑAN CITY ADMIN</h1>
+        <h1 class="h4 fw-bold mb-2 text-center" style="letter-spacing: 0.05em; color: #ffffff;">CITY OF BIÑAN</h1>
       </div>
 
       <div class="col-lg-7 login-form-side p-4 p-md-5 d-flex align-items-center">
@@ -175,13 +175,11 @@
             <div class="d-lg-none text-center mb-4">
               <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="mb-3" style="max-height: 80px;"
                 alt="Biñan Logo">
-              <h2 class="h5 fw-bold text-dark mb-1">BIÑAN CITY ADMIN</h2>
-              <p class="text-muted small">Official Content Management System</p>
+              <h2 class="h5 fw-bold text-dark mb-1">CITY GOVERNMENT OF BIÑAN</h2>
               <hr class="my-4 opacity-25">
             </div>
 
             <h2 class="fw-bold text-dark mb-1 d-none d-lg-block">Welcome Back</h2>
-            <p class="text-secondary small d-none d-lg-block">Please enter your administrative credentials.</p>
           </div>
 
           <form method="post" autocomplete="off">
@@ -224,7 +222,7 @@
                 Verifying Credentials...
               </button>
 
-              <button id="btnLogin" class="btn theme-login-action-btn" type="submit">
+              <button id="btnLogin" class="btn theme-login-action-btn w-100" type="submit">
                 <i class='bx bx-log-in-circle me-2 align-middle fs-5'></i>
                 <span class="align-middle">Login</span>
               </button>

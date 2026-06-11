@@ -263,7 +263,7 @@
 
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="row g-2">
-                            
+
                             <div class="col-12 col-md-4">
                                 <button type="submit" class="btn btn-primary w-100  fw-semibold shadow-sm" id="searchBtn"
                                     style="height: 38px;">
@@ -382,7 +382,7 @@
 
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Department</button>
+                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
         </form>
     </div>

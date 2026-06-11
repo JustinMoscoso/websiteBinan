@@ -59,7 +59,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="row g-2">
 
-                            
+
                             <div class="col-12 col-md-4">
                                 <button type="submit" class="btn btn-primary w-100  fw-semibold shadow-sm"
                                     id="cityoffSearchBtn" style="height: 38px;">
@@ -158,8 +158,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="offimg" class="form-label small fw-bold text-secondary">Primary Profile
-                                    Image Badge <span class="text-danger">*</span></label>
+                                <label for="offimg" class="form-label small fw-bold text-secondary">
+                                    Image Logo<span class="text-danger">*</span></label>
                                 <input type="file" class="form-control" id="offimg" name="offimg" accept="image/*"
                                     required>
                             </div>
@@ -181,7 +181,7 @@
                                 Information Portals</h6>
 
                             <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary mb-1">Chronological Years of
+                                <label class="form-label small fw-bold text-secondary mb-1">Years of
                                     Service</label>
                                 <div class="editor-wrapper">
                                     <div id="years_of_service" style="height: 140px;"></div>
@@ -211,7 +211,7 @@
 
             <div class="modal-footer bg-light px-4 py-3 border-top">
                 <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Official Record</button>
+                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
 
         </form>
@@ -288,7 +288,7 @@
                     <div class="col-lg-7 col-12 d-flex flex-column gap-3">
                         <div class="card border-0 shadow-sm p-4 bg-white">
                             <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-3">Biography
-                                Information Portals</h6>
+                                Information</h6>
 
                             <div class="mb-3">
                                 <label class="form-label small fw-bold text-secondary mb-1">Chronological Years of
