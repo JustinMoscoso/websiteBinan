@@ -52,9 +52,9 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <div class="row g-2">
+                        <div class="row g-2 admin-filter-actions">
 
-                           
+
 
                             <div class="col-12 col-md-4">
                                 <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
@@ -62,20 +62,19 @@
                                     Search
                                 </button>
                             </div>
-                             <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-4">
                                 <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
                                     Clear
                                 </button>
                             </div>
 
-                                <div class="col-12 col-md-4">
-                                    <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
-                                        data-bs-toggle="modal" data-bs-target="#addModal"
-                                        style="height: 38px; background:#16a085; border-color:#16a085;">
-                                        <i class="bi bi-plus-circle me-1"></i>
-                                        Add Record
-                                    </button>
-                                </div>
+                            <div class="col-12 col-md-4">
+                                <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
+                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    <i class="bi bi-plus-circle me-1"></i>
+                                    Add Record
+                                </button>
+                            </div>
 
                         </div>
                     </div>

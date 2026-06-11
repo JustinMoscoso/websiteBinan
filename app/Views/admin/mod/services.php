@@ -52,15 +52,15 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <label class="form-label small fw-bold text-secondary">Assigned Unit</label>
 
                             <div id="searchBrgyGroup" style="display: none;">
-                                <select class="form-control form-select bg-light border-secondary-subtle" name="brgy" id="searchBrgy"
-                                    style="height: 38px; cursor: pointer;">
+                                <select class="form-control form-select bg-light border-secondary-subtle" name="brgy"
+                                    id="searchBrgy" style="height: 38px; cursor: pointer;">
                                     <option value="">Select Barangay...</option>
                                 </select>
                             </div>
 
                             <div id="searchDeptGroup" style="display: none;">
-                                <select class="form-control form-select bg-light border-secondary-subtle" name="dept" id="searchDept"
-                                    style="height: 38px; cursor: pointer;">
+                                <select class="form-control form-select bg-light border-secondary-subtle" name="dept"
+                                    id="searchDept" style="height: 38px; cursor: pointer;">
                                     <option value="">Select Dept...</option>
                                 </select>
                             </div>
@@ -91,25 +91,24 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 
                         <div class="row justify-content-end pt-2">
                             <div class="col-xl-4 col-lg-4 col-md-12">
-                                <div class="row g-2">
+                                <div class="row g-2 admin-filter-actions">
                                     <div class="col-12 col-md-4">
-                                        <button type="submit" id="searchBtn" class="btn btn-primary w-100 fw-semibold shadow-sm"
-                                            style="height: 38px;">
+                                        <button type="submit" id="searchBtn"
+                                            class="btn btn-primary w-100 fw-semibold shadow-sm" style="height: 38px;">
                                             <i class="bi bi-search me-1"></i>
                                             Search
                                         </button>
                                     </div>
-                                     <div class="col-12 col-md-4">
+                                    <div class="col-12 col-md-4">
                                         <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
                                             <i class="bi bi-arrow-counterclockwise me-1"></i>
                                             Clear
                                         </button>
                                     </div>
                                     <div class="col-12 col-md-4">
-                                        <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
-                                            data-bs-toggle="modal" data-bs-target="#addModal"
-                                            style="height: 38px; background:#16a085; border-color:#16a085;">
-                                            <i class="bi bi-plus-circle me-1"></i>
+                                        <button type="button" class="btn w-100 btn-success fw-semibold text-white shadow-sm"
+                                            data-bs-toggle="modal" data-bs-target="#addModal" ">
+                                                    <i class=" bi bi-plus-circle me-1"></i>
                                             Add Record
                                         </button>
                                     </div>

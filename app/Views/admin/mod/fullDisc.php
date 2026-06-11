@@ -29,7 +29,8 @@
                         </label>
 
                         <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Search File Name / Year..." style="height: 38px;">
+                            <input type="text" class="form-control" name="search" placeholder="Search File Name / Year..."
+                                style="height: 38px;">
                         </div>
                     </div>
 
@@ -39,7 +40,8 @@
                             Frequency
                         </label>
 
-                        <select class="form-control form-select bg-light border-secondary-subtle" name="frequency" style="height: 38px; cursor: pointer;">
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="frequency"
+                            style="height: 38px; cursor: pointer;">
                             <option value="">All Frequencies</option>
                             <option value="ANNUAL">Annual</option>
                             <option value="QUARTERLY">Quarterly</option>
@@ -52,7 +54,8 @@
                             File Category
                         </label>
 
-                        <select class="form-control form-select bg-light border-secondary-subtle" name="file_category" style="height: 38px; cursor: pointer;">
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="file_category"
+                            style="height: 38px; cursor: pointer;">
                             <option value="">All Categories</option>
 
                             <optgroup label="Annual Reports">
@@ -109,7 +112,8 @@
                             Status
                         </label>
 
-                        <select class="form-control form-select bg-light border-secondary-subtle" name="status" style="height: 38px; cursor: pointer;">
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="status"
+                            style="height: 38px; cursor: pointer;">
                             <option value="">All</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
@@ -122,24 +126,23 @@
 
                         <div class="row justify-content-end pt-2">
                             <div class="col-xl-4 col-lg-4 col-md-12">
-                                <div class="row g-2">
+                                <div class="row g-2 admin-filter-actions">
                                     <div class="col-12 col-md-4">
-                                        <button type="submit" id="searchBtn" class="btn btn-primary w-100 fw-semibold shadow-sm"
-                                            style="height: 38px;">
+                                        <button type="submit" id="searchBtn"
+                                            class="btn btn-primary w-100 fw-semibold shadow-sm" style="height: 38px;">
                                             <i class="bi bi-search me-1"></i>
                                             Search
                                         </button>
                                     </div>
-                                     <div class="col-12 col-md-4">
+                                    <div class="col-12 col-md-4">
                                         <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
                                             <i class="bi bi-arrow-counterclockwise me-1"></i>
                                             Clear
                                         </button>
                                     </div>
                                     <div class="col-12 col-md-4">
-                                        <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
-                                            data-bs-toggle="modal" data-bs-target="#addModal"
-                                            style="height: 38px; background:#16a085; border-color:#16a085;">
+                                        <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
+                                            data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
                                             <i class="bi bi-plus-circle me-1"></i>
                                             Add Record
                                         </button>
@@ -192,25 +195,35 @@
 
                     <div class="col-12">
                         <label class="form-label small fw-bold text-secondary">File Category</label>
-                        <select class="form-control form-select shadow-sm" id="fileCategory" name="fileCategory" required>
+                        <select class="form-control form-select shadow-sm" id="fileCategory" name="fileCategory"
+                            required>
                             <option value="" selected disabled>Choose Category</option>
                             <optgroup label="Annual Reports">
                                 <option value="Annual Budget Report">Annual Budget Report</option>
-                                <option value="Annual Procurement Plan or Procurement List">Annual Procurement Plan or Procurement List</option>
+                                <option value="Annual Procurement Plan or Procurement List">Annual Procurement Plan or
+                                    Procurement List</option>
                                 <option value="Supplemental Procurement Plan">Supplemental Procurement Plan</option>
-                                <option value="Annual Gender and Development Accomplishment Report">Annual Gender and Development Accomplishment Report</option>
+                                <option value="Annual Gender and Development Accomplishment Report">Annual Gender and
+                                    Development Accomplishment Report</option>
                             </optgroup>
                             <optgroup label="Quarterly Reports">
-                                <option value="Quarterly Statement of Cash Flow">Quarterly Statement of Cash Flow</option>
-                                <option value="Statement of Receipts and Expenditures">Statement of Receipts and Expenditures</option>
-                                <option value="20% Component of the Internal Revenue Allotment Utilization">20% Component of the Internal Revenue Allotment Utilization</option>
-                                <option value="Local Disaster Risk Reduction and Management Fund Utilization">Local Disaster Risk Reduction and Management Fund Utilization</option>
-                                <option value="Report of Special Education Fund Utilization">Report of Special Education Fund Utilization</option>
+                                <option value="Quarterly Statement of Cash Flow">Quarterly Statement of Cash Flow
+                                </option>
+                                <option value="Statement of Receipts and Expenditures">Statement of Receipts and
+                                    Expenditures</option>
+                                <option value="20% Component of the Internal Revenue Allotment Utilization">20%
+                                    Component of the Internal Revenue Allotment Utilization</option>
+                                <option value="Local Disaster Risk Reduction and Management Fund Utilization">Local
+                                    Disaster Risk Reduction and Management Fund Utilization</option>
+                                <option value="Report of Special Education Fund Utilization">Report of Special Education
+                                    Fund Utilization</option>
                                 <option value="Trust Fund (PDAF) Utilization">Trust Fund (PDAF) Utilization</option>
                                 <option value="Unliquidated Cash Advances">Unliquidated Cash Advances</option>
-                                <option value="Bid Results on Civil Works and Goods and Services">Bid Results on Civil Works and Goods and Services</option>
+                                <option value="Bid Results on Civil Works and Goods and Services">Bid Results on Civil
+                                    Works and Goods and Services</option>
                                 <option value="Manpower Complement">Manpower Complement</option>
-                                <option value="Annual Statement of Indebtedness, Payments and Balances">Annual Statement of Indebtedness, Payments and Balances</option>
+                                <option value="Annual Statement of Indebtedness, Payments and Balances">Annual Statement
+                                    of Indebtedness, Payments and Balances</option>
                             </optgroup>
                         </select>
                     </div>
@@ -253,7 +266,8 @@
                         <label for="policyFile" class="form-label small fw-bold text-secondary">Upload Document</label>
                         <input type="file" class="form-control shadow-sm" id="policyFile" name="policyFile"
                             accept=".pdf,.xls,.xlsx" required>
-                        <div class="form-text text-muted" style="font-size: 0.78rem;">Accepted formats: PDF, XLS, XLSX</div>
+                        <div class="form-text text-muted" style="font-size: 0.78rem;">Accepted formats: PDF, XLS, XLSX
+                        </div>
                     </div>
 
                 </div>
@@ -284,7 +298,8 @@
                     <div class="col-12">
                         <label for="editFileCategory" class="form-label small fw-bold text-secondary">File
                             Category</label>
-                        <select class="form-control form-select shadow-sm" id="editFileCategory" name="editFileCategory" required>
+                        <select class="form-control form-select shadow-sm" id="editFileCategory" name="editFileCategory"
+                            required>
                             <optgroup label="Annual Reports">
                                 <option value="Annual Budget Report">Annual Budget Report</option>
                                 <option value="Annual Procurement Plan or Procurement List">Annual Procurement Plan or

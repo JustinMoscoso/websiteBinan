@@ -170,7 +170,7 @@
                                 </button>
                             </div>
                             <div class="col-6">
-                                 <button type="reset"
+                                <button type="reset"
                                     class="btn btn-danger w-100 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold">
                                     <i class="bi bi-trash"></i> Clear
                                 </button>
