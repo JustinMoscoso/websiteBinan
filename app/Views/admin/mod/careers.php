@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <div class="row g-2 justify-content-end">
+                        <div class="row g-2 justify-content-end admin-filter-actions">
 
                            
 

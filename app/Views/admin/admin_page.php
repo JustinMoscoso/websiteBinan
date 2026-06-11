@@ -221,7 +221,7 @@
       .modal-footer {
         display: flex !important;
         flex-direction: column-reverse !important;
-        gap: 0.5rem;
+        gap: 0.85rem;
         padding: 1rem !important;
       }
       .modal-footer .btn {

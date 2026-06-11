@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-6">
-                        <div class="row g-2">
+                        <div class="row g-2 admin-filter-actions">
 
                             <!-- Clear -->
                            

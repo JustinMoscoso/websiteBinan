@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?= base_url('assets/css/custom.css?v=' . time()) ?>">
+
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Job Management</h1>
@@ -248,6 +250,15 @@
     .transition-all {
         transition: all 0.2s ease;
     }
+
+    @media (max-width: 767.98px) {
+        .admin-filter-actions .col-12 {
+            margin-bottom: 1.5rem !important;
+        }
+        .admin-filter-actions .col-12:last-child {
+            margin-bottom: 0 !important;
+        }
+    }
 </style>
 
 <?php if (in_array($user->user_lvl, ['ADMIN', 'SUPERADMIN', 'DEVELOPER'])): ?>
@@ -289,15 +300,15 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <div class="row g-2">
+                        <div class="row g-3 admin-filter-actions">
                            
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-4 mb-4 mb-md-0">
                                 <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm"
                                     id="jobsSearchBtn" style="height: 38px;">
                                     Search
                                 </button>
                             </div>
-                             <div class="col-12 col-md-4">
+                             <div class="col-12 col-md-4 mb-4 mb-md-0">
                                 <button type="reset" class="btn btn-danger w-100 flex-grow-1 fw-semibold"
                                     style="height: 38px;">
                                     Clear
