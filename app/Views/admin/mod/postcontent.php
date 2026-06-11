@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Publication Status</label>
+                        <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Statuses</option>
@@ -54,7 +54,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="row g-2 admin-filter-actions">
 
-                           
+
 
                             <div class="col-12 col-md-4">
                                 <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
@@ -62,20 +62,20 @@
                                     Search
                                 </button>
                             </div>
-                             <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-4">
                                 <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
                                     Clear
                                 </button>
                             </div>
 
-                                <div class="col-12 col-md-4">
-                                    <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
-                                        data-bs-toggle="modal" data-bs-target="#addModal"
-                                        style="height: 38px; background:#16a085; border-color:#16a085;">
-                                        <i class="bi bi-plus-circle me-1"></i>
-                                        Add Record
-                                    </button>
-                                </div>
+                            <div class="col-12 col-md-4">
+                                <button type="button" class="btn w-100 fw-semibold text-white shadow-sm"
+                                    data-bs-toggle="modal" data-bs-target="#addModal"
+                                    style="height: 38px; background:#16a085; border-color:#16a085;">
+                                    <i class="bi bi-plus-circle me-1"></i>
+                                    Add Record
+                                </button>
+                            </div>
 
                         </div>
                     </div>
@@ -168,7 +168,7 @@
 
             <div class="modal-footer bg-light px-4 py-3 border-top">
                 <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Publish Content</button>
+                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
 
         </form>

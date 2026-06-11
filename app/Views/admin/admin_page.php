@@ -15,10 +15,6 @@
   <?php pre_styles('admin'); ?>
 
   <style>
-    /* =========================================
-   BINAN ADMIN SIDEBAR THEME
-========================================= */
-
     /* SIDEBAR */
     #wrapper {
       display: flex;
@@ -28,9 +24,32 @@
       position: sticky;
       top: 0;
       height: 100vh;
-      overflow-y: auto;
+      overflow-y: scroll;
+      /* always show scrollbar */
       overflow-x: hidden;
       overscroll-behavior: contain;
+
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+    }
+
+    /* Chrome / Edge / Safari */
+    .sidebar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 10px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.55);
     }
 
     /* Mobile drawer style for sidebar */
@@ -45,12 +64,16 @@
         z-index: 1050;
         transition: left 0.25s ease-in-out;
         display: flex !important;
+        flex-direction: column;
+        overflow-y: scroll !important;
       }
+
       .sidebar.toggled {
         left: 0 !important;
         width: 224px !important;
-        overflow-y: auto !important;
+        overflow-y: scroll !important;
       }
+
       .sidebar-backdrop {
         position: fixed;
         top: 0;
@@ -61,178 +84,9 @@
         z-index: 1040;
         display: none;
       }
+
       body.sidebar-toggled .sidebar-backdrop {
         display: block;
-      }
-    }
-
-    /* BRAND */
-
-    .sidebar-brand {
-      background: rgba(0, 0, 0, 0.08);
-      height: 80px !important;
-    }
-
-    /* BRAND TEXT */
-
-    .sidebar-brand-text {
-      font-weight: 700;
-      letter-spacing: 0.4px;
-    }
-
-    /* NAV LINKS */
-    .sidebar .nav-item {
-      width: 100%;
-    }
-
-    .sidebar .nav-item .nav-link {
-      width: calc(100% - 20px);
-      margin: 4px 10px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      box-sizing: border-box;
-    }
-
-    /* ICONS */
-
-    .sidebar .nav-item .nav-link i {
-      margin-right: 8px;
-      color: rgba(255, 255, 255, 0.75) !important;
-    }
-
-    /* HOVER */
-
-    .sidebar .nav-item .nav-link:hover {
-      background: rgba(255, 255, 255, 0.10);
-      color: #fff !important;
-      transform: translateX(1px);
-    }
-
-    /* ACTIVE */
-
-    .sidebar .nav-item.active .nav-link {
-      background: rgba(255, 255, 255, 0.16);
-      color: #fff !important;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
-    }
-
-    /* ACTIVE ICON */
-
-    .sidebar .nav-item.active .nav-link i {
-      color: #fff !important;
-    }
-
-    /* HEADINGS */
-
-    .sidebar-heading {
-      color: rgba(255, 255, 255, 0.65) !important;
-      font-size: 11px;
-      letter-spacing: 1px;
-    }
-
-    /* DIVIDER */
-
-    .sidebar-divider {
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    /* TOGGLE BUTTON */
-
-    #sidebarToggle {
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    #sidebarToggle::after {
-      color: white;
-    }
-
-    /* TOPBAR */
-
-    .topbar {
-      border-bottom: 1px solid #eaeaea;
-    }
-
-    /* BODY */
-
-    body {
-      background: #f5f7fb;
-    }
-
-    /* =========================================
-       GLOBAL RESPONSIVE OVERRIDES
-       ========================================= */
-    @media (max-width: 767.98px) {
-      .topbar {
-        padding: 0.5rem 1rem !important;
-      }
-      .container-fluid {
-        padding-left: 0.75rem !important;
-        padding-right: 0.75rem !important;
-      }
-      .card-body {
-        padding: 1rem !important;
-      }
-      /* Ensure tables scroll horizontally on mobile */
-      .table-responsive {
-        width: 100% !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-      }
-      /* Prevent Quill editor toolbars from overflowing */
-      .ql-toolbar.ql-snow {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        padding: 4px 6px !important;
-      }
-      .ql-toolbar.ql-snow .ql-formats {
-        margin-right: 4px !important;
-        margin-bottom: 4px !important;
-        display: inline-flex !important;
-        flex-wrap: wrap !important;
-      }
-      /* Make DataTable search and page size filters responsive */
-      .dataTables_filter {
-        width: 100% !important;
-        text-align: left !important;
-        margin-top: 0.5rem;
-      }
-      .dataTables_filter label {
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100% !important;
-        align-items: flex-start !important;
-      }
-      .dataTables_filter input[type="search"] {
-        width: 100% !important;
-        margin-left: 0 !important;
-        margin-top: 0.25rem !important;
-      }
-      .dataTables_length {
-        width: 100% !important;
-        text-align: left !important;
-      }
-      .dataTables_length label {
-        display: flex !important;
-        align-items: center !important;
-        width: 100% !important;
-        justify-content: space-between !important;
-      }
-      /* Align modal buttons nicely on mobile */
-      .modal-footer {
-        display: flex !important;
-        flex-direction: column-reverse !important;
-        gap: 0.85rem;
-        padding: 1rem !important;
-      }
-      .modal-footer .btn {
-        width: 100% !important;
-        margin: 0 !important;
-      }
-      .modal-body {
-        padding: 1rem !important;
-      }
-      .modal-header {
-        padding: 1rem !important;
       }
     }
   </style>
@@ -542,23 +396,23 @@
   <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       var sidebarOpen = false;
 
       // Track explicit user clicks on toggle buttons
-      $(document).on('click', '#sidebarToggle, #sidebarToggleTop', function() {
+      $(document).on('click', '#sidebarToggle, #sidebarToggleTop', function () {
         sidebarOpen = !sidebarOpen;
       });
 
       // Track clicks on backdrop to dismiss sidebar
-      $('#sidebarBackdrop').on('click', function() {
+      $('#sidebarBackdrop').on('click', function () {
         $('body').removeClass('sidebar-toggled');
         $('.sidebar').removeClass('toggled');
         sidebarOpen = false;
       });
 
       // Prevent SB Admin 2 from forcing the sidebar open on small screens / window resizes
-      $(window).on('resize', function() {
+      $(window).on('resize', function () {
         if ($(window).width() < 768 && !sidebarOpen) {
           $('body').removeClass('sidebar-toggled');
           $('.sidebar').removeClass('toggled');
@@ -574,4 +428,5 @@
     });
   </script>
 </body>
+
 </html>
