@@ -12,10 +12,11 @@
         "url": "<?php echo site_url('admin/ajax/get_audit'); ?>",
         "type": "POST",
         "data": function (d) {
-            return {
-                searchAction: $('#searchAction').val(),
-                searchDate: $('#searchDate').val()
-            };
+            d.searchAction = $('#searchAction').val();
+            d.searchDate = $('#searchDate').val();
+        },
+        "dataSrc": function (json) {
+            return json.data || [];
         }
     },
     columns: [
@@ -73,22 +74,21 @@
     // Set max date to today
     document.getElementById('searchDate').max = new Date().toISOString().split('T')[0];
 
+    // Prevent page reload on form submit (e.g. Enter key) and reload DataTable instead
+    $('#auditLogSearchForm').submit(function(e) {
+        e.preventDefault();
+        tbl.ajax.reload();
+    });
+
     // Search button click handler
     $('#searchBtn').click(function() {
         tbl.ajax.reload();
     });
 
-    // Clear filters handler
-    $('button[type="reset"]').click(function() {
-        $('#searchAction').val('');
-        $('#searchDate').val('');
-        tbl.ajax.reload();
-    });
-
-    // Optional: Trigger search on Enter key in search field
-    $('#searchAction').keypress(function(e) {
-        if(e.which == 13) {
+    // Clear filters handler using form reset
+    $('#auditLogSearchForm').on('reset', function() {
+        setTimeout(function() {
             tbl.ajax.reload();
-        }
+        }, 0);
     });
 </script>
