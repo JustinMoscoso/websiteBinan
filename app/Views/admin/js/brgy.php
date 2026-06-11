@@ -296,14 +296,6 @@
             return;
         }
 
-        if (!validImageTypes.includes(imageFile2.type)) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please upload a valid captain image (jpg, png, gif).'
-            });
-            return;
-        }
 
         Swal.fire({
             title: 'Please wait...',

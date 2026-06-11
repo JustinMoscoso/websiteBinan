@@ -2101,11 +2101,11 @@ class Admin extends BaseController
                             $log_c['processDetails'] = 'BRGY_ID: ' . $brgy_id . ' ' . $brgy_name;
                         } else {
                             $message = 'Failed to save data';
-                            return;
+                            break;
                         }
                     } else {
                         $message = 'Failed to upload files';
-                        return;
+                        break;
                     }
                 }
                 break;
