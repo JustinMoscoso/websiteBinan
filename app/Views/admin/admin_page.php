@@ -29,6 +29,8 @@
       top: 0;
       height: 100vh;
       overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
     }
 
     /* Mobile drawer style for sidebar */
@@ -84,7 +86,7 @@
     }
 
     .sidebar .nav-item .nav-link {
-      width: calc(100% - 10px);
+      width: calc(100% - 20px);
       margin: 4px 10px;
       padding: 12px 16px;
       border-radius: 12px;
