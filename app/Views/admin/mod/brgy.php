@@ -100,8 +100,8 @@
     </div>
 </section>
 
-<div class="modal fade modal-xl" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+<div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-xl custom-wide-modal modal-dialog-centered modal-dialog-scrollable">
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">Create New Barangay</h5>
@@ -168,8 +168,8 @@
     </div>
 </div>
 
-<div class="modal fade modal-xl" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-xl custom-wide-modal modal-dialog-centered modal-dialog-scrollable">
         <form id="editForm" class="modal-content border-0 shadow-lg">
             <input type="hidden" id="editBrgyId" name="id">
 
