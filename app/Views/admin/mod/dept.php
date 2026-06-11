@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?= base_url('assets/css/custom.css?v=' . time()) ?>">
+
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Department Management</h1>
@@ -233,26 +235,34 @@
     .transition-all {
         transition: all 0.2s ease;
     }
+
+    @media (max-width: 767.98px) {
+        .admin-filter-actions .col-12 {
+            margin-bottom: 1.5rem !important;
+        }
+        .admin-filter-actions .col-12:last-child {
+            margin-bottom: 0 !important;
+        }
+    }
 </style>
 
 <?php if (!in_array($user->user_lvl, ['VIEWER', 'ENCODER'])): ?>
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
-            <form id="barangaySearchForm">
+            <form id="departmentSearchForm">
                 <div class="row g-3 align-items-end">
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Query</label>
                         <div class="input-group">
-
-                            <input type="text" class="form-control border-start-0 filter-input" id="searchBrgy"
-                                placeholder="Search Barangay / Captain..." style="height: 38px;">
+                            <input type="text" class="form-control border-start-0 filter-input" id="searchDept"
+                                placeholder="Search Department / Officer..." style="height: 38px;">
                         </div>
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
-                        <select class="form-control form-select bg-light border-secondary-subtle filter-input" name="status"
+                        <select class="form-control form-select bg-light border-secondary-subtle filter-input" name="deptStatus"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Statuses</option>
                             <option value="ACTIVE">Active</option>
@@ -270,16 +280,16 @@
                                     Search
                                 </button>
                             </div>
-                            <div class="col-12 col-md-4">
-                                <button type="reset" class="btn btn-danger w-100 border  fw-semibold text-white"
+                            <div class="col-12 col-md-4 mb-4 mb-md-0">
+                                <button type="reset" class="btn btn-danger border w-100 fw-semibold text-white"
                                     style="height: 38px;">
                                     Clear
                                 </button>
                             </div>
                             <div class="col-12 col-md-4">
-                                <button type="button"
-                                    class="btn btn-success w-100 shadow-sm fw-semibold text-nowrap flex-grow-1"
+                                <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
                                     data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    <i class="bi bi-plus-circle me-1"></i>
                                     Add Record
                                 </button>
                             </div>

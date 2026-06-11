@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?= base_url('assets/css/custom.css?v=' . time()) ?>">
+
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Job Management</h1>

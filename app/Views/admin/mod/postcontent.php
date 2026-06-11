@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <div class="row g-2">
+                        <div class="row g-2 admin-filter-actions">
 
 
 

@@ -161,7 +161,7 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-6">
-                        <div class="row g-2 justify-content-end">
+                        <div class="row g-2 justify-content-end admin-filter-actions">
                             <div class="col-6">
                                 <button type="button"
                                     class="btn btn-primary text-white w-100 py-2 text-nowrap d-inline-flex align-items-center justify-content-center gap-1 small fw-semibold"
