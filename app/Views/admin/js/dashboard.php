@@ -104,34 +104,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Load Recent News
     function loadRecentNews(filter) {
-        document.getElementById('news-filter').textContent = `| ${filter}`;
-        const newsActivity = document.getElementById('news-activity');
+        const newsFilter = document.getElementById('news-filter');
+        if (newsFilter) newsFilter.textContent = `| ${filter}`;
+        const newsFeedFilter = document.getElementById('news-feed-filter');
+        if (newsFeedFilter) newsFeedFilter.textContent = `| ${filter}`;
+        
         const newsCount = document.getElementById('news-count');
-        newsActivity.innerHTML = 'Loading...';
+        const newsFeedCount = document.getElementById('news-feed-count');
         
         fetch(`<?= base_url('admin/getRecentNews') ?>?filter=${filter}`)
             .then(res => res.json())
             .then(data => {
-                newsCount.textContent = data.length;
-                if (data.length === 0) {
-                    newsActivity.innerHTML = "<p class='text-muted'>No recent news added.</p>";
-                    return;
-                }
-                newsActivity.innerHTML = '';
-                data.forEach(news => {
-                    const d = new Date(news.created_date).toLocaleDateString();
-                    newsActivity.insertAdjacentHTML('beforeend', `
-                        <div class="mb-2 pb-2 border-bottom text-sm">
-                            <span class="font-weight-bold text-dark d-block">${news.title}</span>
-                            <span class="text-xs text-muted"><i class="fas fa-calendar-alt"></i> ${d}</span>
-                        </div>
-                    `);
-                });
+                if (newsCount) newsCount.textContent = data.length;
+                if (newsFeedCount) newsFeedCount.textContent = data.length;
             })
-            .catch(() => { newsActivity.innerHTML = 'Error loading.'; newsCount.textContent = '0'; });
+            .catch(() => {
+                if (newsCount) newsCount.textContent = '0';
+                if (newsFeedCount) newsFeedCount.textContent = '0';
+            });
     }
 
-    document.querySelectorAll('.news-card .dropdown-item[data-filter]').forEach(item => {
+    document.querySelectorAll('.news-card .dropdown-item[data-filter], .news-feed-card .dropdown-item[data-filter]').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             loadRecentNews(this.getAttribute('data-filter'));

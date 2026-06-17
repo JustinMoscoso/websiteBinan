@@ -76,7 +76,7 @@
 
 <div class="row">
 
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
         <div class="card card-premium metric-card metric-primary website-visits-card h-100 py-2 position-relative" id="website-visits-card">
             <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
@@ -109,7 +109,41 @@
         </div>
     </div>
 
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card card-premium metric-card metric-success news-feed-card h-100 py-2 position-relative" id="news-feed-card">
+            <div class="card-body py-3">
+                <div class="row g-0 align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-uppercase tracking-wider mb-1"
+                            style="color: var(--theme-mid-green);">
+                            Latest News Feed <span id="news-feed-filter" class="text-muted fw-normal lowercase">|
+                                Today</span>
+                        </div>
+                        <div class="h4 mb-0 fw-bold text-dark" id="news-feed-count">
+                            <span class="spinner-border spinner-border-sm text-secondary" role="status"></span>
+                        </div>
+                    </div>
+                    <div class="col-auto opacity-50" style="color: var(--theme-mid-green);">
+                        <i class="bi bi-rss fs-2"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;">
+                <a class="text-decoration-none text-muted p-1" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical small"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end shadow border-0 filter">
+                    <div class="dropdown-header small text-uppercase fw-bold text-secondary">Scope Filter:</div>
+                    <a class="dropdown-item" href="#" data-filter="Today">Today</a>
+                    <a class="dropdown-item" href="#" data-filter="This Month">This Month</a>
+                    <a class="dropdown-item" href="#" data-filter="This Year">This Year</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
         <div class="card card-premium metric-card metric-info revenue-card h-100 py-2 position-relative">
             <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
@@ -139,7 +173,7 @@
         </div>
     </div>
 
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
         <div class="card card-premium metric-card metric-warning news-card h-100 py-2 position-relative" id="news-card">
             <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
@@ -201,33 +235,6 @@
             <div class="card-body d-flex flex-column justify-content-between p-4">
                 <div class="chart-area position-relative w-100 flex-grow-1" style="min-height: 280px;">
                     <canvas id="myAreaChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<div class="row justify-content-center">
-
-    <div class="col-xl-6 col-lg-8 mb-4">
-        <div class="card card-premium metric-card metric-success h-100">
-            <div
-                class="card-header bg-white border-bottom py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 fw-bold" style="color: var(--theme-dark-green); font-size: 0.95rem;">
-                    <i class="bi bi-rss me-2"></i>Latest News Feed
-                </h6>
-                <a href="<?= base_url('admin/postcontent') ?>"
-                    class="btn btn-sm btn-link text-decoration-none p-0 fw-semibold"
-                    style="color: var(--theme-mid-green); font-size: 0.85rem;">
-                    View Board <i class="bi bi-arrow-right small ms-1"></i>
-                </a>
-            </div>
-            <div class="card-body p-3 custom-activity-scroll" id="news-activity"
-                style="max-height: 215px; overflow-y: auto;">
-                <div class="text-center py-4 text-muted">
-                    <i class="bi bi-inbox fs-4 d-block mb-1 opacity-50"></i>
-                    <p class="small mb-0">No active news items found in database system archive.</p>
                 </div>
             </div>
         </div>
