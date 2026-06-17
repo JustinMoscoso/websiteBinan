@@ -69,7 +69,7 @@
                                 <button type="button"
                                     class="btn btn-success w-100 shadow-sm fw-semibold text-nowrap flex-grow-1"
                                     data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
-                                    <i class="bi bi-person-plus-fill me-1"></i>Add Account
+                                    <i class="bi bi-person-plus-fill me-1"></i>Add Record
                                 </button>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
 </section>
 
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" data-bs-backdrop="static">
-    <form id="addForm" class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <form id="addForm" class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
 
             <div class="modal-header modal-header-theme py-3 px-4">
@@ -164,16 +164,13 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="col-12">
+                    <div class="col-6">
                         <label for="txtPassword" class="form-label small fw-bold text-secondary">Access Password
                             <span class="text-danger">*</span></label>
                         <input type="password" class="form-control" id="txtPassword" name="txtPassword"
                             placeholder="Construct a strong protective password passphrase" required>
                     </div>
-                </div>
-
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                      <div class="col-md-6">
                         <label for="txtAccLevel" class="form-label small fw-bold text-secondary">Access Role
                             Authorization Level <span class="text-danger">*</span></label>
                         <select id="txtAccLevel" name="txtAccLevel" class="form-select" required>
@@ -186,6 +183,10 @@
                             <option value="VIEWER">System Read Auditor</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  
                 </div>
 
                 <div class="row g-3 border-top border-light pt-3 mt-2" id="accountTypeRow">

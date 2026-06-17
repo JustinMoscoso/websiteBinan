@@ -41,10 +41,10 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-6">
-                        <div class="row g-2 admin-filter-actions">
+                        <div class="row g-2">
 
                             <!-- Clear -->
-
+                           
 
                             <!-- Search -->
                             <div class="col-12 col-md-4">

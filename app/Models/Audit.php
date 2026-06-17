@@ -12,7 +12,7 @@ class Audit extends Model
     protected $returnType = 'object';
     protected $useSoftDeletes = false;
     protected $protectFields = false;
-    protected $allowedFields = ['ipaddress', 'action', 'processDetails', 'created_date', 'userID'];
+    protected $allowedFields = ['ipaddress', 'action', 'processDetails', 'created_date', 'userID', 'device', 'browser'];
 
     protected bool $allowEmptyInserts = false;
 

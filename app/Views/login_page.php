@@ -176,12 +176,11 @@
               <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="mb-3" style="max-height: 80px;"
                 alt="Biñan Logo">
               <h2 class="h5 fw-bold text-dark mb-1">BIÑAN CITY ADMIN</h2>
-              <p class="text-muted small">Official Content Management System</p>
+            
               <hr class="my-4 opacity-25">
             </div>
 
             <h2 class="fw-bold text-dark mb-1 d-none d-lg-block">Welcome Back</h2>
-            <p class="text-secondary small d-none d-lg-block">Please enter your administrative credentials.</p>
           </div>
 
           <form method="post" autocomplete="off">
@@ -224,7 +223,7 @@
                 Verifying Credentials...
               </button>
 
-              <button id="btnLogin" class="btn theme-login-action-btn" type="submit">
+              <button id="btnLogin" class="btn theme-login-action-btn w-100" type="submit">
                 <i class='bx bx-log-in-circle me-2 align-middle fs-5'></i>
                 <span class="align-middle">Login</span>
               </button>

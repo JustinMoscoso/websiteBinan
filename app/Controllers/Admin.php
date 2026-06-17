@@ -484,10 +484,36 @@ class Admin extends BaseController
         $currentUserFullName = trim(($user->fname ?? '') . ' ' . ($user->lname ?? ''));
 
         $log_m = new \App\Models\Audit();
+
+        $agent = $this->request->getUserAgent();
+        $deviceType = 'Desktop';
+        if ($agent->isMobile()) {
+            $mobileDevice = $agent->getMobile();
+            $deviceType = 'Mobile' . (!empty($mobileDevice) ? ' (' . $mobileDevice . ')' : '');
+        } elseif ($agent->isRobot()) {
+            $deviceType = 'Bot/Robot';
+        }
+
+        $browserName = 'Unknown';
+        if ($agent->isBrowser()) {
+            $browserName = $agent->getBrowser() . ' ' . $agent->getVersion();
+        } elseif ($agent->isRobot()) {
+            $browserName = $agent->getRobot();
+        } elseif ($agent->isMobile()) {
+            $browserName = $agent->getMobile() ?: 'Mobile Browser';
+        } else {
+            $agentString = $agent->getAgentString();
+            if (!empty($agentString)) {
+                $browserName = substr($agentString, 0, 50);
+            }
+        }
+
         $log_c = [
             'ipaddress' => $this->request->getIPAddress(),
             'action' => $mode,
             'UserID' => $user->ID ?? 0,
+            'device' => $deviceType,
+            'browser' => $browserName,
         ];
 
         switch ($mode) {
@@ -944,7 +970,7 @@ class Admin extends BaseController
                         }
                     }
 
-                    $users_d = $builder->findAll();
+                    $users_d = $builder->findAll(200);
                     foreach ($users_d as $u) {
                         if (in_array($u->user_lvl, ['DEVELOPER', 'SUPERADMIN']) || empty($u->account_type)) {
                             $u->account_type = 'System';
@@ -1213,7 +1239,12 @@ class Admin extends BaseController
                 $isSearching = false;
 
                 if (!empty($searchAction)) {
-                    $query->like('audit_trails.action', $searchAction);
+                    $query->groupStart()
+                        ->like('audit_trails.action', $searchAction)
+                        ->orLike('audit_trails.processDetails', $searchAction)
+                        ->orLike('audit_trails.device', $searchAction)
+                        ->orLike('audit_trails.browser', $searchAction)
+                        ->groupEnd();
                     $isSearching = true;
                 }
 
@@ -1244,6 +1275,8 @@ class Admin extends BaseController
                         'ipaddress' => $logs->ipaddress,
                         'action' => $logs->action,
                         'processDetails' => $logs->processDetails,
+                        'device' => $logs->device ?? 'Unknown',
+                        'browser' => $logs->browser ?? 'Unknown',
                         'userID' => $userName // Replace userID with user name
                     ];
                 }
