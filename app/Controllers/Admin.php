@@ -1275,13 +1275,75 @@ class Admin extends BaseController
                         $userName = 'User ID: ' . $logs->userID;
                     }
 
+                    // Dynamically resolve target entity name from database if ID is present
+                    $resolvedDetails = $logs->processDetails;
+                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
+                        $prefix = strtoupper($matches[1]);
+                        $targetId = (int) $matches[2];
+                        $name = '';
+                        $suffix = '';
+
+                        $db = \Config\Database::connect();
+                        if ($prefix === 'ACCOUNT') {
+                            $userRow = $db->table('useradmin')->select('fname, lname, username, user_lvl')->where('ID', $targetId)->get()->getRow();
+                            if ($userRow) {
+                                $fullName = trim(($userRow->fname ?? '') . ' ' . ($userRow->lname ?? ''));
+                                $name = !empty($fullName) ? $fullName : ($userRow->username ?? '');
+                                $suffix = !empty($userRow->user_lvl) ? ' [' . $userRow->user_lvl . ']' : '';
+                            }
+                        } elseif ($prefix === 'DEPT' || $prefix === 'PROFILE_DEPT') {
+                            $deptRow = $db->table('department_content')->select('dept_name')->where('ID', $targetId)->get()->getRow();
+                            if ($deptRow) {
+                                $name = $deptRow->dept_name;
+                            }
+                        } elseif ($prefix === 'BRGY') {
+                            $brgyRow = $db->table('barangay_content')->select('brgy_name')->where('ID', $targetId)->get()->getRow();
+                            if ($brgyRow) {
+                                $name = $brgyRow->brgy_name;
+                            }
+                        } elseif ($prefix === 'JOB') {
+                            $jobRow = $db->table('jobs')->select('title')->where('ID', $targetId)->get()->getRow();
+                            if ($jobRow) {
+                                $name = $jobRow->title;
+                            }
+                        } elseif (in_array($prefix, ['NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT'], true)) {
+                            $contentRow = $db->table('content_tbl')->select('title')->where('ID', $targetId)->get()->getRow();
+                            if ($contentRow) {
+                                $name = $contentRow->title;
+                            }
+                        } elseif ($prefix === 'CITYOFFICIAL') {
+                            $officialRow = $db->table('officials_content')->select('fname, lname, position')->where('ID', $targetId)->get()->getRow();
+                            if ($officialRow) {
+                                $fullName = trim(($officialRow->fname ?? '') . ' ' . ($officialRow->lname ?? ''));
+                                $name = !empty($fullName) ? $fullName : ($officialRow->position ?? '');
+                            }
+                        } elseif ($prefix === 'SERVICE') {
+                            $serviceRow = $db->table('service_content')->select('title')->where('ID', $targetId)->get()->getRow();
+                            if ($serviceRow) {
+                                $name = $serviceRow->title;
+                            }
+                        }
+
+                        if (!empty($name)) {
+                            $replacement = $matches[0];
+                            if ($prefix === 'ACCOUNT') {
+                                $replacement = $matches[0] . ' ' . $name . $suffix;
+                            } elseif (in_array($prefix, ['JOB', 'NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT'], true)) {
+                                $replacement = $matches[0] . ' TITLE: ' . $name;
+                            } else {
+                                $replacement = $matches[0] . ' ' . $name;
+                            }
+                            $resolvedDetails = preg_replace('/' . preg_quote($matches[0], '/') . '/', $replacement, $resolvedDetails, 1);
+                        }
+                    }
+
                     // Create the data object with user name
                     $data[] = [
                         'ID' => $logs->ID,
                         'created_date' => $logs->created_date,
                         'ipaddress' => $logs->ipaddress,
                         'action' => $logs->action,
-                        'processDetails' => $logs->processDetails,
+                        'processDetails' => $resolvedDetails,
                         'device' => $logs->device ?? 'Unknown',
                         'browser' => $logs->browser ?? 'Unknown',
                         'userID' => $userName // Replace userID with user name
