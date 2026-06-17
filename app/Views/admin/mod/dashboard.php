@@ -211,7 +211,7 @@
 <div class="row justify-content-center">
 
     <div class="col-xl-6 col-lg-8 mb-4">
-        <div class="card card-premium border-top border-3" style="border-top-color: var(--theme-mid-green) !important;">
+        <div class="card card-premium metric-card metric-success h-100">
             <div
                 class="card-header bg-white border-bottom py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 fw-bold" style="color: var(--theme-dark-green); font-size: 0.95rem;">
