@@ -86,11 +86,7 @@
     <div class="col-12">
       <!-- SB Admin 2 Styled Card -->
       <div class="card shadow mb-4 border-top border-4" style="border-top-color: var(--theme-mid-green) !important;">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-          <h6 class="m-0 font-weight-bold text-success">
-            <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Investment Directory
-          </h6>
-        </div>
+      
         <div class="card-body">
           <div class="table-responsive">
             <table id="tblinvest" class="table table-bordered table-hover align-middle w-100" cellspacing="0">

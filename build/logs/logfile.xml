@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="5" assertions="4" errors="2" warnings="0" failures="1" skipped="0" time="0.133848">
+    <testsuite name="App" tests="5" assertions="4" errors="2" warnings="0" failures="1" skipped="0" time="0.133848">
+      <testsuite name="ExampleDatabaseTest" file="C:\xampp\htdocs\websitebinan\tests\database\ExampleDatabaseTest.php" tests="2" assertions="0" errors="2" warnings="0" failures="0" skipped="0" time="0.085302">
+        <testcase name="testModelFindAll" class="ExampleDatabaseTest" classname="ExampleDatabaseTest" file="C:\xampp\htdocs\websitebinan\tests\database\ExampleDatabaseTest.php" line="17" assertions="0" time="0.081272">
+          <error type="CodeIgniter\Database\Exceptions\DatabaseException">ExampleDatabaseTest::testModelFindAll
+CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.&#13;
+Main connection [SQLite3]: Class "SQLite3" not found
+
+C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php:427
+C:\xampp\htdocs\websitebinan\system\Database\SQLite3\Connection.php:59
+C:\xampp\htdocs\websitebinan\system\Test\DatabaseTestTrait.php:74
+C:\xampp\htdocs\websitebinan\system\Test\DatabaseTestTrait.php:54
+C:\xampp\htdocs\websitebinan\system\Test\CIUnitTestCase.php:248</error>
+        </testcase>
+        <testcase name="testSoftDeleteLeavesRow" class="ExampleDatabaseTest" classname="ExampleDatabaseTest" file="C:\xampp\htdocs\websitebinan\tests\database\ExampleDatabaseTest.php" line="28" assertions="0" time="0.004030">
+          <error type="CodeIgniter\Database\Exceptions\DatabaseException">ExampleDatabaseTest::testSoftDeleteLeavesRow
+CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.&#13;
+Main connection [SQLite3]: Class "SQLite3" not found
+
+C:\xampp\htdocs\websitebinan\system\Database\BaseConnection.php:427
+C:\xampp\htdocs\websitebinan\system\Database\SQLite3\Connection.php:59
+C:\xampp\htdocs\websitebinan\system\Test\DatabaseTestTrait.php:74
+C:\xampp\htdocs\websitebinan\system\Test\DatabaseTestTrait.php:54
+C:\xampp\htdocs\websitebinan\system\Test\CIUnitTestCase.php:248</error>
+        </testcase>
+      </testsuite>
+      <testsuite name="ExampleSessionTest" file="C:\xampp\htdocs\websitebinan\tests\session\ExampleSessionTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.006228">
+        <testcase name="testSessionSimple" class="ExampleSessionTest" classname="ExampleSessionTest" file="C:\xampp\htdocs\websitebinan\tests\session\ExampleSessionTest.php" line="11" assertions="1" time="0.006228"/>
+      </testsuite>
+      <testsuite name="HealthTest" file="C:\xampp\htdocs\websitebinan\tests\unit\HealthTest.php" tests="2" assertions="3" errors="0" warnings="0" failures="1" skipped="0" time="0.042318">
+        <testcase name="testIsDefinedAppPath" class="HealthTest" classname="HealthTest" file="C:\xampp\htdocs\websitebinan\tests\unit\HealthTest.php" line="13" assertions="1" time="0.006028"/>
+        <testcase name="testBaseUrlHasBeenSet" class="HealthTest" classname="HealthTest" file="C:\xampp\htdocs\websitebinan\tests\unit\HealthTest.php" line="18" assertions="2" time="0.036290">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">HealthTest::testBaseUrlHasBeenSet
+baseURL "" in app/Config/App.php is not valid URL
+Failed asserting that false is true.
+
+C:\xampp\htdocs\websitebinan\tests\unit\HealthTest.php:45</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

@@ -144,7 +144,7 @@
                 if (module === 'anns') label = 'announcement';
                 
                 var entityName = '';
-                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|INVEST)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
                 var match = str.match(regex);
                 if (match && match[1]) {
                     entityName = match[1].trim();
@@ -162,7 +162,7 @@
                 if (module === 'anns') label = 'announcement';
                 
                 var entityName = '';
-                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|INVEST)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
                 var match = str.match(regex);
                 if (match && match[1]) {
                     entityName = match[1].trim();

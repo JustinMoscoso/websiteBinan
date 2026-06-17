@@ -1,12 +1,6 @@
 <div class="pagetitle mb-4 pb-2 border-bottom">
     <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Account Management</h1>
-    <nav>
-        <ol class="breadcrumb mb-0 bg-transparent p-2">
-            <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard') ?>" class="text-decoration-none"
-                    style="color: #2d6a4f;">Dashboard</a></li>
-            <li class="breadcrumb-item active">Account Management</li>
-        </ol>
-    </nav>
+
 </div>
 
 <link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
@@ -23,7 +17,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Account</label>
                         <input type="text" class="form-control" id="searchUser"
-                            placeholder="Search accounts by username or legal name...">
+                            placeholder="Search accounts by username">
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
@@ -111,13 +105,13 @@
     <form id="addForm" class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
 
-            <div class="modal-header modal-header-theme py-3 px-4">
-                <h5 class="modal-title fw-bold d-inline-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                    <i class="bi bi-person-plus"></i> Create System User Account
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
+                <div class="modal-header modal-header-theme py-3 px-4">
+                    <h5 class="modal-title fw-bold d-inline-flex align-items-center gap-2" style="font-size: 1.1rem;">
+                        <i class="bi bi-person-plus"></i> 
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
 
             <div class="modal-body p-4 bg-light-surface">
 
@@ -151,10 +145,10 @@
                         <label for="txtUsername" class="form-label small fw-bold text-secondary">Account Username
                             <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="txtUsername" name="txtUsername"
-                            placeholder="Unique profile identifier username" required>
+                            placeholder="Username" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="txtEmail" class="form-label small fw-bold text-secondary">Primary E-Mail
+                        <label for="txtEmail" class="form-label small fw-bold text-secondary">E-Mail
                             Address
                             <span class="text-danger">*</span></label>
                         <input type="email" class="form-control" id="txtEmail" name="txtEmail"
@@ -164,14 +158,13 @@
 
                 <div class="row mb-3">
                     <div class="col-6">
-                        <label for="txtPassword" class="form-label small fw-bold text-secondary">Access Password
+                        <label for="txtPassword" class="form-label small fw-bold text-secondary">Password
                             <span class="text-danger">*</span></label>
                         <input type="password" class="form-control" id="txtPassword" name="txtPassword"
-                            placeholder="Construct a strong protective password passphrase" required>
+                            placeholder="*********" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="txtAccLevel" class="form-label small fw-bold text-secondary">Access Role
-                            Authorization Level <span class="text-danger">*</span></label>
+                        <label for="txtAccLevel" class="form-label small fw-bold text-secondary">Account Level <span class="text-danger">*</span></label>
                         <select id="txtAccLevel" name="txtAccLevel" class="form-select" required>
                             <option selected disabled value="">— Select Authorization Level
                                 —
@@ -190,22 +183,16 @@
 
                 <div class="row g-3 border-top border-light pt-3 mt-2" id="accountTypeRow">
                     <div class="col-md-6">
-                        <label for="txtAccountType" class="form-label small fw-bold text-secondary">Functional
-                            Account
-                            Scope Boundaries</label>
-                        <select id="txtAccountType" name="txtAccountType" class="form-select">
-                            <option value="DEPARTMENT">Departmental Agency Account</option>
-                            <option value="BARANGAY">Barangay Local Unit Account</option>
-                        </select>
-                        <div class="form-text text-muted" style="font-size: 0.75rem;">Limits
-                            organizational data
-                            adjustments entirely to their assigned identity parameters.
-                        </div>
+                        <label for="txtAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
+                       <select id="txtAccountType" name="txtAccountType" class="form-select">
+    <option disabled value="">— Select Account Scope Boundaries —</option>
+    <option value="DEPARTMENT" selected>Department</option>
+    <option value="BARANGAY">Barangay</option>
+</select>
+                      
                     </div>
                     <div class="col-md-6" id="entityRefGroup">
-                        <label for="txtEntityRef" class="form-label small fw-bold text-secondary">Linked
-                            Enterprise
-                            Context Node <span class="text-danger">*</span></label>
+                        <label for="txtEntityRef" class="form-label small fw-bold text-secondary">Select Department or Barangay<span class="text-danger">*</span></label>
                         <select id="txtEntityRef" name="txtEntityRef" class="form-control">
                             <option value="" disabled selected>— Select contextual entity
                                 node
@@ -219,9 +206,9 @@
 
             <div class="modal-footer bg-light py-2 px-4">
                 <button type="button" class="btn btn-sm btn-secondary fw-semibold px-3"
-                    data-bs-dismiss="modal">Discard</button>
+                    data-bs-dismiss="modal">Cancel</button>
                 <button id="btnAdd" type="button" class="btn btn-sm text-white fw-semibold px-4"
-                    style="background-color: var(--theme-mid-green);">Save Profile</button>
+                    style="background-color: var(--theme-mid-green);">Save</button>
             </div>
 
         </div>
@@ -270,7 +257,7 @@
 
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <label for="editUsername" class="form-label small fw-bold text-secondary">Account Username
+                        <label for="editUsername" class="form-label small fw-bold text-secondary">Username
                             <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="editUsername" name="editUsername"
                             placeholder="Modify account username string" required>
@@ -314,12 +301,10 @@
 
                 <div class="row g-3 border-top border-light pt-3 mt-2" id="editAccountTypeRow">
                     <div class="col-md-6">
-                        <label for="editAccountType" class="form-label small fw-bold text-secondary">Functional
-                            Account
-                            Scope Boundaries</label>
+                        <label for="editAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
                         <select id="editAccountType" name="editAccountType" class="form-select">
-                            <option value="DEPARTMENT">Departmental Agency Account</option>
-                            <option value="BARANGAY">Barangay Local Unit Account</option>
+                            <option value="DEPARTMENT">Department</option>
+                            <option value="BARANGAY">Barangay</option>
                         </select>
                     </div>
                     <div class="col-md-6" id="editEntityRefGroup">

@@ -1278,7 +1278,7 @@ class Admin extends BaseController
                     // Dynamically resolve target entity name from database if ID is present
                     $resolvedDetails = $logs->processDetails;
                     try {
-                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
+                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|INVEST)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
                         $prefix = strtoupper($matches[1]);
                         $targetId = (int) $matches[2];
                         $name = '';
@@ -1306,6 +1306,11 @@ class Admin extends BaseController
                             $jobRow = $db->table('jobs')->select('title')->where('ID', $targetId)->get()->getRow();
                             if ($jobRow) {
                                 $name = $jobRow->title;
+                            }
+                        } elseif ($prefix === 'INVEST') {
+                            $investRow = $db->table('file_tbl')->select('file_category')->where('ID', $targetId)->get()->getRow();
+                            if ($investRow) {
+                                $name = $investRow->file_category;
                             }
                         } elseif (in_array($prefix, ['NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT'], true)) {
                             $contentRow = $db->table('content_tbl')->select('title')->where('ID', $targetId)->get()->getRow();
@@ -2605,7 +2610,7 @@ class Admin extends BaseController
                         $status = 1;
                         $message = 'Content created successfully.';
                         $in_id = $invest_m->getInsertID();
-                        $log_c['processDetails'] = 'INVEST_ID: ' . $in_id;
+                        $log_c['processDetails'] = 'INVEST_ID: ' . $in_id . ' ' . $fc;
                     } catch (\Exception $e) {
                         $status = 0;
                         $message = 'An error occurred while saving the data.';
@@ -3725,7 +3730,7 @@ class Admin extends BaseController
                         $invest_m->update($id, $data);
                         $status = 1;
                         $message = 'Content updated successfully.';
-                        $log_c['processDetails'] = 'INVEST_ID: ' . $id;
+                        $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' ' . $fc;
                     } catch (\Exception $e) {
                         $status = 0;
                         $message = 'An error occurred while updating.';
@@ -4476,9 +4481,10 @@ class Admin extends BaseController
                     'status' => $status,
                     'updated_date' => date('Y-m-d H:i:s')
                 ];
+                $inv = $invest_m->find($id);
                 $invest_m->update($id, $data);
                 $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' - ' . $status;
+                $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' ' . ($inv->file_category ?? '') . ' - ' . $status;
                 $status = 1;
                 break;
             }
