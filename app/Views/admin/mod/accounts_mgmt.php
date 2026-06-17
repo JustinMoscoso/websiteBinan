@@ -32,7 +32,6 @@
                             <option selected value="">— Status Profile —</option>
                             <option value="ACTIVE">Active Only</option>
                             <option value="INACTIVE">Inactive Only</option>
-                            <option value="ARCHIVED">Archived / Suspended</option>
                         </select>
                     </div>
 

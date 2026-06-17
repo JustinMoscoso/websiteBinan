@@ -12,13 +12,13 @@
         // Check status
         var status = null;
         if (str.toUpperCase().indexOf('INACTIVE') !== -1) {
-            status = '<strong class="text-danger">Inactive</strong>';
+            status = '<strong style="color: #858796;">Inactive</strong>';
         } else if (str.toUpperCase().indexOf('ACTIVE') !== -1) {
-            status = '<strong class="text-success">Active</strong>';
+            status = '<strong style="color: #858796;">Active</strong>';
         } else if (str.toUpperCase().indexOf('ARCHIVED') !== -1) {
-            status = '<strong class="text-secondary">Archived</strong>';
+            status = '<strong style="color: #858796;">Archived</strong>';
         } else if (str.toUpperCase().indexOf('DELETED') !== -1) {
-            status = '<strong class="text-dark">Deleted</strong>';
+            status = '<strong style="color: #858796;">Deleted</strong>';
         }
         
         // Title matching
@@ -67,6 +67,9 @@
                     var displayMod = (module === 'news') ? 'news article' : 'announcement';
                     return 'Created new ' + displayMod + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
                 }
+                if (module === 'job') {
+                    return 'Created new job posting' + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
+                }
                 if (module === 'contact') {
                     return 'Created contact/hotline entry' + formattedId;
                 }
@@ -108,6 +111,9 @@
                 if (module === 'policy') {
                     var period = (year && qtr) ? ' to ' + year + ' (' + qtr + ' Quarter)' : '';
                     return 'Updated system policy period' + period;
+                }
+                if (module === 'job') {
+                    return 'Updated job posting' + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'profile') {
                     return 'Updated profile account details' + formattedId;
@@ -217,7 +223,7 @@
             "render": function (data, type, row) {
                 var humanDetails = formatDetails(data, row.action);
                 var escapedData = data ? data.replace(/"/g, '&quot;') : '';
-                return '<span title="Raw Log Data: ' + escapedData + '" style="cursor: help;">' + humanDetails + '</span>';
+                return '<span title="Raw Log Data: ' + escapedData + '" style="cursor: help; color: #858796;">' + humanDetails + '</span>';
             }
         },
         {

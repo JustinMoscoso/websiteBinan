@@ -1875,8 +1875,10 @@ class Admin extends BaseController
                     $result = $db->table('jobs')->insert($jobData);
 
                     if ($result) {
+                        $insertedId = $db->insertID();
                         $status = 1;
                         $message = 'Job created successfully';
+                        $log_c['processDetails'] = 'JOB_ID: ' . $insertedId . ' TITLE: ' . $title;
                         log_message('debug', 'Create Job - Success with direct DB insert');
                     } else {
                         // Get validation errors if any
@@ -1908,7 +1910,7 @@ class Admin extends BaseController
                 $type = trim($this->request->getPost('type'));
                 $publication_date = $this->request->getPost('publication_date');
                 $email = trim($this->request->getPost('email'));
-                $status = $this->request->getPost('status');
+                $statusVal = $this->request->getPost('status');
 
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
@@ -1950,8 +1952,8 @@ class Admin extends BaseController
                     'updated_date' => date('Y-m-d H:i:s')
                 ];
 
-                if ($status !== null) {
-                    $jobData['status'] = $status;
+                if ($statusVal !== null) {
+                    $jobData['status'] = $statusVal;
                 }
 
                 // Try to update the job with better error handling
@@ -1959,6 +1961,7 @@ class Admin extends BaseController
                     if ($job_m->update($id, $jobData)) {
                         $status = 1;
                         $message = 'Job updated successfully';
+                        $log_c['processDetails'] = 'JOB_ID: ' . $id . ' TITLE: ' . $title;
                     } else {
                         // Get validation errors if any
                         $errors = $job_m->errors();
@@ -4479,6 +4482,7 @@ class Admin extends BaseController
                     if ($job_m->update($id, $data)) {
                         $status = 1;
                         $message = 'Job status updated successfully';
+                        $log_c['processDetails'] = 'JOB_ID: ' . $id . ' - ' . $statusVal;
                     } else {
                         $message = 'Failed to update job status';
                     }
@@ -4515,6 +4519,7 @@ class Admin extends BaseController
                 if ($job_m->delete($id)) {
                     $status = 1;
                     $message = 'Job deleted successfully';
+                    $log_c['processDetails'] = 'JOB_ID: ' . $id . ' - DELETED';
                 } else {
                     $message = 'Failed to delete job';
                 }
