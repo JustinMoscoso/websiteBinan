@@ -254,7 +254,7 @@
             }
         },
         {
-            "title": "User Name", "data": "userID", "className": "dt-center"
+            "title": "Username", "data": "userID", "className": "dt-center"
         },
     ],
     initComplete: function() {

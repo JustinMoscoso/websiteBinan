@@ -1235,7 +1235,7 @@ class Admin extends BaseController
                 $user_m = new \App\Models\UserAccount();
 
                 // Build query with user information using correct table names
-                $query = $log_m->select('audit_trails.*, useradmin.fname, useradmin.lname')
+                $query = $log_m->select('audit_trails.*, useradmin.fname, useradmin.lname, useradmin.username')
                     ->join('useradmin', 'useradmin.ID = audit_trails.userID', 'left')
                     ->orderBy('audit_trails.created_date', 'desc');
 
@@ -1267,7 +1267,9 @@ class Admin extends BaseController
                 foreach ($log_d as $logs) {
                     // Create user display name
                     $userName = 'System';
-                    if ($logs->userID && $logs->fname && $logs->lname) {
+                    if ($logs->userID && !empty($logs->username)) {
+                        $userName = $logs->username;
+                    } elseif ($logs->userID && $logs->fname && $logs->lname) {
                         $userName = $logs->fname . ' ' . $logs->lname;
                     } elseif ($logs->userID) {
                         $userName = 'User ID: ' . $logs->userID;
