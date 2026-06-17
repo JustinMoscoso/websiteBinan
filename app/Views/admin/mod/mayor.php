@@ -28,12 +28,12 @@
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0" name="search"
-                                placeholder="Search Section / Mayor Name...">
+                                placeholder="Search Section / Mayor Name">
                         </div>
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Category Filter</label>
+                        <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-select bg-light border-secondary-subtle" name="category"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Sections</option>
@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Publication Status</label>
+                        <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Statuses</option>
@@ -98,12 +98,7 @@
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-                    <h6 class="m-0 font-weight-bold text-success">
-                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Executive
-                        Profile Directory
-                    </h6>
-                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tblmayor" class="table table-bordered table-hover align-middle w-100"
@@ -136,7 +131,7 @@
                             Type /
                             Category <span class="text-danger">*</span></label>
                         <select class="form-select" id="content_category" name="content_category" required>
-                            <option selected disabled value="">Choose profile section...
+                            <option selected disabled value="">Choose profile section
                             </option>
                             <option value="Personal Data">Personal Data</option>
                             <option value="Awards">Awards</option>
@@ -164,14 +159,21 @@
                     </div>
 
                     <div class="col-12">
-                        <label for="mayorimg" class="form-label small fw-bold text-secondary">Media Assets
-                            / Press
-                            Gallery Files</label>
-                        <input type="file" class="form-control" id="mayorimg" name="mayorimg[]" accept="image/*"
-                            multiple>
-                        <div class="form-text text-muted">Multi-file uploading enabled.
-                            Supported document formats: PNG,
-                            JPG, JPEG, WEBP.</div>
+                        <label for="mayorimg" class="form-label fw-semibold">
+                            <i class="bi bi-images me-1"></i>
+                            Media Assets / Press Gallery Files
+                        </label>
+
+                        <div class="border rounded-3 p-3 bg-light">
+                            <input type="file" id="mayorimg" name="mayorimg[]"
+                                accept="image/png,image/jpeg,image/jpg,image/webp" multiple>
+
+                            <div class="mt-2 small text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Upload one or more images for the press gallery.
+                                Supported formats: <strong>PNG, JPG, JPEG, WEBP</strong>.
+                            </div>
+                        </div>
                     </div>
 
                 </div>

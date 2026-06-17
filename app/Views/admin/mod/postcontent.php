@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Category Filter</label>
+                        <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-select bg-light border-secondary-subtle" name="category"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Categories</option>
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Publication Status</label>
+                        <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">All Statuses</option>
@@ -92,11 +92,7 @@
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-                    <h6 class="m-0 font-weight-bold text-success">
-                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Post Content Records
-                    </h6>
-                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tblnews" class="table table-bordered table-hover align-middle w-100" cellspacing="0">
