@@ -1312,15 +1312,14 @@ class Admin extends BaseController
                                 $name = $contentRow->title;
                             }
                         } elseif ($prefix === 'CITYOFFICIAL') {
-                            $officialRow = $db->table('officials_content')->select('fname, lname, position')->where('ID', $targetId)->get()->getRow();
+                            $officialRow = $db->table('officials_content')->select('off_name, off_position')->where('ID', $targetId)->get()->getRow();
                             if ($officialRow) {
-                                $fullName = trim(($officialRow->fname ?? '') . ' ' . ($officialRow->lname ?? ''));
-                                $name = !empty($fullName) ? $fullName : ($officialRow->position ?? '');
+                                $name = $officialRow->off_name ?? ($officialRow->off_position ?? '');
                             }
                         } elseif ($prefix === 'SERVICE') {
-                            $serviceRow = $db->table('service_content')->select('title')->where('ID', $targetId)->get()->getRow();
+                            $serviceRow = $db->table('service_content')->select('serv_name')->where('ID', $targetId)->get()->getRow();
                             if ($serviceRow) {
-                                $name = $serviceRow->title;
+                                $name = $serviceRow->serv_name;
                             }
                         }
 
