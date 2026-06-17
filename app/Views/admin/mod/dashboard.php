@@ -211,7 +211,7 @@
 <div class="row">
 
     <div class="col-12 mb-4">
-        <div class="card card-premium h-100">
+        <div class="card card-premium">
             <div
                 class="card-header bg-white border-bottom py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 fw-bold" style="color: var(--theme-dark-green); font-size: 0.95rem;">
@@ -233,8 +233,8 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body d-flex flex-column justify-content-between p-4">
-                <div class="chart-area position-relative w-100 flex-grow-1" style="min-height: 280px;">
+            <div class="card-body p-3">
+                <div class="chart-area position-relative w-100" style="height: 220px;">
                     <canvas id="myAreaChart"></canvas>
                 </div>
             </div>
