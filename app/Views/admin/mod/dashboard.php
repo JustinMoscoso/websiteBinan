@@ -23,6 +23,7 @@
     /* Summary Metric Indicators Border Accents */
     .metric-card {
         border-left: 4px solid #333;
+        cursor: pointer;
     }
 
     .metric-primary {
@@ -77,7 +78,7 @@
 <div class="row">
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card card-premium metric-card metric-primary website-visits-card h-100 py-2 position-relative" id="website-visits-card">
+        <div class="card card-premium metric-card metric-primary website-visits-card h-100 py-2 position-relative" id="website-visits-card" onclick="window.open('<?= base_url('/') ?>', '_blank')">
             <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
                     <div class="col me-2">
@@ -94,7 +95,7 @@
                     </div>
                 </div>
             </div>
-            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;">
+            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;" onclick="event.stopPropagation();">
                 <a class="text-decoration-none text-muted p-1" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <i class="bi bi-three-dots-vertical small"></i>
@@ -110,7 +111,7 @@
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card card-premium metric-card metric-success news-feed-card h-100 py-2 position-relative" id="news-feed-card">
+        <div class="card card-premium metric-card metric-success news-feed-card h-100 py-2 position-relative" id="news-feed-card" onclick="window.open('<?= base_url('newsevents') ?>', '_blank')">
             <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
                     <div class="col me-2">
@@ -128,7 +129,7 @@
                     </div>
                 </div>
             </div>
-            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;">
+            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;" onclick="event.stopPropagation();">
                 <a class="text-decoration-none text-muted p-1" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <i class="bi bi-three-dots-vertical small"></i>
@@ -144,7 +145,7 @@
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card card-premium metric-card metric-info revenue-card h-100 py-2 position-relative">
+        <div class="card card-premium metric-card metric-info revenue-card h-100 py-2 position-relative" onclick="window.open('<?= base_url('announcements') ?>', '_blank')">
             <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
                     <div class="col me-2">
@@ -158,7 +159,7 @@
                     </div>
                 </div>
             </div>
-            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;">
+            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;" onclick="event.stopPropagation();">
                 <a class="text-decoration-none text-muted p-1" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <i class="bi bi-three-dots-vertical small"></i>
@@ -174,7 +175,7 @@
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card card-premium metric-card metric-warning news-card h-100 py-2 position-relative" id="news-card">
+        <div class="card card-premium metric-card metric-warning news-card h-100 py-2 position-relative" id="news-card" onclick="window.open('<?= base_url('newsevents') ?>', '_blank')">
             <div class="card-body py-3">
                 <div class="row g-0 align-items-center">
                     <div class="col me-2">
@@ -191,7 +192,7 @@
                     </div>
                 </div>
             </div>
-            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;">
+            <div class="dropdown no-arrow position-absolute" style="top: 12px; right: 15px;" onclick="event.stopPropagation();">
                 <a class="text-decoration-none text-muted p-1" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <i class="bi bi-three-dots-vertical small"></i>
