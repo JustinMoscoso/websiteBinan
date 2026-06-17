@@ -834,6 +834,11 @@ class Admin extends BaseController
             }
 
             case 'set_status_profile_department': {
+                if (!in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'You are not authorized to change the status of this department.';
+                    break;
+                }
+
                 if (($user->account_type ?? '') !== 'DEPARTMENT' || empty($user->entity_ref_id)) {
                     $message = 'No linked department found for this account.';
                     break;
@@ -868,8 +873,8 @@ class Admin extends BaseController
             }
 
             case 'delete_profile_department': {
-                if ($user->user_lvl === 'ENCODER') {
-                    $message = 'Encoders are not permitted to delete a department.';
+                if (!in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'You are not authorized to delete this department.';
                     break;
                 }
 
@@ -3880,8 +3885,13 @@ class Admin extends BaseController
             }
 
             case 'set_status_barangay': {
-                $brgy_m = new \App\Models\Barangay();
                 $id = $this->request->getPost('id');
+                if (($user->account_type ?? '') === 'BARANGAY' && (int)$id === (int)($user->entity_ref_id ?? 0) && !in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'You are not authorized to change the status of your linked barangay.';
+                    break;
+                }
+
+                $brgy_m = new \App\Models\Barangay();
                 $status = $this->request->getPost('status');
                 $data = [
                     'status' => $status,
@@ -3895,8 +3905,13 @@ class Admin extends BaseController
             }
 
             case 'set_status_dept': {
-                $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
+                if (($user->account_type ?? '') === 'DEPARTMENT' && (int)$id === (int)($user->entity_ref_id ?? 0) && !in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'You are not authorized to change the status of your linked department.';
+                    break;
+                }
+
+                $dept_m = new \App\Models\Department();
 
                 // Enforce ENCODER/dept-scoped ADMIN restriction
                 if (($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') || $isDeptScopedAdmin) {
