@@ -1,13 +1,7 @@
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Department Management</h1>
-        <nav>
-            <ol class="breadcrumb mb-0 bg-transparent p-2" style="font-size: 0.85rem;">
-                <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard') ?>"
-                        class="text-decoration-none text-muted">Dashboard</a></li>
-                <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Department Management</li>
-            </ol>
-        </nav>
+
     </div>
 
 </div>
@@ -25,7 +19,7 @@
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0 filter-input" id="searchBrgy"
-                                placeholder="Search Barangay / Captain..." style="height: 38px;">
+                                placeholder="Search Barangay / Captain" style="height: 38px;">
                         </div>
                     </div>
 
@@ -33,7 +27,7 @@
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select bg-light border-secondary-subtle filter-input" name="status"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Statuses</option>
+                            <option selected value="">All Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>
@@ -77,11 +71,7 @@
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-                    <h6 class="m-0 font-weight-bold text-success">
-                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Department Directory
-                    </h6>
-                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tbldept" class="table table-bordered table-hover align-middle w-100" cellspacing="0">
@@ -97,7 +87,7 @@
     <div class="modal-dialog modal-xl custom-wide-modal modal-dialog-centered modal-dialog-scrollable">
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">Add New Department</h5>
+                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;"></h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -160,8 +150,8 @@
             </div>
 
             <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Department</button>
+                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
+                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
             </div>
         </form>
     </div>
@@ -239,7 +229,7 @@
 
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnEdit" type="submit" class="btn btn-theme px-4">Update Changes</button>
+                <button id="btnEdit" type="submit" class="btn btn-success px-4">Update Changes</button>
             </div>
         </form>
     </div>

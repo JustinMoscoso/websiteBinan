@@ -169,7 +169,7 @@
                         <input type="password" class="form-control" id="txtPassword" name="txtPassword"
                             placeholder="Construct a strong protective password passphrase" required>
                     </div>
-                      <div class="col-md-6">
+                    <div class="col-md-6">
                         <label for="txtAccLevel" class="form-label small fw-bold text-secondary">Access Role
                             Authorization Level <span class="text-danger">*</span></label>
                         <select id="txtAccLevel" name="txtAccLevel" class="form-select" required>
@@ -185,7 +185,7 @@
                 </div>
 
                 <div class="row g-3 mb-3">
-                  
+
                 </div>
 
                 <div class="row g-3 border-top border-light pt-3 mt-2" id="accountTypeRow">

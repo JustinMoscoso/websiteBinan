@@ -71,7 +71,9 @@
                     return 'Created new job posting' + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'contact') {
-                    return 'Created contact/hotline entry' + formattedId;
+                    var contMatch = str.match(/(?:CONTACT|HOTLINE)_ID:\s*\d+\s+([^\-\[]+)/i);
+                    var contName = contMatch ? contMatch[1].trim() : '';
+                    return 'Created contact/hotline entry' + (contName ? ' for <strong>' + contName + '</strong>' : '') + formattedId;
                 }
                 return 'Created new ' + module.replace('_', ' ') + ' record' + formattedId;
             } 
@@ -128,6 +130,11 @@
                 if (module === 'profile_department') {
                     return 'Updated linked department details' + formattedId;
                 }
+                if (module === 'contact') {
+                    var contMatch = str.match(/(?:CONTACT|HOTLINE)_ID:\s*\d+\s+([^\-\[]+)/i);
+                    var contName = contMatch ? contMatch[1].trim() : '';
+                    return 'Updated contact/hotline entry' + (contName ? ' for <strong>' + contName + '</strong>' : '') + formattedId;
+                }
                 return 'Updated ' + module.replace('_', ' ') + ' record' + formattedId;
             }
 
@@ -137,7 +144,7 @@
                 if (module === 'anns') label = 'announcement';
                 
                 var entityName = '';
-                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
                 var match = str.match(regex);
                 if (match && match[1]) {
                     entityName = match[1].trim();
@@ -155,7 +162,7 @@
                 if (module === 'anns') label = 'announcement';
                 
                 var entityName = '';
-                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
                 var match = str.match(regex);
                 if (match && match[1]) {
                     entityName = match[1].trim();

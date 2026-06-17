@@ -1,13 +1,7 @@
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
   <div>
     <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Invest Management</h1>
-    <nav>
-      <ol class="breadcrumb mb-0 bg-transparent p-2 " style="font-size: 0.85rem;">
-        <li class="breadcrumb-item"><a href="<?= base_url('/dashboard') ?>"
-            class="text-decoration-none text-muted">Dashboard</a></li>
-        <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Invest Management</li>
-      </ol>
-    </nav>
+
   </div>
 </div>
 
@@ -27,12 +21,12 @@
             <div class="input-group">
 
               <input type="text" class="form-control border-start-0" name="search"
-                placeholder="Search Category / File Name...">
+                placeholder="Search Category / File Name">
             </div>
           </div>
 
           <div class="col-xl-2 col-lg-2 col-md-6">
-            <label class="form-label small fw-bold text-secondary">Category Filter</label>
+            <label class="form-label small fw-bold text-secondary">Category</label>
             <select class="form-control form-select bg-light border-secondary-subtle" name="category"
               style="height: 38px; cursor: pointer;">
               <option selected value="">All Categories</option>
@@ -47,10 +41,10 @@
           </div>
 
           <div class="col-xl-2 col-lg-2 col-md-6">
-            <label class="form-label small fw-bold text-secondary">Publication Status</label>
+            <label class="form-label small fw-bold text-secondary">Status</label>
             <select class="form-control form-select bg-light border-secondary-subtle" name="status"
               style="height: 38px; cursor: pointer;">
-              <option selected value="">All Statuses</option>
+              <option selected value="">All Status</option>
               <option value="ACTIVE">Active</option>
               <option value="INACTIVE">Inactive</option>
               <option value="ARCHIVED">Archived</option>
@@ -114,7 +108,7 @@
 
       <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
         <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-          <i class="bi bi-plus-circle me-2"></i>Add Investment Content
+
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -150,8 +144,8 @@
       </div>
 
       <div class="modal-footer bg-light px-4 py-3">
-        <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-        <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Content</button>
+        <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
+        <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
       </div>
 
     </form>

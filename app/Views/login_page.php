@@ -162,25 +162,56 @@
     <div class="login-container-wrapper row overflow-hidden mx-0">
 
       <div
-        class="col-lg-5 branding-side-panel d-none d-lg-flex flex-column justify-content-center align-items-center text-white p-5">
-        <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="brand-logo mb-4 img-fluid"
-          style="max-height: 140px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));" alt="Biñan Logo">
-        <h1 class="h4 fw-bold mb-2 text-center" style="letter-spacing: 0.05em; color: #ffffff;">BIÑAN CITY ADMIN</h1>
-      </div>
+        class="col-lg-5 branding-side-panel d-none d-lg-flex flex-column justify-content-center align-items-center text-white p-5"
+        style="background-color: #1B4332;">
 
+        <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="brand-logo mb-4 img-fluid"
+          style="max-height: 140px; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.3));" alt="Biñan Logo">
+
+        <div class="text-center d-flex flex-column align-items-center w-100" style="max-width: 280px;">
+          <span
+            style="font-size: 11px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: rgba(255, 255, 255, 0.8); letter-spacing: 1px; line-height: 1.2;">
+            REPUBLIC OF THE PHILIPPINES
+          </span>
+
+          <hr style="width: 100%; margin: 6px 0; border: none; border-top: 2px solid rgba(255, 255, 255, 0.4);">
+
+          <span
+            style="font-size: 11px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: rgba(255, 255, 255, 0.8); letter-spacing: 0.5px; line-height: 1.2;">
+            CITY GOVERNMENT OF BIÑAN
+          </span>
+
+
+        </div>
+
+      </div>
       <div class="col-lg-7 login-form-side p-4 p-md-5 d-flex align-items-center">
         <div class="w-100">
 
           <div class="mb-4">
+            <!-- Mobile View Header -->
             <div class="d-lg-none text-center mb-4">
-              <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="mb-3" style="max-height: 80px;"
-                alt="Biñan Logo">
-              <h2 class="h5 fw-bold text-dark mb-1">BIÑAN CITY ADMIN</h2>
-            
-              <hr class="my-4 opacity-25">
+              <div class="d-flex align-items-center justify-content-center mb-3" style="gap: 12px;">
+                <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="img-fluid flex-shrink-0"
+                  style="max-height: 60px;" alt="Biñan Logo">
+                <div class="text-start d-flex flex-column align-items-start" style="max-width: 200px;">
+                  <span
+                    style="font-size: 9px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: #1B4332; letter-spacing: 0.5px; line-height: 1.2;">
+                    REPUBLIC OF THE PHILIPPINES
+                  </span>
+                  <hr style="width: 100%; margin: 3px 0; border: none; border-top: 1.5px solid rgba(0, 0, 0, 0.15);">
+                  <span
+                    style="font-size: 11px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: #1B4332; letter-spacing: 0.5px; line-height: 1.2;">
+                    CITY GOVERNMENT OF BIÑAN
+                  </span>
+                </div>
+              </div>
+
+              <hr class="my-3" style="border: none; border-top: 1px solid rgba(0, 0, 0, 0.1); opacity: 1;">
             </div>
 
-            <h2 class="fw-bold text-dark mb-1 d-none d-lg-block">Welcome Back</h2>
+            <!-- Desktop View Header -->
+            <h2 class="fw-bold text-dark mb-1 d-none d-lg-block">Sign Up</h2>
           </div>
 
           <form method="post" autocomplete="off">

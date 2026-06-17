@@ -3,8 +3,15 @@
         .copyright-link:hover {
             text-decoration: underline !important;
         }
+        .footer-bg {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent), url('<?= base_url('assets/img/footer3.jpg'); ?>') !important;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
     </style>
-    <div class="container-fluid text-light pt-2 wow fadeIn" style="background:linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent), url('<?= base_url('assets/img/footer3.jpg'); ?>') !important; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
+    <div class="container-fluid text-light pt-2 wow fadeIn footer-bg">
         <div class="container pt-5">
             <div class="row g-5">
                 <!-- Logo -->
@@ -130,10 +137,10 @@
             <!-- Logos Row (centered above copyright) -->
             <div class="row mt-4">
                 <div class="col-12">
-                    <div class="d-flex flex-wrap justify-content-center align-items-center py-3">
-                        <img src="<?= base_url('assets/img/transparency.png') ?>" class="img-fluid m-2" style="height: 60px; object-fit: contain;" alt="Transparency Seal">
-                        <img src="<?= base_url('assets/img/republic.png') ?>" class="img-fluid m-2" style="height: 60px; object-fit: contain;" alt="Republic Seal">
-                        <img src="<?= base_url('assets/img/iso.png') ?>" class="img-fluid m-2" style="height: 60px; object-fit: contain;" alt="ISO Certified">
+                    <div class="d-flex justify-content-center align-items-center py-3">
+                        <img src="<?= base_url('assets/img/transparency.png') ?>" class="img-fluid me-3" style="height: 60px; object-fit: contain;" alt="Transparency Seal">
+                        <img src="<?= base_url('assets/img/republic.png') ?>" class="img-fluid me-3" style="height: 60px; object-fit: contain;" alt="Republic Seal">
+                        <img src="<?= base_url('assets/img/iso.png') ?>" class="img-fluid" style="height: 60px; object-fit: contain;" alt="ISO Certified">
                     </div>
                 </div>
             </div>

@@ -1,13 +1,7 @@
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">About / Homepage Management</h1>
-        <nav>
-            <ol class="breadcrumb mb-0 bg-transparent p-2" style="font-size: 0.85rem;">
-                <li class="breadcrumb-item"><a href="<?= base_url('/dashboard') ?>"
-                        class="text-decoration-none text-muted">Dashboard</a></li>
-                <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">About / Homepage Management</li>
-            </ol>
-        </nav>
+
     </div>
 </div>
 
@@ -26,15 +20,15 @@
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0" name="search"
-                                placeholder="Search Title / Description...">
+                                placeholder="Search Title / Description">
                         </div>
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Section Filter</label>
+                        <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-select bg-light border-secondary-subtle" name="section"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Sections</option>
+                            <option selected value="">All Categories</option>
                             <option value="Home Page">Home Page</option>
                             <option value="History">History</option>
                             <option value="Content">About - Content</option>
@@ -44,10 +38,10 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Publication Status</label>
+                        <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Statuses</option>
+                            <option selected value="">All Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>
@@ -97,11 +91,7 @@
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-                    <h6 class="m-0 font-weight-bold text-success">
-                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>About & Homepage Records
-                    </h6>
-                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tblabout" class="table table-bordered table-hover align-middle w-100"
@@ -120,7 +110,7 @@
 
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-plus-circle me-2"></i>Add Corporate Page Content
+
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -130,10 +120,10 @@
                 <div class="row g-3">
 
                     <div class="col-md-6">
-                        <label for="content_category" class="form-label small fw-bold text-secondary">Target Placement
+                        <label for="content_category" class="form-label small fw-bold text-secondary">
                             Category <span class="text-danger">*</span></label>
                         <select class="form-select" id="content_category" name="content_category" required>
-                            <option selected disabled value="">Select placement block...</option>
+                            <option selected disabled value="">Select Category</option>
                             <option value="Home Page">Home Page</option>
                             <option value="History">History</option>
                             <option value="Content">About - Content</option>
@@ -142,10 +132,10 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="TxtTitle" class="form-label small fw-bold text-secondary">Content Block Title <span
+                        <label for="TxtTitle" class="form-label small fw-bold text-secondary">Title <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="TxtTitle" name="TxtTitle"
-                            placeholder="Enter headline/header title..." required>
+                            placeholder="Enter headline/header title" required>
                     </div>
 
                     <div class="col-12">
@@ -172,8 +162,8 @@
             </div>
 
             <div class="modal-footer bg-light px-4 py-3 border-top">
-                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Content</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
             </div>
 
         </form>
@@ -197,10 +187,10 @@
                 <div class="row g-3">
 
                     <div class="col-md-6">
-                        <label for="edit_content_category" class="form-label small fw-bold text-secondary">Target
-                            Placement Category <span class="text-danger">*</span></label>
+                        <label for="edit_content_category" class="form-label small fw-bold text-secondary">Category
+                            <span class="text-danger">*</span></label>
                         <select class="form-select" id="edit_content_category" name="edit_content_category" required>
-                            <option disabled value="">Select placement block...</option>
+                            <option disabled value="">Select Category</option>
                             <option value="Home Page">Home Page</option>
                             <option value="History">History</option>
                             <option value="Content">About - Content</option>
@@ -209,10 +199,10 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="EditTxtTitle" class="form-label small fw-bold text-secondary">Content Block Title
+                        <label for="EditTxtTitle" class="form-label small fw-bold text-secondary">Title
                             <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="EditTxtTitle" name="EditTxtTitle"
-                            placeholder="Enter headline/header title..." required>
+                            placeholder="Enter headline/header title" required>
                     </div>
 
                     <div class="col-12">

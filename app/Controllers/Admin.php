@@ -1277,7 +1277,8 @@ class Admin extends BaseController
 
                     // Dynamically resolve target entity name from database if ID is present
                     $resolvedDetails = $logs->processDetails;
-                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
+                    try {
+                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
                         $prefix = strtoupper($matches[1]);
                         $targetId = (int) $matches[2];
                         $name = '';
@@ -1321,6 +1322,32 @@ class Admin extends BaseController
                             if ($serviceRow) {
                                 $name = $serviceRow->serv_name;
                             }
+                        } elseif (in_array($prefix, ['CONTACT', 'HOTLINE'], true)) {
+                            $hotlineRow = $db->table('hotlines')->select('section, content_ref_id, number, telco')->where('ID', $targetId)->get()->getRow();
+                            if ($hotlineRow) {
+                                $section = $hotlineRow->section ?? '';
+                                $refId   = $hotlineRow->content_ref_id ?? null;
+                                $entityName = '';
+                                if ($section === 'Department' && $refId) {
+                                    $dRow = $db->table('department_content')->select('dept_name')->where('ID', (int)$refId)->get()->getRow();
+                                    if ($dRow) $entityName = $dRow->dept_name;
+                                } elseif ($section === 'Barangay' && $refId) {
+                                    $bRow = $db->table('barangay_content')->select('brgy_name')->where('ID', (int)$refId)->get()->getRow();
+                                    if ($bRow) $entityName = $bRow->brgy_name;
+                                } elseif ($section === 'Others' && $refId) {
+                                    // For 'Others', content_ref_id stores the name string directly
+                                    $entityName = $refId;
+                                }
+                                if (!empty($entityName)) {
+                                    $name = $entityName . ' (' . $section . ')';
+                                } elseif (!empty($section)) {
+                                    $num = $hotlineRow->number ?? ($hotlineRow->telco ?? '');
+                                    $name = ($num ? $num . ' - ' : '') . $section;
+                                } else {
+                                    $num = $hotlineRow->number ?? ($hotlineRow->telco ?? '');
+                                    $name = $num ?: '';
+                                }
+                            }
                         }
 
                         if (!empty($name)) {
@@ -1334,6 +1361,9 @@ class Admin extends BaseController
                             }
                             $resolvedDetails = preg_replace('/' . preg_quote($matches[0], '/') . '/', $replacement, $resolvedDetails, 1);
                         }
+                    }
+                    } catch (\Throwable $e) {
+                        log_message('error', 'Audit resolver error: ' . $e->getMessage());
                     }
 
                     // Create the data object with user name

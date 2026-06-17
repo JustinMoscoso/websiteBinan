@@ -7,13 +7,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Service Management</h1>
-        <nav>
-            <ol class="breadcrumb mb-0 bg-transparent p-2 " style="font-size: 0.85rem;">
-                <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard') ?>"
-                        class="text-decoration-none text-muted">Dashboard</a></li>
-                <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Service Management</li>
-            </ol>
-        </nav>
+
     </div>
 
 </div>
@@ -28,18 +22,18 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                 <div class="row g-3">
 
                     <div class="<?= !$isEntityScopedAdmin ? 'col-xl-4' : 'col-xl-9' ?> col-lg-6 col-md-12">
-                        <label for="service_name" class="form-label small fw-bold text-secondary">Service Query
+                        <label for="service_name" class="form-label small fw-bold text-secondary">
                             Title</label>
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0" name="service_name" id="service_name"
-                                placeholder="Search service keyword..." style="height: 38px;">
+                                placeholder="Search Title" style="height: 38px;">
                         </div>
                     </div>
 
                     <?php if (!$isEntityScopedAdmin): ?>
                         <div class="col-xl-3 col-lg-3 col-md-6">
-                            <label for="searchCategory" class="form-label small fw-bold text-secondary">Scope Category</label>
+                            <label for="searchCategory" class="form-label small fw-bold text-secondary">Category</label>
                             <select class="form-control form-select bg-light border-secondary-subtle" name="category"
                                 id="searchCategory" style="height: 38px; cursor: pointer;">
                                 <option selected value="">All Categories</option>
@@ -49,7 +43,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                         </div>
 
                         <div class="col-xl-3 col-lg-3 col-md-6">
-                            <label class="form-label small fw-bold text-secondary">Assigned Unit</label>
+                            <label class="form-label small fw-bold text-secondary">Select Department / Barangay</label>
 
                             <div id="searchBrgyGroup" style="display: none;">
                                 <select class="form-control form-select bg-light border-secondary-subtle" name="brgy"
@@ -68,17 +62,17 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <div id="searchDefaultGroup">
                                 <select class="form-control form-select bg-light border-secondary-subtle" disabled
                                     style="height: 38px;">
-                                    <option value="">Choose category first</option>
+                                    <option value="">Choose Category First</option>
                                 </select>
                             </div>
                         </div>
                     <?php endif; ?>
 
                     <div class="<?= !$isEntityScopedAdmin ? 'col-xl-2' : 'col-xl-3' ?> col-lg-3 col-md-6">
-                        <label for="status" class="form-label small fw-bold text-secondary">Publishing Status</label>
+                        <label for="status" class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select bg-light border-secondary-subtle" name="status" id="status"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Statuses</option>
+                            <option selected value="">All Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>
@@ -107,8 +101,8 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <button type="button" class="btn w-100 btn-success fw-semibold text-white shadow-sm"
-                                            data-bs-toggle="modal" data-bs-target="#addModal" ">
-                                                    <i class=" bi bi-plus-circle me-1"></i>
+                                            data-bs-toggle="modal" data-bs-target="#addModal">
+                                            <i class=" bi bi-plus-circle me-1"></i>
                                             Add Record
                                         </button>
                                     </div>
@@ -129,11 +123,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-                    <h6 class="m-0 font-weight-bold text-success">
-                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Service Directory
-                    </h6>
-                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tblservice" class="table table-bordered table-hover align-middle w-100"
@@ -152,7 +142,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-plus-circle me-2"></i>Add Service Provision Listing
+
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -172,20 +162,20 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                         </div>
                     <?php else: ?>
                         <div class="col-md-6">
-                            <label for="category" class="form-label small fw-bold text-secondary">Category Group Scope <span
+                            <label for="category" class="form-label small fw-bold text-secondary">Category<span
                                     class="text-danger">*</span></label>
                             <select class="form-select" id="category" name="category" required>
-                                <option value="" selected disabled>Choose classification...</option>
+                                <option value="" selected disabled>Choose Category</option>
                                 <option value="BRGY">Barangay</option>
                                 <option value="DEPT">Department</option>
                             </select>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="serviceName" class="form-label small fw-bold text-secondary">Service Provision Name
+                            <label for="serviceName" class="form-label small fw-bold text-secondary">Service
                                 <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="serviceName" name="serviceName"
-                                placeholder="Enter service description..." required>
+                                placeholder="Enter Service Title" required>
                         </div>
 
                         <div class="col-12">
@@ -208,8 +198,8 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                     <?php endif; ?>
 
                     <div class="col-12">
-                        <label class="form-label small fw-bold text-secondary mb-1">Detailed Service Instructions &
-                            Content Requirements <span class="text-danger">*</span></label>
+                        <label class="form-label small fw-bold text-secondary mb-1">Service Details<span
+                                class="text-danger">*</span></label>
                         <div class="editor-wrapper shadow-sm">
                             <div id="quillContent" style="height: 180px;"></div>
                         </div>
@@ -220,8 +210,8 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
             </div>
 
             <div class="modal-footer bg-light px-4 py-3 border-top">
-                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Provision</button>
+                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
+                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
             </div>
 
         </form>
@@ -252,7 +242,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <label for="editcategory" class="form-label small fw-bold text-secondary">Category Group Scope
                                 <span class="text-danger">*</span></label>
                             <select class="form-select" id="editcategory" name="editcategory" required>
-                                <option value="" disabled>Choose classification...</option>
+                                <option value="" disabled>Choose classification</option>
                                 <option value="BRGY">Barangay</option>
                                 <option value="DEPT">Department</option>
                             </select>

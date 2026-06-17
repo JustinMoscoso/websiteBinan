@@ -1,14 +1,7 @@
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Full Disclosure Policy Management</h1>
-        <nav>
-            <ol class="breadcrumb mb-0 bg-transparent p-2 " style="font-size: 0.85rem;">
-                <li class="breadcrumb-item"><a href="<?php echo site_url('admin/dashboard'); ?>"
-                        class="text-decoration-none text-muted">Dashboard</a></li>
-                <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Full
-                    Disclosure Policy</li>
-            </ol>
-        </nav>
+
     </div>
 
 </div>
@@ -29,7 +22,7 @@
                         </label>
 
                         <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Search File Name / Year..."
+                            <input type="text" class="form-control" name="search" placeholder="Search File Name / Year"
                                 style="height: 38px;">
                         </div>
                     </div>
@@ -51,7 +44,7 @@
                     <!-- Category -->
                     <div class="col-xl-4 col-lg-6">
                         <label class="form-label small fw-bold text-secondary">
-                            File Category
+                            Category
                         </label>
 
                         <select class="form-control form-select bg-light border-secondary-subtle" name="file_category"
@@ -114,7 +107,7 @@
 
                         <select class="form-control form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
-                            <option value="">All</option>
+                            <option value="">All Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                         </select>
@@ -163,11 +156,7 @@
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-                    <h6 class="m-0 font-weight-bold text-success">
-                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Full Disclosure Policy Directory
-                    </h6>
-                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tblfdp" class="table table-bordered table-hover align-middle w-100" cellspacing="0">
@@ -194,7 +183,7 @@
                 <div class="row g-3">
 
                     <div class="col-12">
-                        <label class="form-label small fw-bold text-secondary">File Category</label>
+                        <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-control form-select shadow-sm" id="fileCategory" name="fileCategory"
                             required>
                             <option value="" selected disabled>Choose Category</option>
@@ -274,8 +263,8 @@
             </div>
 
             <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Close</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Policy</button>
+                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Close</button>
+                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
             </div>
         </form>
     </div>
