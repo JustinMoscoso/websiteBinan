@@ -1,13 +1,7 @@
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Career Management</h1>
-        <nav>
-            <ol class="breadcrumb mb-0 bg-transparent p-2" style="font-size: 0.85rem;">
-                <li class="breadcrumb-item"><a href="<?= base_url('/dashboard') ?>"
-                        class="text-decoration-none text-muted">Dashboard</a></li>
-                <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Career Management</li>
-            </ol>
-        </nav>
+
     </div>
 
 </div>
@@ -28,25 +22,25 @@
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0" name="search"
-                                placeholder="Search Date / File Name...">
+                                placeholder="Search Date / File Name">
                         </div>
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Level Filter</label>
+                        <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-select bg-light border-secondary-subtle" name="level"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Levels</option>
+                            <option selected value="">All Categories</option>
                             <option value="1">Level 1</option>
                             <option value="2">Level 2</option>
                         </select>
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Publication Status</label>
+                        <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Statuses</option>
+                            <option selected value="">All Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>
@@ -92,11 +86,7 @@
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-                    <h6 class="m-0 font-weight-bold text-success">
-                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Career Posting Directory
-                    </h6>
-                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tblcareer" class="table table-bordered table-hover align-middle w-100"
@@ -113,7 +103,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">Add New Career Entry</h5>
+                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;"></h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -134,7 +124,7 @@
                     </div>
                     <div class="col-12 mt-3">
                         <label for="careerFile" class="form-label small fw-bold text-secondary">Upload Document
-                            Attachment</label>
+                        </label>
                         <input type="file" class="form-control shadow-sm" id="careerFile" name="careerFile"
                             accept=".pdf,.xls,.xlsx" required>
                         <div class="form-text text-muted" style="font-size: 0.75rem;">Supported types: .pdf, .xls, .xlsx
@@ -144,7 +134,7 @@
             </div>
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Record</button>
+                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
         </form>
     </div>
@@ -162,15 +152,15 @@
             <div class="modal-body p-4">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="editpublication" class="form-label small fw-bold text-secondary">Publication
+                        <label for="editpublication" class="form-label small fw-bold text-secondary">
                             Date</label>
                         <input type="date" class="form-control shadow-sm" id="editpublication" name="editpublication"
                             required>
                     </div>
                     <div class="col-md-6">
-                        <label for="editlevel" class="form-label small fw-bold text-secondary">Level</label>
+                        <label for="editlevel" class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-select shadow-sm" id="editlevel" name="editlevel" required>
-                            <option selected disabled value="">Select Level</option>
+                            <option selected disabled value="">All Category</option>
                             <option value="1">Level 1</option>
                             <option value="2">Level 2</option>
                         </select>

@@ -1,13 +1,7 @@
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Contacts Management</h1>
-        <nav>
-            <ol class="breadcrumb mb-0 bg-transparent p-2" style="font-size: 0.85rem;">
-                <li class="breadcrumb-item"><a href="<?= base_url('/dashboard') ?>"
-                        class="text-decoration-none text-muted">Dashboard</a></li>
-                <li class="breadcrumb-item active fw-semibold" style="color: #2d6a4f;">Contacts Management</li>
-            </ol>
-        </nav>
+
     </div>
 </div>
 
@@ -27,9 +21,9 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Section Category</label>
+                        <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-control form-select" name="contactCategory">
-                            <option selected value="">- Category -</option>
+                            <option selected value="">All Categories</option>
                             <option value="BRGY">Barangay</option>
                             <option value="DEPT">Department</option>
                             <option value="Others">Others</option>
@@ -39,7 +33,7 @@
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select" name="contactStatus">
-                            <option selected value="">- Status -</option>
+                            <option selected value="">All Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>
@@ -83,11 +77,7 @@
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white">
-                    <h6 class="m-0 font-weight-bold text-success">
-                        <i class="fas fa-table fa-sm fa-fw text-success me-2"></i>Contact Directory Records
-                    </h6>
-                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tblhotlines" class="table table-bordered table-hover align-middle w-100"
@@ -106,7 +96,7 @@
 
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-plus-circle me-2"></i>Add New Contact Directory
+                    <i class="bi bi-plus-circle me-2"></i>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -119,7 +109,7 @@
                         <label for="category" class="form-label small fw-bold text-secondary">Directory Section <span
                                 class="text-danger">*</span></label>
                         <select class="form-select shadow-sm" id="category" name="category" required>
-                            <option value="" selected disabled>Choose a section...</option>
+                            <option value="" selected disabled>Choose a section</option>
                             <option value="BRGY">Barangay</option>
                             <option value="DEPT">Department</option>
                             <option value="Others">Others</option>
@@ -180,8 +170,8 @@
             </div>
 
             <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save Contact Entry</button>
+                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
+                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
             </div>
 
         </form>

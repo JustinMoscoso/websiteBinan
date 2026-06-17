@@ -23,6 +23,7 @@
     .sidebar {
       position: sticky;
       top: 0;
+      width: 310px !important;
       height: 100vh;
       overflow-y: scroll;
       /* always show scrollbar */
@@ -101,13 +102,24 @@
     <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: #1B4332;">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center"
-        href="<?= base_url('admin/dashboard') ?>">
-        <div class="sidebar-brand-icon">
-          <img src="<?= site_url('assets/img/binanlogo.png'); ?>" alt="" style="width: 40px; height: 40px;">
+      <!-- Sidebar - Brand -->
+      <a class="navbar-brand d-flex align-items-center px-3 py-3" href="<?= base_url('admin/dashboard') ?>"
+        style="gap: 10px;">
+        <img src="<?= base_url('assets/img/binanlogo.png') ?>" alt="Logo" width="45" height="45"
+          class="img-fluid flex-shrink-0">
+        <div class="d-none d-sm-flex flex-column align-items-start style=" width: 100%; max-width: 180px;">
+          <span
+            style="font-size: 9px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; line-height: 1.2;">
+            REPUBLIC OF THE PHILIPPINES
+          </span>
+          <hr style="width: 100%; margin: 3px 0; border: none; border-top: 1.5px solid rgba(255, 255, 255, 0.6);">
+          <span
+            style="font-size: 9px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; line-height: 1.2;">
+            CITY GOVERNMENT OF BIÑAN
+          </span>
         </div>
-        <div class="sidebar-brand-text mx-3">Biñan Admin</div>
       </a>
+
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
