@@ -1277,14 +1277,14 @@ class Admin extends BaseController
 
                     // Dynamically resolve target entity name from database if ID is present
                     $resolvedDetails = $logs->processDetails;
-                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
+                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
                         $prefix = strtoupper($matches[1]);
                         $targetId = (int) $matches[2];
                         $name = '';
                         $suffix = '';
 
                         $db = \Config\Database::connect();
-                        if ($prefix === 'ACCOUNT') {
+                        if (in_array($prefix, ['ACCOUNT', 'PROFILE', 'PROFILE_PASSWORD', 'PROFILE_IMAGE'], true)) {
                             $userRow = $db->table('useradmin')->select('fname, lname, username, user_lvl')->where('ID', $targetId)->get()->getRow();
                             if ($userRow) {
                                 $fullName = trim(($userRow->fname ?? '') . ' ' . ($userRow->lname ?? ''));
@@ -1325,7 +1325,7 @@ class Admin extends BaseController
 
                         if (!empty($name)) {
                             $replacement = $matches[0];
-                            if ($prefix === 'ACCOUNT') {
+                            if (in_array($prefix, ['ACCOUNT', 'PROFILE', 'PROFILE_PASSWORD', 'PROFILE_IMAGE'], true)) {
                                 $replacement = $matches[0] . ' ' . $name . $suffix;
                             } elseif (in_array($prefix, ['JOB', 'NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT'], true)) {
                                 $replacement = $matches[0] . ' TITLE: ' . $name;

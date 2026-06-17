@@ -116,7 +116,14 @@
                     return 'Updated job posting' + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'profile') {
-                    return 'Updated profile account details' + formattedId;
+                    var nameMatch = str.match(/PROFILE_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/PROFILE_ID:\s*\d+\s*(.+)$/i);
+                    var name = nameMatch ? nameMatch[1].trim() : '';
+                    return 'Updated profile account details' + (name ? ' for "<strong>' + name + '</strong>"' : '') + formattedId;
+                }
+                if (module === 'user') {
+                    var nameMatch = str.match(/ACCOUNT_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/ACCOUNT_ID:\s*\d+\s*(.+)$/i);
+                    var name = nameMatch ? nameMatch[1].trim() : '';
+                    return 'Updated user account' + (name ? ' details for "<strong>' + name + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'profile_department') {
                     return 'Updated linked department details' + formattedId;
@@ -130,7 +137,7 @@
                 if (module === 'anns') label = 'announcement';
                 
                 var entityName = '';
-                var regex = new RegExp('(?:' + module.toUpperCase() + '|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
                 var match = str.match(regex);
                 if (match && match[1]) {
                     entityName = match[1].trim();
@@ -148,7 +155,7 @@
                 if (module === 'anns') label = 'announcement';
                 
                 var entityName = '';
-                var regex = new RegExp('(?:' + module.toUpperCase() + '|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
                 var match = str.match(regex);
                 if (match && match[1]) {
                     entityName = match[1].trim();
@@ -161,13 +168,19 @@
             }
 
             if (actionLower === 'change_profile_password') {
-                return 'Changed profile login password' + formattedId;
+                var nameMatch = str.match(/PROFILE_PASSWORD_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/PROFILE_PASSWORD_ID:\s*\d+\s*(.+)$/i);
+                var name = nameMatch ? nameMatch[1].trim() : '';
+                return 'Changed profile login password' + (name ? ' for "<strong>' + name + '</strong>"' : '') + formattedId;
             }
             if (actionLower === 'update_profile_picture') {
-                return 'Uploaded a new profile picture' + formattedId;
+                var nameMatch = str.match(/PROFILE_IMAGE_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/PROFILE_IMAGE_ID:\s*\d+\s*(.+)$/i);
+                var name = nameMatch ? nameMatch[1].trim() : '';
+                return 'Uploaded a new profile picture' + (name ? ' for "<strong>' + name + '</strong>"' : '') + formattedId;
             }
-            if (actionLower === 'reset_pass_account') {
-                return 'Triggered password reset and notification email' + formattedId;
+            if (actionLower === 'reset_pass_account' || actionLower === 'reset_password') {
+                var nameMatch = str.match(/ACCOUNT_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/ACCOUNT_ID:\s*\d+\s*(.+)$/i);
+                var name = nameMatch ? nameMatch[1].trim() : '';
+                return 'Triggered password reset and notification email' + (name ? ' for "<strong>' + name + '</strong>"' : '') + formattedId;
             }
             
         } catch (e) {
