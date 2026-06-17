@@ -104,27 +104,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Load Recent News
     function loadRecentNews(filter) {
-        const newsFilter = document.getElementById('news-filter');
-        if (newsFilter) newsFilter.textContent = `| ${filter}`;
         const newsFeedFilter = document.getElementById('news-feed-filter');
         if (newsFeedFilter) newsFeedFilter.textContent = `| ${filter}`;
         
-        const newsCount = document.getElementById('news-count');
         const newsFeedCount = document.getElementById('news-feed-count');
         
         fetch(`<?= base_url('admin/getRecentNews') ?>?filter=${filter}`)
             .then(res => res.json())
             .then(data => {
-                if (newsCount) newsCount.textContent = data.length;
                 if (newsFeedCount) newsFeedCount.textContent = data.length;
             })
             .catch(() => {
-                if (newsCount) newsCount.textContent = '0';
                 if (newsFeedCount) newsFeedCount.textContent = '0';
             });
     }
 
-    document.querySelectorAll('.news-card .dropdown-item[data-filter], .news-feed-card .dropdown-item[data-filter]').forEach(item => {
+    document.querySelectorAll('.news-feed-card .dropdown-item[data-filter]').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             loadRecentNews(this.getAttribute('data-filter'));
