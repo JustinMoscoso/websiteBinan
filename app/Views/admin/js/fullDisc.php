@@ -50,6 +50,13 @@
         allowClear: true
     });
 
+    // Initialize yearpicker
+    $('.yearpicker').yearpicker({
+        year: new Date().getFullYear()
+    });
+    // Initially clear the add year input text box so it shows the placeholder
+    $('#yr').val('');
+
     // Function to check if file category is annual
     function isAnnualCategory(category) {
         const annualCategories = [
@@ -147,6 +154,13 @@
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
                     $('#fileCategory')[0].selectize.clear();
+                    let addYrPicker = $('#yr').data('yearpicker');
+                    if (addYrPicker) {
+                        addYrPicker.year = new Date().getFullYear();
+                        addYrPicker.setValue();
+                    }
+                    // Reset add year input text box to empty so it displays placeholder
+                    $('#yr').val('');
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
@@ -184,6 +198,11 @@
                     $('#editPolicyId').val(res.ID);
                     $('#editFileCategory')[0].selectize.setValue(res.file_category); // Set the value for selectize
                     $('#edityr').val(res.year);
+                    let editYrPicker = $('#edityr').data('yearpicker');
+                    if (editYrPicker) {
+                        editYrPicker.year = parseInt(res.year);
+                        editYrPicker.setValue();
+                    }
                     $('#editqtr').val(res.quarter);
 
                     // Handle quarter field visibility based on category

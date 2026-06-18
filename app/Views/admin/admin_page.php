@@ -90,6 +90,14 @@
         display: block;
       }
     }
+
+    /* Centering all data table column headers for consistency */
+    .table th,
+    .table thead th,
+    table.dataTable thead th,
+    div.dataTables_wrapper table.dataTable thead th {
+        text-align: center !important;
+    }
   </style>
 </head>
 

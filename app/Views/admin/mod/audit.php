@@ -1,12 +1,5 @@
 <div class="pagetitle mb-4 pb-2 border-bottom">
     <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">System Audit Logs</h1>
-    <nav>
-        <ol class="breadcrumb mb-0 bg-transparent p-2">
-            <li class="breadcrumb-item"><a href="<?= base_url('admin/dashboard') ?>" class="text-decoration-none"
-                    style="color: #2d6a4f;">Dashboard</a></li>
-            <li class="breadcrumb-item active">System Logs</li>
-        </ol>
-    </nav>
 </div>
 
 <style>

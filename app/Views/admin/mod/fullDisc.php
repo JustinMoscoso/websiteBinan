@@ -219,25 +219,7 @@
 
                     <div class="col-md-6">
                         <label for="yr" class="form-label small fw-bold text-secondary">Year</label>
-                        <select class="form-control form-select shadow-sm" id="yr" name="yr" required>
-                            <option value="" selected disabled>Select Year</option>
-                            <option value="2030">2030</option>
-                            <option value="2029">2029</option>
-                            <option value="2028">2028</option>
-                            <option value="2027">2027</option>
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
-                            <option value="2017">2017</option>
-                            <option value="2016">2016</option>
-                            <option value="2015">2015</option>
-                        </select>
+                        <input type="text" class="form-control shadow-sm yearpicker" id="yr" name="yr" placeholder="Select Year" readonly required>
                     </div>
 
                     <div class="col-md-6">
@@ -321,25 +303,7 @@
 
                     <div class="col-md-6">
                         <label for="edityr" class="form-label small fw-bold text-secondary">Year</label>
-                        <select class="form-control form-select shadow-sm" id="edityr" name="edityr" required>
-                            <option value="" disabled>Select Year</option>
-                            <option value="2030">2030</option>
-                            <option value="2029">2029</option>
-                            <option value="2028">2028</option>
-                            <option value="2027">2027</option>
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
-                            <option value="2017">2017</option>
-                            <option value="2016">2016</option>
-                            <option value="2015">2015</option>
-                        </select>
+                        <input type="text" class="form-control shadow-sm yearpicker" id="edityr" name="edityr" placeholder="Select Year" readonly required>
                     </div>
 
                     <div class="col-md-6">
