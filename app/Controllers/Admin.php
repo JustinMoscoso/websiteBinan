@@ -1278,7 +1278,7 @@ class Admin extends BaseController
                     // Dynamically resolve target entity name from database if ID is present
                     $resolvedDetails = $logs->processDetails;
                     try {
-                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
+                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|ABOUT|MAYOR|POSTCONTENT|INVEST|FULLDISC)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
                         $prefix = strtoupper($matches[1]);
                         $targetId = (int) $matches[2];
                         $name = '';
@@ -1307,10 +1307,20 @@ class Admin extends BaseController
                             if ($jobRow) {
                                 $name = $jobRow->title;
                             }
-                        } elseif (in_array($prefix, ['NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT'], true)) {
+                        } elseif (in_array($prefix, ['NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT', 'POSTCONTENT'], true)) {
                             $contentRow = $db->table('content_tbl')->select('title')->where('ID', $targetId)->get()->getRow();
                             if ($contentRow) {
                                 $name = $contentRow->title;
+                            }
+                        } elseif ($prefix === 'ABOUT') {
+                            $aboutRow = $db->table('about_content')->select('title')->where('ID', $targetId)->get()->getRow();
+                            if ($aboutRow) {
+                                $name = $aboutRow->title;
+                            }
+                        } elseif ($prefix === 'MAYOR') {
+                            $mayorRow = $db->table('mayor_content')->select('section')->where('ID', $targetId)->get()->getRow();
+                            if ($mayorRow) {
+                                $name = $mayorRow->section;
                             }
                         } elseif ($prefix === 'CITYOFFICIAL') {
                             $officialRow = $db->table('officials_content')->select('off_name, off_position')->where('ID', $targetId)->get()->getRow();
@@ -1321,6 +1331,28 @@ class Admin extends BaseController
                             $serviceRow = $db->table('service_content')->select('serv_name')->where('ID', $targetId)->get()->getRow();
                             if ($serviceRow) {
                                 $name = $serviceRow->serv_name;
+                            }
+                        } elseif ($prefix === 'INVEST') {
+                            $investRow = $db->table('file_tbl')->select('file_category')->where('ID', $targetId)->get()->getRow();
+                            if ($investRow) {
+                                $name = $investRow->file_category;
+                            }
+                        } elseif ($prefix === 'FULLDISC') {
+                            $fdRow = $db->table('file_tbl')->select('file_category, year, quarter')->where('ID', $targetId)->get()->getRow();
+                            if ($fdRow) {
+                                $category = $fdRow->file_category;
+                                $yearVal = $fdRow->year;
+                                $qtrVal = $fdRow->quarter;
+                                
+                                $hasCategory = stripos($resolvedDetails, $category) !== false;
+                                $hasYear = stripos($resolvedDetails, $yearVal) !== false;
+                                $hasQtr = stripos($resolvedDetails, $qtrVal) !== false;
+                                
+                                if (!$hasCategory && !$hasYear && !$hasQtr) {
+                                    $name = $category . ' ' . $yearVal . ' - ' . $qtrVal;
+                                } elseif (!$hasCategory) {
+                                    $name = $category;
+                                }
                             }
                         } elseif (in_array($prefix, ['CONTACT', 'HOTLINE'], true)) {
                             $hotlineRow = $db->table('hotlines')->select('section, content_ref_id, number, telco')->where('ID', $targetId)->get()->getRow();
@@ -1353,13 +1385,25 @@ class Admin extends BaseController
                         if (!empty($name)) {
                             $replacement = $matches[0];
                             if (in_array($prefix, ['ACCOUNT', 'PROFILE', 'PROFILE_PASSWORD', 'PROFILE_IMAGE'], true)) {
-                                $replacement = $matches[0] . ' ' . $name . $suffix;
-                            } elseif (in_array($prefix, ['JOB', 'NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT'], true)) {
-                                $replacement = $matches[0] . ' TITLE: ' . $name;
+                                if (stripos($resolvedDetails, $name) === false) {
+                                    $replacement = $matches[0] . ' ' . $name . $suffix;
+                                }
+                            } elseif (in_array($prefix, ['JOB', 'NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT', 'ABOUT', 'POSTCONTENT'], true)) {
+                                if (stripos($resolvedDetails, 'TITLE:') === false) {
+                                    $replacement = $matches[0] . ' TITLE: ' . $name;
+                                }
+                            } elseif ($prefix === 'MAYOR') {
+                                if (stripos($resolvedDetails, 'SECTION:') === false) {
+                                    $replacement = $matches[0] . ' SECTION: ' . $name;
+                                }
                             } else {
-                                $replacement = $matches[0] . ' ' . $name;
+                                if (stripos($resolvedDetails, $name) === false) {
+                                    $replacement = $matches[0] . ' ' . $name;
+                                }
                             }
-                            $resolvedDetails = preg_replace('/' . preg_quote($matches[0], '/') . '/', $replacement, $resolvedDetails, 1);
+                            if ($replacement !== $matches[0]) {
+                                $resolvedDetails = preg_replace('/' . preg_quote($matches[0], '/') . '/', $replacement, $resolvedDetails, 1);
+                            }
                         }
                     }
                     } catch (\Throwable $e) {
@@ -2411,7 +2455,8 @@ class Admin extends BaseController
                     if ($con_m->insert($data)) {
                         $status = 1;
                         $message = 'Post Content created successfully';
-                        $log_c['processDetails'] = 'TITLE: ' . $title;
+                        $insertedId = $con_m->getInsertID();
+                        $log_c['processDetails'] = 'POSTCONTENT_ID: ' . $insertedId . ' TITLE: ' . $title;
                     } else {
                         $message = 'Failed to save data';
                         return;
@@ -2469,7 +2514,7 @@ class Admin extends BaseController
                             $status = 1;
                             $message = 'Content created successfully';
                             $mayor_id = $may_m->getInsertID();
-                            $log_c['processDetails'] = 'MAYOR_ID: ' . $mayor_id . ' ' . $mayor_name;
+                            $log_c['processDetails'] = 'MAYOR_ID: ' . $mayor_id . ' SECTION: ' . $section;
                         } else {
                             $message = 'Failed to save data.';
                         }
@@ -2516,7 +2561,7 @@ class Admin extends BaseController
                     $status = 1;
                     $message = 'Policy created successfully.';
                     $fulldisc_id = $policy_m->getInsertID();
-                    $log_c['processDetails'] = 'FULLDISC_ID: ' . $fulldisc_id . ' ' . $yr . ' - ' . $qtr;
+                    $log_c['processDetails'] = 'FULLDISC_ID: ' . $fulldisc_id . ' ' . $fc . ' ' . $yr . ' - ' . $qtr;
                 } catch (\Exception $e) {
                     $message = 'An error occurred while saving the data.';
                     return;
@@ -2605,7 +2650,7 @@ class Admin extends BaseController
                         $status = 1;
                         $message = 'Content created successfully.';
                         $in_id = $invest_m->getInsertID();
-                        $log_c['processDetails'] = 'INVEST_ID: ' . $in_id;
+                        $log_c['processDetails'] = 'INVEST_ID: ' . $in_id . ' ' . $fc;
                     } catch (\Exception $e) {
                         $status = 0;
                         $message = 'An error occurred while saving the data.';
@@ -2765,7 +2810,7 @@ class Admin extends BaseController
                         $status = 1;
                         $message = 'Content created successfully';
                         $abt_id = $about_m->getInsertID();
-                        $log_c['processDetails'] = 'ABOUT_ID: ' . $abt_id;
+                        $log_c['processDetails'] = 'ABOUT_ID: ' . $abt_id . ' TITLE: ' . $title;
                     } else {
                         $status = 0;
                         $message = 'Failed to save data';
@@ -3330,7 +3375,7 @@ class Admin extends BaseController
                         $con_m->update($id, $data);
                         $status = 1;
                         $message = 'Content updated successfully.';
-                        $log_c['processDetails'] = 'TITLE : ' . $title;
+                        $log_c['processDetails'] = 'POSTCONTENT_ID: ' . $id . ' TITLE: ' . $title;
                     } catch (\Exception $e) {
                         $message = 'An error occurred while updating.';
                         return;
@@ -3392,7 +3437,7 @@ class Admin extends BaseController
                             $may_m->update($id, $data);
                             $status = 1;
                             $message = 'Content updated successfully.';
-                            $log_c['processDetails'] = 'MAYOR_ID: ' . $id . ' ' . $mayor_name;
+                            $log_c['processDetails'] = 'MAYOR_ID: ' . $id . ' SECTION: ' . $section;
                         } catch (\Exception $e) {
                             $message = 'An error occurred while updating: ' . $e->getMessage();
                         }
@@ -3439,7 +3484,7 @@ class Admin extends BaseController
                         $policy_m->update($id, $data);
                         $status = 1;
                         $message = 'Policy updated successfully.';
-                        $log_c['processDetails'] = 'FULLDISC_ID: ' . $id . ' ' . $yr . ' - ' . $qtr;
+                        $log_c['processDetails'] = 'FULLDISC_ID: ' . $id . ' ' . $fc . ' ' . $yr . ' - ' . $qtr;
                     } catch (\Exception $e) {
                         $message = 'An error occurred while updating.';
                         return;
@@ -3725,7 +3770,7 @@ class Admin extends BaseController
                         $invest_m->update($id, $data);
                         $status = 1;
                         $message = 'Content updated successfully.';
-                        $log_c['processDetails'] = 'INVEST_ID: ' . $id;
+                        $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' ' . $fc;
                     } catch (\Exception $e) {
                         $status = 0;
                         $message = 'An error occurred while updating.';
@@ -3905,7 +3950,7 @@ class Admin extends BaseController
                     $about_m->update($id, $data);
                     $status = 1;
                     $message = 'Content updated successfully.';
-                    $log_c['processDetails'] = 'ABOUT_ID: ' . $id;
+                    $log_c['processDetails'] = 'ABOUT_ID: ' . $id . ' TITLE: ' . $title;
                 } catch (\Exception $e) {
                     $message = 'An error occurred while updating.';
                 }
@@ -4063,15 +4108,22 @@ class Admin extends BaseController
                 }
                 $may_m = new \App\Models\MayorContent();
                 $id = $this->request->getPost('id');
-                $status = $this->request->getPost('status');
-                $data = [
-                    'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s')
-                ];
-                $may_m->update($id, $data);
-                $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'MAYOR_ID: ' . $id . ' - ' . $status;
-                $status = 1;
+                $statusVal = $this->request->getPost('status');
+                $mayorRecord = $may_m->find($id);
+                if ($mayorRecord) {
+                    $sect = $mayorRecord->section ?? '';
+                    $data = [
+                        'status' => $statusVal,
+                        'updated_date' => date('Y-m-d H:i:s')
+                    ];
+                    $may_m->update($id, $data);
+                    $message = 'Content status updated successfully.';
+                    $log_c['processDetails'] = 'MAYOR_ID: ' . $id . ' SECTION: ' . $sect . ' - ' . $statusVal;
+                    $status = 1;
+                } else {
+                    $message = 'Content not found.';
+                    $status = 0;
+                }
                 break;
             }
             case 'set_status_postcontent': {
@@ -4088,15 +4140,22 @@ class Admin extends BaseController
                     }
                 }
 
-                $status = $this->request->getPost('status');
-                $data = [
-                    'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s')
-                ];
-                $anns_m->update($id, $data);
-                $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'POSTCONTENT_ID: ' . $id . ' - ' . $status;
-                $status = 1;
+                $statusVal = $this->request->getPost('status');
+                $postRecord = $anns_m->find($id);
+                if ($postRecord) {
+                    $title = $postRecord->title ?? '';
+                    $data = [
+                        'status' => $statusVal,
+                        'updated_date' => date('Y-m-d H:i:s')
+                    ];
+                    $anns_m->update($id, $data);
+                    $message = 'Content status updated successfully.';
+                    $log_c['processDetails'] = 'POSTCONTENT_ID: ' . $id . ' TITLE: ' . $title . ' - ' . $statusVal;
+                    $status = 1;
+                } else {
+                    $message = 'Content not found.';
+                    $status = 0;
+                }
                 break;
             }
 
@@ -4108,14 +4167,23 @@ class Admin extends BaseController
                 $fulldisc_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
-                $data = [
-                    'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s')
-                ];
-                $fulldisc_m->update($id, $data);
-                $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'FULLDISC_ID: ' . $id . ' - ' . $status;
-                $status = 1;
+                $fdRow = $fulldisc_m->find($id);
+                if ($fdRow) {
+                    $fc = $fdRow->file_category;
+                    $yr = $fdRow->year;
+                    $qtr = $fdRow->quarter;
+                    $data = [
+                        'status' => $status,
+                        'updated_date' => date('Y-m-d H:i:s')
+                    ];
+                    $fulldisc_m->update($id, $data);
+                    $message = 'Content status updated successfully.';
+                    $log_c['processDetails'] = 'FULLDISC_ID: ' . $id . ' ' . $fc . ' ' . $yr . ' - ' . $qtr . ' - ' . $status;
+                    $status = 1;
+                } else {
+                    $message = 'Policy not found.';
+                    $status = 0;
+                }
                 break;
             }
 
@@ -4134,11 +4202,14 @@ class Admin extends BaseController
 
                 $fulldisc_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
-
-                if ($fulldisc_m->find($id)) {
+                $fdRow = $fulldisc_m->find($id);
+                if ($fdRow) {
+                    $fc = $fdRow->file_category;
+                    $yr = $fdRow->year;
+                    $qtr = $fdRow->quarter;
                     $fulldisc_m->delete($id);
                     $message = 'Content deleted successfully.';
-                    $log_c['processDetails'] = 'FULLDISC_ID: ' . $id . ' - DELETED';
+                    $log_c['processDetails'] = 'FULLDISC_ID: ' . $id . ' ' . $fc . ' ' . $yr . ' - ' . $qtr . ' - DELETED';
                     $status = 1;
                 } else {
                     $message = 'Content not found.';
@@ -4204,10 +4275,12 @@ class Admin extends BaseController
                 }
                 $invest_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
-                if ($invest_m->find($id)) {
+                $investRow = $invest_m->find($id);
+                if ($investRow) {
+                    $fc = $investRow->file_category;
                     $invest_m->delete($id);
                     $message = 'Investment content deleted successfully.';
-                    $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' - DELETED';
+                    $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' ' . $fc . ' - DELETED';
                     $status = 1;
                 } else {
                     $message = 'Content not found.';
@@ -4283,10 +4356,12 @@ class Admin extends BaseController
                 }
                 $may_m = new \App\Models\MayorContent();
                 $id = $this->request->getPost('id');
-                if ($may_m->find($id)) {
+                $mayorRecord = $may_m->find($id);
+                if ($mayorRecord) {
+                    $sect = $mayorRecord->section ?? '';
                     $may_m->delete($id);
                     $message = "Mayor's content deleted successfully.";
-                    $log_c['processDetails'] = 'MAYOR_ID: ' . $id . ' - DELETED';
+                    $log_c['processDetails'] = 'MAYOR_ID: ' . $id . ' SECTION: ' . $sect . ' - DELETED';
                     $status = 1;
                 } else {
                     $message = 'Content not found.';
@@ -4320,10 +4395,12 @@ class Admin extends BaseController
                         break;
                     }
                 }
-                if ($con_m->find($id)) {
+                $postRecord = $con_m->find($id);
+                if ($postRecord) {
+                    $title = $postRecord->title ?? '';
                     $con_m->delete($id);
                     $message = 'Post content deleted successfully.';
-                    $log_c['processDetails'] = 'POSTCONTENT_ID: ' . $id . ' - DELETED';
+                    $log_c['processDetails'] = 'POSTCONTENT_ID: ' . $id . ' TITLE: ' . $title . ' - DELETED';
                     $status = 1;
                 } else {
                     $message = 'Content not found.';
@@ -4346,10 +4423,12 @@ class Admin extends BaseController
                 }
                 $about_m = new \App\Models\About();
                 $id = $this->request->getPost('id');
-                if ($about_m->find($id)) {
+                $aboutRecord = $about_m->find($id);
+                if ($aboutRecord) {
+                    $title = $aboutRecord->title ?? '';
                     $about_m->delete($id);
                     $message = 'About content deleted successfully.';
-                    $log_c['processDetails'] = 'ABOUT_ID: ' . $id . ' - DELETED';
+                    $log_c['processDetails'] = 'ABOUT_ID: ' . $id . ' TITLE: ' . $title . ' - DELETED';
                     $status = 1;
                 } else {
                     $message = 'Content not found.';
@@ -4472,14 +4551,21 @@ class Admin extends BaseController
                 $invest_m = new \App\Models\FileTbl();
                 $id = $this->request->getPost('id');
                 $status = $this->request->getPost('status');
-                $data = [
-                    'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s')
-                ];
-                $invest_m->update($id, $data);
-                $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' - ' . $status;
-                $status = 1;
+                $investRow = $invest_m->find($id);
+                if ($investRow) {
+                    $fc = $investRow->file_category;
+                    $data = [
+                        'status' => $status,
+                        'updated_date' => date('Y-m-d H:i:s')
+                    ];
+                    $invest_m->update($id, $data);
+                    $message = 'Content status updated successfully.';
+                    $log_c['processDetails'] = 'INVEST_ID: ' . $id . ' ' . $fc . ' - ' . $status;
+                    $status = 1;
+                } else {
+                    $message = 'Investment content not found.';
+                    $status = 0;
+                }
                 break;
             }
             case 'set_status_services': {
@@ -4513,17 +4599,24 @@ class Admin extends BaseController
                     $message = 'Unauthorized access.';
                     break;
                 }
-                $invest_m = new \App\Models\About();
+                $about_m = new \App\Models\About();
                 $id = $this->request->getPost('id');
-                $status = $this->request->getPost('status');
-                $data = [
-                    'status' => $status,
-                    'updated_date' => date('Y-m-d H:i:s')
-                ];
-                $invest_m->update($id, $data);
-                $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'ABOUT_ID: ' . $id . ' - ' . $status;
-                $status = 1;
+                $statusVal = $this->request->getPost('status');
+                $aboutRecord = $about_m->find($id);
+                if ($aboutRecord) {
+                    $title = $aboutRecord->title ?? '';
+                    $data = [
+                        'status' => $statusVal,
+                        'updated_date' => date('Y-m-d H:i:s')
+                    ];
+                    $about_m->update($id, $data);
+                    $message = 'Content status updated successfully.';
+                    $log_c['processDetails'] = 'ABOUT_ID: ' . $id . ' TITLE: ' . $title . ' - ' . $statusVal;
+                    $status = 1;
+                } else {
+                    $message = 'Content not found.';
+                    $status = 0;
+                }
                 break;
             }
             case 'set_status_contact': {

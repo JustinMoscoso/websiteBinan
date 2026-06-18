@@ -58,6 +58,7 @@
         letter-spacing: 0.5px;
         border: 1px solid #e3e6f0 !important;
         padding: 12px 16px;
+        text-align: center !important;
     }
 
     #tblaudit td {
@@ -140,7 +141,7 @@
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
             <h6 class="fw-bold mb-3 small text-uppercase tracking-wider text-secondary">
-                <i class="bi bi-terminal-split me-2" style="color: var(--theme-mid-green);"></i>Audit Log Stream Filtering
+                <i class="bi bi-terminal-split me-2" style="color: var(--theme-mid-green);"></i>
             </h6>
             <form id="auditLogSearchForm">
                 <div class="row g-3 align-items-center">
@@ -149,7 +150,7 @@
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0 ps-0" id="searchAction"
-                                placeholder="Search by action, user, or details..." name="search_query">
+                                placeholder="Search by action, user, or details" name="search_query">
                         </div>
                     </div>
 

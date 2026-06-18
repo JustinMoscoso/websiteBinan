@@ -40,8 +40,10 @@
                     return 'Created new post content' + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'fulldiscpol') {
+                    var categoryMatch = str.match(/FULLDISC_ID:\s*\d+\s+(.+?)\s+\d{4}\s*-\s*/i);
+                    var category = categoryMatch ? categoryMatch[1].trim() : '';
                     var period = (year && qtr) ? ' for ' + year + ' (' + qtr + ' Quarter)' : '';
-                    return 'Created new Full Disclosure Policy record' + period + formattedId;
+                    return 'Created new Full Disclosure Policy record' + (category ? ': "<strong>' + category + '</strong>"' : '') + period + formattedId;
                 }
                 if (module === 'cityoff') {
                     var posMatch = str.match(/CITYOFFICIAL_ID:\s*\d+\s+(.+)$/i);
@@ -75,6 +77,11 @@
                     var contName = contMatch ? contMatch[1].trim() : '';
                     return 'Created contact/hotline entry' + (contName ? ' for <strong>' + contName + '</strong>' : '') + formattedId;
                 }
+                if (module === 'invest') {
+                    var categoryMatch = str.match(/INVEST_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/INVEST_ID:\s*\d+\s*(.+)$/i);
+                    var category = categoryMatch ? categoryMatch[1].trim() : '';
+                    return 'Created new investment content' + (category ? ': "<strong>' + category + '</strong>"' : '') + formattedId;
+                }
                 return 'Created new ' + module.replace('_', ' ') + ' record' + formattedId;
             } 
             
@@ -84,8 +91,10 @@
                     return 'Updated post content' + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'fulldiscpol') {
+                    var categoryMatch = str.match(/FULLDISC_ID:\s*\d+\s+(.+?)\s+\d{4}\s*-\s*/i);
+                    var category = categoryMatch ? categoryMatch[1].trim() : '';
                     var period = (year && qtr) ? ' for ' + year + ' (' + qtr + ' Quarter)' : '';
-                    return 'Updated Full Disclosure Policy record' + period + formattedId;
+                    return 'Updated Full Disclosure Policy record' + (category ? ': "<strong>' + category + '</strong>"' : '') + period + formattedId;
                 }
                 if (module === 'cityoff') {
                     var nameMatch = str.match(/CITYOFFICIAL_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/CITYOFFICIAL_ID:\s*\d+\s*(.+)$/i);
@@ -135,6 +144,11 @@
                     var contName = contMatch ? contMatch[1].trim() : '';
                     return 'Updated contact/hotline entry' + (contName ? ' for <strong>' + contName + '</strong>' : '') + formattedId;
                 }
+                if (module === 'invest') {
+                    var categoryMatch = str.match(/INVEST_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/INVEST_ID:\s*\d+\s*(.+)$/i);
+                    var category = categoryMatch ? categoryMatch[1].trim() : '';
+                    return 'Updated investment content' + (category ? ' "<strong>' + category + '</strong>"' : '') + formattedId;
+                }
                 return 'Updated ' + module.replace('_', ' ') + ' record' + formattedId;
             }
 
@@ -142,9 +156,10 @@
                 var module = actionLower.replace('set_status_', '');
                 var label = module.replace('_', ' ');
                 if (module === 'anns') label = 'announcement';
+                if (module === 'fulldiscpol') label = 'Full Disclosure Policy';
                 
                 var entityName = '';
-                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|INVEST|FULLDISC)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
                 var match = str.match(regex);
                 if (match && match[1]) {
                     entityName = match[1].trim();
@@ -160,9 +175,10 @@
                 var module = actionLower.replace('delete_', '');
                 var label = module.replace('_', ' ');
                 if (module === 'anns') label = 'announcement';
+                if (module === 'fulldiscpol') label = 'Full Disclosure Policy';
                 
                 var entityName = '';
-                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|INVEST|FULLDISC)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
                 var match = str.match(regex);
                 if (match && match[1]) {
                     entityName = match[1].trim();
@@ -215,6 +231,17 @@
             var name = nameMatch ? nameMatch[1].trim() : '';
             var type = typeMatch ? typeMatch[1] : '';
             return 'User Account' + formattedId + (name ? ': "<strong>' + name + '</strong>"' : '') + (type ? ' <span class="badge bg-light text-dark">' + type + '</span>' : '') + (status ? ' (' + status + ')' : '');
+        }
+        if (str.match(/^INVEST_ID:/i)) {
+            var categoryMatch = str.match(/INVEST_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/INVEST_ID:\s*\d+\s*(.+)$/i);
+            var category = categoryMatch ? categoryMatch[1].trim() : '';
+            return 'Investment Content' + formattedId + (category ? ': "<strong>' + category + '</strong>"' : '') + (status ? ' (' + status + ')' : '');
+        }
+        if (str.match(/^FULLDISC_ID:/i)) {
+            var categoryMatch = str.match(/FULLDISC_ID:\s*\d+\s+(.+?)\s+\d{4}\s*-\s*/i) || str.match(/FULLDISC_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/FULLDISC_ID:\s*\d+\s*(.+)$/i);
+            var category = categoryMatch ? categoryMatch[1].trim() : '';
+            var period = (year && qtr) ? ' for ' + year + ' (' + qtr + ' Quarter)' : '';
+            return 'Full Disclosure Policy' + (category ? ': "<strong>' + category + '</strong>"' : '') + period + formattedId + (status ? ' (' + status + ')' : '');
         }
 
         var cleanStr = str.replace(/_/g, ' ');

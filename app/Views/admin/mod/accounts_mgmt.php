@@ -9,7 +9,7 @@
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
             <h6 class="fw-bold mb-3 small text-uppercase tracking-wider text-secondary">
-                <i class="bi bi-funnel-fill me-2" style="color: var(--theme-mid-green);"></i>Data Directory Filtering
+                <i class="bi bi-funnel-fill me-2" style="color: var(--theme-mid-green);"></i
             </h6>
             <form id="userSearchForm">
                 <div class="row g-3 align-items-end">
