@@ -138,6 +138,26 @@
     .text-success {
       color: #388e3c !important;
     }
+
+    .service-card {
+      background-color: #ffffff;
+      border: 1px solid #e8f5e9;
+      border-left: 5px solid #388e3c;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      transition: all 0.3s ease;
+      text-align: left;
+    }
+    .service-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    .service-card h5 {
+      color: #1b5e20;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -239,9 +259,11 @@ include_header(htmlspecialchars($brgy->brgy_name), $breadcrumbs, [
         <hr />
         <div class="row">     <?php foreach ($services as $data): ?>
           <div class="col-12">
-            <div class="bg-light p-3 h-100 rounded shadow-sm mb-3">
-              <h5 class="text-dark"><?= htmlspecialchars($data->serv_name) ?></h5>
-              <div><?= $data->content ?></div>
+            <div class="service-card">
+              <h5 class="mb-3"><?= htmlspecialchars($data->serv_name) ?></h5>
+              <div class="text-muted small">
+                <?= $data->content ?>
+              </div>
             </div>
           </div>
           <?php endforeach; ?>

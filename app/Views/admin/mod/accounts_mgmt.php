@@ -100,7 +100,7 @@
     <form id="addForm" class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
 
-                <div class="modal-header modal-header-theme py-3 px-4">
+                <div class="modal-header modal-header-theme py-3 px-4"style="background-color: var(--theme-dark-green);">
                     <h5 class="modal-title fw-bold d-inline-flex align-items-center gap-2" style="font-size: 1.1rem;">
                         <i class="bi bi-person-plus"></i> 
                     </h5>
@@ -213,7 +213,7 @@
     <form id="editForm" class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
 
-            <div class="modal-header modal-header-theme py-3 px-4">
+            <div class="modal-header modal-header-theme py-3 px-4"style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold d-inline-flex align-items-center gap-2" style="font-size: 1.1rem;">
                     <i class="bi bi-pencil-square"></i> Modify Account Properties
                 </h5>
@@ -306,7 +306,7 @@
                         <label for="editEntityRef" class="form-label small fw-bold text-secondary">Linked
                             Enterprise
                             Context Node <span class="text-danger">*</span></label>
-                        <select id="editEntityRef" name="editEntityRef" class="form-select">
+                        <select id="editEntityRef" name="editEntityRef" class="form-control form-select">
                             <option value="" disabled selected>— Select contextual entity
                                 node
                                 link —</option>
