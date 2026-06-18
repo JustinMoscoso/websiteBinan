@@ -410,6 +410,7 @@
                                         <i class="fas fa-edit mr-1"></i> Edit
                                     </a>
                                 </li>
+                                <?php if (in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'])): ?>
                                 <li>
                                     <a class="dropdown-item profile-dept-status-action" href="#"
                                         data-current-status="<?= esc($profile_department->status ?? '') ?>">
@@ -418,7 +419,6 @@
                                         <?= esc($nextDeptStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') ?>
                                     </a>
                                 </li>
-                                <?php if ($user->user_lvl !== 'ENCODER'): ?>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -457,7 +457,7 @@
                                 ?>
                                 <button type="button" class="dept-status-toggle profile-dept-status-action"
                                     data-current-status="<?= esc($deptStatus) ?>" aria-label="Toggle department status"
-                                    <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
+                                    <?= (!in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'])) ? 'disabled' : '' ?>>
                                     <span class="dept-status-switch <?= esc($deptStatusClass) ?>">
                                         <span class="dept-status-switch__track" aria-hidden="true">
                                             <span class="dept-status-switch__thumb"></span>
@@ -725,6 +725,7 @@
                                         <i class="fas fa-edit mr-1"></i> Edit
                                     </a>
                                 </li>
+                                <?php if (in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'])): ?>
                                 <li>
                                     <?php $nextBrgyStatus = ($profile_barangay->status ?? '') === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'; ?>
                                     <a class="dropdown-item profile-brgy-status-action" href="#"
@@ -734,6 +735,7 @@
                                         <?= esc($nextBrgyStatus === 'ACTIVE' ? 'Activate' : 'Deactivate') ?>
                                     </a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
                         </div>
                         <?php endif; ?>
@@ -758,7 +760,7 @@
                             <div id="profileBrgyStatusCell">
                                 <button type="button" class="brgy-status-toggle profile-brgy-status-action"
                                     data-current-status="<?= esc($brgyStatus) ?>" aria-label="Toggle barangay status"
-                                    <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
+                                    <?= (!in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'])) ? 'disabled' : '' ?>>
                                     <span class="brgy-status-switch <?= esc($brgyStatusClass) ?>">
                                         <span class="brgy-status-switch__track" aria-hidden="true">
                                             <span class="brgy-status-switch__thumb"></span>

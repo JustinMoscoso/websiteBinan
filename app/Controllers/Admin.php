@@ -834,6 +834,11 @@ class Admin extends BaseController
             }
 
             case 'set_status_profile_department': {
+                if (!in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'You are not authorized to change the status of this department.';
+                    break;
+                }
+
                 if (($user->account_type ?? '') !== 'DEPARTMENT' || empty($user->entity_ref_id)) {
                     $message = 'No linked department found for this account.';
                     break;
@@ -868,8 +873,8 @@ class Admin extends BaseController
             }
 
             case 'delete_profile_department': {
-                if ($user->user_lvl === 'ENCODER') {
-                    $message = 'Encoders are not permitted to delete a department.';
+                if (!in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'You are not authorized to delete this department.';
                     break;
                 }
 
@@ -1230,7 +1235,7 @@ class Admin extends BaseController
                 $user_m = new \App\Models\UserAccount();
 
                 // Build query with user information using correct table names
-                $query = $log_m->select('audit_trails.*, useradmin.fname, useradmin.lname')
+                $query = $log_m->select('audit_trails.*, useradmin.fname, useradmin.lname, useradmin.username')
                     ->join('useradmin', 'useradmin.ID = audit_trails.userID', 'left')
                     ->orderBy('audit_trails.created_date', 'desc');
 
@@ -1262,10 +1267,103 @@ class Admin extends BaseController
                 foreach ($log_d as $logs) {
                     // Create user display name
                     $userName = 'System';
-                    if ($logs->userID && $logs->fname && $logs->lname) {
+                    if ($logs->userID && !empty($logs->username)) {
+                        $userName = $logs->username;
+                    } elseif ($logs->userID && $logs->fname && $logs->lname) {
                         $userName = $logs->fname . ' ' . $logs->lname;
                     } elseif ($logs->userID) {
                         $userName = 'User ID: ' . $logs->userID;
+                    }
+
+                    // Dynamically resolve target entity name from database if ID is present
+                    $resolvedDetails = $logs->processDetails;
+                    try {
+                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
+                        $prefix = strtoupper($matches[1]);
+                        $targetId = (int) $matches[2];
+                        $name = '';
+                        $suffix = '';
+
+                        $db = \Config\Database::connect();
+                        if (in_array($prefix, ['ACCOUNT', 'PROFILE', 'PROFILE_PASSWORD', 'PROFILE_IMAGE'], true)) {
+                            $userRow = $db->table('useradmin')->select('fname, lname, username, user_lvl')->where('ID', $targetId)->get()->getRow();
+                            if ($userRow) {
+                                $fullName = trim(($userRow->fname ?? '') . ' ' . ($userRow->lname ?? ''));
+                                $name = !empty($fullName) ? $fullName : ($userRow->username ?? '');
+                                $suffix = !empty($userRow->user_lvl) ? ' [' . $userRow->user_lvl . ']' : '';
+                            }
+                        } elseif ($prefix === 'DEPT' || $prefix === 'PROFILE_DEPT') {
+                            $deptRow = $db->table('department_content')->select('dept_name')->where('ID', $targetId)->get()->getRow();
+                            if ($deptRow) {
+                                $name = $deptRow->dept_name;
+                            }
+                        } elseif ($prefix === 'BRGY') {
+                            $brgyRow = $db->table('barangay_content')->select('brgy_name')->where('ID', $targetId)->get()->getRow();
+                            if ($brgyRow) {
+                                $name = $brgyRow->brgy_name;
+                            }
+                        } elseif ($prefix === 'JOB') {
+                            $jobRow = $db->table('jobs')->select('title')->where('ID', $targetId)->get()->getRow();
+                            if ($jobRow) {
+                                $name = $jobRow->title;
+                            }
+                        } elseif (in_array($prefix, ['NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT'], true)) {
+                            $contentRow = $db->table('content_tbl')->select('title')->where('ID', $targetId)->get()->getRow();
+                            if ($contentRow) {
+                                $name = $contentRow->title;
+                            }
+                        } elseif ($prefix === 'CITYOFFICIAL') {
+                            $officialRow = $db->table('officials_content')->select('off_name, off_position')->where('ID', $targetId)->get()->getRow();
+                            if ($officialRow) {
+                                $name = $officialRow->off_name ?? ($officialRow->off_position ?? '');
+                            }
+                        } elseif ($prefix === 'SERVICE') {
+                            $serviceRow = $db->table('service_content')->select('serv_name')->where('ID', $targetId)->get()->getRow();
+                            if ($serviceRow) {
+                                $name = $serviceRow->serv_name;
+                            }
+                        } elseif (in_array($prefix, ['CONTACT', 'HOTLINE'], true)) {
+                            $hotlineRow = $db->table('hotlines')->select('section, content_ref_id, number, telco')->where('ID', $targetId)->get()->getRow();
+                            if ($hotlineRow) {
+                                $section = $hotlineRow->section ?? '';
+                                $refId   = $hotlineRow->content_ref_id ?? null;
+                                $entityName = '';
+                                if ($section === 'Department' && $refId) {
+                                    $dRow = $db->table('department_content')->select('dept_name')->where('ID', (int)$refId)->get()->getRow();
+                                    if ($dRow) $entityName = $dRow->dept_name;
+                                } elseif ($section === 'Barangay' && $refId) {
+                                    $bRow = $db->table('barangay_content')->select('brgy_name')->where('ID', (int)$refId)->get()->getRow();
+                                    if ($bRow) $entityName = $bRow->brgy_name;
+                                } elseif ($section === 'Others' && $refId) {
+                                    // For 'Others', content_ref_id stores the name string directly
+                                    $entityName = $refId;
+                                }
+                                if (!empty($entityName)) {
+                                    $name = $entityName . ' (' . $section . ')';
+                                } elseif (!empty($section)) {
+                                    $num = $hotlineRow->number ?? ($hotlineRow->telco ?? '');
+                                    $name = ($num ? $num . ' - ' : '') . $section;
+                                } else {
+                                    $num = $hotlineRow->number ?? ($hotlineRow->telco ?? '');
+                                    $name = $num ?: '';
+                                }
+                            }
+                        }
+
+                        if (!empty($name)) {
+                            $replacement = $matches[0];
+                            if (in_array($prefix, ['ACCOUNT', 'PROFILE', 'PROFILE_PASSWORD', 'PROFILE_IMAGE'], true)) {
+                                $replacement = $matches[0] . ' ' . $name . $suffix;
+                            } elseif (in_array($prefix, ['JOB', 'NEWS', 'ANNOUNCEMENT', 'ANNNOUNCEMENT'], true)) {
+                                $replacement = $matches[0] . ' TITLE: ' . $name;
+                            } else {
+                                $replacement = $matches[0] . ' ' . $name;
+                            }
+                            $resolvedDetails = preg_replace('/' . preg_quote($matches[0], '/') . '/', $replacement, $resolvedDetails, 1);
+                        }
+                    }
+                    } catch (\Throwable $e) {
+                        log_message('error', 'Audit resolver error: ' . $e->getMessage());
                     }
 
                     // Create the data object with user name
@@ -1274,7 +1372,7 @@ class Admin extends BaseController
                         'created_date' => $logs->created_date,
                         'ipaddress' => $logs->ipaddress,
                         'action' => $logs->action,
-                        'processDetails' => $logs->processDetails,
+                        'processDetails' => $resolvedDetails,
                         'device' => $logs->device ?? 'Unknown',
                         'browser' => $logs->browser ?? 'Unknown',
                         'userID' => $userName // Replace userID with user name
@@ -1875,8 +1973,10 @@ class Admin extends BaseController
                     $result = $db->table('jobs')->insert($jobData);
 
                     if ($result) {
+                        $insertedId = $db->insertID();
                         $status = 1;
                         $message = 'Job created successfully';
+                        $log_c['processDetails'] = 'JOB_ID: ' . $insertedId . ' TITLE: ' . $title;
                         log_message('debug', 'Create Job - Success with direct DB insert');
                     } else {
                         // Get validation errors if any
@@ -1908,7 +2008,7 @@ class Admin extends BaseController
                 $type = trim($this->request->getPost('type'));
                 $publication_date = $this->request->getPost('publication_date');
                 $email = trim($this->request->getPost('email'));
-                $status = $this->request->getPost('status');
+                $statusVal = $this->request->getPost('status');
 
                 if (!$id || !is_numeric($id)) {
                     $message = 'Invalid job ID';
@@ -1950,8 +2050,8 @@ class Admin extends BaseController
                     'updated_date' => date('Y-m-d H:i:s')
                 ];
 
-                if ($status !== null) {
-                    $jobData['status'] = $status;
+                if ($statusVal !== null) {
+                    $jobData['status'] = $statusVal;
                 }
 
                 // Try to update the job with better error handling
@@ -1959,6 +2059,7 @@ class Admin extends BaseController
                     if ($job_m->update($id, $jobData)) {
                         $status = 1;
                         $message = 'Job updated successfully';
+                        $log_c['processDetails'] = 'JOB_ID: ' . $id . ' TITLE: ' . $title;
                     } else {
                         // Get validation errors if any
                         $errors = $job_m->errors();
@@ -3877,8 +3978,13 @@ class Admin extends BaseController
             }
 
             case 'set_status_barangay': {
-                $brgy_m = new \App\Models\Barangay();
                 $id = $this->request->getPost('id');
+                if (($user->account_type ?? '') === 'BARANGAY' && (int)$id === (int)($user->entity_ref_id ?? 0) && !in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'You are not authorized to change the status of your linked barangay.';
+                    break;
+                }
+
+                $brgy_m = new \App\Models\Barangay();
                 $status = $this->request->getPost('status');
                 $data = [
                     'status' => $status,
@@ -3892,8 +3998,13 @@ class Admin extends BaseController
             }
 
             case 'set_status_dept': {
-                $dept_m = new \App\Models\Department();
                 $id = $this->request->getPost('id');
+                if (($user->account_type ?? '') === 'DEPARTMENT' && (int)$id === (int)($user->entity_ref_id ?? 0) && !in_array($user->user_lvl ?? '', ['DEVELOPER', 'SUPERADMIN'], true)) {
+                    $message = 'You are not authorized to change the status of your linked department.';
+                    break;
+                }
+
+                $dept_m = new \App\Models\Department();
 
                 // Enforce ENCODER/dept-scoped ADMIN restriction
                 if (($user->account_type === 'DEPARTMENT' && $user->user_lvl !== 'DEVELOPER') || $isDeptScopedAdmin) {
@@ -4479,6 +4590,7 @@ class Admin extends BaseController
                     if ($job_m->update($id, $data)) {
                         $status = 1;
                         $message = 'Job status updated successfully';
+                        $log_c['processDetails'] = 'JOB_ID: ' . $id . ' - ' . $statusVal;
                     } else {
                         $message = 'Failed to update job status';
                     }
@@ -4515,6 +4627,7 @@ class Admin extends BaseController
                 if ($job_m->delete($id)) {
                     $status = 1;
                     $message = 'Job deleted successfully';
+                    $log_c['processDetails'] = 'JOB_ID: ' . $id . ' - DELETED';
                 } else {
                     $message = 'Failed to delete job';
                 }

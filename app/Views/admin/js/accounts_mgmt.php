@@ -433,32 +433,7 @@
         });
     }
 
-    function del(userId) {
-        Swal.fire({
-            title: 'Delete User',
-            text: 'This will permanently delete the user account.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#c0392b',
-            cancelButtonColor: '#7f8c8d',
-            confirmButtonText: 'Yes, Delete',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({ title: 'Deleting\u2026', showConfirmButton: false, willOpen: () => Swal.showLoading() });
-                $.post('<?php echo site_url('admin/ajax/set_status_user') ?>',
-                    { id: userId, status: 'DELETED' },
-                    function (result) {
-                        if (result.status == 1) {
-                            tbl.ajax.reload(null, false);
-                            Swal.fire({ icon: 'success', title: 'Deleted', text: 'User account deleted.' });
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Error', text: result.message });
-                        }
-                    }
-                );
-            }
-        });
-    }
+
 
     // ── DataTable ────────────────────────────────────────────────────────
     var tbl = $('#tbluser').DataTable({
@@ -560,14 +535,7 @@
                                 </a>
                             </li>`;
                     }
-                    if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
-                        html += `<li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}', 'ACTIVE')"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</a></li>`;
-                    } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
-                        html += `<li><a class="dropdown-item text-warning" href="#" onclick="toggleStatus(${row.ID}, '${row.status}', 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
-                    }
-                    if (adminCanDelete(userLevel)) {
-                        html += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="del(${row.ID})"><i class="bi bi-trash me-1"></i> Delete User</a></li>`;
-                    }
+
 
                     html += `</ul></div>`;
                     return html;

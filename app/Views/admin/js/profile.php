@@ -1,6 +1,14 @@
 <script>
     const userLevel = '<?= $user->user_lvl ?>'.toUpperCase();
 
+    if (userLevel !== 'DEVELOPER' && userLevel !== 'SUPERADMIN') {
+        // Disable status toggles (activate/deactivate)
+        $('.profile-dept-status-action, .profile-brgy-status-action').prop('disabled', true).css({
+            'pointer-events': 'none',
+            'cursor': 'default'
+        });
+    }
+
     if (userLevel === 'VIEWER') {
         // Disable status toggles and logo buttons
         $('.profile-dept-status-action, .profile-brgy-status-action, #profileDeptLogoButton, #profileBrgyLogoButton').prop('disabled', true).css({

@@ -11,9 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const cleanCounts = allCounts.map(count => parseInt(count) || 0);
     
     // Group definitions
-    const page1Labels = ['Home', 'Mission & Vision', 'City Officials', 'History', 'Barangays', 'Jobs'];
-    const page2Labels = ['Invest', 'Contact', 'Departments', 'Maps', 'Full Disclosure Policy', 'Careers'];
-    let currentPage = 1;
+    const allChartLabels = [
+        'Home', 'Mission & Vision', 'City Officials', 'History', 'Barangays', 'Jobs',
+        'Invest', 'Contact', 'Departments', 'Maps', 'Full Disclosure Policy', 'Careers'
+    ];
 
     // Helper to find index in PHP data
     function findLabelMatch(targetLabel) {
@@ -26,17 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-    // Colors for Pie Chart
-    const pieColors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'];
-    const pieHoverColors = ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#be2617', '#60616f'];
-
     // Setup Area Chart
     const ctxArea = document.getElementById("myAreaChart");
     let myLineChart;
     
     function updateAreaChart() {
-        const paginatedLabels = currentPage === 1 ? page1Labels : page2Labels;
-        const paginatedCounts = paginatedLabels.map(label => {
+        const counts = allChartLabels.map(label => {
             const index = findLabelMatch(label);
             return index !== -1 ? cleanCounts[index] : 0;
         });
@@ -45,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
             myLineChart = new Chart(ctxArea, {
                 type: 'line',
                 data: {
-                    labels: paginatedLabels,
+                    labels: allChartLabels,
                     datasets: [{
                         label: "Visits",
                         tension: 0.3,
@@ -59,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         pointHoverBorderColor: "rgba(78, 115, 223, 1)",
                         pointHitRadius: 10,
                         pointBorderWidth: 2,
-                        data: paginatedCounts,
+                        data: counts,
                         fill: true
                     }],
                 },
@@ -81,58 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
         } else {
-            myLineChart.data.labels = paginatedLabels;
-            myLineChart.data.datasets[0].data = paginatedCounts;
+            myLineChart.data.labels = allChartLabels;
+            myLineChart.data.datasets[0].data = counts;
             myLineChart.update();
         }
-
-        // Update pagination buttons
-        document.getElementById('page1Btn').className = currentPage === 1 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary';
-        document.getElementById('page2Btn').className = currentPage === 2 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary';
     }
     updateAreaChart();
-
-    document.getElementById('page1Btn').addEventListener('click', () => { if (currentPage !== 1) { currentPage = 1; updateAreaChart(); } });
-    document.getElementById('page2Btn').addEventListener('click', () => { if (currentPage !== 2) { currentPage = 2; updateAreaChart(); } });
-
-    // Setup Pie Chart
-    const ctxPie = document.getElementById("myPieChart");
-    
-    // Get Top 3 pages
-    let combinedData = allLabels.map((lbl, idx) => ({ label: lbl, count: cleanCounts[idx] }));
-    combinedData.sort((a, b) => b.count - a.count);
-    const top3Data = combinedData.slice(0, 3);
-    const pieLabels = top3Data.map(d => d.label);
-    const pieCounts = top3Data.map(d => d.count);
-
-    new Chart(ctxPie, {
-        type: 'doughnut',
-        data: {
-            labels: pieLabels,
-            datasets: [{
-                data: pieCounts,
-                backgroundColor: pieColors.slice(0, pieCounts.length),
-                hoverBackgroundColor: pieHoverColors.slice(0, pieCounts.length),
-                hoverBorderColor: "rgba(234, 236, 244, 1)",
-            }],
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: {
-                tooltip: { backgroundColor: "rgb(255,255,255)", bodyColor: "#858796", borderColor: '#dddfeb', borderWidth: 1, padding: 15, displayColors: false },
-                legend: { display: false }
-            },
-            cutout: '80%'
-        },
-    });
-
-    // Populate Pie Legend
-    const legendContainer = document.getElementById("pie-chart-legend");
-    let legendHtml = '';
-    pieLabels.forEach((label, idx) => {
-        legendHtml += `<span class="mr-2"><i class="fas fa-circle" style="color:${pieColors[idx]}"></i> ${label}</span>`;
-    });
-    legendContainer.innerHTML = legendHtml;
 
     // Load Announcements
     function loadRecentAnns(filter) {
@@ -154,34 +104,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Load Recent News
     function loadRecentNews(filter) {
-        document.getElementById('news-filter').textContent = `| ${filter}`;
-        const newsActivity = document.getElementById('news-activity');
-        const newsCount = document.getElementById('news-count');
-        newsActivity.innerHTML = 'Loading...';
+        const newsFeedFilter = document.getElementById('news-feed-filter');
+        if (newsFeedFilter) newsFeedFilter.textContent = `| ${filter}`;
+        
+        const newsFeedCount = document.getElementById('news-feed-count');
         
         fetch(`<?= base_url('admin/getRecentNews') ?>?filter=${filter}`)
             .then(res => res.json())
             .then(data => {
-                newsCount.textContent = data.length;
-                if (data.length === 0) {
-                    newsActivity.innerHTML = "<p class='text-muted'>No recent news added.</p>";
-                    return;
-                }
-                newsActivity.innerHTML = '';
-                data.forEach(news => {
-                    const d = new Date(news.created_date).toLocaleDateString();
-                    newsActivity.insertAdjacentHTML('beforeend', `
-                        <div class="mb-2 pb-2 border-bottom text-sm">
-                            <span class="font-weight-bold text-dark d-block">${news.title}</span>
-                            <span class="text-xs text-muted"><i class="fas fa-calendar-alt"></i> ${d}</span>
-                        </div>
-                    `);
-                });
+                if (newsFeedCount) newsFeedCount.textContent = data.length;
             })
-            .catch(() => { newsActivity.innerHTML = 'Error loading.'; newsCount.textContent = '0'; });
+            .catch(() => {
+                if (newsFeedCount) newsFeedCount.textContent = '0';
+            });
     }
 
-    document.querySelectorAll('.news-card .dropdown-item[data-filter]').forEach(item => {
+    document.querySelectorAll('.news-feed-card .dropdown-item[data-filter]').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             loadRecentNews(this.getAttribute('data-filter'));

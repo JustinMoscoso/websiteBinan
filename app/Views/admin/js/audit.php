@@ -12,13 +12,13 @@
         // Check status
         var status = null;
         if (str.toUpperCase().indexOf('INACTIVE') !== -1) {
-            status = '<strong class="text-danger">Inactive</strong>';
+            status = '<strong style="color: #858796;">Inactive</strong>';
         } else if (str.toUpperCase().indexOf('ACTIVE') !== -1) {
-            status = '<strong class="text-success">Active</strong>';
+            status = '<strong style="color: #858796;">Active</strong>';
         } else if (str.toUpperCase().indexOf('ARCHIVED') !== -1) {
-            status = '<strong class="text-secondary">Archived</strong>';
+            status = '<strong style="color: #858796;">Archived</strong>';
         } else if (str.toUpperCase().indexOf('DELETED') !== -1) {
-            status = '<strong class="text-dark">Deleted</strong>';
+            status = '<strong style="color: #858796;">Deleted</strong>';
         }
         
         // Title matching
@@ -49,17 +49,17 @@
                     return 'Created city official record' + (position ? ' for <strong>' + position + '</strong>' : '') + formattedId;
                 }
                 if (module === 'barangay') {
-                    var brgyMatch = str.match(/BRGY_ID:\s*\d+\s+(.+)$/i);
+                    var brgyMatch = str.match(/BRGY_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/BRGY_ID:\s*\d+\s+(.+)$/i);
                     var brgy = brgyMatch ? brgyMatch[1].trim() : '';
                     return 'Created new barangay record' + (brgy ? ': "<strong>' + brgy + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'dept') {
-                    var deptMatch = str.match(/DEPT_ID:\s*\d+\s*(.+)$/i);
+                    var deptMatch = str.match(/DEPT_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/DEPT_ID:\s*\d+\s*(.+)$/i);
                     var dept = deptMatch ? deptMatch[1].trim() : '';
                     return 'Created new department record' + (dept ? ': "<strong>' + dept + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'mayor') {
-                    var mNameMatch = str.match(/MAYOR_ID:\s*\d+\s*(.+)$/i);
+                    var mNameMatch = str.match(/MAYOR_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/MAYOR_ID:\s*\d+\s*(.+)$/i);
                     var mName = mNameMatch ? mNameMatch[1].trim() : '';
                     return 'Created new Mayor\'s content' + (mName ? ': "<strong>' + mName + '</strong>"' : '') + formattedId;
                 }
@@ -67,8 +67,13 @@
                     var displayMod = (module === 'news') ? 'news article' : 'announcement';
                     return 'Created new ' + displayMod + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
                 }
+                if (module === 'job') {
+                    return 'Created new job posting' + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
+                }
                 if (module === 'contact') {
-                    return 'Created contact/hotline entry' + formattedId;
+                    var contMatch = str.match(/(?:CONTACT|HOTLINE)_ID:\s*\d+\s+([^\-\[]+)/i);
+                    var contName = contMatch ? contMatch[1].trim() : '';
+                    return 'Created contact/hotline entry' + (contName ? ' for <strong>' + contName + '</strong>' : '') + formattedId;
                 }
                 return 'Created new ' + module.replace('_', ' ') + ' record' + formattedId;
             } 
@@ -83,22 +88,22 @@
                     return 'Updated Full Disclosure Policy record' + period + formattedId;
                 }
                 if (module === 'cityoff') {
-                    var nameMatch = str.match(/CITYOFFICIAL_ID:\s*\d+\s*(.+)$/i);
+                    var nameMatch = str.match(/CITYOFFICIAL_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/CITYOFFICIAL_ID:\s*\d+\s*(.+)$/i);
                     var name = nameMatch ? nameMatch[1].trim() : '';
                     return 'Updated city official' + (name ? ' details for <strong>' + name + '</strong>' : '') + formattedId;
                 }
                 if (module === 'barangay') {
-                    var brgyMatch = str.match(/BRGY_ID:\s*\d+\s*(.+)$/i);
+                    var brgyMatch = str.match(/BRGY_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/BRGY_ID:\s*\d+\s*(.+)$/i);
                     var brgy = brgyMatch ? brgyMatch[1].trim() : '';
                     return 'Updated barangay record' + (brgy ? ' "<strong>' + brgy + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'dept') {
-                    var deptMatch = str.match(/DEPT_ID:\s*\d+\s*(.+)$/i);
+                    var deptMatch = str.match(/DEPT_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/DEPT_ID:\s*\d+\s*(.+)$/i);
                     var dept = deptMatch ? deptMatch[1].trim() : '';
                     return 'Updated department details' + (dept ? ' for "<strong>' + dept + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'mayor') {
-                    var mNameMatch = str.match(/MAYOR_ID:\s*\d+\s*(.+)$/i);
+                    var mNameMatch = str.match(/MAYOR_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/MAYOR_ID:\s*\d+\s*(.+)$/i);
                     var mName = mNameMatch ? mNameMatch[1].trim() : '';
                     return 'Updated Mayor\'s content' + (mName ? ' for "<strong>' + mName + '</strong>"' : '') + formattedId;
                 }
@@ -109,11 +114,26 @@
                     var period = (year && qtr) ? ' to ' + year + ' (' + qtr + ' Quarter)' : '';
                     return 'Updated system policy period' + period;
                 }
+                if (module === 'job') {
+                    return 'Updated job posting' + (title ? ': "<strong>' + title + '</strong>"' : '') + formattedId;
+                }
                 if (module === 'profile') {
-                    return 'Updated profile account details' + formattedId;
+                    var nameMatch = str.match(/PROFILE_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/PROFILE_ID:\s*\d+\s*(.+)$/i);
+                    var name = nameMatch ? nameMatch[1].trim() : '';
+                    return 'Updated profile account details' + (name ? ' for "<strong>' + name + '</strong>"' : '') + formattedId;
+                }
+                if (module === 'user') {
+                    var nameMatch = str.match(/ACCOUNT_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/ACCOUNT_ID:\s*\d+\s*(.+)$/i);
+                    var name = nameMatch ? nameMatch[1].trim() : '';
+                    return 'Updated user account' + (name ? ' details for "<strong>' + name + '</strong>"' : '') + formattedId;
                 }
                 if (module === 'profile_department') {
                     return 'Updated linked department details' + formattedId;
+                }
+                if (module === 'contact') {
+                    var contMatch = str.match(/(?:CONTACT|HOTLINE)_ID:\s*\d+\s+([^\-\[]+)/i);
+                    var contName = contMatch ? contMatch[1].trim() : '';
+                    return 'Updated contact/hotline entry' + (contName ? ' for <strong>' + contName + '</strong>' : '') + formattedId;
                 }
                 return 'Updated ' + module.replace('_', ' ') + ' record' + formattedId;
             }
@@ -123,22 +143,51 @@
                 var label = module.replace('_', ' ');
                 if (module === 'anns') label = 'announcement';
                 
-                return 'Changed ' + label + ' status to ' + (status || 'updated status') + formattedId;
+                var entityName = '';
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var match = str.match(regex);
+                if (match && match[1]) {
+                    entityName = match[1].trim();
+                } else if (title) {
+                    entityName = title;
+                }
+                
+                var nameDisplay = entityName ? ': "<strong>' + entityName + '</strong>"' : '';
+                return 'Changed ' + label + nameDisplay + ' status to ' + (status || 'updated status') + formattedId;
             }
 
             if (actionLower.startsWith('delete_')) {
                 var module = actionLower.replace('delete_', '');
-                return 'Deleted ' + module.replace('_', ' ') + ' record' + formattedId;
+                var label = module.replace('_', ' ');
+                if (module === 'anns') label = 'announcement';
+                
+                var entityName = '';
+                var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
+                var match = str.match(regex);
+                if (match && match[1]) {
+                    entityName = match[1].trim();
+                } else if (title) {
+                    entityName = title;
+                }
+                
+                var nameDisplay = entityName ? ': "<strong>' + entityName + '</strong>"' : '';
+                return 'Deleted ' + label + nameDisplay + ' record' + formattedId;
             }
 
             if (actionLower === 'change_profile_password') {
-                return 'Changed profile login password' + formattedId;
+                var nameMatch = str.match(/PROFILE_PASSWORD_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/PROFILE_PASSWORD_ID:\s*\d+\s*(.+)$/i);
+                var name = nameMatch ? nameMatch[1].trim() : '';
+                return 'Changed profile login password' + (name ? ' for "<strong>' + name + '</strong>"' : '') + formattedId;
             }
             if (actionLower === 'update_profile_picture') {
-                return 'Uploaded a new profile picture' + formattedId;
+                var nameMatch = str.match(/PROFILE_IMAGE_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/PROFILE_IMAGE_ID:\s*\d+\s*(.+)$/i);
+                var name = nameMatch ? nameMatch[1].trim() : '';
+                return 'Uploaded a new profile picture' + (name ? ' for "<strong>' + name + '</strong>"' : '') + formattedId;
             }
-            if (actionLower === 'reset_pass_account') {
-                return 'Triggered password reset and notification email' + formattedId;
+            if (actionLower === 'reset_pass_account' || actionLower === 'reset_password') {
+                var nameMatch = str.match(/ACCOUNT_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/ACCOUNT_ID:\s*\d+\s*(.+)$/i);
+                var name = nameMatch ? nameMatch[1].trim() : '';
+                return 'Triggered password reset and notification email' + (name ? ' for "<strong>' + name + '</strong>"' : '') + formattedId;
             }
             
         } catch (e) {
@@ -217,7 +266,7 @@
             "render": function (data, type, row) {
                 var humanDetails = formatDetails(data, row.action);
                 var escapedData = data ? data.replace(/"/g, '&quot;') : '';
-                return '<span title="Raw Log Data: ' + escapedData + '" style="cursor: help;">' + humanDetails + '</span>';
+                return '<span title="Raw Log Data: ' + escapedData + '" style="cursor: help; color: #858796;">' + humanDetails + '</span>';
             }
         },
         {
@@ -248,7 +297,7 @@
             }
         },
         {
-            "title": "User Name", "data": "userID", "className": "dt-center"
+            "title": "Username", "data": "userID", "className": "dt-center"
         },
     ],
     initComplete: function() {

@@ -7,7 +7,8 @@
 
 # Environment files
 .env
-
+# Assets
+/public/assets/
 # IDE and other configurations
 .idea/
 .vscode/
