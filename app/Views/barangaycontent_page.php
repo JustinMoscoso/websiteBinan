@@ -158,6 +158,64 @@
       color: #1b5e20;
       font-weight: 700;
     }
+
+    .mv-card {
+      background-color: #ffffff;
+      border: 1px solid #c8e6c9;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .mv-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transform: translateY(-3px);
+    }
+    
+    .mv-icon-wrapper {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #e8f5e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .mv-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .dept-logo {
+      width: 130px;
+      height: 130px;
+      object-fit: contain;
+      border-radius: 16px;
+      padding: 8px;
+      border: 1px solid #c8e6c9;
+      background-color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+    .dept-logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .dept-head-badge {
+      background-color: #e8f5e9;
+      border: 1px solid #c8e6c9;
+      color: #1b5e20;
+    }
+    
+    .dept-about-text {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #333333;
+    }
   </style>
 </head>
 <body>
@@ -203,53 +261,78 @@ include_header(htmlspecialchars($brgy->brgy_name), $breadcrumbs, [
             <h4 class="text-center">About</h4>
             <hr />
             <div class="about-content">
-                <?= $brgy->about ?>
+                <div class="dept-header-block d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4 p-3 mb-4">
+                    <div class="dept-logo-wrapper flex-shrink-0 d-flex flex-column align-items-center gap-3">
+                        <div class="dept-head-badge d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-pill">
+                            <i class="bi bi-person-badge-fill text-success"></i>
+                            <span class="small fw-semibold text-secondary">Captain:</span>
+                            <span class="small fw-bold" style="color: #1b5e20;"><?= htmlspecialchars($brgy->brngy_capt) ?></span>
+                        </div>
+                        <img src="<?= base_url('admin/image/BARANGAY/' . $brgy->img_logo) ?>" alt="Barangay Logo" class="dept-logo" />
+                    </div>
+                    <div class="dept-info flex-grow-1 text-center text-md-start">
+                        <div class="dept-about-text">
+                            <?= $brgy->about ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
       <div id="captain" class="content-tab content-section">
         <h4 class="text-center">Barangay Officials</h4>
         <hr />
         
-                 <!-- Barangay Captain Section -->
-         <div class="mb-4">
-           <h5 class="text-dark text-center mb-3">Barangay Captain</h5>
-           <div class="row">
-             <div class="col-12">
-               <div class="bg-light p-3 rounded shadow-sm">
-                 <p class="mb-0"><strong>Name:</strong> <?= htmlspecialchars($brgy->brngy_capt) ?></p>
-               </div>
-             </div>
-           </div>
-         </div>
-         
-         <!-- Barangay Staffs Section -->
-         <div class="mt-4">
-           <h5 class="text-dark text-center mb-3">Barangay Staffs</h5>
-           <div class="row">
-             <div class="col-12">
-               <div class="bg-light p-3 rounded shadow-sm">
-                 <?php if (!empty($brgy->barangay_staff)): ?>
-                   <div><?= $brgy->barangay_staff ?></div>
-                 <?php else: ?>
-                   <p class="text-center mb-0 text-muted">No staff information available.</p>
-                 <?php endif; ?>
-               </div>
-             </div>
-           </div>
-         </div>
+        <!-- Barangay Captain Section -->
+        <div class="mb-4 text-center">
+            <h5 class="fw-bold mb-3" style="color: #1b5e20;">Barangay Captain</h5>
+            <div class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm" style="background-color: #e8f5e9; border: 1px solid #c8e6c9;">
+                <i class="bi bi-person-badge-fill text-success fs-5"></i>
+                <span class="fw-bold fs-6" style="color: #1b5e20;"><?= htmlspecialchars($brgy->brngy_capt) ?></span>
+            </div>
+        </div>
+        
+        <!-- Barangay Staff Section -->
+        <div class="mt-4">
+            <h5 class="text-center fw-bold mb-3" style="color: #1b5e20;">Barangay Staff</h5>
+            <div class="p-4 rounded" style="background-color: #f8f9fa; border: 1px dashed #c8e6c9;">
+                <?php if (!empty($brgy->barangay_staff)): ?>
+                    <div class="dept-about-text">
+                        <?= $brgy->barangay_staff ?>
+                    </div>
+                <?php else: ?>
+                    <p class="text-center mb-0 text-muted small">No staff information available.</p>
+                <?php endif; ?>
+            </div>
+        </div>
       </div>
 
-      <div id="missionvision" class="content-tab content-section">
-        <div class="row">
-          <div class="col-12 mb-4">
-            <h5 class="text-dark text-center">Mission</h5>
-            <hr />
-            <p><?=($brgy->mission) ?></p>
+      <div id="missionvision" class="content-tab content-section" style="border: none; box-shadow: none; padding: 0; background: transparent;">
+        <div class="row g-4">
+          <!-- Mission Column -->
+          <div class="col-md-6">
+            <div class="mv-card h-100 p-4 text-center">
+              <div class="mv-icon-wrapper mb-3 mx-auto">
+                <i class="bi bi-bullseye fs-2" style="color: #388e3c;"></i>
+              </div>
+              <h4 class="fw-bold mb-3" style="color: #1b5e20;">Mission</h4>
+              <div class="mv-text text-muted">
+                <?= $brgy->mission ?>
+              </div>
+            </div>
           </div>
-          <div class="col-12 mb-4">
-            <h5 class="text-dark text-center">Vision</h5>
-            <hr />
-            <p><?=($brgy->vision) ?></p>
+          
+          <!-- Vision Column -->
+          <div class="col-md-6">
+            <div class="mv-card h-100 p-4 text-center">
+              <div class="mv-icon-wrapper mb-3 mx-auto">
+                <i class="bi bi-lightbulb fs-2" style="color: #388e3c;"></i>
+              </div>
+              <h4 class="fw-bold mb-3" style="color: #1b5e20;">Vision</h4>
+              <div class="mv-text text-muted">
+                <?= $brgy->vision ?>
+              </div>
+            </div>
           </div>
         </div>
       </div>
