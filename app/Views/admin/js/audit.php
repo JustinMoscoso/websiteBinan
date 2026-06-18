@@ -284,12 +284,12 @@
                 return formatDate(date); // Only format for display
             }
         },
-        { "title": "IP Address", "data": "ipaddress" },
-        { "title": "Action", "data": "action" },
+        { "title": "IP Address", "data": "ipaddress", "className": "dt-center" },
+        { "title": "Action", "data": "action", "className": "dt-center" },
         {
             "title": "Details", 
             "data": "processDetails", 
-            "className": "dt-head-center dt-body-justify",
+            "className": "dt-center",
             "render": function (data, type, row) {
                 var humanDetails = formatDetails(data, row.action);
                 var escapedData = data ? data.replace(/"/g, '&quot;') : '';

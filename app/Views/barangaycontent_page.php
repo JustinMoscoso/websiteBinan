@@ -120,6 +120,10 @@
       margin-top: 0;
       padding-top: 0;
     }
+
+    #contact.content-tab .contact {
+      text-align: center;
+    }
     
     #about.content-tab {
       padding-top: 15px;
@@ -247,8 +251,8 @@ include_header(htmlspecialchars($brgy->brgy_name), $breadcrumbs, [
       <div id="contact" class="content-tab content-section">
         <h4 class="text-center">Contact Information</h4>
         <hr />
-         <div class="contact">
-        <p><?=($brgy->contact) ?></p>
+         <div class="contact text-center">
+            <?= $brgy->contact ?>
          </div>
       </div>
     </div>

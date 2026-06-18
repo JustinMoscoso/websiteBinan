@@ -98,6 +98,13 @@
     div.dataTables_wrapper table.dataTable thead th {
         text-align: center !important;
     }
+
+    /* Centering all data table rows/cells for consistency */
+    .table td,
+    table.dataTable tbody td,
+    div.dataTables_wrapper table.dataTable tbody td {
+        text-align: center !important;
+    }
   </style>
 </head>
 
@@ -417,6 +424,11 @@
 
   <script>
     $(document).ready(function () {
+      // Prevent native form submission globally for AJAX-handled add/edit forms
+      $(document).on('submit', '#addForm, #editForm', function (e) {
+        e.preventDefault();
+      });
+
       var sidebarOpen = false;
 
       // Track explicit user clicks on toggle buttons

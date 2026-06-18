@@ -59,6 +59,7 @@
         vertical-align: middle;
         border: 1px solid #e3e6f0 !important;
         background-color: inherit !important;
+        text-align: center !important;
     }
 
     /* Clean, soft table row backgrounds overriding DataTables/Bootstrap defaults */

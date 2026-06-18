@@ -339,10 +339,9 @@
     data-bs-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" id="filePreviewModalLabel"><i class="bi bi-eye me-2"></i>Document
-                    Preview</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+            <div class="modal-header text-white px-4 py-3 d-flex justify-content-between align-items-center w-100" style="background-color: var(--theme-dark-green);">
+                <h5 class="modal-title fw-bold" id="filePreviewModalLabel"><i class="bi bi-eye me-2"></i>Document Preview</h5>
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <div class="modal-body p-0" style="height: 78vh; background-color: #f4f6f9;">

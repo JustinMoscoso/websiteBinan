@@ -57,6 +57,18 @@
     // Initially clear the add year input text box so it shows the placeholder
     $('#yr').val('');
 
+    // Restrict file inputs to one file upload only
+    $('#policyFile, #editpolicyFile').on('change', function () {
+        if (this.files && this.files.length > 1) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Limit Exceeded',
+                text: 'You can only upload one file at a time.'
+            });
+            this.value = ''; // Clear selected files
+        }
+    });
+
     // Function to check if file category is annual
     function isAnnualCategory(category) {
         const annualCategories = [

@@ -204,7 +204,8 @@
         // $('#addBrgyCaptPreview').html(''); // Captain image preview - commented out as not needed
     });
 
-    $('#btnAdd').on('click', function () {
+    $('#btnAdd').on('click', function (e) {
+        e.preventDefault();
         // Ensure all Quill editors are initialized
         if (!quillCreateAbout || !quillCreateMission || !quillCreateVision || !quillCreateContact || !quillCreateStaff) {
             Swal.fire({
@@ -469,7 +470,8 @@
 }
 
     // Update function
-    $('#btnEdit').click(function () {
+    $('#btnEdit').click(function (e) {
+        e.preventDefault();
         let form = $('#editForm')[0];
         let formData = new FormData(form);
 

@@ -102,75 +102,100 @@
                                                                 <div id="leftCollapse<?= $i ?><?= $year ?>" class="accordion-collapse collapse"
                                                                     aria-labelledby="leftHeading<?= $i ?><?= $year ?>" data-bs-parent="#leftCollapse<?= $i ?>">
                                                                     <div class="accordion-body">
-                                                                        <ul>
-                                                                            <?php
-                                                                            // Check if this is an annual category
-                                                                            $is_annual = in_array($category, $annual_categories);
-                                                                            
-                                                                            if ($is_annual) :
-                                                                                // For annual reports, show files directly without quarter grouping
-                                                                                foreach ($files as $file) :
-                                                                            ?>
-                                                                                    <li>
+                                                                        <?php
+                                                                        // Check if this is an annual category
+                                                                        $is_annual = in_array($category, $annual_categories);
+                                                                        
+                                                                        if ($is_annual) :
+                                                                        ?>
+                                                                            <ul class="mb-0">
+                                                                                <?php foreach ($files as $file) : ?>
+                                                                                    <li class="d-flex justify-content-between align-items-center mb-2">
                                                                                         <?php
                                                                                         if (isset($file->file_name) && !empty($file->file_name)) {
                                                                                             $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
-                                                                                            echo '<a href="#" class="preview-link" data-fileurl="' . htmlspecialchars($fileUrl) . '">Preview</a>';
+                                                                                            echo '<a href="#" class="preview-link fw-semibold text-decoration-none" data-fileurl="' . htmlspecialchars($fileUrl) . '"><i class="fas fa-eye me-1"></i>Preview</a>';
+                                                                                            echo '<a href="' . htmlspecialchars($fileUrl) . '" class="p-1 d-inline-flex align-items-center justify-content-center text-decoration-none" style="color: var(--binan-green); font-size: 1.2rem; transition: transform 0.2s, color 0.2s;" onmouseover="this.style.transform=\'scale(1.2)\'; this.style.color=\'var(--binan-green-dark)\'" onmouseout="this.style.transform=\'scale(1)\'; this.style.color=\'var(--binan-green)\'" title="Download File" download><i class="fas fa-download"></i></a>';
                                                                                         } else {
-                                                                                            echo 'No File Name Available';
+                                                                                            echo '<span class="text-muted small">No File Name Available</span>';
                                                                                         }
                                                                                         ?>
                                                                                     </li>
-                                                                            <?php 
-                                                                                endforeach;
-                                                                            else :
-                                                                                // For quarterly reports, group by quarters
-                                                                                $files_by_quarter = [];
-                                                                                foreach ($files as $file) {
-                                                                                    if (isset($file->quarter)) {
-                                                                                        $files_by_quarter[$file->quarter][] = $file;
-                                                                                    }
+                                                                                <?php endforeach; ?>
+                                                                            </ul>
+                                                                        <?php
+                                                                        else :
+                                                                            // For quarterly reports, group by quarters
+                                                                            $files_by_quarter = [];
+                                                                            foreach ($files as $file) {
+                                                                                if (isset($file->quarter)) {
+                                                                                    $files_by_quarter[$file->quarter][] = $file;
                                                                                 }
-                                                                                uksort($files_by_quarter, function($a, $b) use ($quarters) {
-                                                                                    return array_search($a, $quarters) - array_search($b, $quarters);
-                                                                                });
-                                                                                if (empty($files_by_quarter)) :
-                                                                                    echo '<p class="error-message">No valid quarter data found.</p>';
-                                                                                else :
-                                                                                    foreach ($files_by_quarter as $quarter => $files_in_quarter) :
+                                                                            }
+                                                                            $quarters_order = ['First', 'Second', 'Third', 'Fourth', 'First Quarter', 'Second Quarter', 'Third Quarter', 'Fourth Quarter'];
+                                                                            uksort($files_by_quarter, function($a, $b) use ($quarters_order) {
+                                                                                $index_a = array_search($a, $quarters_order);
+                                                                                $index_b = array_search($b, $quarters_order);
+                                                                                $index_a = ($index_a === false) ? 999 : ($index_a % 4);
+                                                                                $index_b = ($index_b === false) ? 999 : ($index_b % 4);
+                                                                                return $index_a - $index_b;
+                                                                            });
+                                                                            if (empty($files_by_quarter)) :
+                                                                                echo '<p class="error-message">No valid quarter data found.</p>';
+                                                                            else :
                                                                             ?>
-                                                                                        <?php
-                                                                                        $quarterNames = [
-                                                                                            'First' => 'First Quarter',
-                                                                                            'Second' => 'Second Quarter',
-                                                                                            'Third' => 'Third Quarter',
-                                                                                            'Fourth' => 'Fourth Quarter',
-                                                                                            'First Quarter' => 'First Quarter',
-                                                                                            'Second Quarter' => 'Second Quarter',
-                                                                                            'Third Quarter' => 'Third Quarter',
-                                                                                            'Fourth Quarter' => 'Fourth Quarter'
-                                                                                        ];
+                                                                                <div class="accordion" id="qAccLeft<?= $i ?>_<?= $year ?>">
+                                                                                    <?php
+                                                                                    $quarterNames = [
+                                                                                        'First' => 'First Quarter',
+                                                                                        'Second' => 'Second Quarter',
+                                                                                        'Third' => 'Third Quarter',
+                                                                                        'Fourth' => 'Fourth Quarter',
+                                                                                        'First Quarter' => 'First Quarter',
+                                                                                        'Second Quarter' => 'Second Quarter',
+                                                                                        'Third Quarter' => 'Third Quarter',
+                                                                                        'Fourth Quarter' => 'Fourth Quarter'
+                                                                                    ];
+                                                                                    foreach ($files_by_quarter as $quarter => $files_in_quarter) :
                                                                                         $displayQuarter = isset($quarterNames[$quarter]) ? $quarterNames[$quarter] : htmlspecialchars($quarter);
-                                                                                        ?>
-                                                                                        <li class="quarter-label"><?= $displayQuarter ?></li>
-                                                                                        <ul>
-                                                                                            <?php foreach ($files_in_quarter as $file) : ?>
-                                                                                                <li>
-                                                                                                    <?php
-                                                                                                    if (isset($file->file_name) && !empty($file->file_name)) {
-                                                                                                        $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
-                                                                                                        echo '<a href="#" class="preview-link" data-fileurl="' . htmlspecialchars($fileUrl) . '">Preview</a>';
-                                                                                                    } else {
-                                                                                                        echo 'No File Name Available';
-                                                                                                    }
-                                                                                                    ?>
-                                                                                                </li>
-                                                                                            <?php endforeach; ?>
-                                                                                        </ul>
+                                                                                        $qKey = preg_replace('/[^a-zA-Z0-9]/', '', $quarter);
+                                                                                        $qCollapseId = "qCollapseLeft_" . $i . "_" . $year . "_" . $qKey;
+                                                                                        $qHeadingId = "qHeadingLeft_" . $i . "_" . $year . "_" . $qKey;
+                                                                                    ?>
+                                                                                        <div class="accordion-item nested" style="margin-bottom: 6px;">
+                                                                                            <h2 class="accordion-header" id="<?= $qHeadingId ?>">
+                                                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                                                                        data-bs-target="#<?= $qCollapseId ?>" aria-expanded="false"
+                                                                                                        aria-controls="<?= $qCollapseId ?>" style="font-size: 0.9rem; min-height: 44px; padding: 8px 12px;">
+                                                                                                    <?= $displayQuarter ?>
+                                                                                                </button>
+                                                                                            </h2>
+                                                                                            <div id="<?= $qCollapseId ?>" class="accordion-collapse collapse" aria-labelledby="<?= $qHeadingId ?>">
+                                                                                                <div class="accordion-body" style="padding: 10px 12px;">
+                                                                                                    <ul class="mb-0">
+                                                                                                        <?php foreach ($files_in_quarter as $file) : ?>
+                                                                                                            <li class="d-flex justify-content-between align-items-center mb-2">
+                                                                                                                <?php
+                                                                                                                if (isset($file->file_name) && !empty($file->file_name)) {
+                                                                                                                    $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
+                                                                                                                    echo '<a href="#" class="preview-link fw-semibold text-decoration-none" data-fileurl="' . htmlspecialchars($fileUrl) . '"><i class="fas fa-eye me-1"></i>Preview</a>';
+                                                                                                                    echo '<a href="' . htmlspecialchars($fileUrl) . '" class="p-1 d-inline-flex align-items-center justify-content-center text-decoration-none" style="color: var(--binan-green); font-size: 1.2rem; transition: transform 0.2s, color 0.2s;" onmouseover="this.style.transform=\'scale(1.2)\'; this.style.color=\'var(--binan-green-dark)\'" onmouseout="this.style.transform=\'scale(1)\'; this.style.color=\'var(--binan-green)\'" title="Download File" download><i class="fas fa-download"></i></a>';
+                                                                                                                } else {
+                                                                                                                    echo '<span class="text-muted small">No File Name Available</span>';
+                                                                                                                }
+                                                                                                                ?>
+                                                                                                            </li>
+                                                                                                        <?php endforeach; ?>
+                                                                                                    </ul>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     <?php endforeach; ?>
-                                                                                <?php endif; ?>
-                                                                            <?php endif; ?>
-                                                                        </ul>
+                                                                                </div>
+                                                                            <?php
+                                                                            endif;
+                                                                        endif;
+                                                                        ?>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -238,75 +263,100 @@
                                                                 <div id="rightCollapse<?= $i ?><?= $year ?>" class="accordion-collapse collapse"
                                                                     aria-labelledby="rightHeading<?= $i ?><?= $year ?>" data-bs-parent="#rightCollapse<?= $i ?>">
                                                                     <div class="accordion-body">
-                                                                        <ul>
-                                                                            <?php
-                                                                            // Check if this is an annual category
-                                                                            $is_annual = in_array($category, $annual_categories);
-                                                                            
-                                                                            if ($is_annual) :
-                                                                                // For annual reports, show files directly without quarter grouping
-                                                                                foreach ($files as $file) :
-                                                                            ?>
-                                                                                    <li>
+                                                                        <?php
+                                                                        // Check if this is an annual category
+                                                                        $is_annual = in_array($category, $annual_categories);
+                                                                        
+                                                                        if ($is_annual) :
+                                                                        ?>
+                                                                            <ul class="mb-0">
+                                                                                <?php foreach ($files as $file) : ?>
+                                                                                    <li class="d-flex justify-content-between align-items-center mb-2">
                                                                                         <?php
                                                                                         if (isset($file->file_name) && !empty($file->file_name)) {
                                                                                             $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
-                                                                                            echo '<a href="#" class="preview-link" data-fileurl="' . htmlspecialchars($fileUrl) . '">Preview</a>';
+                                                                                            echo '<a href="#" class="preview-link fw-semibold text-decoration-none" data-fileurl="' . htmlspecialchars($fileUrl) . '"><i class="fas fa-eye me-1"></i>Preview</a>';
+                                                                                            echo '<a href="' . htmlspecialchars($fileUrl) . '" class="p-1 d-inline-flex align-items-center justify-content-center text-decoration-none" style="color: var(--binan-green); font-size: 1.2rem; transition: transform 0.2s, color 0.2s;" onmouseover="this.style.transform=\'scale(1.2)\'; this.style.color=\'var(--binan-green-dark)\'" onmouseout="this.style.transform=\'scale(1)\'; this.style.color=\'var(--binan-green)\'" title="Download File" download><i class="fas fa-download"></i></a>';
                                                                                         } else {
-                                                                                            echo 'No File Name Available';
+                                                                                            echo '<span class="text-muted small">No File Name Available</span>';
                                                                                         }
                                                                                         ?>
                                                                                     </li>
-                                                                            <?php 
-                                                                                endforeach;
-                                                                            else :
-                                                                                // For quarterly reports, group by quarters
-                                                                                $files_by_quarter = [];
-                                                                                foreach ($files as $file) {
-                                                                                    if (isset($file->quarter)) {
-                                                                                        $files_by_quarter[$file->quarter][] = $file;
-                                                                                    }
+                                                                                <?php endforeach; ?>
+                                                                            </ul>
+                                                                        <?php
+                                                                        else :
+                                                                            // For quarterly reports, group by quarters
+                                                                            $files_by_quarter = [];
+                                                                            foreach ($files as $file) {
+                                                                                if (isset($file->quarter)) {
+                                                                                    $files_by_quarter[$file->quarter][] = $file;
                                                                                 }
-                                                                                uksort($files_by_quarter, function($a, $b) use ($quarters) {
-                                                                                    return array_search($a, $quarters) - array_search($b, $quarters);
-                                                                                });
-                                                                                if (empty($files_by_quarter)) :
-                                                                                    echo '<p class="error-message">No valid quarter data found.</p>';
-                                                                                else :
-                                                                                    foreach ($files_by_quarter as $quarter => $files_in_quarter) :
+                                                                            }
+                                                                            $quarters_order = ['First', 'Second', 'Third', 'Fourth', 'First Quarter', 'Second Quarter', 'Third Quarter', 'Fourth Quarter'];
+                                                                            uksort($files_by_quarter, function($a, $b) use ($quarters_order) {
+                                                                                $index_a = array_search($a, $quarters_order);
+                                                                                $index_b = array_search($b, $quarters_order);
+                                                                                $index_a = ($index_a === false) ? 999 : ($index_a % 4);
+                                                                                $index_b = ($index_b === false) ? 999 : ($index_b % 4);
+                                                                                return $index_a - $index_b;
+                                                                            });
+                                                                            if (empty($files_by_quarter)) :
+                                                                                echo '<p class="error-message">No valid quarter data found.</p>';
+                                                                            else :
                                                                             ?>
-                                                                                        <?php
-                                                                                        $quarterNames = [
-                                                                                            'First' => 'First Quarter',
-                                                                                            'Second' => 'Second Quarter',
-                                                                                            'Third' => 'Third Quarter',
-                                                                                            'Fourth' => 'Fourth Quarter',
-                                                                                            'First Quarter' => 'First Quarter',
-                                                                                            'Second Quarter' => 'Second Quarter',
-                                                                                            'Third Quarter' => 'Third Quarter',
-                                                                                            'Fourth Quarter' => 'Fourth Quarter'
-                                                                                        ];
+                                                                                <div class="accordion" id="qAccRight<?= $i ?>_<?= $year ?>">
+                                                                                    <?php
+                                                                                    $quarterNames = [
+                                                                                        'First' => 'First Quarter',
+                                                                                        'Second' => 'Second Quarter',
+                                                                                        'Third' => 'Third Quarter',
+                                                                                        'Fourth' => 'Fourth Quarter',
+                                                                                        'First Quarter' => 'First Quarter',
+                                                                                        'Second Quarter' => 'Second Quarter',
+                                                                                        'Third Quarter' => 'Third Quarter',
+                                                                                        'Fourth Quarter' => 'Fourth Quarter'
+                                                                                    ];
+                                                                                    foreach ($files_by_quarter as $quarter => $files_in_quarter) :
                                                                                         $displayQuarter = isset($quarterNames[$quarter]) ? $quarterNames[$quarter] : htmlspecialchars($quarter);
-                                                                                        ?>
-                                                                                        <li class="quarter-label"><?= $displayQuarter ?></li>
-                                                                                        <ul>
-                                                                                            <?php foreach ($files_in_quarter as $file) : ?>
-                                                                                                <li>
-                                                                                                    <?php
-                                                                                                    if (isset($file->file_name) && !empty($file->file_name)) {
-                                                                                                        $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
-                                                                                                        echo '<a href="#" class="preview-link" data-fileurl="' . htmlspecialchars($fileUrl) . '">Preview</a>';
-                                                                                                    } else {
-                                                                                                        echo 'No File Name Available';
-                                                                                                    }
-                                                                                                    ?>
-                                                                                                </li>
-                                                                                            <?php endforeach; ?>
-                                                                                        </ul>
+                                                                                        $qKey = preg_replace('/[^a-zA-Z0-9]/', '', $quarter);
+                                                                                        $qCollapseId = "qCollapseRight_" . $i . "_" . $year . "_" . $qKey;
+                                                                                        $qHeadingId = "qHeadingRight_" . $i . "_" . $year . "_" . $qKey;
+                                                                                    ?>
+                                                                                        <div class="accordion-item nested" style="margin-bottom: 6px;">
+                                                                                            <h2 class="accordion-header" id="<?= $qHeadingId ?>">
+                                                                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                                                                        data-bs-target="#<?= $qCollapseId ?>" aria-expanded="false"
+                                                                                                        aria-controls="<?= $qCollapseId ?>" style="font-size: 0.9rem; min-height: 44px; padding: 8px 12px;">
+                                                                                                    <?= $displayQuarter ?>
+                                                                                                </button>
+                                                                                            </h2>
+                                                                                            <div id="<?= $qCollapseId ?>" class="accordion-collapse collapse" aria-labelledby="<?= $qHeadingId ?>">
+                                                                                                <div class="accordion-body" style="padding: 10px 12px;">
+                                                                                                    <ul class="mb-0">
+                                                                                                        <?php foreach ($files_in_quarter as $file) : ?>
+                                                                                                            <li class="d-flex justify-content-between align-items-center mb-2">
+                                                                                                                <?php
+                                                                                                                if (isset($file->file_name) && !empty($file->file_name)) {
+                                                                                                                    $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
+                                                                                                                    echo '<a href="#" class="preview-link fw-semibold text-decoration-none" data-fileurl="' . htmlspecialchars($fileUrl) . '"><i class="fas fa-eye me-1"></i>Preview</a>';
+                                                                                                                    echo '<a href="' . htmlspecialchars($fileUrl) . '" class="p-1 d-inline-flex align-items-center justify-content-center text-decoration-none" style="color: var(--binan-green); font-size: 1.2rem; transition: transform 0.2s, color 0.2s;" onmouseover="this.style.transform=\'scale(1.2)\'; this.style.color=\'var(--binan-green-dark)\'" onmouseout="this.style.transform=\'scale(1)\'; this.style.color=\'var(--binan-green)\'" title="Download File" download><i class="fas fa-download"></i></a>';
+                                                                                                                } else {
+                                                                                                                    echo '<span class="text-muted small">No File Name Available</span>';
+                                                                                                                }
+                                                                                                                ?>
+                                                                                                            </li>
+                                                                                                        <?php endforeach; ?>
+                                                                                                    </ul>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     <?php endforeach; ?>
-                                                                                <?php endif; ?>
-                                                                            <?php endif; ?>
-                                                                        </ul>
+                                                                                </div>
+                                                                            <?php
+                                                                            endif;
+                                                                        endif;
+                                                                        ?>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -330,13 +380,35 @@
 <!-- File Preview Modal -->
 <div class="modal fade" id="filePreviewModal" tabindex="-1" aria-labelledby="filePreviewModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="filePreviewModalLabel">File Preview</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
+      <div class="modal-header text-white px-4 py-3 d-flex justify-content-between align-items-center w-100" style="background-color: #1b4d3e !important; border-bottom: none;">
+        <h5 class="modal-title fw-bold" id="filePreviewModalLabel">File Preview</h5>
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <a id="fileDownloadBtn" href="" class="btn btn-sm btn-light fw-bold px-3 d-flex align-items-center gap-1 shadow-sm" download>
+            <i class="fas fa-download"></i> Download
+          </a>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
       </div>
-      <div class="modal-body" style="height:80vh;">
-        <iframe id="filePreviewFrame" src="" style="width:100%;height:100%;border:none;"></iframe>
+      <div class="modal-body p-0" style="height: 75vh; position: relative; background-color: #f8f9fa;">
+        
+        <!-- Native Iframe for Previewable Files (PDF, Images) -->
+        <iframe id="filePreviewFrame" src="" style="width:100%; height:100%; border:none; display:none;"></iframe>
+        
+        <!-- Placeholder for Non-previewable Files (Excel, Word, Zip) -->
+        <div id="filePreviewPlaceholder" class="w-100 h-100 d-flex flex-column align-items-center justify-content-center px-4 text-center" style="display:none;">
+          <div class="card p-5 border-0 shadow-sm d-flex flex-column align-items-center" style="max-width: 500px; border-radius: 16px; background: #ffffff;">
+            <div class="icon-box mb-4 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; border-radius: 50%; background-color: #ffebee; color: #c62828; font-size: 2.2rem;">
+              <i class="fas fa-file-excel" id="fileTypeIcon"></i>
+            </div>
+            <h4 class="fw-bold mb-2 text-dark" style="color: #2d3748;">No Preview Available</h4>
+            <p class="text-secondary small mb-4" id="placeholderMessage">This file format (.xlsx) cannot be previewed directly in your browser. You can download the file to view its contents on your device.</p>
+            <a id="placeholderDownloadBtn" href="" class="btn btn-primary fw-bold px-4 py-2 d-inline-flex align-items-center gap-2 shadow" style="background-color: #1b4d3e !important; border-color: #1b4d3e !important; border-radius: 6px;" download>
+              <i class="fas fa-cloud-download-alt"></i> Download File
+            </a>
+          </div>
+        </div>
+        
       </div>
     </div>
   </div>
