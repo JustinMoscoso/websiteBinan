@@ -1,6 +1,34 @@
 <script>
     const userLevel = '<?= $user->user_lvl ?>'.toUpperCase();
 
+    // ── Name formatting helpers ─────────────────────────────────────────────
+    function toTitleCase(str) {
+        if (!str) return '';
+        return str.replace(/\w\S*/g, function (word) {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        });
+    }
+
+    function toPascalName(fname, mname, lname, suffix) {
+        var last  = toTitleCase(lname  || '');
+        var first = toTitleCase(fname  || '');
+        var mid   = toTitleCase(mname  || '');
+        var suf   = (suffix || '').trim();
+        var full  = last + ', ' + first;
+        if (mid) full += ' ' + mid;
+        if (suf) full += ' ' + suf;
+        return full;
+    }
+
+    // ── Real-time Title-Case on name inputs in editNameModal ───────────────
+    $(document).on('input blur', '#dlgFirstName, #dlgMiddleName, #dlgLastName', function () {
+        var el    = this;
+        var start = el.selectionStart;
+        var end   = el.selectionEnd;
+        el.value  = toTitleCase(el.value);
+        if (el.setSelectionRange) { el.setSelectionRange(start, end); }
+    });
+
     if (userLevel !== 'DEVELOPER' && userLevel !== 'SUPERADMIN') {
         // Disable status toggles (activate/deactivate)
         $('.profile-dept-status-action, .profile-brgy-status-action').prop('disabled', true).css({
@@ -71,9 +99,9 @@
         $('#editNameModal').on('show.bs.modal', function () {
             $('#dlgFirstName, #dlgMiddleName, #dlgLastName').removeClass('is-invalid');
             
-            $('#dlgFirstName').val($('#profileFname').val() || '');
-            $('#dlgMiddleName').val($('#profileMname').val() || '');
-            $('#dlgLastName').val($('#profileLname').val() || '');
+            $('#dlgFirstName').val(toTitleCase($('#profileFname').val() || ''));
+            $('#dlgMiddleName').val(toTitleCase($('#profileMname').val() || ''));
+            $('#dlgLastName').val(toTitleCase($('#profileLname').val() || ''));
             $('#dlgSuffix').val($('#profileSuffix').val() || '');
         });
 
@@ -89,9 +117,9 @@
 
         $('#btnSaveNameDlg').on('click', function () {
             let isValid = true;
-            const fname = $('#dlgFirstName').val().trim();
-            const mname = $('#dlgMiddleName').val().trim();
-            const lname = $('#dlgLastName').val().trim();
+            const fname  = toTitleCase($('#dlgFirstName').val().trim());
+            const mname  = toTitleCase($('#dlgMiddleName').val().trim());
+            const lname  = toTitleCase($('#dlgLastName').val().trim());
             const suffix = $('#dlgSuffix').val().trim();
 
             if (fname === '') {
@@ -119,18 +147,19 @@
                 return;
             }
 
+            // Reflect title-cased values back into the dialog inputs
+            $('#dlgFirstName').val(fname);
+            $('#dlgMiddleName').val(mname);
+            $('#dlgLastName').val(lname);
+
+            // Push to hidden fields
             $('#profileFname').val(fname);
             $('#profileMname').val(mname);
             $('#profileLname').val(lname);
             $('#profileSuffix').val(suffix);
 
-            const fullNameParts = [];
-            if (fname) fullNameParts.push(fname);
-            if (mname) fullNameParts.push(mname);
-            if (lname) fullNameParts.push(lname);
-            if (suffix) fullNameParts.push(suffix);
-            
-            $('#profileFullName').val(fullNameParts.join(' '));
+            // Display Pascal format: Last, First Middle [Suffix]
+            $('#profileFullName').val(toPascalName(fname, mname, lname, suffix));
 
             $('#editNameModal').modal('hide');
         });

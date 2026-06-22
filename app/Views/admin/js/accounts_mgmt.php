@@ -3,6 +3,58 @@
     const userLevel = "<?= $user->user_lvl ?>".toUpperCase();
     const phpAccType = "<?= $user->account_type ?? '' ?>".toUpperCase();
 
+    // ── Name formatting helpers ────────────────────────────────────────────
+    /**
+     * Convert a string to Title Case (capitalise first letter of each word).
+     * @param {string} str
+     * @returns {string}
+     */
+    function toTitleCase(str) {
+        if (!str) return '';
+        return str.replace(/\w\S*/g, function (word) {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        });
+    }
+
+    /**
+     * Build a Pascal-format name: "Last, First [Middle]" all in Title Case.
+     * @param {string} fname
+     * @param {string} mname
+     * @param {string} lname
+     * @param {string} suffix
+     * @returns {string}
+     */
+    function toPascalName(fname, mname, lname, suffix) {
+        var last  = toTitleCase(lname  || '');
+        var first = toTitleCase(fname  || '');
+        var mid   = toTitleCase(mname  || '');
+        var suf   = toTitleCase(suffix || '');
+        var full  = last + ', ' + first;
+        if (mid)  full += ' ' + mid;
+        if (suf)  full += ' ' + suf;
+        return full;
+    }
+
+    // ── Auto Title-Case name inputs – real-time + on-leave (Add modal) ─────
+    // Uses both 'input' (real-time) and 'blur' (on leave) events.
+    // Cursor position is preserved so typing feels natural.
+    $(document).on('input blur', '#txtFirstName, #txtMiddleName, #txtLastName', function () {
+        var el   = this;
+        var start = el.selectionStart;
+        var end   = el.selectionEnd;
+        el.value  = toTitleCase(el.value);
+        if (el.setSelectionRange) { el.setSelectionRange(start, end); }
+    });
+
+    // ── Auto Title-Case name inputs – real-time + on-leave (Edit modal) ─────
+    $(document).on('input blur', '#editFirstName, #editMiddleName, #editLastName', function () {
+        var el   = this;
+        var start = el.selectionStart;
+        var end   = el.selectionEnd;
+        el.value  = toTitleCase(el.value);
+        if (el.setSelectionRange) { el.setSelectionRange(start, end); }
+    });
+
     // ── Show/hide Add button ───────────────────────────────────────────────
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
         $('.button-32').show();
@@ -255,9 +307,9 @@
                     let accType = res.account_type || '';
 
                     $('#editUserId').val(res.ID);
-                    $('#editFirstName').val(res.fname);
-                    $('#editMiddleName').val(res.mname || '');
-                    $('#editLastName').val(res.lname);
+                    $('#editFirstName').val(toTitleCase(res.fname));
+                    $('#editMiddleName').val(toTitleCase(res.mname || ''));
+                    $('#editLastName').val(toTitleCase(res.lname));
                     $('#editSuffix').val(res.suffix || '');
                     $('#editUsername').val(res.username);
                     $('#editEmail').val(res.email);
@@ -465,15 +517,11 @@
             {
                 title: 'Name', data: 'fname',
                 className: 'dt-head-center dt-body-justify', width: '15%',
-                render: function (data, type, row) { 
-                    let fullName = row.fname;
-                    if (row.mname) fullName += ' ' + row.mname;
-                    fullName += ' ' + row.lname;
-                    if (row.suffix) fullName += ' ' + row.suffix;
-                    return fullName;
+                render: function (data, type, row) {
+                    return toPascalName(row.fname, row.mname, row.lname, row.suffix);
                 }
             },
-            { title: 'Email', data: 'email' },
+            { title: 'Email', data: 'email', visible: false },
             { title: 'Account Level', data: 'user_lvl' },
             {
                 title: 'Account Type', data: 'account_type', className: 'dt-center', defaultContent: 'System',
@@ -530,7 +578,7 @@
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#"
-                                    onclick="reset_password(${row.ID}, \`${row.fname} ${row.lname}\`)">
+                                    onclick="reset_password(${row.ID}, \`${toPascalName(row.fname, row.mname, row.lname, row.suffix)}\`)">
                                     <i class="bi bi-shield-lock me-1"></i> Reset Password
                                 </a>
                             </li>`;

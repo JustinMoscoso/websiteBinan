@@ -131,7 +131,20 @@
                     </div>
                     <div class="col-md-3">
                         <label for="txtSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
-                        <input type="text" class="form-control" id="txtSuffix" name="txtSuffix" placeholder="e.g. Jr.">
+                        <select class="form-select" id="txtSuffix" name="txtSuffix">
+                            <option value="">— None —</option>
+                            <option value="Jr.">Jr. (Junior)</option>
+                            <option value="Sr.">Sr. (Senior)</option>
+                            <option value="II">II</option>
+                            <option value="III">III</option>
+                            <option value="IV">IV</option>
+                            <option value="V">V</option>
+                            <option value="VI">VI</option>
+                            <option value="VII">VII</option>
+                            <option value="VIII">VIII</option>
+                            <option value="IX">IX</option>
+                            <option value="X">X</option>
+                        </select>
                     </div>
                 </div>
 
@@ -245,8 +258,20 @@
                     </div>
                     <div class="col-md-3">
                         <label for="editSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
-                        <input type="text" class="form-control" id="editSuffix" name="editSuffix"
-                            placeholder="Update suffix">
+                        <select class="form-select" id="editSuffix" name="editSuffix">
+                            <option value="">— None —</option>
+                            <option value="Jr.">Jr. (Junior)</option>
+                            <option value="Sr.">Sr. (Senior)</option>
+                            <option value="II">II</option>
+                            <option value="III">III</option>
+                            <option value="IV">IV</option>
+                            <option value="V">V</option>
+                            <option value="VI">VI</option>
+                            <option value="VII">VII</option>
+                            <option value="VIII">VIII</option>
+                            <option value="IX">IX</option>
+                            <option value="X">X</option>
+                        </select>
                     </div>
                 </div>
 

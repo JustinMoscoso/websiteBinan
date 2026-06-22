@@ -1061,8 +1061,21 @@
                     <div class="invalid-feedback">Last name is required.</div>
                 </div>
                 <div class="mb-3">
-                    <label for="dlgSuffix" class="form-label">Suffix (e.g. Jr., III) <span class="text-muted">(Optional)</span></label>
-                    <input type="text" class="form-control" id="dlgSuffix">
+                    <label for="dlgSuffix" class="form-label">Suffix <span class="text-muted">(Optional)</span></label>
+                    <select class="form-select" id="dlgSuffix">
+                        <option value="">— None —</option>
+                        <option value="Jr.">Jr. (Junior)</option>
+                        <option value="Sr.">Sr. (Senior)</option>
+                        <option value="II">II</option>
+                        <option value="III">III</option>
+                        <option value="IV">IV</option>
+                        <option value="V">V</option>
+                        <option value="VI">VI</option>
+                        <option value="VII">VII</option>
+                        <option value="VIII">VIII</option>
+                        <option value="IX">IX</option>
+                        <option value="X">X</option>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
