@@ -271,7 +271,7 @@
     columns: [
         { "title": "ID", "data": "ID", "visible": false },
         {
-            "title": "Date and Time", 
+            "title": "Time and Date", 
             "data": "created_date", 
             "className": "dt-center", 
             width: '25%',
@@ -284,7 +284,6 @@
                 return formatDate(date); // Only format for display
             }
         },
-        { "title": "IP Address", "data": "ipaddress", "className": "dt-center" },
         { "title": "Action", "data": "action", "className": "dt-center" },
         {
             "title": "Details", 
@@ -323,6 +322,7 @@
                 return '<span class="d-inline-flex align-items-center gap-1"><i class="bi bi-globe text-success"></i> ' + data + '</span>';
             }
         },
+        { "title": "IP Address", "data": "ipaddress", "className": "dt-center" },
         {
             "title": "Username", "data": "userID", "className": "dt-center"
         },

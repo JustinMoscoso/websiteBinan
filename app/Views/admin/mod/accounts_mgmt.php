@@ -97,7 +97,7 @@
 </section>
 
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" data-bs-backdrop="static">
-    <form id="addForm" class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <form id="addForm" class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
 
                 <div class="modal-header modal-header-theme py-3 px-4"style="background-color: var(--theme-dark-green);">
@@ -188,7 +188,7 @@
                     </div>
                     <div class="col-md-6" id="entityRefGroup">
                         <label for="txtEntityRef" class="form-label small fw-bold text-secondary">Select Department or Barangay<span class="text-danger">*</span></label>
-                        <select id="txtEntityRef" name="txtEntityRef" class="form-control">
+                        <select id="txtEntityRef" name="txtEntityRef" class="form-control form-select">
                             <option value="" disabled selected>— Select contextual entity
                                 node
                                 link —</option>
@@ -215,7 +215,7 @@
 
             <div class="modal-header modal-header-theme py-3 px-4"style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold d-inline-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                    <i class="bi bi-pencil-square"></i> Modify Account Properties
+                    <i class="bi bi-pencil-square"></i>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -258,8 +258,8 @@
                             placeholder="Modify account username string" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="editEmail" class="form-label small fw-bold text-secondary">Primary E-Mail
-                            Address
+                        <label for="editEmail" class="form-label small fw-bold text-secondary">Email-Address
+                            
                             <span class="text-danger">*</span></label>
                         <input type="email" class="form-control" id="editEmail" name="editEmail"
                             placeholder="Modify account email address location" required>
@@ -268,20 +268,19 @@
 
                 <div class="row mb-3">
                     <div class="col-12">
-                        <label for="editPassword" class="form-label small fw-bold text-secondary">Override Secure
+                        <label for="editPassword" class="form-label small fw-bold text-secondary">
                             Password</label>
                         <input type="password" class="form-control" id="editPassword" name="editPassword"
-                            placeholder="Leave empty unless explicitly resetting password authentication variables">
-                        <div class="form-text text-muted" style="font-size: 0.75rem;">Leave
-                            entirely unpopulated to
-                            protect and maintain current active database passwords.</div>
+                            placeholder="Leave empty unless you want to change password">
+                        <div class="form-text text-muted" style="font-size: 0.75rem;">
+                         </div>
                     </div>
                 </div>
 
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <label for="editAccLevel" class="form-label small fw-bold text-secondary">Access Role
-                            Authorization Level <span class="text-danger">*</span></label>
+                        <label for="editAccLevel" class="form-label small fw-bold text-secondary">
+                            Account Level <span class="text-danger">*</span></label>
                         <select id="editAccLevel" name="editAccLevel" class="form-select" required>
                             <option selected disabled value="">— Select Authorization Level
                                 —
@@ -303,9 +302,9 @@
                         </select>
                     </div>
                     <div class="col-md-6" id="editEntityRefGroup">
-                        <label for="editEntityRef" class="form-label small fw-bold text-secondary">Linked
-                            Enterprise
-                            Context Node <span class="text-danger">*</span></label>
+                        <label for="editEntityRef" class="form-label small fw-bold text-secondary">Select
+                            Department or Barangay
+                             <span class="text-danger">*</span></label>
                         <select id="editEntityRef" name="editEntityRef" class="form-control form-select">
                             <option value="" disabled selected>— Select contextual entity
                                 node
@@ -319,10 +318,10 @@
 
             <div class="modal-footer bg-light py-2 px-4">
                 <button type="button" class="btn btn-sm btn-secondary fw-semibold px-3" data-bs-dismiss="modal">Cancel
-                    Changes</button>
+                    </button>
                 <button id="btnEdit" type="button" class="btn btn-sm text-white fw-semibold px-4"
-                    style="background-color: var(--theme-mid-green);">Update
-                    Parameters</button>
+                    style="background-color: var(--theme-mid-green);">Save
+                    </button>
             </div>
 
         </div>
