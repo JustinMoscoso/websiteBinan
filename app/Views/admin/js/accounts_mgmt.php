@@ -474,7 +474,7 @@
                 }
             },
             { title: 'Email', data: 'email' },
-            { title: 'User Level', data: 'user_lvl' },
+            { title: 'Account Level', data: 'user_lvl' },
             {
                 title: 'Account Type', data: 'account_type', className: 'dt-center', defaultContent: 'System',
                 render: function (data) {
