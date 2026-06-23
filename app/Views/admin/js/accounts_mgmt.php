@@ -554,7 +554,7 @@
 
                     let html = `
                     <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                        <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                             <i class="bi bi-list"></i> Actions
                         </button>
