@@ -2703,13 +2703,33 @@ class Admin extends BaseController
             }
             case 'create_contact': {
                 $hot_m = new \App\Models\Hotlines();
-                $telco = $this->request->getPost('telco');
-                $number = $this->request->getPost('contact');
-                $smart = $this->request->getPost('smart');
-                $globe = $this->request->getPost('globe');
+                $telco = $this->normalizePhilippineLandlineNumber($this->request->getPost('telco'));
+                $number = $this->normalizePhilippineLandlineNumber($this->request->getPost('contact'));
+                $smart = $this->normalizePhilippineMobileNumber($this->request->getPost('smart'));
+                $globe = $this->normalizePhilippineMobileNumber($this->request->getPost('globe'));
                 $dept_cont_ID = $this->request->getPost('txtDept');
                 $brngy_cont_ID = $this->request->getPost('txtBrgy');
                 $others_cont_ID = $this->request->getPost('txtOthers');
+
+                if ($number !== '' && !$this->isValidPhilippineLandlineNumber($number)) {
+                    $message = 'PLDT Landline must be in Philippine landline format, for example (049) 123-4567 or (02) 1234-5678.';
+                    break;
+                }
+
+                if ($telco !== '' && !$this->isValidPhilippineLandlineNumber($telco)) {
+                    $message = 'INTELCO Line must be in Philippine landline format, for example (049) 123-4567 or (02) 1234-5678.';
+                    break;
+                }
+
+                if ($smart !== '' && !$this->isValidPhilippineMobileNumber($smart)) {
+                    $message = 'SMART number must be in the format +63 9XX XXX XXXX.';
+                    break;
+                }
+
+                if ($globe !== '' && !$this->isValidPhilippineMobileNumber($globe)) {
+                    $message = 'GLOBE number must be in the format +63 9XX XXX XXXX.';
+                    break;
+                }
 
                 // Dept/brgy-scoped ADMIN: force their own entity
                 if ($isDeptScopedAdmin) {
@@ -3857,13 +3877,33 @@ class Admin extends BaseController
                 }
 
                 if ($hot) {
-                    $telco = $this->request->getPost('editTelco');
-                    $number = $this->request->getPost('editContact');
-                    $smart = $this->request->getPost('editSmart');
-                    $globe = $this->request->getPost('editGlobe');
+                    $telco = $this->normalizePhilippineLandlineNumber($this->request->getPost('editTelco'));
+                    $number = $this->normalizePhilippineLandlineNumber($this->request->getPost('editContact'));
+                    $smart = $this->normalizePhilippineMobileNumber($this->request->getPost('editSmart'));
+                    $globe = $this->normalizePhilippineMobileNumber($this->request->getPost('editGlobe'));
                     $dept_cont_ID = $this->request->getPost('editDept');
                     $brngy_cont_ID = $this->request->getPost('editBrgy');
                     $others_cont_ID = $this->request->getPost('editOthers');
+
+                    if ($number !== '' && !$this->isValidPhilippineLandlineNumber($number)) {
+                        $message = 'PLDT Landline must be in Philippine landline format, for example (049) 123-4567 or (02) 1234-5678.';
+                        break;
+                    }
+
+                    if ($telco !== '' && !$this->isValidPhilippineLandlineNumber($telco)) {
+                        $message = 'INTELCO Line must be in Philippine landline format, for example (049) 123-4567 or (02) 1234-5678.';
+                        break;
+                    }
+
+                    if ($smart !== '' && !$this->isValidPhilippineMobileNumber($smart)) {
+                        $message = 'SMART number must be in the format +63 9XX XXX XXXX.';
+                        break;
+                    }
+
+                    if ($globe !== '' && !$this->isValidPhilippineMobileNumber($globe)) {
+                        $message = 'GLOBE number must be in the format +63 9XX XXX XXXX.';
+                        break;
+                    }
 
                     // Scoped ADMIN: force their own entity reference
                     if ($isDeptScopedAdmin) {
@@ -4834,6 +4874,85 @@ class Admin extends BaseController
         }
 
         return null;
+    }
+
+    private function normalizePhilippineMobileNumber($value): string
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return '';
+        }
+
+        if ($value === '+63 9') {
+            return '';
+        }
+
+        $digits = preg_replace('/\D+/', '', $value);
+        if ($digits === '') {
+            return $value;
+        }
+
+        if (str_starts_with($digits, '63')) {
+            $digits = substr($digits, 2);
+        } elseif (str_starts_with($digits, '0')) {
+            $digits = substr($digits, 1);
+        }
+
+        if (!preg_match('/^9\d{9}$/', $digits)) {
+            return $value;
+        }
+
+        return '+63 ' . substr($digits, 0, 3) . ' ' . substr($digits, 3, 3) . ' ' . substr($digits, 6, 4);
+    }
+
+    private function normalizePhilippineLandlineNumber($value): string
+    {
+        $value = trim((string) $value);
+        if ($value === '' || $value === '(' || $value === '(0' || $value === '(02' || $value === '(049' || $value === '(02)' || $value === '(049)') {
+            return '';
+        }
+
+        $digits = preg_replace('/\D+/', '', $value);
+        if ($digits === '') {
+            return $value;
+        }
+
+        if (str_starts_with($digits, '63') && strlen($digits) > 2) {
+            $digits = substr($digits, 2);
+        }
+
+        if ($digits === '') {
+            return '';
+        }
+
+        if (str_starts_with($digits, '049')) {
+            $subscriber = substr($digits, 3, 7);
+            if ($subscriber === '') {
+                return '';
+            }
+            return '(049) ' . substr($subscriber, 0, 3) . '-' . substr($subscriber, 3, 4);
+        }
+
+        if (str_starts_with($digits, '02')) {
+            $subscriber = substr($digits, 2, 8);
+            if ($subscriber === '') {
+                return '';
+            }
+            return '(02) ' . substr($subscriber, 0, 4) . '-' . substr($subscriber, 4, 4);
+        }
+
+        return $value;
+    }
+
+    private function isValidPhilippineLandlineNumber($value): bool
+    {
+        $value = trim((string) $value);
+        return (bool) preg_match('/^\(049\)\s\d{3}-\d{4}$/', $value) || (bool) preg_match('/^\(02\)\s\d{4}-\d{4}$/', $value);
+    }
+
+    private function isValidPhilippineMobileNumber($value): bool
+    {
+        return (bool) preg_match('/^\+63\s9\d{2}\s\d{3}\s\d{4}$/', trim((string) $value));
     }
 
     public function preview_file($category, $filename)

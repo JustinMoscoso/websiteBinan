@@ -145,25 +145,25 @@
                     <div class="col-md-6">
                         <label for="contact" class="form-label small fw-bold text-secondary">PLDT Landline</label>
                         <input type="text" class="form-control shadow-sm" id="contact" name="contact"
-                            placeholder="Enter Landline Number" required>
+                            placeholder="(049) 123-4567 or (02) 1234-5678" inputmode="tel" maxlength="15">
                     </div>
 
                     <div class="col-md-6">
                         <label for="smart" class="form-label small fw-bold text-secondary">SMART Network Mobile</label>
                         <input type="text" class="form-control shadow-sm" id="smart" name="smart"
-                            placeholder="Enter Phone Number" required>
+                            placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
                     </div>
 
                     <div class="col-md-6">
                         <label for="globe" class="form-label small fw-bold text-secondary">GLOBE Network Mobile</label>
                         <input type="text" class="form-control shadow-sm" id="globe" name="globe"
-                            placeholder="Enter Phone Number" required>
+                            placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
                     </div>
 
                     <div class="col-md-6">
                         <label for="telco" class="form-label small fw-bold text-secondary">INTELCO Line</label>
                         <input type="text" class="form-control shadow-sm" id="telco" name="telco"
-                            placeholder="Enter Landline Number" required>
+                            placeholder="(049) 123-4567 or (02) 1234-5678" inputmode="tel" maxlength="15">
                     </div>
 
                 </div>
@@ -219,7 +219,11 @@
                         </select>
                     </div>
 
-                  
+                    <div class="col-12" id="editothersGrp" style="display: none;">
+                        <label for="editOthers" class="form-label small fw-bold text-secondary">Office Name <span
+                                class="text-danger">*</span></label>
+                        <input type="text" id="editOthers" name="editOthers" class="form-control shadow-sm" required>
+                    </div>
 
                     <div class="col-12 mt-4 mb-1">
                         <h6 class="small text-uppercase fw-bold text-muted tracking-wider border-bottom pb-2">
@@ -229,27 +233,27 @@
                     <div class="col-md-6">
                         <label for="editContact" class="form-label small fw-bold text-secondary">PLDT Landline</label>
                         <input type="text" class="form-control shadow-sm" id="editContact" name="editContact"
-                            placeholder="XXX-XXXX or -" required>
+                            inputmode="tel" maxlength="15">
                     </div>
 
                     <div class="col-md-6">
                         <label for="editSmart" class="form-label small fw-bold text-secondary">SMART Network
                             Mobile</label>
                         <input type="text" class="form-control shadow-sm" id="editSmart" name="editSmart"
-                            placeholder="09XX-XXX-XXXX or -" required>
+                            placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
                     </div>
 
                     <div class="col-md-6">
                         <label for="editGlobe" class="form-label small fw-bold text-secondary">GLOBE Network
                             Mobile</label>
                         <input type="text" class="form-control shadow-sm" id="editGlobe" name="editGlobe"
-                            placeholder="09XX-XXX-XXXX or -" required>
+                            placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
                     </div>
 
                     <div class="col-md-6">
                         <label for="editTelco" class="form-label small fw-bold text-secondary">INTELCO Line</label>
                         <input type="text" class="form-control shadow-sm" id="editTelco" name="editTelco"
-                            placeholder="Enter Landline Number" required>
+                            inputmode="tel" maxlength="15">
                     </div>
 
                 </div>
