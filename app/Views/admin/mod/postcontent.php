@@ -64,9 +64,9 @@
 
                             <div class="col-12 col-md-4">
                                 <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
-                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
-                                    <i class="bi bi-plus-circle me-1"></i>
-                                    Add Record
+                                    data-bs-toggle="modal" data-bs-target="#contentModal" id="openAddModalBtn"
+                                    style="height: 38px;">
+                                    <i class="bi bi-plus-circle me-1"></i> Add Record
                                 </button>
                             </div>
 
@@ -98,13 +98,13 @@
     </div>
 </section>
 
-<div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+<div class="modal fade" id="contentModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <form id="addForm" class="modal-content border-0 shadow-lg" enctype="multipart/form-data">
+        <form id="contentForm" class="modal-content border-0 shadow-lg" enctype="multipart/form-data">
+            <input type="hidden" id="recordId" name="id">
 
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-
+                <h5 class="modal-title fw-bold" id="modalTitle" style="font-size: 1.1rem;">
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -114,8 +114,8 @@
                 <div class="row g-3">
 
                     <div class="col-md-4">
-                        <label for="content_category" class="form-label small fw-bold text-secondary">Category
-                            <span class="text-danger">*</span></label>
+                        <label for="content_category" class="form-label small fw-bold text-secondary">Category <span
+                                class="text-danger">*</span></label>
                         <select class="form-select" id="content_category" name="content_category" required>
                             <option selected disabled value="">Select Category</option>
                             <option value="NEWS">News and Events</option>
@@ -130,25 +130,25 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="newsImg" class="form-label small fw-bold text-secondary">Cover Image<span
-                                class="text-danger">*</span></label>
-                        <input type="file" id="newsImg" name="newsImg" accept="image/*" required>
+                        <label for="newsImg" class="form-label small fw-bold text-secondary" id="imgLabel">Cover Image
+                            <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="newsImg" name="newsImg" accept="image/*">
                     </div>
 
                     <div class="col-12">
-                        <label for="title" class="form-label small fw-bold text-secondary">Title
-                            <span class="text-danger">*</span></label>
+                        <label for="title" class="form-label small fw-bold text-secondary">Title <span
+                                class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title"
                             required>
                     </div>
 
                     <div class="col-12">
-                        <label for="addDescHidden" class="form-label small fw-bold text-secondary mb-1">Content <span
+                        <label for="descHidden" class="form-label small fw-bold text-secondary mb-1">Content <span
                                 class="text-danger">*</span></label>
                         <div class="editor-wrapper shadow-sm">
                             <div id="quillDesc" style="height: 220px;"></div>
                         </div>
-                        <input type="hidden" id="addDescHidden" name="desc" required>
+                        <input type="hidden" id="descHidden" name="desc" required>
                     </div>
 
                 </div>
@@ -156,73 +156,7 @@
 
             <div class="modal-footer bg-light px-4 py-3 border-top">
                 <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
-            </div>
-
-        </form>
-    </div>
-</div>
-
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <form id="editForm" class="modal-content border-0 shadow-lg" enctype="multipart/form-data">
-            <input type="hidden" id="editNewsId" name="id">
-
-            <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-pencil-square me-2"></i>
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4">
-                <div class="row g-3">
-
-                    <div class="col-md-4">
-                        <label for="edit_content_category" class="form-label small fw-bold text-secondary">Post
-                            Classification Category <span class="text-danger">*</span></label>
-                        <select class="form-select" id="edit_content_category" name="edit_content_category" required>
-                            <option disabled value="">Choose channel...</option>
-                            <option value="NEWS">News and Events</option>
-                            <option value="ANNS">Announcements</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="editAuthor" class="form-label small fw-bold text-secondary">Author</label>
-                        <input type="text" class="form-control bg-light text-muted" id="editAuthor" name="editAuthor"
-                            value="<?= $user->fname . ' ' . $user->lname ?>" readonly>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="editNewsImg" class="form-label small fw-bold text-secondary">Replace Cover Banner
-                            Graphic Asset</label>
-                        <input type="file" class="form-control" id="editNewsImg" name="editNewsImg" accept="image/*">
-                    </div>
-
-                    <div class="col-12">
-                        <label for="editTitle" class="form-label small fw-bold text-secondary">Post Headline / Article
-                            Title <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="editTitle" name="editTitle"
-                            placeholder="Update headline title details..." required>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="editDescHidden" class="form-label small fw-bold text-secondary mb-1">Body Context /
-                            Editor Copy <span class="text-danger">*</span></label>
-                        <div class="editor-wrapper shadow-sm">
-                            <div id="editQuillDesc" style="height: 220px;"></div>
-                        </div>
-                        <input type="hidden" id="editDescHidden" name="editDesc" required>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="modal-footer bg-light px-4 py-3 border-top">
-                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnEdit" type="submit" class="btn btn-theme px-4">Save</button>
+                <button id="btnSubmit" type="submit" class="btn btn-success px-4">Save</button>
             </div>
 
         </form>
