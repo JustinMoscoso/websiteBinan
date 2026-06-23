@@ -142,7 +142,6 @@
     .service-card {
       background-color: #ffffff;
       border: 1px solid #e8f5e9;
-      border-left: 5px solid #388e3c;
       border-radius: 8px;
       padding: 24px;
       margin-bottom: 24px;
