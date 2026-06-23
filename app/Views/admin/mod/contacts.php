@@ -17,7 +17,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Contact / Office</label>
                         <input type="text" class="form-control" id="searchContact"
-                            placeholder="Search Contact / Office Name...">
+                            placeholder="Search Contact / Office Name">
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
@@ -155,15 +155,15 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="globe" class="form-label small fw-bold text-secondary">GLOBE Network Mobile</label>
-                        <input type="text" class="form-control shadow-sm" id="globe" name="globe"
-                            placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
-                    </div>
-
-                    <div class="col-md-6">
                         <label for="telco" class="form-label small fw-bold text-secondary">INTELCO Line</label>
                         <input type="text" class="form-control shadow-sm" id="telco" name="telco"
                             placeholder="(049) 123-4567 or (02) 1234-5678" inputmode="tel" maxlength="15">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="globe" class="form-label small fw-bold text-secondary">GLOBE Network Mobile</label>
+                        <input type="text" class="form-control shadow-sm" id="globe" name="globe"
+                            placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
                     </div>
 
                 </div>
@@ -244,16 +244,16 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label for="editTelco" class="form-label small fw-bold text-secondary">INTELCO Line</label>
+                        <input type="text" class="form-control shadow-sm" id="editTelco" name="editTelco"
+                            inputmode="tel" maxlength="15">
+                    </div>
+
+                    <div class="col-md-6">
                         <label for="editGlobe" class="form-label small fw-bold text-secondary">GLOBE Network
                             Mobile</label>
                         <input type="text" class="form-control shadow-sm" id="editGlobe" name="editGlobe"
                             placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editTelco" class="form-label small fw-bold text-secondary">INTELCO Line</label>
-                        <input type="text" class="form-control shadow-sm" id="editTelco" name="editTelco"
-                            inputmode="tel" maxlength="15">
                     </div>
 
                 </div>

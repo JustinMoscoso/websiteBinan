@@ -22,7 +22,7 @@
                         <div class="tab-content w-100">
                             <div class="tab-pane fade show active">
                                 <div class="row g-4 d-flex justify-content-center">
-                                    <div class="col-md-10">
+                                    <div class="col-md-12">
                                         <!-- Modern Carded Table Container -->
                                         <div class="hotline-card">
                                             <div class="filter-container">
@@ -63,9 +63,9 @@
                                                                         ?>
                                                                     </td>
                                                                     <td><?= htmlspecialchars($hotline->number ?? '-') ?></td>
+                                                                    <td><?= htmlspecialchars($hotline->telco ?? '-') ?></td>
                                                                     <td><?= htmlspecialchars($hotline->smart ?? '-') ?></td>
                                                                     <td><?= htmlspecialchars($hotline->globe ?? '-') ?></td>
-                                                                    <td><?= htmlspecialchars($hotline->telco ?? '-') ?></td>
                                                                 </tr>
                                                             <?php endforeach; ?>
                                                         <?php else: ?>
@@ -97,24 +97,25 @@
             "order": [[0, "asc"]],
             "paging": true, // Enable pagination
             "searching": true, // Enable built-in search
+            "dom": "ltip", // Hide default search input, keep length changing, table, info, pagination
             "info": true,
             "autoWidth": false,
             "columnDefs": [
                 { "targets": 0, "data": "name" },
                 { "targets": 1, "data": "pldt" },
-                { "targets": 2, "data": "smart" },
-                { "targets": 3, "data": "globe" },
-                { "targets": 4, "data": "intelco" }
+                { "targets": 2, "data": "intelco" },
+                { "targets": 3, "data": "smart" },
+                { "targets": 4, "data": "globe" }
             ]
         });
 
         // Function to update table headers based on filter
         function updateTableHeader(filter) {
             var headers = {
-                all: ['All Hotlines', 'PLDT', 'SMART', 'GLOBE', 'INTELCO'],
-                department: ['Office', 'PLDT', 'SMART', 'GLOBE', 'INTELCO'],
-                barangay: ['Barangay', 'PLDT', 'SMART', 'GLOBE', 'INTELCO'],
-                others: ['Others', 'PLDT', 'SMART', 'GLOBE', 'INTELCO']
+                all: ['All Hotlines', 'PLDT', 'INTELCO', 'SMART', 'GLOBE'],
+                department: ['Office', 'PLDT', 'INTELCO', 'SMART', 'GLOBE'],
+                barangay: ['Barangay', 'PLDT', 'INTELCO', 'SMART', 'GLOBE'],
+                others: ['Others', 'PLDT', 'INTELCO', 'SMART', 'GLOBE']
             };
 
             // Clear existing headers
