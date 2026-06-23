@@ -126,7 +126,7 @@
                     <div class="col-12" id="brgyGroup" style="display: none;">
                         <label for="txtBrgy" class="form-label small fw-bold text-secondary">Barangay Location <span
                                 class="text-danger">*</span></label>
-                        <select class="form-select shadow-sm" id="txtBrgy" name="txtBrgy" required>
+                        <select class="form-control  shadow-sm" id="txtBrgy" name="txtBrgy" required>
                         </select>
                     </div>
 
@@ -145,25 +145,25 @@
                     <div class="col-md-6">
                         <label for="contact" class="form-label small fw-bold text-secondary">PLDT Landline</label>
                         <input type="text" class="form-control shadow-sm" id="contact" name="contact"
-                            placeholder="XXX-XXXX or -" required>
+                            placeholder="Enter Landline Number" required>
                     </div>
 
                     <div class="col-md-6">
                         <label for="smart" class="form-label small fw-bold text-secondary">SMART Network Mobile</label>
                         <input type="text" class="form-control shadow-sm" id="smart" name="smart"
-                            placeholder="09XX-XXX-XXXX or -" required>
+                            placeholder="Enter Phone Number" required>
                     </div>
 
                     <div class="col-md-6">
                         <label for="globe" class="form-label small fw-bold text-secondary">GLOBE Network Mobile</label>
                         <input type="text" class="form-control shadow-sm" id="globe" name="globe"
-                            placeholder="09XX-XXX-XXXX or -" required>
+                            placeholder="Enter Phone Number" required>
                     </div>
 
                     <div class="col-md-6">
                         <label for="telco" class="form-label small fw-bold text-secondary">INTELCO Line</label>
                         <input type="text" class="form-control shadow-sm" id="telco" name="telco"
-                            placeholder="XXX-XXXX or -" required>
+                            placeholder="Enter Landline Number" required>
                     </div>
 
                 </div>
@@ -215,15 +215,11 @@
                     <div class="col-12" id="editbrgyGroup" style="display: none;">
                         <label for="editBrgy" class="form-label small fw-bold text-secondary">Barangay Location <span
                                 class="text-danger">*</span></label>
-                        <select class="form-select shadow-sm" id="editBrgy" name="editBrgy" required>
+                        <select class="form-control form-select shadow-sm" id="editBrgy" name="editBrgy" required>
                         </select>
                     </div>
 
-                    <div class="col-12" id="editothersGrp" style="display: none;">
-                        <label for="editOthers" class="form-label small fw-bold text-secondary">Office Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" id="editOthers" name="editOthers" class="form-control shadow-sm" required>
-                    </div>
+                  
 
                     <div class="col-12 mt-4 mb-1">
                         <h6 class="small text-uppercase fw-bold text-muted tracking-wider border-bottom pb-2">
@@ -253,7 +249,7 @@
                     <div class="col-md-6">
                         <label for="editTelco" class="form-label small fw-bold text-secondary">INTELCO Line</label>
                         <input type="text" class="form-control shadow-sm" id="editTelco" name="editTelco"
-                            placeholder="XXX-XXXX or -" required>
+                            placeholder="Enter Landline Number" required>
                     </div>
 
                 </div>

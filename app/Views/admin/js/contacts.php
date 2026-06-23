@@ -44,10 +44,23 @@
     }
 
     // Initialize selectize for all selects
-    $('#txtDept, #editDept, #txtBrgy, #editBrgy').selectize({
+    // Placeholder must be passed in the config — Selectize ignores the HTML placeholder attribute
+    // dropdownParent: 'body' appends the dropdown list to <body> so it fully escapes
+    // the modal's stacking context and always renders on top without bleed-through
+    $('#txtDept, #editDept').selectize({
         sortField: 'text',
-        allowClear: true
+        allowClear: true,
+        placeholder: 'Select Department',
+        dropdownParent: 'body'
     });
+
+    $('#txtBrgy, #editBrgy').selectize({
+        sortField: 'text',
+        allowClear: true,
+        placeholder: 'Select Barangay',
+        dropdownParent: 'body'
+    });
+
 
     // Toggle Status function
     function toggleStatus(id, currentStatus, forcedStatus) {
