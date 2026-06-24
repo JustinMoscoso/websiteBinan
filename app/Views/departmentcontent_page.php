@@ -217,7 +217,7 @@ include_header(htmlspecialchars($dept->dept_name), $breadcrumbs, [
     <div class="col-md-3 sidebar mb-4 mt-0 pt-0">
       <nav id="sidebar-nav" class="nav flex-column">
         <a href="#" class="nav-link sidebar-link active" data-tab="about">About</a>
-        <a href="#" class="nav-link sidebar-link" data-tab="missionvision">Mission & Vision</a>
+        <a href="#" class="nav-link sidebar-link" data-tab="missionvision">Mission &amp; Vision</a>
         <a href="#" class="nav-link sidebar-link" data-tab="services">Services</a>
         <a href="#" class="nav-link sidebar-link" data-tab="contact">Contact Information</a>
       </nav>
@@ -268,6 +268,13 @@ include_header(htmlspecialchars($dept->dept_name), $breadcrumbs, [
             <hr />
             <p><?= ($dept->vision) ?></p>
           </div>
+          <?php if (!empty($dept->quality_policy)): ?>
+          <div class="col-12 mb-4">
+            <h5 class="text-dark text-center">Policy Objectives</h5>
+            <hr />
+            <div><?= $dept->quality_policy ?></div>
+          </div>
+          <?php endif; ?>
         </div>
       </div>
 

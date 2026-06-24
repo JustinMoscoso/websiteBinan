@@ -180,18 +180,18 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 
                         <div class="col-12">
                             <div id="deptGroup" style="display:none;">
-                                <label for="txtDept" class="form-label small fw-bold text-secondary">Responsible Department
-                                    Entity <span class="text-danger">*</span></label>
+                                <label for="txtDept" class="form-label small fw-bold text-secondary">Department
+                                    <span class="text-danger">*</span></label>
                                 <select id="txtDept" name="txtDept" class="form-control form-select">
-                                    <option selected disabled value="">Choose regional department...</option>
+                                    <option selected disabled value="">Select Department</option>
                                 </select>
                             </div>
 
                             <div id="brgyGroup" style="display:none;">
-                                <label for="txtBrgy" class="form-label small fw-bold text-secondary">Responsible Barangay
+                                <label for="txtBrgy" class="form-label small fw-bold text-secondary">Barangay
                                     Ward <span class="text-danger">*</span></label>
                                 <select id="txtBrgy" name="txtBrgy" class="form-control form-select">
-                                    <option selected disabled value="">Choose community ward...</option>
+                                    <option selected disabled value="">Select Barangay</option>
                                 </select>
                             </div>
                         </div>
@@ -211,7 +211,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 
             <div class="modal-footer bg-light px-4 py-3 border-top">
                 <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
+                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
 
         </form>
@@ -225,7 +225,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-pencil-square me-2"></i>Modify Service Configuration
+                    <i class="bi bi-pencil-square me-2"></i>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -239,10 +239,10 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             value="<?= $isBrgyScopedAdmin ? 'BRGY' : 'DEPT' ?>">
                     <?php else: ?>
                         <div class="col-md-6">
-                            <label for="editcategory" class="form-label small fw-bold text-secondary">Category Group Scope
+                            <label for="editcategory" class="form-label small fw-bold text-secondary">Category
                                 <span class="text-danger">*</span></label>
                             <select class="form-select" id="editcategory" name="editcategory" required>
-                                <option value="" disabled>Choose classification</option>
+                                <option value="" disabled>Choose Category</option>
                                 <option value="BRGY">Barangay</option>
                                 <option value="DEPT">Department</option>
                             </select>
@@ -250,8 +250,8 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                     <?php endif; ?>
 
                     <div class="<?= $isEntityScopedAdmin ? 'col-12' : 'col-md-6' ?>">
-                        <label for="editServiceName" class="form-label small fw-bold text-secondary">Service Provision
-                            Name <span class="text-danger">*</span></label>
+                        <label for="editServiceName" class="form-label small fw-bold text-secondary">Service
+                             <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="editServiceName" name="editServiceName"
                             placeholder="Enter service description..." required>
                     </div>
@@ -259,14 +259,14 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                     <?php if (!$isEntityScopedAdmin): ?>
                         <div class="col-12">
                             <div id="editDeptFieldGroup" style="display:none;" class="mb-2">
-                                <label for="editDept" class="form-label small fw-bold text-secondary">Responsible Department
-                                    Entity <span class="text-danger">*</span></label>
+                                <label for="editDept" class="form-label small fw-bold text-secondary">Department
+                                    <span class="text-danger">*</span></label>
                                 <select id="editDept" name="editDept" class="form-control form-select">
                                 </select>
                             </div>
 
                             <div id="editBrgyFieldGroup" style="display:none;">
-                                <label for="editBrgy" class="form-label small fw-bold text-secondary">Responsible Barangay
+                                <label for="editBrgy" class="form-label small fw-bold text-secondary">Barangay
                                     Ward <span class="text-danger">*</span></label>
                                 <select id="editBrgy" name="editBrgy" class="form-control form-select">
                                 </select>
@@ -275,8 +275,8 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                     <?php endif; ?>
 
                     <div class="col-12">
-                        <label class="form-label small fw-bold text-secondary mb-1">Detailed Service Instructions &
-                            Content Requirements <span class="text-danger">*</span></label>
+                        <label class="form-label small fw-bold text-secondary mb-1">Service Details
+                                 <span class="text-danger">*</span></label>
                         <div class="editor-wrapper shadow-sm">
                             <div id="editQuillContent" style="height: 180px;"></div>
                         </div>

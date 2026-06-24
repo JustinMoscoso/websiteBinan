@@ -582,9 +582,14 @@
             { "title": "Department ID", "data": "ID", "visible": false },
             { "title": "Dept. Name", "data": "dept_name", width: '30%' },
             {
-                "title": "Logo", "data": "img_logo", "className": "dt-center",
+                "title": "Logo",
+                "data": "img_logo",
+                "className": "dt-center dept-logo-cell",
                 "render": function (data, type, row) {
-                    return '<img id="img_logo" class="img-fluid mt-3" src="<?php echo base_url('admin/image/DEPT/') ?>' + data + '">';
+                    if (!data) {
+                        return '<div class="dept-logo-thumb"><small class="text-muted">No logo</small></div>';
+                    }
+                    return '<div class="dept-logo-thumb"><img id="img_logo" src="<?php echo base_url('admin/image/DEPT/') ?>' + data + '" alt="Department logo"></div>';
                 }
             },
             { "title": "Officer in Charge", "data": "head", width: '25%' },

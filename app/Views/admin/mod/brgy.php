@@ -7,6 +7,30 @@
 
 
 <link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
+<style>
+    .brgy-logo-thumb {
+        width: 100%;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 0.25rem;
+    }
+
+    .brgy-logo-thumb img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+    }
+
+    #tblbrgy td.brgy-logo-cell {
+        vertical-align: middle;
+    }
+</style>
 
 <?php if ($user->user_lvl !== 'VIEWER'): ?>
     <div class="card card-premium mb-4">
@@ -90,8 +114,8 @@
     </div>
 </section>
 
-<div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-xl custom-wide-modal modal-dialog-centered modal-dialog-scrollable">
+<div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true" style="overflow-y: auto;">
+    <div class="modal-dialog modal-xl custom-wide-modal my-3">
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;"></h5>
@@ -114,30 +138,31 @@
 
                     <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">About</label>
-                        <div id="createabout" style="height: 220px;"></div>
+                        <div id="createabout" style="height: 150px;"></div>
                         <input type="hidden" id="createAbout" name="createAbout">
                     </div>
 
-                    <div class="col-md-6 mt-2">
+                    <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">Mission</label>
-                        <div id="txtMission" style="height: 180px;"></div>
+                        <div id="txtMission" style="height: 150px;"></div>
                         <input type="hidden" name="txtMission">
                     </div>
-                    <div class="col-md-6 mt-2">
+
+                    <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">Vision</label>
-                        <div id="txtVision" style="height: 180px;"></div>
+                        <div id="txtVision" style="height: 150px;"></div>
                         <input type="hidden" name="txtVision">
                     </div>
 
                     <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">Contact Information</label>
-                        <div id="txtContact" style="height: 140px;"></div>
+                        <div id="txtContact" style="height: 150px;"></div>
                         <input type="hidden" name="txtContact">
                     </div>
 
                     <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">Barangay Staff</label>
-                        <div id="txtStaff" style="height: 180px;"></div>
+                        <div id="txtStaff" style="height: 150px;"></div>
                         <input type="hidden" name="txtStaff">
                     </div>
 
@@ -158,8 +183,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-xl custom-wide-modal modal-dialog-centered modal-dialog-scrollable">
+<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true" style="overflow-y: auto;">
+    <div class="modal-dialog modal-xl custom-wide-modal my-3">
         <form id="editForm" class="modal-content border-0 shadow-lg">
             <input type="hidden" id="editBrgyId" name="id">
 
@@ -184,36 +209,37 @@
 
                     <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">About</label>
-                        <div id="editabout" style="height: 220px;"></div>
+                        <div id="editabout" style="height: 150px;"></div>
                         <input type="hidden" id="editAbout" name="editAbout">
                     </div>
 
-                    <div class="col-md-6 mt-2">
+                    <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">Mission</label>
-                        <div id="editMission" style="height: 180px;"></div>
+                        <div id="editMission" style="height: 150px;"></div>
                         <input type="hidden" name="editMission">
                     </div>
-                    <div class="col-md-6 mt-2">
+
+                    <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">Vision</label>
-                        <div id="editVision" style="height: 180px;"></div>
+                        <div id="editVision" style="height: 150px;"></div>
                         <input type="hidden" name="editVision">
                     </div>
 
                     <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">Contact Information</label>
-                        <div id="editContact" style="height: 140px;"></div>
+                        <div id="editContact" style="height: 150px;"></div>
                         <input type="hidden" name="editContact">
                     </div>
 
                     <div class="col-12 mt-2">
                         <label class="form-label small fw-bold text-secondary">Barangay Staff</label>
-                        <div id="editStaff" style="height: 180px;"></div>
+                        <div id="editStaff" style="height: 150px;"></div>
                         <input type="hidden" name="editStaff">
                     </div>
 
                     <div class="col-md-6 mt-2">
                         <label for="editbrgyImg" class="form-label small fw-bold text-secondary">Barangay Logo</label>
-                        <input type="file" class=" shadow-sm" id="editbrgyImg" name="editbrgyImg" accept="image/*">
+                        <input type="file" class="shadow-sm" id="editbrgyImg" name="editbrgyImg" accept="image/*">
                         <div id="editBrgyLogoPreview" class="mt-2"></div>
                     </div>
                 </div>

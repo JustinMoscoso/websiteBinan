@@ -708,9 +708,15 @@
             { "title": "Barangay ID", "data": "ID", "visible": false },
             { "title": "Barangay", "data": "brgy_name", width: '18%' },
             {
-                "title": "Logo", "data": "img_logo", "className": "dt-center", width: '12%',
+                "title": "Logo",
+                "data": "img_logo",
+                "className": "dt-center brgy-logo-cell",
+                width: '12%',
                 "render": function (data, type, row) {
-                    return '<img id="img_logo" class="img-fluid mt-3" src="<?php echo base_url('admin/image/BARANGAY/') ?>' + data + '">';
+                    if (!data) {
+                        return '<div class="brgy-logo-thumb"><small class="text-muted">No logo</small></div>';
+                    }
+                    return '<div class="brgy-logo-thumb"><img id="img_logo" src="<?php echo base_url('admin/image/BARANGAY/') ?>' + data + '" alt="Barangay logo"></div>';
                 }
             },
             { "title": "Captain", "data": "brngy_capt", width: '15%', "className": "dt-body-left" },
