@@ -22,7 +22,7 @@
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0" name="search"
-                                placeholder="Search Date / File Name">
+                                placeholder="Search Date">
                         </div>
                     </div>
 
@@ -33,6 +33,7 @@
                             <option selected value="">All Categories</option>
                             <option value="1">Level 1</option>
                             <option value="2">Level 2</option>
+                            <option value="3">Level 1 &amp; 2</option>
                         </select>
                     </div>
 
@@ -120,14 +121,15 @@
                             <option selected disabled value="">Select Level</option>
                             <option value="1">Level 1</option>
                             <option value="2">Level 2</option>
+                            <option value="3">Level 1 &amp; 2</option>
                         </select>
                     </div>
                     <div class="col-12 mt-3">
                         <label for="careerFile" class="form-label small fw-bold text-secondary">Upload Document
                         </label>
                         <input type="file" class="form-control shadow-sm" id="careerFile" name="careerFile"
-                            accept=".pdf,.xls,.xlsx" required>
-                        <div class="form-text text-muted" style="font-size: 0.75rem;">Supported types: .pdf, .xls, .xlsx
+                            accept=".pdf,application/pdf" required>
+                        <div class="form-text text-muted" style="font-size: 0.75rem;">Supported type: .pdf only
                         </div>
                     </div>
                 </div>
@@ -158,20 +160,21 @@
                             required>
                     </div>
                     <div class="col-md-6">
-                        <label for="editlevel" class="form-label small fw-bold text-secondary">Category</label>
+                        <label for="editlevel" class="form-label small fw-bold text-secondary">Level</label>
                         <select class="form-select shadow-sm" id="editlevel" name="editlevel" required>
-                            <option selected disabled value="">All Category</option>
+                            <option selected disabled value="">Select Level</option>
                             <option value="1">Level 1</option>
                             <option value="2">Level 2</option>
+                            <option value="3">Level 1 &amp; 2</option>
                         </select>
                     </div>
                     <div class="col-12 mt-3">
-                        <label for="editCareerFile" class="form-label small fw-bold text-secondary">Replace Document
-                            Attachment</label>
+                        <label for="editCareerFile" class="form-label small fw-bold text-secondary">Upload Document
+                            </label>
                         <input type="file" class="form-control shadow-sm" id="editCareerFile" name="editCareerFile"
-                            accept=".pdf,.xls,.xlsx">
-                        <div class="form-text text-muted" style="font-size: 0.75rem;">Leave empty to keep current file
-                            attachment</div>
+                            accept=".pdf,application/pdf">
+                        <div class="form-text text-muted" style="font-size: 0.75rem;">Supported type: .pdf only
+                            </div>
                     </div>
                 </div>
             </div>

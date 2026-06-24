@@ -148,15 +148,36 @@
         editpublication.max = new Date().toISOString().split("T")[0];
     }
 
+    function isPdfFile(file) {
+        if (!file) {
+            return false;
+        }
+
+        var fileName = (file.name || '').toLowerCase();
+        var fileType = (file.type || '').toLowerCase();
+
+        return fileName.endsWith('.pdf') || fileType === 'application/pdf';
+    }
+
     $('#btnAdd').on('click', function () {
         let form = $('#addForm')[0];
         let formData = new FormData(form);
+        let careerFile = formData.get('careerFile');
 
-        if (!formData.get('publication') || !formData.get('careerFile').name) {
+        if (!formData.get('publication') || !careerFile || !careerFile.name) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
+            });
+            return;
+        }
+
+        if (!isPdfFile(careerFile)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'Please upload a PDF file only.'
             });
             return;
         }
@@ -217,6 +238,7 @@
                     let res = response.data; // Directly access the data object
                     $('#editCareerId').val(res.ID);
                     $('#editpublication').val(res.publication_date);
+                    $('#editlevel').val(res.level);
                     $('#editModal').modal('show');
                 } else {
                     Swal.fire({
@@ -240,12 +262,22 @@
     // Function to submit the edit user form
     $('#btnEdit').click(function () {
         let formData = new FormData($('#editForm')[0]);
+        let careerFile = formData.get('editCareerFile');
 
         if (!formData.get('editpublication')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
+            });
+            return;
+        }
+
+        if (careerFile && careerFile.size > 0 && !isPdfFile(careerFile)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'Please upload a PDF file only.'
             });
             return;
         }
@@ -322,6 +354,7 @@
                 "render": function (data, type, row) {
                     if (data == 1) return 'Level 1';
                     if (data == 2) return 'Level 2';
+                    if (data == 3) return 'Level 1 & 2';
                     return '-';
                 }
             },

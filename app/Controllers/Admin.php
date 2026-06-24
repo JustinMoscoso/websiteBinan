@@ -2580,6 +2580,13 @@ class Admin extends BaseController
                 $careerFile = $this->request->getFile('careerFile');
                 $level = $this->request->getPost('level'); // Get level from POST
 
+                $careerExt = strtolower((string) $careerFile->getClientExtension());
+                $careerMime = strtolower((string) $careerFile->getClientMimeType());
+                if ($careerExt !== 'pdf' || ($careerMime !== 'application/pdf' && $careerMime !== 'application/x-pdf')) {
+                    $message = 'Please upload a PDF file only.';
+                    break;
+                }
+
                 // Validate the file
                 if ($careerFile->isValid() && !$careerFile->hasMoved()) {
                     $fileName = $careerFile->getRandomName();
@@ -3495,7 +3502,8 @@ class Admin extends BaseController
                         $fileName = $policyFile->getRandomName();
                         $path = WRITEPATH . 'uploads/' . $file_category;
 
-                        if ($policyFile->hasMoved() && $policyFile->move($path, $fileName)) {
+                        if (!$policyFile->hasMoved()) {
+                            $policyFile->move($path, $fileName);
                             $data['file_name'] = $fileName;
                         }
                     }
@@ -3733,10 +3741,18 @@ class Admin extends BaseController
                     $careerFile = $this->request->getFile('editCareerFile');
 
                     if ($careerFile && $careerFile->isValid()) {
+                        $careerExt = strtolower((string) $careerFile->getClientExtension());
+                        $careerMime = strtolower((string) $careerFile->getClientMimeType());
+                        if ($careerExt !== 'pdf' || ($careerMime !== 'application/pdf' && $careerMime !== 'application/x-pdf')) {
+                            $message = 'Please upload a PDF file only.';
+                            break;
+                        }
+
                         $fileName = $careerFile->getRandomName();
                         $path = WRITEPATH . 'uploads/' . $file_category;
 
-                        if ($careerFile->hasMoved() && $careerFile->move($path, $fileName)) {
+                        if (!$careerFile->hasMoved()) {
+                            $careerFile->move($path, $fileName);
                             $data['file_name'] = $fileName;
                         }
                     }
@@ -3746,7 +3762,7 @@ class Admin extends BaseController
                         $status = 1;
                         $message = 'Career updated successfully.';
                         $log_c['processDetails'] = 'CAREER_ID: ' . $id;
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $message = 'An error occurred while updating.';
                         return;
                     }
