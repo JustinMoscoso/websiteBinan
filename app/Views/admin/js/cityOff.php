@@ -801,7 +801,7 @@
         select: false,
         searching: true,
         ordering: true,
-        "order": [[1, 'asc']],
+        "order": [[3, 'asc']],
         pageLength: 10,
         processing: true,
         ajax: {
@@ -839,16 +839,16 @@
         },
         columns: [
             { "title": "City Official ID", "data": "ID", "visible": false },
+            { "title": "Official Name", "data": "off_name" },
+            { "title": "Position", "data": "off_position", width: '15%' },
             {
                 "title": "Rank", "data": "ranking", "className": "dt-center", width: '5%',
                 "render": function (data, type, row) {
                     return data ? data : '-'; // Display "-" if data is null
                 }
             },
-            { "title": "Official Name", "data": "off_name" },
-            { "title": "Position", "data": "off_position", width: '15%' },
             {
-                "title": "Years of Service", "data": "years_of_service", width: '10%',
+                "title": "Years of Service", "data": "years_of_service", "visible": false, width: '10%',
                 "render": function (data, type, row) {
                     if (!data) return '-';
                     let text = data.replace(/<[^>]+>/g, ''); // Remove HTML tags
@@ -856,7 +856,7 @@
                 }
             },
             {
-                "title": "Personal Data", "data": "personal_data", width: '20%',
+                "title": "Personal Data", "data": "personal_data", "visible": false, width: '20%',
                 "render": function (data, type, row) {
                     if (!data) return '-';
                     let text = data.replace(/<[^>]+>/g, ''); // Remove HTML tags
@@ -864,7 +864,7 @@
                 }
             },
             {
-                "title": "Awards", "data": "awards", width: '20%',
+                "title": "Awards", "data": "awards", "visible": false, width: '20%',
                 "render": function (data, type, row) {
                     if (!data) return '-';
                     let text = data.replace(/<[^>]+>/g, ''); // Remove HTML tags

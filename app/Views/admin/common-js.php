@@ -59,14 +59,14 @@
         if (!adminCanArchive(level)) {
             return '';
         }
-        return `<li><a class="dropdown-item text-warning" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}', 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
+        return `<li><a class="dropdown-item" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}', 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
     }
 
     function renderDeleteAction(level, rowId, deleteFnName) {
         if (!adminCanDelete(level)) {
             return '';
         }
-        return `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="${deleteFnName}(${rowId})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
+        return `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item" href="#" onclick="${deleteFnName}(${rowId})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
     }
 
     function nextRecordStatus(currentStatus, forcedStatus) {

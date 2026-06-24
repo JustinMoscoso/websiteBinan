@@ -207,10 +207,10 @@
                             if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
                                 actionHtml += `<li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}" data-forced-status="ACTIVE"><i class="bi bi-arrow-counterclockwise me-1"></i>Restore</a></li>`;
                             } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
-                                actionHtml += `<li><a class="dropdown-item text-warning toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}" data-forced-status="ARCHIVED"><i class="bi bi-archive me-1"></i>Archive</a></li>`;
+                                actionHtml += `<li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}" data-forced-status="ARCHIVED"><i class="bi bi-archive me-1"></i>Archive</a></li>`;
                             }
                             if (adminCanDelete(userLevel)) {
-                                actionHtml += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger delete-job" href="#" data-id="${row.ID}"><i class="bi bi-trash me-1"></i>Delete</a></li>`;
+                                actionHtml += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item delete-job" href="#" data-id="${row.ID}"><i class="bi bi-trash me-1"></i>Delete</a></li>`;
                             }
                         }
 

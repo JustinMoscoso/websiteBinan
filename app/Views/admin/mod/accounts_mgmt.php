@@ -23,7 +23,7 @@
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select" id="searchStatus">
-                            <option selected value="">— Select Status —</option>
+                            <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active Only</option>
                             <option value="INACTIVE">Inactive Only</option>
                         </select>
@@ -32,7 +32,7 @@
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Account Level</label>
                         <select class="form-control form-select" id="searchUserLevel">
-                            <option selected value="">— Select Account Level —</option>
+                            <option selected value="">Select Account Level</option>
                             <?php if ($user->user_lvl === 'DEVELOPER'): ?>
                                 <option value="DEVELOPER">Developer</option>
                             <?php endif; ?>
@@ -132,7 +132,7 @@
                             <label for="txtLastName" class="form-label small fw-bold text-secondary">Last Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="txtLastName" name="txtLastName" placeholder="e.g. Doe" required>
                         </div>
-                        <div class="col-md-2 col-sm-2">
+                        <div class="col-md-3 col-sm-2">
                             <label for="txtSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
                             <select class="form-select" id="txtSuffix" name="txtSuffix">
                                 <option value="">None</option>
@@ -264,7 +264,7 @@
                             <label for="editLastName" class="form-label small fw-bold text-secondary">Last Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="editLastName" name="editLastName" placeholder="Update last name" required>
                         </div>
-                        <div class="col-md-2 col-sm-2">
+                        <div class="col-md-3 col-sm-2">
                             <label for="editSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
                             <select class="form-select" id="editSuffix" name="editSuffix">
                                 <option value="">None</option>

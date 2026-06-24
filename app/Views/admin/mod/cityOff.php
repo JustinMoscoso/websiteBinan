@@ -168,10 +168,10 @@
                     <div class="col-lg-7 col-12 d-flex flex-column gap-3">
                         <div class="card border-0 shadow-sm p-4 bg-white">
                             <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-3">Biography
-                                Information Portals</h6>
+                                </h6>
 
                             <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary mb-1">Chronological Years of
+                                <label class="form-label small fw-bold text-secondary mb-1">Years of
                                     Service</label>
                                 <div class="editor-wrapper">
                                     <div id="years_of_service" style="height: 140px;"></div>
@@ -179,15 +179,15 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary mb-1">Personal Background Data
-                                    Document</label>
+                                <label class="form-label small fw-bold text-secondary mb-1">Personal Data
+                                    </label>
                                 <div class="editor-wrapper">
                                     <div id="personal_data" style="height: 140px;"></div>
                                 </div>
                             </div>
 
                             <div class="mb-0">
-                                <label class="form-label small fw-bold text-secondary mb-1">Accredited Awards &
+                                <label class="form-label small fw-bold text-secondary mb-1">Awards &
                                     Distinctions</label>
                                 <div class="editor-wrapper">
                                     <div id="awards" style="height: 140px;"></div>
@@ -227,7 +227,7 @@
                     <div class="col-lg-5 col-12 d-flex flex-column gap-3">
                         <div class="card border-0 shadow-sm p-4 h-100 rounded-3 bg-white">
                             <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-3">Identity
-                                Specifications</h6>
+                                </h6>
 
                             <div class="mb-3">
                                 <label for="editoffname" class="form-label small fw-bold text-secondary">Official Full
