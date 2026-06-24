@@ -110,101 +110,107 @@
 
             <div class="modal-body p-4 bg-light-surface">
 
-                <div class="row g-3 mb-3">
-                    <div class="col-md-3">
-                        <label for="txtFirstName" class="form-label small fw-bold text-secondary">First Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="txtFirstName" name="txtFirstName"
-                            placeholder="e.g. John" required>
+                <!-- Section: Personal Information -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-person"></i></span>
+                        <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Personal Information</span>
+                        
                     </div>
-                    <div class="col-md-3">
-                        <label for="txtMiddleName" class="form-label small fw-bold text-secondary">Middle Name
-                            <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="txtMiddleName" name="txtMiddleName"
-                            placeholder="e.g. Smith" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="txtLastName" class="form-label small fw-bold text-secondary">Last Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="txtLastName" name="txtLastName"
-                            placeholder="e.g. Doe" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="txtSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
-                        <select class="form-select" id="txtSuffix" name="txtSuffix">
-                            <option value="">— None —</option>
-                            <option value="Jr.">Jr. (Junior)</option>
-                            <option value="Sr.">Sr. (Senior)</option>
-                            <option value="II">II</option>
-                            <option value="III">III</option>
-                            <option value="IV">IV</option>
-                            <option value="V">V</option>
-                            <option value="VI">VI</option>
-                            <option value="VII">VII</option>
-                            <option value="VIII">VIII</option>
-                            <option value="IX">IX</option>
-                            <option value="X">X</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label for="txtUsername" class="form-label small fw-bold text-secondary">Account Username
-                            <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="txtUsername" name="txtUsername"
-                            placeholder="Username" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="txtEmail" class="form-label small fw-bold text-secondary">E-Mail
-                            Address
-                            <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="txtEmail" name="txtEmail"
-                            placeholder="username@domain.com" required>
+                    <hr>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-sm-12">
+                            <label for="txtFirstName" class="form-label small fw-bold text-secondary">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="txtFirstName" name="txtFirstName" placeholder="e.g. John" required>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="txtMiddleName" class="form-label small fw-bold text-secondary">Middle Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="txtMiddleName" name="txtMiddleName" placeholder="e.g. Smith" required>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-6 col-sm-10">
+                            <label for="txtLastName" class="form-label small fw-bold text-secondary">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="txtLastName" name="txtLastName" placeholder="e.g. Doe" required>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <label for="txtSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
+                            <select class="form-select" id="txtSuffix" name="txtSuffix">
+                                <option value="">None</option>
+                                <option value="Jr.">Jr.</option>
+                                <option value="Sr.">Sr.</option>
+                                <option value="II">II</option>
+                                <option value="III">III</option>
+                                <option value="IV">IV</option>
+                                <option value="V">V</option>
+                                <option value="VI">VI</option>
+                                <option value="VII">VII</option>
+                                <option value="VIII">VIII</option>
+                                <option value="IX">IX</option>
+                                <option value="X">X</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <label for="txtPassword" class="form-label small fw-bold text-secondary">Password
-                            <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" id="txtPassword" name="txtPassword"
-                            placeholder="*********" required>
+                <hr class="my-4" style="opacity: 0.15;">
+
+                <!-- Section: Account Credentials -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-shield-lock"></i></span>
+                        <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Credentials</span>
                     </div>
-                    <div class="col-md-6">
-                        <label for="txtAccLevel" class="form-label small fw-bold text-secondary">Account Level <span class="text-danger">*</span></label>
-                        <select id="txtAccLevel" name="txtAccLevel" class="form-select" required>
-                            <option selected disabled value="">— Select Authorization Level
-                                —
-                            </option>
-                            <option value="SUPERADMIN">Super Administrator</option>
-                            <option value="ADMIN">Standard Administrator</option>
-                            <option value="ENCODER">Data Encoder Entry</option>
-                            <option value="VIEWER">System Read Auditor</option>
-                        </select>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-sm-12">
+                            <label for="txtUsername" class="form-label small fw-bold text-secondary">Account Username <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="txtUsername" name="txtUsername" placeholder="Username" required>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="txtEmail" class="form-label small fw-bold text-secondary">E-Mail Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="username@domain.com" required>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="txtPassword" class="form-label small fw-bold text-secondary">Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="txtPassword" name="txtPassword" placeholder="*********" required>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="txtAccLevel" class="form-label small fw-bold text-secondary">Account Level <span class="text-danger">*</span></label>
+                            <select id="txtAccLevel" name="txtAccLevel" class="form-select" required>
+                                <option selected disabled value="">— Select Authorization Level —</option>
+                                <option value="SUPERADMIN">Super Administrator</option>
+                                <option value="ADMIN">Standard Administrator</option>
+                                <option value="ENCODER">Data Encoder Entry</option>
+                                <option value="VIEWER">System Read Auditor</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row g-3 mb-3">
-
-                </div>
-
-                <div class="row g-3 border-top border-light pt-3 mt-2" id="accountTypeRow">
-                    <div class="col-md-6">
-                        <label for="txtAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
-                       <select id="txtAccountType" name="txtAccountType" class="form-select">
-    <option disabled value="">— Select Account Scope Boundaries —</option>
-    <option value="DEPARTMENT" selected>Department</option>
-    <option value="BARANGAY">Barangay</option>
-</select>
-                      
-                    </div>
-                    <div class="col-md-6" id="entityRefGroup">
-                        <label for="txtEntityRef" class="form-label small fw-bold text-secondary">Select Department or Barangay<span class="text-danger">*</span></label>
-                        <select id="txtEntityRef" name="txtEntityRef" class="form-control form-select">
-                            <option value="" disabled selected>Select department / barangay</option>
-                        </select>
-                        <div class="form-text text-info" id="entityRefHint" style="font-size: 0.75rem;"></div>
+                <div id="accountTypeRow" style="display: none;">
+                    <hr class="my-4" style="opacity: 0.15;">
+                    <!-- Section: Account Scope & Boundaries -->
+                    <div class="mb-2">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-sliders"></i></span>
+                            <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Scope & Boundaries</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6 col-sm-12">
+                                <label for="txtAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
+                                <select id="txtAccountType" name="txtAccountType" class="form-select">
+                                    <option disabled value="">— Select Account Scope Boundaries —</option>
+                                    <option value="DEPARTMENT" selected>Department</option>
+                                    <option value="BARANGAY">Barangay</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-sm-12" id="entityRefGroup">
+                                <label for="txtEntityRef" class="form-label small fw-bold text-secondary">Select Department or Barangay <span class="text-danger">*</span></label>
+                                <select id="txtEntityRef" name="txtEntityRef" class="form-control form-select">
+                                    <option value="" disabled selected>Select department / barangay</option>
+                                </select>
+                                <div class="form-text text-info" id="entityRefHint" style="font-size: 0.75rem;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -235,100 +241,105 @@
             <div class="modal-body p-4 bg-light-surface">
                 <input type="hidden" id="editUserId" name="id">
 
-                <div class="row g-3 mb-3">
-                    <div class="col-md-3">
-                        <label for="editFirstName" class="form-label small fw-bold text-secondary">First Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="editFirstName" name="editFirstName"
-                            placeholder="Update first name" required>
+                <!-- Section: Personal Information -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-person"></i></span>
+                        <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Personal Information</span>
                     </div>
-                    <div class="col-md-3">
-                        <label for="editMiddleName" class="form-label small fw-bold text-secondary">Middle Name
-                            <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="editMiddleName" name="editMiddleName"
-                            placeholder="Update middle name" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="editLastName" class="form-label small fw-bold text-secondary">Last Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="editLastName" name="editLastName"
-                            placeholder="Update last name" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="editSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
-                        <select class="form-select" id="editSuffix" name="editSuffix">
-                            <option value="">— None —</option>
-                            <option value="Jr.">Jr. (Junior)</option>
-                            <option value="Sr.">Sr. (Senior)</option>
-                            <option value="II">II</option>
-                            <option value="III">III</option>
-                            <option value="IV">IV</option>
-                            <option value="V">V</option>
-                            <option value="VI">VI</option>
-                            <option value="VII">VII</option>
-                            <option value="VIII">VIII</option>
-                            <option value="IX">IX</option>
-                            <option value="X">X</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label for="editUsername" class="form-label small fw-bold text-secondary">Username
-                            <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="editUsername" name="editUsername"
-                            placeholder="Modify account username string" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="editEmail" class="form-label small fw-bold text-secondary">Email-Address
-                            
-                            <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="editEmail" name="editEmail"
-                            placeholder="Modify account email address location" required>
+                    <hr>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-sm-12">
+                            <label for="editFirstName" class="form-label small fw-bold text-secondary">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editFirstName" name="editFirstName" placeholder="Update first name" required>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="editMiddleName" class="form-label small fw-bold text-secondary">Middle Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editMiddleName" name="editMiddleName" placeholder="Update middle name" required>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="editLastName" class="form-label small fw-bold text-secondary">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editLastName" name="editLastName" placeholder="Update last name" required>
+                        </div>
+                        <div class="col-md-2 col-sm-2">
+                            <label for="editSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
+                            <select class="form-select" id="editSuffix" name="editSuffix">
+                                <option value="">None</option>
+                                <option value="Jr.">Jr.</option>
+                                <option value="Sr.">Sr.</option>
+                                <option value="II">II</option>
+                                <option value="III">III</option>
+                                <option value="IV">IV</option>
+                                <option value="V">V</option>
+                                <option value="VI">VI</option>
+                                <option value="VII">VII</option>
+                                <option value="VIII">VIII</option>
+                                <option value="IX">IX</option>
+                                <option value="X">X</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <label for="editPassword" class="form-label small fw-bold text-secondary">
-                            Password</label>
-                        <input type="password" class="form-control" id="editPassword" name="editPassword"
-                            placeholder="Leave empty unless you want to change password">
-                        <div class="form-text text-muted" style="font-size: 0.75rem;">
-                         </div>
+                <hr class="my-4" style="opacity: 0.15;">
+
+                <!-- Section: Account Credentials -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-shield-lock"></i></span>
+                        <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Credentials</span>
                     </div>
-                    <div class="col-md-6">
-                        <label for="editAccLevel" class="form-label small fw-bold text-secondary">
-                            Account Level <span class="text-danger">*</span></label>
-                        <select id="editAccLevel" name="editAccLevel" class="form-select" required>
-                            <option selected disabled value="">— Select Authorization Level
-                                —
-                            </option>
-                            <option value="SUPERADMIN">Super Administrator</option>
-                            <option value="ADMIN">Standard Administrator</option>
-                            <option value="ENCODER">Data Encoder Entry</option>
-                            <option value="VIEWER">System Read Auditor</option>
-                        </select>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-sm-12">
+                            <label for="editUsername" class="form-label small fw-bold text-secondary">Username <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editUsername" name="editUsername" placeholder="Modify account username string" required>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="editEmail" class="form-label small fw-bold text-secondary">Email-Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="editEmail" name="editEmail" placeholder="Modify account email address location" required>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="editPassword" class="form-label small fw-bold text-secondary">Password</label>
+                            <input type="password" class="form-control" id="editPassword" name="editPassword" placeholder="Leave empty unless you want to change password">
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <label for="editAccLevel" class="form-label small fw-bold text-secondary">Account Level <span class="text-danger">*</span></label>
+                            <select id="editAccLevel" name="editAccLevel" class="form-select" required>
+                                <option selected disabled value="">— Select Authorization Level —</option>
+                                <option value="SUPERADMIN">Super Administrator</option>
+                                <option value="ADMIN">Standard Administrator</option>
+                                <option value="ENCODER">Data Encoder Entry</option>
+                                <option value="VIEWER">System Read Auditor</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row g-3 border-top border-light pt-3 mt-2" id="editAccountTypeRow">
-                    <div class="col-md-6">
-                        <label for="editAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
-                        <select id="editAccountType" name="editAccountType" class="form-select">
-                            <option value="DEPARTMENT">Department</option>
-                            <option value="BARANGAY">Barangay</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6" id="editEntityRefGroup">
-                        <label for="editEntityRef" class="form-label small fw-bold text-secondary">Select
-                            Department or Barangay
-                             <span class="text-danger">*</span></label>
-                        <select id="editEntityRef" name="editEntityRef" class="form-control form-select">
-                            <option value="" disabled selected>Select department / barangay</option>
-                        </select>
-                        <div class="form-text text-info" id="editEntityRefHint" style="font-size: 0.75rem;"></div>
+                <div id="editAccountTypeRow" style="display: none;">
+                    <hr class="my-4" style="opacity: 0.15;">
+                    <!-- Section: Account Scope & Boundaries -->
+                    <div class="mb-2">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-sliders"></i></span>
+                            <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Scope & Boundaries</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6 col-sm-12">
+                                <label for="editAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
+                                <select id="editAccountType" name="editAccountType" class="form-select">
+                                    <option value="DEPARTMENT">Department</option>
+                                    <option value="BARANGAY">Barangay</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-sm-12" id="editEntityRefGroup">
+                                <label for="editEntityRef" class="form-label small fw-bold text-secondary">Select Department or Barangay <span class="text-danger">*</span></label>
+                                <select id="editEntityRef" name="editEntityRef" class="form-control form-select">
+                                    <option value="" disabled selected>Select department / barangay</option>
+                                </select>
+                                <div class="form-text text-info" id="editEntityRefHint" style="font-size: 0.75rem;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
