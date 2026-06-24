@@ -100,7 +100,7 @@
 </section>
 
 <div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <form id="addForm" class="modal-content border-0 shadow-lg">
 
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
@@ -114,8 +114,8 @@
             <div class="modal-body p-4 bg-light">
                 <div class="row g-4">
 
-                    <div class="col-lg-5 col-12 d-flex flex-column gap-3">
-                        <div class="card border-0 shadow-sm p-4 h-100 rounded-3 bg-white">
+                    <div class="col-12 d-flex flex-column gap-3">
+                        <div class="card border-0 shadow-sm p-4 rounded-3 bg-white">
                             <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-3">Identity
                                 Specifications</h6>
 
@@ -165,7 +165,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-7 col-12 d-flex flex-column gap-3">
+                    <div class="col-12 d-flex flex-column gap-3">
                         <div class="card border-0 shadow-sm p-4 bg-white">
                             <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-3">Biography
                                 </h6>
@@ -174,7 +174,7 @@
                                 <label class="form-label small fw-bold text-secondary mb-1">Years of
                                     Service</label>
                                 <div class="editor-wrapper">
-                                    <div id="years_of_service" style="height: 140px;"></div>
+                                    <div id="years_of_service" style="height: 220px;"></div>
                                 </div>
                             </div>
 
@@ -182,7 +182,7 @@
                                 <label class="form-label small fw-bold text-secondary mb-1">Personal Data
                                     </label>
                                 <div class="editor-wrapper">
-                                    <div id="personal_data" style="height: 140px;"></div>
+                                    <div id="personal_data" style="height: 220px;"></div>
                                 </div>
                             </div>
 
@@ -190,7 +190,7 @@
                                 <label class="form-label small fw-bold text-secondary mb-1">Awards &
                                     Distinctions</label>
                                 <div class="editor-wrapper">
-                                    <div id="awards" style="height: 140px;"></div>
+                                    <div id="awards" style="height: 220px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -209,7 +209,7 @@
 </div>
 
 <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <form id="editForm" class="modal-content border-0 shadow-lg">
             <input type="hidden" id="editCOId" name="id">
 
@@ -224,8 +224,8 @@
             <div class="modal-body p-4 bg-light">
                 <div class="row g-4">
 
-                    <div class="col-lg-5 col-12 d-flex flex-column gap-3">
-                        <div class="card border-0 shadow-sm p-4 h-100 rounded-3 bg-white">
+                    <div class="col-12 d-flex flex-column gap-3">
+                        <div class="card border-0 shadow-sm p-4 rounded-3 bg-white">
                             <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-3">Identity
                                 </h6>
 
@@ -275,7 +275,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-7 col-12 d-flex flex-column gap-3">
+                    <div class="col-12 d-flex flex-column gap-3">
                         <div class="card border-0 shadow-sm p-4 bg-white">
                             <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-3">Biography
                                 Information Portals</h6>
@@ -284,7 +284,7 @@
                                 <label class="form-label small fw-bold text-secondary mb-1">Chronological Years of
                                     Service</label>
                                 <div class="editor-wrapper">
-                                    <div id="edit_years_of_service" style="height: 140px;"></div>
+                                    <div id="edit_years_of_service" style="height: 220px;"></div>
                                 </div>
                             </div>
 
@@ -292,7 +292,7 @@
                                 <label class="form-label small fw-bold text-secondary mb-1">Personal Background Data
                                     Document</label>
                                 <div class="editor-wrapper">
-                                    <div id="edit_personal_data" style="height: 140px;"></div>
+                                    <div id="edit_personal_data" style="height: 220px;"></div>
                                 </div>
                             </div>
 
@@ -300,7 +300,7 @@
                                 <label class="form-label small fw-bold text-secondary mb-1">Accredited Awards &
                                     Distinctions</label>
                                 <div class="editor-wrapper">
-                                    <div id="edit_awards" style="height: 140px;"></div>
+                                    <div id="edit_awards" style="height: 220px;"></div>
                                 </div>
                             </div>
                         </div>
