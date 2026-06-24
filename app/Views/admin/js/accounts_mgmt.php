@@ -140,7 +140,7 @@
             $raw[0].selectize.destroy();
         }
 
-        $raw.empty().append('<option value="" disabled selected>Loading\u2026</option>');
+        $raw.empty().append('<option value="" disabled selected>Select department / barangay</option>');
 
         var url, labelKey;
         if (type === 'DEPARTMENT') {
@@ -172,14 +172,19 @@
             $raw.selectize({
                 sortField: 'text',
                 searchField: 'text',
-                placeholder: '\u2014 Type to search \u2014',
+                placeholder: 'Select department / barangay',
+                allowEmptyOption: true,
                 allowClear: true,
                 onInitialize: function () {
-                    if (currentVal) { this.setValue(String(currentVal)); }
+                    if (currentVal) {
+                        this.setValue(String(currentVal));
+                    } else {
+                        this.clear(true);
+                    }
                 }
             });
         }, 'json').fail(function () {
-            $raw.empty().append('<option value="" disabled>Failed to load. Please retry.</option>');
+            $raw.empty().append('<option value="" disabled selected>Failed to load. Please retry.</option>');
         });
     }
 
@@ -218,6 +223,7 @@
         } else {
             // Default to DEPARTMENT and load options
             $('#txtAccountType').val('DEPARTMENT');
+            $('#txtEntityRef').val('');
             loadEntityOptions('DEPARTMENT', '#txtEntityRef', '#entityRefHint', null);
             $('#accountTypeRow').show();
         }

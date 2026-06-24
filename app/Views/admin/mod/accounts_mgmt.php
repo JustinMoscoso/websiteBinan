@@ -202,9 +202,7 @@
                     <div class="col-md-6" id="entityRefGroup">
                         <label for="txtEntityRef" class="form-label small fw-bold text-secondary">Select Department or Barangay<span class="text-danger">*</span></label>
                         <select id="txtEntityRef" name="txtEntityRef" class="form-control form-select">
-                            <option value="" disabled selected>— Select contextual entity
-                                node
-                                link —</option>
+                            <option value="" disabled selected>Select department / barangay</option>
                         </select>
                         <div class="form-text text-info" id="entityRefHint" style="font-size: 0.75rem;"></div>
                     </div>
@@ -292,7 +290,7 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="col-12">
+                    <div class="col-6">
                         <label for="editPassword" class="form-label small fw-bold text-secondary">
                             Password</label>
                         <input type="password" class="form-control" id="editPassword" name="editPassword"
@@ -300,9 +298,6 @@
                         <div class="form-text text-muted" style="font-size: 0.75rem;">
                          </div>
                     </div>
-                </div>
-
-                <div class="row g-3 mb-3">
                     <div class="col-md-6">
                         <label for="editAccLevel" class="form-label small fw-bold text-secondary">
                             Account Level <span class="text-danger">*</span></label>
@@ -331,9 +326,7 @@
                             Department or Barangay
                              <span class="text-danger">*</span></label>
                         <select id="editEntityRef" name="editEntityRef" class="form-control form-select">
-                            <option value="" disabled selected>— Select contextual entity
-                                node
-                                link —</option>
+                            <option value="" disabled selected>Select department / barangay</option>
                         </select>
                         <div class="form-text text-info" id="editEntityRefHint" style="font-size: 0.75rem;"></div>
                     </div>
