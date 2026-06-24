@@ -593,15 +593,6 @@
                 },
                 "visible": false
             },
-            {
-                "title": "Category", "data": "brngy_cont_ID", width: '25%',
-                "render": function (data, type, row) {
-                    if (row.brgy_name === null)
-                        return row.dept_name;
-                    else
-                        return row.brgy_name;
-                }
-            },
             { "title": "Services", "data": "serv_name" },
             {
                 "title": "Content", "data": "content", "className": "dt-head-center dt-body-justify", width: '35%',
@@ -612,6 +603,15 @@
                     tmp.innerHTML = data;
                     var text = tmp.textContent || tmp.innerText || '';
                     return text.length > 120 ? text.substring(0, 120) + '…' : text;
+                }
+            },
+            {
+                "title": "Category", "data": "brngy_cont_ID", width: '25%',
+                "render": function (data, type, row) {
+                    if (row.brgy_name === null)
+                        return row.dept_name;
+                    else
+                        return row.brgy_name;
                 }
             },
             {
