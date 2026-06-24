@@ -21,25 +21,25 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Status Profile</label>
+                        <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select" id="searchStatus">
-                            <option selected value="">— Status Profile —</option>
+                            <option selected value="">— Select Status —</option>
                             <option value="ACTIVE">Active Only</option>
                             <option value="INACTIVE">Inactive Only</option>
                         </select>
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Authority Level</label>
+                        <label class="form-label small fw-bold text-secondary">Account Level</label>
                         <select class="form-control form-select" id="searchUserLevel">
-                            <option selected value="">— Authority Level —</option>
+                            <option selected value="">— Select Account Level —</option>
                             <?php if ($user->user_lvl === 'DEVELOPER'): ?>
-                                <option value="DEVELOPER">Developer Engine</option>
+                                <option value="DEVELOPER">Developer</option>
                             <?php endif; ?>
-                            <option value="SUPERADMIN">Super Administrator</option>
-                            <option value="ADMIN">Standard Administrator</option>
-                            <option value="ENCODER">Data Encoder Entry</option>
-                            <option value="VIEWER">System Read Auditor</option>
+                            <option value="SUPERADMIN">Super Admin</option>
+                            <option value="ADMIN">Admin</option>
+                            <option value="ENCODER">Encoder</option>
+                            <option value="VIEWER">Viewer</option>
                         </select>
                     </div>
 

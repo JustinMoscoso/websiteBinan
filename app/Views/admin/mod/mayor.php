@@ -30,7 +30,7 @@
                         <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-select bg-light border-secondary-subtle" name="category"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Categories</option>
+                            <option selected value="">Select Categories</option>
                             <option value="Personal Data">Personal Data</option>
                             <option value="Awards">Awards</option>
                             <option value="Years Service">Years Service</option>
@@ -43,7 +43,7 @@
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Status</option>
+                            <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>

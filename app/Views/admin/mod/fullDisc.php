@@ -22,7 +22,7 @@
                         </label>
 
                         <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Search File Name / Year"
+                            <input type="text" class="form-control" name="search" placeholder="Search Category"
                                 style="height: 38px;">
                         </div>
                     </div>
@@ -35,7 +35,7 @@
 
                         <select class="form-control form-select bg-light border-secondary-subtle" name="frequency"
                             style="height: 38px; cursor: pointer;">
-                            <option value="">All Frequencies</option>
+                            <option value="">Search Frequencies</option>
                             <option value="ANNUAL">Annual</option>
                             <option value="QUARTERLY">Quarterly</option>
                         </select>
@@ -49,7 +49,7 @@
 
                         <select class="form-control form-select bg-light border-secondary-subtle" name="file_category"
                             style="height: 38px; cursor: pointer;">
-                            <option value="">All Categories</option>
+                            <option value="">Search Categories</option>
 
                             <optgroup label="Annual Reports">
                                 <option value="Annual Budget Report">Annual Budget Report</option>
@@ -107,7 +107,7 @@
 
                         <select class="form-control form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
-                            <option value="">All Status</option>
+                            <option value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                         </select>

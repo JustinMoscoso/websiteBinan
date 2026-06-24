@@ -23,7 +23,7 @@
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-control form-select" name="contactCategory">
-                            <option selected value="">All Categories</option>
+                            <option selected value="">Select Categories</option>
                             <option value="BRGY">Barangay</option>
                             <option value="DEPT">Department</option>
                             <option value="Others">Others</option>
@@ -33,7 +33,7 @@
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select" name="contactStatus">
-                            <option selected value="">All Status</option>
+                            <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>
@@ -109,7 +109,7 @@
                         <label for="category" class="form-label small fw-bold text-secondary">Directory Section <span
                                 class="text-danger">*</span></label>
                         <select class="form-select shadow-sm" id="category" name="category" required>
-                            <option value="" selected disabled>Choose a section</option>
+                            <option value="" selected disabled>Select a section</option>
                             <option value="BRGY">Barangay</option>
                             <option value="DEPT">Department</option>
                             <option value="Others">Others</option>

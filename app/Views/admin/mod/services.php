@@ -36,7 +36,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <label for="searchCategory" class="form-label small fw-bold text-secondary">Category</label>
                             <select class="form-control form-select bg-light border-secondary-subtle" name="category"
                                 id="searchCategory" style="height: 38px; cursor: pointer;">
-                                <option selected value="">All Categories</option>
+                                <option selected value="">Select Categories</option>
                                 <option value="BARANGAY">Barangay</option>
                                 <option value="DEPARTMENT">Department</option>
                             </select>
@@ -62,7 +62,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <div id="searchDefaultGroup">
                                 <select class="form-control form-select bg-light border-secondary-subtle" disabled
                                     style="height: 38px;">
-                                    <option value="">Choose Category First</option>
+                                    <option value="">Select Category First</option>
                                 </select>
                             </div>
                         </div>
@@ -72,7 +72,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                         <label for="status" class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select bg-light border-secondary-subtle" name="status" id="status"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Status</option>
+                            <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>

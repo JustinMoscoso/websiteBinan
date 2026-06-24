@@ -28,7 +28,7 @@
                         <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-control form-select bg-light border-secondary-subtle" name="type"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Job Categories</option>
+                            <option selected value="">Select Job Categories</option>
                             <option value="Full Time">Full Time</option>
                             <option value="Part Time">Part Time</option>
                         </select>
@@ -38,7 +38,7 @@
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Status</option>
+                            <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>

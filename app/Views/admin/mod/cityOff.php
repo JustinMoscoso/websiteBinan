@@ -29,7 +29,7 @@
                         <label class="form-label small fw-bold text-secondary">Category</label>
                         <select class="form-select bg-light border-secondary-subtle" name="position"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Categories</option>
+                            <option selected value="">Select Categories</option>
                             <option value="CONGRESS">Congress</option>
                             <option value="CITY MAYOR">City Mayor</option>
                             <option value="CITY VICE MAYOR">City Vice Mayor</option>
@@ -43,7 +43,7 @@
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">All Status</option>
+                            <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                             <option value="ARCHIVED">Archived</option>
