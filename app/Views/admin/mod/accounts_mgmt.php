@@ -113,7 +113,7 @@
                 <!-- Section: Personal Information -->
                 <div class="mb-4">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-person"></i></span>
+                       
                         <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Personal Information</span>
                         
                     </div>
@@ -157,9 +157,10 @@
                 <!-- Section: Account Credentials -->
                 <div class="mb-4">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-shield-lock"></i></span>
+                        
                         <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Credentials</span>
                     </div>
+                    <hr>
                     <div class="row g-3">
                         <div class="col-md-6 col-sm-12">
                             <label for="txtUsername" class="form-label small fw-bold text-secondary">Account Username <span class="text-danger">*</span></label>
@@ -191,9 +192,10 @@
                     <!-- Section: Account Scope & Boundaries -->
                     <div class="mb-2">
                         <div class="d-flex align-items-center gap-2 mb-3">
-                            <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-sliders"></i></span>
+                          
                             <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Scope & Boundaries</span>
                         </div>
+                        <hr>
                         <div class="row g-3">
                             <div class="col-md-6 col-sm-12">
                                 <label for="txtAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
@@ -244,7 +246,7 @@
                 <!-- Section: Personal Information -->
                 <div class="mb-4">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-person"></i></span>
+                      
                         <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Personal Information</span>
                     </div>
                     <hr>
@@ -287,9 +289,10 @@
                 <!-- Section: Account Credentials -->
                 <div class="mb-4">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-shield-lock"></i></span>
+                      
                         <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Credentials</span>
                     </div>
+                    <hr>
                     <div class="row g-3">
                         <div class="col-md-6 col-sm-12">
                             <label for="editUsername" class="form-label small fw-bold text-secondary">Username <span class="text-danger">*</span></label>
@@ -321,9 +324,10 @@
                     <!-- Section: Account Scope & Boundaries -->
                     <div class="mb-2">
                         <div class="d-flex align-items-center gap-2 mb-3">
-                            <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; background-color: #e8f5e9; color: #1b4d3e;"><i class="bi bi-sliders"></i></span>
+                          
                             <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Scope & Boundaries</span>
                         </div>
+                        <hr>
                         <div class="row g-3">
                             <div class="col-md-6 col-sm-12">
                                 <label for="editAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
