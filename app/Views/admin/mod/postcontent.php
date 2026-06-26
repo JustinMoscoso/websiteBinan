@@ -113,7 +113,7 @@
             <div class="modal-body p-4">
                 <div class="row g-3">
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="content_category" class="form-label small fw-bold text-secondary">Category
                             <span class="text-danger">*</span></label>
                         <select class="form-select" id="content_category" name="content_category" required>
@@ -123,16 +123,16 @@
                         </select>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-4 d-none">
                         <label for="author" class="form-label small fw-bold text-secondary">Author</label>
                         <input type="text" class="form-control bg-light text-muted" id="author" name="author"
                             value="<?= $user->fname . ' ' . $user->lname ?>" readonly>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="newsImg" class="form-label small fw-bold text-secondary">Cover Image<span
                                 class="text-danger">*</span></label>
-                        <input type="file" id="newsImg" name="newsImg" accept="image/*" required>
+                        <input type="file" class="form-control" id="newsImg" name="newsImg" accept="image/*" required>
                     </div>
 
                     <div class="col-12">
@@ -179,9 +179,9 @@
             <div class="modal-body p-4">
                 <div class="row g-3">
 
-                    <div class="col-md-4">
-                        <label for="edit_content_category" class="form-label small fw-bold text-secondary">Post
-                            Classification Category <span class="text-danger">*</span></label>
+                    <div class="col-md-6">
+                        <label for="edit_content_category" class="form-label small fw-bold text-secondary">
+                            Category <span class="text-danger">*</span></label>
                         <select class="form-select" id="edit_content_category" name="edit_content_category" required>
                             <option disabled value="">Choose channel...</option>
                             <option value="NEWS">News and Events</option>
@@ -189,28 +189,28 @@
                         </select>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-4 d-none">
                         <label for="editAuthor" class="form-label small fw-bold text-secondary">Author</label>
                         <input type="text" class="form-control bg-light text-muted" id="editAuthor" name="editAuthor"
                             value="<?= $user->fname . ' ' . $user->lname ?>" readonly>
                     </div>
 
-                    <div class="col-md-4">
-                        <label for="editNewsImg" class="form-label small fw-bold text-secondary">Replace Cover Banner
-                            Graphic Asset</label>
+                    <div class="col-md-6">
+                        <label for="editNewsImg" class="form-label small fw-bold text-secondary">Cover Image
+                            </label>
                         <input type="file" class="form-control" id="editNewsImg" name="editNewsImg" accept="image/*">
                     </div>
 
                     <div class="col-12">
-                        <label for="editTitle" class="form-label small fw-bold text-secondary">Post Headline / Article
+                        <label for="editTitle" class="form-label small fw-bold text-secondary">
                             Title <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="editTitle" name="editTitle"
                             placeholder="Update headline title details..." required>
                     </div>
 
                     <div class="col-12">
-                        <label for="editDescHidden" class="form-label small fw-bold text-secondary mb-1">Body Context /
-                            Editor Copy <span class="text-danger">*</span></label>
+                        <label for="editDescHidden" class="form-label small fw-bold text-secondary mb-1">Content
+                            <span class="text-danger">*</span></label>
                         <div class="editor-wrapper shadow-sm">
                             <div id="editQuillDesc" style="height: 220px;"></div>
                         </div>

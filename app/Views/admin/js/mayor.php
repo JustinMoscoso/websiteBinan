@@ -240,6 +240,7 @@
             success: function (result) {
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
+                    $('#add_img_preview').html('');
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
@@ -289,6 +290,8 @@
 
                     // Set the content of the Quill editor
                     quillEditPerData.root.innerHTML = official.content;
+                    $('#editmayorimg').val('');
+                    renderMayorExistingImages(official.mayor_img);
 
                     $('#editModal').modal('show');
                 } else {
@@ -343,6 +346,8 @@
                         text: response.message
                     }).then(() => {
                         $('#editModal').modal('hide');
+                        $('#edit_img_preview').html('');
+                        $('#editmayorimg').val('');
                         tbl.ajax.reload();
                     });
                 } else {
@@ -372,16 +377,187 @@
             for (var i = 0; i < files.length; i++) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    $(previewContainer).append('<img src="' + e.target.result + '" class="img-thumbnail" style="width: 100px; height: auto; margin: 5px;">');
+                    $(previewContainer).append(
+                        '<div class="text-center d-inline-block" style="width: 100px; vertical-align: top; margin: 10px;">' +
+                        '<div class="position-relative" style="width: 100px; height: 100px;">' +
+                        '<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-flex align-items-center justify-content-center remove-image-btn" style="width: 22px; height: 22px; padding: 0; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.25); transform: translate(35%, -35%); z-index: 2; font-size: 14px; font-weight: bold;">&times;</button>' +
+                        '<img src="' + e.target.result + '" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: contain; background-color: #f8f9fa;" alt="Selected image">' +
+                        '</div>' +
+                        '</div>'
+                    );
                 }
                 reader.readAsDataURL(files[i]);
             }
         }
     }
 
+    function setFileInputFiles(input, files) {
+        var dt = new DataTransfer();
+        files.forEach(function (file) {
+            dt.items.add(file);
+        });
+        input.files = dt.files;
+    }
+
+    function renderFilePreview(inputSelector, previewSelector) {
+        var input = $(inputSelector)[0];
+        var preview = $(previewSelector);
+        var files = Array.from(input.files || []);
+
+        if (!files.length) {
+            preview.html('<small class="text-muted">No images selected.</small>');
+            return;
+        }
+
+        var html = '';
+        files.forEach(function (file, index) {
+            html += '<div class="text-center d-inline-block" style="width: 100px; vertical-align: top; margin: 10px;">' +
+                '<div class="position-relative" style="width: 100px; height: 100px;">' +
+                '<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-flex align-items-center justify-content-center remove-selected-image" data-input="' + inputSelector + '" data-index="' + index + '" style="width: 22px; height: 22px; padding: 0; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.25); transform: translate(35%, -35%); z-index: 2; font-size: 14px; font-weight: bold;">&times;</button>' +
+                '<img src="" class="img-thumbnail selected-image-preview" data-file-index="' + index + '" style="width: 100px; height: 100px; object-fit: contain; background-color: #f8f9fa;" alt="Selected image">' +
+                '</div>' +
+                '<div class="text-truncate mt-1" style="font-size: 0.75rem; color: #6c757d;" title="' + file.name + '">' + file.name + '</div>' +
+                '</div>';
+        });
+
+        preview.html(html);
+
+        files.forEach(function (file, index) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                preview.find('img.selected-image-preview[data-file-index="' + index + '"]').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function removeSelectedFile(inputSelector, index) {
+        var input = $(inputSelector)[0];
+        var files = Array.from(input.files || []);
+        files.splice(index, 1);
+        setFileInputFiles(input, files);
+    }
+
+    function renderMayorExistingImages(images) {
+        var list = parseMayorImages(images);
+        $('#existing_mayor_images').val(JSON.stringify(list));
+        renderEditMayorPreview();
+    }
+
+    function renderEditMayorPreview() {
+        var preview = $('#edit_img_preview');
+        var existing = parseMayorImages($('#existing_mayor_images').val());
+        var selected = Array.from($('#editmayorimg')[0].files || []);
+        var html = '';
+
+        if (!existing.length && !selected.length) {
+            preview.html('<small class="text-muted">No existing images available.</small>');
+            return;
+        }
+
+        existing.forEach(function (image) {
+            html += '<div class="text-center d-inline-block" style="width: 100px; vertical-align: top; margin: 10px;">' +
+                '<div class="position-relative" style="width: 100px; height: 100px;">' +
+                '<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-flex align-items-center justify-content-center remove-existing-mayor-image" data-image="' + image + '" style="width: 22px; height: 22px; padding: 0; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.25); transform: translate(35%, -35%); z-index: 2; font-size: 14px; font-weight: bold;">&times;</button>' +
+                '<img src="<?php echo base_url('admin/image/MAYOR/') ?>' + image + '" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: contain; background-color: #f8f9fa;" alt="Mayor image">' +
+                '</div>' +
+                '<div class="text-truncate mt-1" style="font-size: 0.75rem; color: #6c757d;" title="Existing: ' + image + '">Existing: ' + image + '</div>' +
+                '</div>';
+        });
+
+        selected.forEach(function (file, index) {
+            html += '<div class="text-center d-inline-block" style="width: 100px; vertical-align: top; margin: 10px;">' +
+                '<div class="position-relative" style="width: 100px; height: 100px;">' +
+                '<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-flex align-items-center justify-content-center remove-selected-image" data-input="#editmayorimg" data-index="' + index + '" style="width: 22px; height: 22px; padding: 0; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.25); transform: translate(35%, -35%); z-index: 2; font-size: 14px; font-weight: bold;">&times;</button>' +
+                '<img src="" class="img-thumbnail selected-image-preview" data-file-index="' + index + '" style="width: 100px; height: 100px; object-fit: contain; background-color: #f8f9fa;" alt="Selected image">' +
+                '</div>' +
+                '<div class="text-truncate mt-1" style="font-size: 0.75rem; color: #6c757d;" title="New: ' + file.name + '">New: ' + file.name + '</div>' +
+                '</div>';
+        });
+
+        preview.html(html);
+
+        selected.forEach(function (file, index) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                preview.find('img.selected-image-preview[data-file-index="' + index + '"]').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function parseMayorImages(value) {
+        if (!value) {
+            return [];
+        }
+
+        if (Array.isArray(value)) {
+            return value.filter(function (image) {
+                return image && String(image).trim() !== '';
+            });
+        }
+
+        if (typeof value === 'string') {
+            try {
+                var parsed = JSON.parse(value);
+                if (Array.isArray(parsed)) {
+                    return parsed.filter(function (image) {
+                        return image && String(image).trim() !== '';
+                    });
+                }
+            } catch (e) {
+                // Treat plain strings as a single filename below.
+            }
+
+            return value.split(',').map(function (image) {
+                return image.trim();
+            }).filter(function (image) {
+                return image !== '';
+            });
+        }
+
+        return [];
+    }
+
     // Preview images in edit modal
     $('#editmayorimg').on('change', function () {
-        previewImages(this, '#edit_img_preview');
+        renderEditMayorPreview();
+    });
+
+    $('#mayorimg').on('change', function () {
+        renderFilePreview('#mayorimg', '#add_img_preview');
+    });
+
+    $('#addForm').on('reset', function () {
+        setTimeout(function () {
+            $('#add_img_preview').html('');
+        }, 0);
+    });
+
+    $(document).on('click', '.remove-selected-image', function () {
+        var inputSelector = $(this).data('input');
+        var index = parseInt($(this).data('index'), 10);
+        removeSelectedFile(inputSelector, index);
+        if (inputSelector === '#mayorimg') {
+            renderFilePreview('#mayorimg', '#add_img_preview');
+        } else {
+            renderEditMayorPreview();
+        }
+    });
+
+    $(document).on('click', '.remove-existing-mayor-image', function () {
+        var imageName = String($(this).data('image') || '');
+        var existing = parseMayorImages($('#existing_mayor_images').val());
+        existing = existing.filter(function (image) {
+            return image !== imageName;
+        });
+        renderMayorExistingImages(existing);
+    });
+
+    $('#editModal').on('hidden.bs.modal', function () {
+        $('#edit_img_preview').html('');
+        $('#editmayorimg').val('');
+        $('#existing_mayor_images').val('');
     });
 
 
@@ -404,8 +580,8 @@
             "dataSrc": function (json) {
                 if (json.data && Array.isArray(json.data)) {
                     return json.data.map(function (item) {
-                        // Parse JSON-encoded mayor_img field to array of image names
-                        item.mayor_img = item.mayor_img ? JSON.parse(item.mayor_img) : [];
+                        // Normalize mayor_img so the table can render existing uploads safely.
+                        item.mayor_img = parseMayorImages(item.mayor_img);
                         return item;
                     });
                 } else {

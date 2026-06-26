@@ -151,11 +151,12 @@
                     </div>
 
                     <div class="col-12">
-                        <label for="mayorimg" class="form-label small fw-bold text-secondary">Media Assets
-                            / Press
-                            Gallery Files</label>
-                        <br>
-                        <input type="file" class="" id="mayorimg" name="mayorimg[]" accept="image/*" multiple>
+                        <label for="mayorimg" class="form-label small fw-bold text-secondary">Upload Image
+                            </label>
+                        <input type="file" class="form-control" id="mayorimg" name="mayorimg[]" accept="image/*" multiple>
+                        <div id="add_img_preview"
+                            class="mt-3 d-flex flex-wrap gap-2 p-2 border border-dashed rounded bg-light">
+                        </div>
                         <div class="form-text text-muted">Multi-file uploading enabled.
                             Supported document formats: PNG,
                             JPG, JPEG, WEBP.</div>
@@ -191,8 +192,8 @@
                 <div class="row g-3">
 
                     <div class="col-md-6">
-                        <label for="edit_content_category" class="form-label small fw-bold text-secondary">Information
-                            Type / Category <span class="text-danger">*</span></label>
+                        <label for="edit_content_category" class="form-label small fw-bold text-secondary">
+                            Category <span class="text-danger">*</span></label>
                         <select class="form-select" id="edit_content_category" name="edit_content_category" required>
                             <option disabled value="">Choose profile section...</option>
                             <option value="Personal Data">Personal Data</option>
@@ -212,8 +213,8 @@
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label small fw-bold text-secondary mb-1">Personal
-                            Data / Narrative Biography
+                        <label class="form-label small fw-bold text-secondary mb-1">
+                            Biography
                             <span class="text-danger">*</span></label>
                         <div class="editor-wrapper shadow-sm">
                             <div id="editperdataEditor" style="height: 180px;"></div>
@@ -222,11 +223,11 @@
                     </div>
 
                     <div class="col-12">
-                        <label for="editmayorimg" class="form-label small fw-bold text-secondary">Upload
-                            Replacements
-                            Media File assets</label>
+                        <label for="editmayorimg" class="form-label small fw-bold text-secondary">Upload Image
+                            </label>
                         <input type="file" class="form-control" id="editmayorimg" name="editmayorimg[]" accept="image/*"
                             multiple>
+                        <input type="hidden" id="existing_mayor_images" name="existing_mayor_images" value="">
                         <div id="edit_img_preview"
                             class="mt-3 d-flex flex-wrap gap-2 p-2 border border-dashed rounded bg-light">
                         </div>

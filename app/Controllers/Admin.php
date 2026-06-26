@@ -3423,6 +3423,9 @@ class Admin extends BaseController
                 $mayorcontent = $may_m->find($id);
 
                 if ($mayorcontent) {
+                    $currentMayorImagesRaw = is_object($mayorcontent)
+                        ? ($mayorcontent->mayor_img ?? '')
+                        : (is_array($mayorcontent) ? ($mayorcontent['mayor_img'] ?? '') : '');
                     $mayor_name = $this->request->getPost('editmyrname');
                     $section = $this->request->getPost('edit_content_category');
                     $content = $this->request->getPost('editperdata');
@@ -3446,22 +3449,52 @@ class Admin extends BaseController
 
                         // Handle file uploads for mayor image if new files are selected
                         $mayor_img = $this->request->getFileMultiple('editmayorimg');
+                        $uploaded_files = [];
                         if ($mayor_img) {
-                            $uploaded_files = [];
                             foreach ($mayor_img as $img) {
                                 if ($img->isValid() && !$img->hasMoved() && $img->move($path, $img->getRandomName())) {
                                     $uploaded_files[] = $img->getName();
                                 }
                             }
-                            $data['mayor_img'] = json_encode($uploaded_files); // Store as JSON
-                        } else {
-                            // If no new files are uploaded, retain the existing mayor_img value
-                            $data['mayor_img'] = $mayorcontent['mayor_img'];
+                        }
+
+                        $existing_mayor_images = $this->request->getPost('existing_mayor_images');
+                        $retained_images = [];
+                        if (!empty($existing_mayor_images)) {
+                            $decoded_images = json_decode($existing_mayor_images, true);
+                            if (is_array($decoded_images)) {
+                                $retained_images = array_values(array_filter($decoded_images, static function ($image) {
+                                    return is_string($image) && trim($image) !== '';
+                                }));
+                            } else {
+                                $retained_images = array_values(array_filter(array_map('trim', explode(',', (string) $existing_mayor_images))));
+                            }
+                        } elseif (!empty($currentMayorImagesRaw)) {
+                            $decoded_existing = json_decode((string) $currentMayorImagesRaw, true);
+                            if (is_array($decoded_existing)) {
+                                $retained_images = array_values(array_filter($decoded_existing, static function ($image) {
+                                    return is_string($image) && trim($image) !== '';
+                                }));
+                            }
+                        }
+
+                        $final_images = array_values(array_unique(array_merge($retained_images, $uploaded_files)));
+                        $data['mayor_img'] = json_encode($final_images);
+                        $existing_db_images = json_decode((string) $currentMayorImagesRaw, true);
+                        if (!is_array($existing_db_images)) {
+                            $existing_db_images = [];
                         }
 
                         // Update mayor data
                         try {
                             $may_m->update($id, $data);
+                            $removed_images = array_diff($existing_db_images, $final_images);
+                            foreach ($removed_images as $removed_image) {
+                                $remove_path = $path . DIRECTORY_SEPARATOR . $removed_image;
+                                if (is_file($remove_path)) {
+                                    @unlink($remove_path);
+                                }
+                            }
                             $status = 1;
                             $message = 'Content updated successfully.';
                             $log_c['processDetails'] = 'MAYOR_ID: ' . $id . ' SECTION: ' . $section;

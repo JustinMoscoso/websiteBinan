@@ -227,20 +227,13 @@
         },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
+            { "title": "Title", "data": "title" },
+            { "title": "Author Name", "data": "author", width: '15%' },
             {
                 "title": "Date Created", "data": "created_date",
                 "render": function (data, type, row) {
                     var date = new Date(data);
                     return formatDate(date);
-                }
-            },
-            { "title": "Title", "data": "title" },
-            { "title": "Author Name", "data": "author", width: '15%' },
-            { "title": "Category", "data": "category", "className": "dt-center" },
-            {
-                "title": "Image", "data": "file_loc", "className": "dt-center", width: '15%',
-                "render": function (data, type, row) {
-                    return '<img id="img_loc" class="img-fluid mt-3" src="<?php echo base_url('admin/image/POSTCONTENT/') ?>' + data + '">';
                 }
             },
             {
@@ -257,6 +250,13 @@
                     } else {
                         return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>Archived</span>';
                     }
+                }
+            },
+            { "title": "Category", "data": "category", "className": "dt-center" },
+            {
+                "title": "Image", "data": "file_loc", "className": "dt-center", width: '15%',
+                "render": function (data, type, row) {
+                    return '<img id="img_loc" class="img-fluid mt-3" src="<?php echo base_url('admin/image/POSTCONTENT/') ?>' + data + '">';
                 }
             },
             {

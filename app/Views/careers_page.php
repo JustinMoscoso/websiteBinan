@@ -43,6 +43,7 @@
                                             <option value="all">Show All Levels</option>
                                             <option value="1">Level 1 Only</option>
                                             <option value="2">Level 2 Only</option>
+                                            <option value="3">Level 1 & 2 Only</option>
                                         </select>
                                     </div>
                                 </div>
@@ -77,14 +78,20 @@
                                     <?php if (!empty($careers)): ?>
                                         <?php foreach ($careers as $career): ?>
                                             <?php if (!empty($career->publication_date)): ?>
-                                                <tr data-pubmonth="<?= date('Y-m', strtotime($career->publication_date)) ?>">
+                                                <tr data-pubmonth="<?= date('Y-m', strtotime($career->publication_date)) ?>" data-level="<?= htmlspecialchars($career->level ?? '') ?>">
                                                     <td class="date-cell" data-order="<?= strtotime($career->publication_date) ?>" data-label="Vacancy Date">
                                                         <span class="date-main"><?= date('F j, Y', strtotime($career->publication_date)) ?></span>
                                                         <span class="date-sub"><?= date('l', strtotime($career->publication_date)) ?></span>
                                                     </td>
                                                     <td data-label="Level">
                                                         <?php if (isset($career->level) && $career->level): ?>
-                                                            Level <?= htmlspecialchars($career->level) ?>
+                                                            <?php 
+                                                                if ($career->level == 3 || $career->level == 4) {
+                                                                    echo 'Level 1 & 2';
+                                                                } else {
+                                                                    echo 'Level ' . htmlspecialchars($career->level);
+                                                                }
+                                                            ?>
                                                         <?php else: ?>
                                                             -
                                                         <?php endif; ?>
@@ -150,27 +157,6 @@
     <!-- Careers Page JavaScript -->
     <script src="<?= base_url('assets/js/careers.js'); ?>"></script>
     <script>
-// Level filter logic
-const levelFilter = document.getElementById('levelFilter');
-if (levelFilter) {
-    levelFilter.addEventListener('change', function() {
-        const selected = this.value;
-        const rows = document.querySelectorAll('#careersTable tbody tr');
-        rows.forEach(row => {
-            const levelCell = row.querySelector('td[data-label="Level"]');
-            if (!levelCell) return;
-            const text = levelCell.textContent.trim();
-            if (selected === 'all') {
-                row.style.display = '';
-            } else if (text === `Level ${selected}`) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-}
-
 // Date sorting logic
 let dateSortAsc = true;
 document.getElementById('dateSortHeader').addEventListener('click', function() {
