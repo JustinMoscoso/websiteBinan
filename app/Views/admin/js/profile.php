@@ -329,6 +329,7 @@
 
             $('#profileBrgyLogo').val('');
             $('#profileBrgyCardLogoInput').val('');
+            $('#profileBrgyLogoClearBtn').removeClass('active');
         }
 
         function submitProfileBarangayUpdate(formData, options) {
@@ -372,49 +373,84 @@
             });
         }
 
-        $('#editLinkedBarangayActionBtn').on('click', function (e) {
-            e.preventDefault();
-            $('#editLinkedBarangayModal').modal('show');
+        // Initialize editors when the tabs are shown, or immediately on load if tab is active
+        initProfileDepartmentEditors();
+        initProfileBarangayEditors();
+
+        $('#edit-department-tab').on('shown.bs.tab', function () {
+            initProfileDepartmentEditors();
         });
 
-        $('#editLinkedBarangayModal').on('shown.bs.modal', function () {
+        $('#edit-barangay-tab').on('shown.bs.tab', function () {
             initProfileBarangayEditors();
         });
-
-        $('#editLinkedDepartmentActionBtn').on('click', function (e) {
-            e.preventDefault();
-            $('#editLinkedDepartmentModal').modal('show');
-        });
-
         $('#profileDeptAssignCta').on('click', function (e) {
             e.preventDefault();
-            $('#editLinkedDepartmentModal').modal('show');
             $('#profileDeptHead').trigger('focus');
-        });
-
-        $('#editLinkedDepartmentModal').on('shown.bs.modal', function () {
-            initProfileDepartmentEditors();
         });
 
         $('#changeDepartmentBtn').on('click', function () {
             $('#profileDepartment').prop('readonly', false).trigger('focus');
         });
 
-        $('#profileImage').on('change', function () {
-            const file = this.files && this.files[0] ? this.files[0] : null;
-            if (!file) {
-                return;
-            }
+        // ── Profile picture: preview on select, revert on cancel ─────────────
+        (function () {
+            var _origPicSrc = $('#profilePicturePreview').attr('src') || '';
+            var _origPicHasFallback = $('#profilePictureFallback').length && !$('#profilePictureFallback').hasClass('d-none');
+            var _picPending = false;
 
-            const previewUrl = URL.createObjectURL(file);
-            $('#profilePictureFallback').addClass('d-none');
-            $('#profilePicturePreview')
-                .attr('src', previewUrl)
-                .removeClass('d-none')
-                .one('load', function () {
-                    URL.revokeObjectURL(previewUrl);
+            $('#profilePictureWrapper').on('click', function () {
+                _origPicSrc = $('#profilePicturePreview').attr('src') || '';
+                _origPicHasFallback = $('#profilePictureFallback').length && !$('#profilePictureFallback').hasClass('d-none');
+                _picPending = true;
+                $('#profileImage').trigger('click');
+                $(window).one('focus.picRevert', function () {
+                    setTimeout(function () {
+                        if (_picPending && (!$('#profileImage')[0].files || $('#profileImage')[0].files.length === 0)) {
+                            // User cancelled — revert preview
+                            if (_origPicHasFallback) {
+                                $('#profilePictureFallback').removeClass('d-none');
+                                $('#profilePicturePreview').addClass('d-none').attr('src', '');
+                            } else if (_origPicSrc) {
+                                $('#profilePicturePreview').attr('src', _origPicSrc).removeClass('d-none');
+                            }
+                            $('#profilePictureClearBtn').removeClass('active');
+                        }
+                        _picPending = false;
+                    }, 300);
                 });
-        });
+            });
+
+            $('#profileImage').on('change', function () {
+                _picPending = false;
+                $(window).off('focus.picRevert');
+                const file = this.files && this.files[0] ? this.files[0] : null;
+                if (!file) {
+                    $('#profilePictureClearBtn').removeClass('active');
+                    return;
+                }
+                const previewUrl = URL.createObjectURL(file);
+                $('#profilePictureFallback').addClass('d-none');
+                $('#profilePicturePreview')
+                    .attr('src', previewUrl)
+                    .removeClass('d-none')
+                    .one('load', function () { URL.revokeObjectURL(previewUrl); });
+                $('#profilePictureClearBtn').addClass('active');
+            });
+
+            $('#profilePictureClearBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#profileImage').val('');
+                $('#profilePictureClearBtn').removeClass('active');
+                if (_origPicHasFallback) {
+                    $('#profilePictureFallback').removeClass('d-none');
+                    $('#profilePicturePreview').addClass('d-none').attr('src', '');
+                } else if (_origPicSrc) {
+                    $('#profilePicturePreview').attr('src', _origPicSrc).removeClass('d-none');
+                    $('#profilePictureFallback').addClass('d-none');
+                }
+            });
+        }());
 
         function showProfileMessage(status, message) {
             const icon = status ? 'success' : 'error';
@@ -517,6 +553,7 @@
                             '<img class="rounded-circle" src="' + freshImageUrl + '" alt="Profile picture" style="width: 32px; height: 32px; object-fit: cover;">'
                         );
                         $('#profileImage').val('');
+                        $('#profilePictureClearBtn').removeClass('active');
                     }
                 },
                 error: function () {
@@ -528,41 +565,132 @@
             });
         });
 
-        $('#profileDeptLogo').on('change', function () {
-            const file = this.files && this.files[0] ? this.files[0] : null;
-            if (!file) {
-                return;
-            }
+        // ── Dept logo: preview in circular cell, revert on cancel ────────────
+        (function () {
+            var _origDeptSrc = $('#profileDeptLogoCell').attr('src') || '';
+            var _origDeptEmpty = !$('#profileDeptLogoEmpty').hasClass('d-none');
+            var _deptPending = false;
 
-            const previewUrl = URL.createObjectURL(file);
-            $('#profileDeptLogoPreview').html(
-                '<img src="' + previewUrl + '" alt="Department logo preview" style="max-width: 120px; max-height: 120px; object-fit: contain;">'
-            );
-        });
+            $('#profileDeptLogoWrapper').on('click.preview', function () {
+                _origDeptSrc = $('#profileDeptLogoCell').attr('src') || '';
+                _origDeptEmpty = !$('#profileDeptLogoEmpty').hasClass('d-none');
+                _deptPending = true;
+                $('#profileDeptLogo').trigger('click');
+                $(window).one('focus.deptLogoRevert', function () {
+                    setTimeout(function () {
+                        if (_deptPending && (!$('#profileDeptLogo')[0].files || $('#profileDeptLogo')[0].files.length === 0)) {
+                            if (_origDeptEmpty) {
+                                $('#profileDeptLogoEmpty').removeClass('d-none');
+                                $('#profileDeptLogoCell').addClass('d-none').attr('src', '');
+                            } else {
+                                $('#profileDeptLogoCell').attr('src', _origDeptSrc).removeClass('d-none');
+                                $('#profileDeptLogoEmpty').addClass('d-none');
+                            }
+                            $('#profileDeptLogoClearBtn').removeClass('active');
+                        }
+                        _deptPending = false;
+                    }, 300);
+                });
+            });
+
+            $('#profileDeptLogo').on('change', function () {
+                _deptPending = false;
+                $(window).off('focus.deptLogoRevert');
+                const file = this.files && this.files[0] ? this.files[0] : null;
+                if (!file) {
+                    $('#profileDeptLogoClearBtn').removeClass('active');
+                    return;
+                }
+                const previewUrl = URL.createObjectURL(file);
+                $('#profileDeptLogoEmpty').addClass('d-none');
+                $('#profileDeptLogoCell')
+                    .attr('src', previewUrl)
+                    .removeClass('d-none')
+                    .one('load', function () { URL.revokeObjectURL(previewUrl); });
+                $('#profileDeptLogoClearBtn').addClass('active');
+            });
+
+            $('#profileDeptLogoClearBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#profileDeptLogo').val('');
+                $('#profileDeptLogoClearBtn').removeClass('active');
+                if (_origDeptEmpty) {
+                    $('#profileDeptLogoEmpty').removeClass('d-none');
+                    $('#profileDeptLogoCell').addClass('d-none').attr('src', '');
+                } else {
+                    $('#profileDeptLogoCell').attr('src', _origDeptSrc).removeClass('d-none');
+                    $('#profileDeptLogoEmpty').addClass('d-none');
+                }
+            });
+        }());
 
         $('#profileDeptOrgChart').on('change', function () {
             const file = this.files && this.files[0] ? this.files[0] : null;
-            if (!file) {
-                return;
-            }
-
+            if (!file) { return; }
             const previewUrl = URL.createObjectURL(file);
             $('#profileDeptOrgChartPreview').html(
                 '<img src="' + previewUrl + '" alt="Organizational chart preview" style="max-width: 160px; max-height: 160px; object-fit: contain;">'
             );
         });
 
-        $('#profileBrgyLogo').on('change', function () {
-            const file = this.files && this.files[0] ? this.files[0] : null;
-            if (!file) {
-                return;
-            }
+        // ── Brgy logo: preview in circular cell, revert on cancel ─────────────
+        (function () {
+            var _origBrgySrc = $('#profileBrgyLogoCell').attr('src') || '';
+            var _origBrgyEmpty = !$('#profileBrgyLogoEmpty').hasClass('d-none');
+            var _brgyPending = false;
 
-            const previewUrl = URL.createObjectURL(file);
-            $('#profileBrgyLogoPreview').html(
-                '<img src="' + previewUrl + '" alt="Barangay logo preview" style="max-width: 120px; margin-top: 5px;">'
-            );
-        });
+            $('#profileBrgyLogoWrapper').on('click.preview', function () {
+                _origBrgySrc = $('#profileBrgyLogoCell').attr('src') || '';
+                _origBrgyEmpty = !$('#profileBrgyLogoEmpty').hasClass('d-none');
+                _brgyPending = true;
+                $('#profileBrgyLogo').trigger('click');
+                $(window).one('focus.brgyLogoRevert', function () {
+                    setTimeout(function () {
+                        if (_brgyPending && (!$('#profileBrgyLogo')[0].files || $('#profileBrgyLogo')[0].files.length === 0)) {
+                            if (_origBrgyEmpty) {
+                                $('#profileBrgyLogoEmpty').removeClass('d-none');
+                                $('#profileBrgyLogoCell').addClass('d-none').attr('src', '');
+                            } else {
+                                $('#profileBrgyLogoCell').attr('src', _origBrgySrc).removeClass('d-none');
+                                $('#profileBrgyLogoEmpty').addClass('d-none');
+                            }
+                            $('#profileBrgyLogoClearBtn').removeClass('active');
+                        }
+                        _brgyPending = false;
+                    }, 300);
+                });
+            });
+
+            $('#profileBrgyLogo').on('change', function () {
+                _brgyPending = false;
+                $(window).off('focus.brgyLogoRevert');
+                const file = this.files && this.files[0] ? this.files[0] : null;
+                if (!file) {
+                    $('#profileBrgyLogoClearBtn').removeClass('active');
+                    return;
+                }
+                const previewUrl = URL.createObjectURL(file);
+                $('#profileBrgyLogoEmpty').addClass('d-none');
+                $('#profileBrgyLogoCell')
+                    .attr('src', previewUrl)
+                    .removeClass('d-none')
+                    .one('load', function () { URL.revokeObjectURL(previewUrl); });
+                $('#profileBrgyLogoClearBtn').addClass('active');
+            });
+
+            $('#profileBrgyLogoClearBtn').on('click', function (e) {
+                e.stopPropagation();
+                $('#profileBrgyLogo').val('');
+                $('#profileBrgyLogoClearBtn').removeClass('active');
+                if (_origBrgyEmpty) {
+                    $('#profileBrgyLogoEmpty').removeClass('d-none');
+                    $('#profileBrgyLogoCell').addClass('d-none').attr('src', '');
+                } else {
+                    $('#profileBrgyLogoCell').attr('src', _origBrgySrc).removeClass('d-none');
+                    $('#profileBrgyLogoEmpty').addClass('d-none');
+                }
+            });
+        }());
 
         $('#profileBarangayForm').on('submit', function (e) {
             e.preventDefault();
@@ -593,65 +721,7 @@
             }
 
             submitProfileBarangayUpdate(formData, {
-                closeModal: true,
-                $button: $('#btnProfileBarangay')
-            });
-        });
-
-        $('#profileBrgyLogoButton').on('click', function () {
-            $('#profileBrgyCardLogoInput').trigger('click');
-        });
-
-        $('#profileBrgyCardLogoInput').on('change', function () {
-            const file = this.files && this.files[0] ? this.files[0] : null;
-            if (!file) {
-                return;
-            }
-
-            const maxImageSizeMB = 4;
-            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            if (file.size > maxImageSizeMB * 1024 * 1024) {
-                showProfileMessage(false, 'Logo image size should not exceed 4 MB.');
-                return;
-            }
-
-            if (!validImageTypes.includes(file.type)) {
-                showProfileMessage(false, 'Please upload a valid logo image file.');
-                return;
-            }
-
-            const previewUrl = URL.createObjectURL(file);
-            submitProfileBarangayUpdate(buildProfileBarangayFormData({ editbrgyImg: file }), {
-                successMessage: 'Barangay logo updated.',
-                errorMessage: 'Unable to update barangay logo. Please try again.',
-                previewImage: previewUrl
-            });
-        });
-
-        $(document).on('click', '.profile-brgy-status-action', function (e) {
-            e.preventDefault();
-
-            const currentStatus = $(this).attr('data-current-status') || '';
-            const nextStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-            const brgyId = $('#profileBrgyId').val() || '';
-
-            $.ajax({
-                url: "<?= site_url('admin/ajax/set_status_barangay') ?>",
-                type: 'POST',
-                data: { id: brgyId, status: nextStatus },
-                dataType: 'json',
-                success: function (response) {
-                    const saved = response.status == 1;
-                    showProfileMessage(saved, response.message || 'Barangay status updated.');
-                    if (saved) {
-                        const savedStatus = response.data && response.data.status ? response.data.status : nextStatus;
-                        $('#profileBrgyStatusCell').html(renderBarangayStatus(savedStatus));
-                        updateBarangayActionStatus(savedStatus);
-                    }
-                },
-                error: function () {
-                    showProfileMessage(false, 'Unable to update barangay status. Please try again.');
-                }
+                $button: $(this).find('button[type="submit"]')
             });
         });
 
@@ -749,13 +819,13 @@
             $('#profileDeptLogo').val('');
             $('#profileDeptCardLogoInput').val('');
             $('#profileDeptOrgChart').val('');
+            $('#profileDeptLogoClearBtn').removeClass('active');
         }
 
         function submitProfileDepartmentUpdate(formData, options) {
             const settings = $.extend({
                 successMessage: 'Department saved.',
                 errorMessage: 'Unable to update department. Please try again.',
-                closeModal: false,
                 $button: null
             }, options || {});
 
@@ -775,9 +845,6 @@
                     showProfileMessage(saved, response.message || settings.successMessage);
                     if (saved && response.data) {
                         applyProfileDepartmentResponse(response);
-                        if (settings.closeModal) {
-                            $('#editLinkedDepartmentModal').modal('hide');
-                        }
                     }
                 },
                 error: function () {
@@ -803,53 +870,18 @@
             formData.set('qualityPolicy', $('#profileDeptPolicy').val() || '');
 
             submitProfileDepartmentUpdate(formData, {
-                closeModal: true,
                 $button: $(this).find('button[type="submit"]')
             });
         });
 
-        $('#profileDeptLogoButton').on('click', function () {
-            $('#profileDeptCardLogoInput').trigger('click');
+
+        $('#profileDeptLogoSaveBtn').on('click', function () {
+            $('#profileDepartmentForm').trigger('submit');
         });
 
-        $('#profileDeptCardLogoInput').on('change', function () {
-            const file = this.files && this.files[0] ? this.files[0] : null;
-            if (!file) {
-                return;
-            }
-
-            submitProfileDepartmentUpdate(buildProfileDepartmentFormData({ deptLogo: file }), {
-                successMessage: 'Department logo updated.',
-                errorMessage: 'Unable to update department logo. Please try again.'
-            });
+        $('#profileBrgyLogoSaveBtn').on('click', function () {
+            $('#profileBarangayForm').trigger('submit');
         });
-
-        $(document).on('click', '.profile-dept-status-action', function (e) {
-            e.preventDefault();
-
-            const currentStatus = $(this).attr('data-current-status') || '';
-            const nextStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-
-            $.ajax({
-                url: "<?= site_url('admin/ajax/set_status_profile_department') ?>",
-                type: 'POST',
-                data: { status: nextStatus },
-                dataType: 'json',
-                success: function (response) {
-                    const saved = response.status == 1;
-                    showProfileMessage(saved, response.message || 'Department status updated.');
-                    if (saved && response.data) {
-                        $('#profileDeptStatusCell').html(renderDepartmentStatus(response.data.status || ''));
-                        $('#profileDeptStatus').val(response.data.status || '');
-                        updateDepartmentActionStatus(response.data.status || '');
-                    }
-                },
-                error: function () {
-                    showProfileMessage(false, 'Unable to update department status. Please try again.');
-                }
-            });
-        });
-
         $('#deleteLinkedDepartmentBtn').on('click', function (e) {
             e.preventDefault();
 
