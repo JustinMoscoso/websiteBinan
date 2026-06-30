@@ -98,6 +98,8 @@
         var selectedCategory = $(this).val();
         if (selectedCategory === 'Content' || selectedCategory === 'Home Page' || selectedCategory === 'Emergency Hotlines') {
             $('#DescGroup').show();
+            $('#AboutImgGrp').hide();
+            $('#AboutImg').val('');
             // Initialize Quill editor if not already initialized
             if (!QuillManager.getQuillInstance('aboutAddDesc')) {
                 QuillManager.initQuillEditor('quillDesc', 'aboutAddDesc');
@@ -118,6 +120,8 @@
         var selectedCategory = $(this).val();
         if (selectedCategory === 'Content' || selectedCategory === 'Home Page' || selectedCategory === 'Emergency Hotlines') {
             $('#EditDescGroup').show();
+            $('#EditAboutImgGrp').hide();
+            $('#EditAboutImg').val('');
             // Initialize Quill editor if not already initialized
             if (!QuillManager.getQuillInstance('aboutEditDesc')) {
                 QuillManager.initQuillEditor('editQuillDesc', 'aboutEditDesc');
@@ -276,10 +280,12 @@
                             $('#EditAboutImgGrp').show();
                         } else {
                             $('#EditAboutImgGrp').hide();
+                            $('#EditAboutImg').val('');
                         }
                         $('#EditTxtDesc').val(res.description);
                     } else {
                         $('#EditDescGroup, #EditAboutImgGrp').hide();
+                        $('#EditAboutImg').val('');
                     }
                     $('#editModal').modal('show');
 
@@ -389,7 +395,7 @@
             }
             formData.set('EditAboutImg', '');
         } else {
-            formData.set('EditDescGroup', '');
+            formData.set('EditTxtDesc', '');
             formData.set('EditAboutImg', '');
         }
 

@@ -178,6 +178,21 @@
         theme: 'snow'
     });
 
+    function shouldShowMayorNameField(section) {
+        return section === 'Personal Data';
+    }
+
+    function syncMayorNameField(section, mayorName) {
+        var showNameField = shouldShowMayorNameField(section);
+        var $group = $('#editMayorNameGroup');
+        var $field = $('#editmyrname');
+        var nextValue = typeof mayorName === 'undefined' ? $field.val() : (mayorName || '');
+
+        $group.toggle(showNameField);
+        $field.prop('required', showNameField);
+        $field.val(nextValue);
+    }
+
 
 
     // Show/hide the "Name of Mayor" input based on the selected category
@@ -278,15 +293,7 @@
                     let official = response.data;
                     $('#editMayorId').val(official.ID);
                     $('#edit_content_category').val(official.section);
-
-                    // Show or hide the 'Name of Mayor' field based on the selected category
-                    if (official.section === 'Personal Data') {
-                        $('#editmyrname').closest('.form-group').show();
-                        $('#editmyrname').val(official.mayor_name); // Set mayor's name
-                    } else {
-                        $('#editmyrname').closest('.form-group').hide();
-                        $('#editmyrname').val(''); // Ensure mayor's name is cleared for other sections
-                    }
+                    syncMayorNameField(official.section, official.mayor_name);
 
                     // Set the content of the Quill editor
                     quillEditPerData.root.innerHTML = official.content;
@@ -327,6 +334,10 @@
         });
 
         let formData = new FormData($('#editForm')[0]);
+
+        if (!shouldShowMayorNameField($('#edit_content_category').val())) {
+            formData.set('editmyrname', $('#editmyrname').val() || '');
+        }
 
         // Extract the content from the Quill editors
         let quillContentPerData = quillEditPerData.root.innerHTML;
@@ -522,6 +533,10 @@
     // Preview images in edit modal
     $('#editmayorimg').on('change', function () {
         renderEditMayorPreview();
+    });
+
+    $('#edit_content_category').on('change', function () {
+        syncMayorNameField($(this).val());
     });
 
     $('#mayorimg').on('change', function () {

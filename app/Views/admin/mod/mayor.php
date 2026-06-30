@@ -204,7 +204,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="editMayorNameGroup">
                         <label for="editmyrname" class="form-label small fw-bold text-secondary">Full Name of
                             Mayor
                             <span class="text-danger">*</span></label>
