@@ -189,10 +189,22 @@
                         </select>
                     </div>
 
+                    <div class="col-md-6">
+                        <label for="editCreatedDate" class="form-label small fw-bold text-secondary">
+                            Created Date</label>
+                        <input type="text" class="form-control bg-light text-muted" id="editCreatedDate" readonly>
+                    </div>
+
                     <div class="col-md-4 d-none">
                         <label for="editAuthor" class="form-label small fw-bold text-secondary">Author</label>
                         <input type="text" class="form-control bg-light text-muted" id="editAuthor" name="editAuthor"
                             value="<?= $user->fname . ' ' . $user->lname ?>" readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="editUpdatedDate" class="form-label small fw-bold text-secondary">
+                            Last Updated</label>
+                        <input type="text" class="form-control bg-light text-muted" id="editUpdatedDate" readonly>
                     </div>
 
                     <div class="col-md-6">

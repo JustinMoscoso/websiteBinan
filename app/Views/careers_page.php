@@ -40,10 +40,10 @@
                                     <div class="input-group">
                                         <span class="input-group-text bg-white"><i class="fas fa-layer-group"></i></span>
                                         <select id="levelFilter" class="form-select">
-                                            <option value="all">Show All Levels</option>
-                                            <option value="1">Level 1 Only</option>
-                                            <option value="2">Level 2 Only</option>
-                                            <option value="3">Level 1 & 2 Only</option>
+                                            <option value="all">Select Levels</option>
+                                            <option value="1">Level 1 </option>
+                                            <option value="2">Level 2 </option>
+                                            <option value="3">Level 1 & 2</option>
                                         </select>
                                     </div>
                                 </div>

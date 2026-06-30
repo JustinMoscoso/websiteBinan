@@ -27,7 +27,7 @@
                                         <div class="hotline-card">
                                             <div class="filter-container">
                                                 <select id="filterSelect" class="form-select">
-                                                    <option value="all">All</option>
+                                                    <option value="all">Select Category</option>
                                                     <option value="department">Department</option>
                                                     <option value="barangay">Barangay</option>
                                                     <option value="others">Others</option>

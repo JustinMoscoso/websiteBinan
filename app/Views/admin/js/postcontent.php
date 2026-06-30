@@ -185,6 +185,34 @@
         ]
     });
 
+    function formatPostContentDateTime(value) {
+        if (!value) {
+            return '';
+        }
+
+        var raw = String(value).trim();
+        var mysqlMatch = raw.match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2}:\d{2}))?/);
+        if (mysqlMatch) {
+            return mysqlMatch[1] + (mysqlMatch[2] ? ' ' + mysqlMatch[2] : '');
+        }
+
+        var date = new Date(raw);
+        if (isNaN(date.getTime())) {
+            return raw;
+        }
+
+        var pad = function (num) {
+            return String(num).padStart(2, '0');
+        };
+
+        return date.getFullYear() + '-' +
+            pad(date.getMonth() + 1) + '-' +
+            pad(date.getDate()) + ' ' +
+            pad(date.getHours()) + ':' +
+            pad(date.getMinutes()) + ':' +
+            pad(date.getSeconds());
+    }
+
     // Datatable
     var tbl = $('#tblnews').DataTable({
         select: false,
@@ -421,7 +449,9 @@
                     $('#edit_content_category').val(res.category);
                     $('#editTitle').val(res.title);
                     $('#editAuthor').val(res.author);
-                    $('#editDesc').val(res.description);
+                    $('#editCreatedDate').val(formatPostContentDateTime(res.created_date));
+                    $('#editUpdatedDate').val(formatPostContentDateTime(res.updated_date));
+                    $('#editDescHidden').val(res.description || '');
                     //$('#').val(res.content_ref_id);
 
                     $('#editModal').modal('show');
