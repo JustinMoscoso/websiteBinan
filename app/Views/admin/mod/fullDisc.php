@@ -18,11 +18,11 @@
                     <!-- Search -->
                     <div class="col-xl-4 col-lg-6">
                         <label class="form-label small fw-bold text-secondary">
-                            Search Query
+                            Search Category
                         </label>
 
                         <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Search Category"
+                            <input type="text" class="form-control" name="search" placeholder="Type category or year"
                                 style="height: 38px;">
                         </div>
                     </div>

@@ -203,6 +203,16 @@
     $('#addModal').on('hidden.bs.modal', function () {
         $('#addDeptLogoPreview').html('');
         $('#addDeptOrgChartPreview').html('');
+        if (quillAbout) quillAbout.setContents([]);
+        if (quillMission) quillMission.setContents([]);
+        if (quillVision) quillVision.setContents([]);
+        if (quillPolicy) quillPolicy.setContents([]);
+        if (quillContact) quillContact.setContents([]);
+        $('#txtAbout').val('');
+        $('#txtMission').val('');
+        $('#txtVision').val('');
+        $('#txtPolicy').val('');
+        $('#txtContact').val('');
     });
 
     // Edit Modal Quill editors
@@ -320,6 +330,16 @@
                 if (result.status == 1) {
                     $('#addForm').trigger('reset');
                     $('#addModal').modal('hide');
+                    if (quillAbout) quillAbout.setContents([]);
+                    if (quillMission) quillMission.setContents([]);
+                    if (quillVision) quillVision.setContents([]);
+                    if (quillPolicy) quillPolicy.setContents([]);
+                    if (quillContact) quillContact.setContents([]);
+                    $('#txtAbout').val('');
+                    $('#txtMission').val('');
+                    $('#txtVision').val('');
+                    $('#txtPolicy').val('');
+                    $('#txtContact').val('');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',

@@ -89,11 +89,11 @@
         </div>
       <?php else: ?>
         <?php foreach($jobs as $job): ?>
-          <div class="col-md-6 col-lg-4 mb-4 d-flex align-items-stretch job-item" 
+          <div class="col-md-6 col-lg-4 mb-4 job-item" 
                data-title="<?= strtolower(esc($job['title'])) ?>"
                data-company="<?= strtolower(esc($job['company'] ?? '')) ?>"
                data-description="<?= strtolower(esc($job['description'])) ?>">
-            <div class="card h-100 shadow-sm border border-2 job-card" style="cursor: pointer;" 
+            <div class="card shadow-sm job-card" style="cursor: pointer;" 
                  data-job='<?= json_encode([
                    "title" => $job["title"],
                    "description" => $job["description"],
@@ -102,30 +102,33 @@
                    "email" => $job["email"] ?? "",
                    "type" => $job["type"] ?? ""
                  ], JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?>'>
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title fw-bold mb-2"><?= esc($job['title']) ?></h5>
-                <?php if (!empty($job['company'])): ?>
-                  <p class="mb-1"><strong>Company:</strong> <?= esc($job['company']) ?></p>
-                <?php endif; ?>
-                <p class="card-text flex-grow-1" style="font-size: 15px; color: #333; text-align: justify;">
+              <div class="card-body d-flex flex-column p-4">
+                <h5 class="job-card-title"><?= esc($job['title']) ?></h5>
+                <p class="job-card-company">
+                  <i class="fas fa-building me-1 text-secondary"></i>
+                  <strong>Company:</strong> <?= !empty($job['company']) ? esc($job['company']) : 'N/A' ?>
+                </p>
+                <p class="job-card-description">
                   <?= htmlspecialchars(substr(strip_tags($job['description']), 0, 300)) ?>...
                 </p>
-                <div class="mt-2">
-                  <?php if (!empty($job['type'])): ?>
-                    <span class="badge <?= $job['type'] === 'Full Time' ? 'badge-dark-green-custom' : 'badge-green-custom' ?>">Type: <?= esc($job['type']) ?></span>
-                  <?php endif; ?>
-                  <?php if (!empty($job['publication_date'])): ?>
-                    <span class="badge badge-light-green-custom me-1">
-                      <i class="fas fa-calendar me-1"></i>
-                      <?= date('M d, Y', strtotime($job['publication_date'])) ?>
-                    </span>
-                  <?php endif; ?>
-                </div>
-                <div class="mt-3 pt-2 border-top">
-                  <small class="text-muted">
-                    <i class="fas fa-info-circle me-1"></i>
-                    Click to view full details
-                  </small>
+                <div class="job-card-footer-section">
+                  <div class="job-card-badges">
+                    <?php if (!empty($job['type'])): ?>
+                      <span class="badge job-card-badge <?= $job['type'] === 'Full Time' ? 'badge-dark-green-custom' : 'badge-green-custom' ?>">Type: <?= esc($job['type']) ?></span>
+                    <?php endif; ?>
+                    <?php if (!empty($job['publication_date'])): ?>
+                      <span class="badge job-card-badge badge-light-green-custom">
+                        <i class="fas fa-calendar me-1"></i>
+                        <?= date('M d, Y', strtotime($job['publication_date'])) ?>
+                      </span>
+                    <?php endif; ?>
+                  </div>
+                  <div class="job-card-footer">
+                    <small class="text-muted d-flex align-items-center">
+                      <i class="fas fa-info-circle me-2 text-success"></i>
+                      Click to view full details
+                    </small>
+                  </div>
                 </div>
               </div>
             </div>
@@ -169,7 +172,7 @@
             <div id="modalEmailSection" class="border-top pt-3">
               <h6 class="fw-bold text-dark mb-2">How to Apply:</h6>
               <p class="mb-2">Send your resume and application to:</p>
-              <a id="modalEmailLink" href="#" class="btn btn-outline-success">
+              <a id="modalEmailLink" href="#" class="modal-email-link">
                 <i class="fas fa-envelope me-2"></i>
                 <span id="modalEmail"></span>
               </a>
@@ -214,12 +217,7 @@ $(document).ready(function() {
         $('#jobModal').modal('show');
     });
     
-    // Add hover effect to job cards
-    $(document).on('mouseenter', '.job-card', function() {
-        $(this).addClass('shadow-lg').css('transform', 'translateY(-2px)');
-    }).on('mouseleave', '.job-card', function() {
-        $(this).removeClass('shadow-lg').css('transform', 'translateY(0)');
-    });
+
 });
 
 $('#jobModal').on('shown.bs.modal', function () {
@@ -232,11 +230,97 @@ $('#jobModal').on('hidden.bs.modal', function () {
 
 <style>
 .job-card {
+    height: 380px; /* Fixed height to make all cards identical in size */
     transition: all 0.3s ease;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 12px !important;
+    overflow: hidden;
 }
 
 .job-card:hover {
-    border-color: #28a745 !important;
+    border-color: #388e3c !important;
+    box-shadow: 0 8px 24px rgba(56, 142, 60, 0.15) !important;
+    transform: translateY(-4px);
+}
+
+.job-card-title {
+    color: var(--color1) !important; /* Theme color */
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.4;
+    height: 3.2rem; /* Exact height for 2 lines */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-bottom: 0.5rem;
+}
+
+.job-card-company {
+    font-size: 0.875rem;
+    color: #6c757d;
+    height: 1.25rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 0.75rem;
+}
+
+.job-card-description {
+    font-size: 0.9rem;
+    color: #495057;
+    line-height: 1.6;
+    height: 4.8rem; /* Exact height for 3 lines */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-align: justify;
+    margin-bottom: 1.25rem;
+}
+
+.job-card-footer-section {
+    margin-top: auto;
+}
+
+.job-card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.job-card-badge {
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+}
+
+.job-card-footer {
+    border-top: 1px solid #f1f3f5;
+    padding-top: 12px;
+}
+
+.modal-email-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 8px 18px;
+    border: 2px solid var(--color1);
+    border-radius: 8px;
+    color: var(--color1) !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background-color: transparent;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.modal-email-link:hover {
+    background-color: #f0faf0;
+    color: var(--color1) !important;
+    text-decoration: none;
 }
 
 #modalDescription {
@@ -293,19 +377,19 @@ $('#jobModal').on('hidden.bs.modal', function () {
 
 /* Custom green badge and header classes */
 .badge-green-custom {
-    background-color: #437057 !important;
+    background-color: #4caf50 !important;
     color: #fff !important;
 }
 .badge-dark-green-custom {
-    background-color: #2F5249 !important;
+    background-color: var(--color1) !important;
     color: #fff !important;
 }
 .badge-light-green-custom {
-    background-color: #97B067 !important;
-    color: #fff !important;
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
 }
 .modal-header-green-gradient-custom {
-    background: linear-gradient(135deg, #2F5249, #437057) !important;
+    background: linear-gradient(135deg, var(--color1), #4caf50) !important;
     color: #fff !important;
 }
 </style>
