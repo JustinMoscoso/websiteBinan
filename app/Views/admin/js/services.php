@@ -606,12 +606,15 @@
                 }
             },
             {
-                "title": "Category", "data": "brngy_cont_ID", width: '25%',
+                "title": "Category", "data": "service_scope", width: '16%',
                 "render": function (data, type, row) {
-                    if (row.brgy_name === null)
-                        return row.dept_name;
-                    else
-                        return row.brgy_name;
+                    return data || 'Unknown';
+                }
+            },
+            {
+                "title": "Office / Locality", "data": "service_entity_name", width: '24%',
+                "render": function (data, type, row) {
+                    return data || '—';
                 }
             },
             {

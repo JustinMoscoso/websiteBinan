@@ -1653,6 +1653,27 @@ class Admin extends BaseController
             case 'get_services': {
                 $servId = $this->request->getPost('id');
                 $serv_m = new \App\Models\Services();
+                $decorateServiceRow = function ($row) {
+                    if (!$row) {
+                        return $row;
+                    }
+
+                    $scope = 'Unknown';
+                    $entityName = '';
+
+                    if (!empty($row->brngy_cont_ID)) {
+                        $scope = 'Barangay';
+                        $entityName = $row->brgy_name ?? '';
+                    } elseif (!empty($row->dept_cont_ID)) {
+                        $scope = 'Department';
+                        $entityName = $row->dept_name ?? '';
+                    }
+
+                    $row->service_scope = $scope;
+                    $row->service_entity_name = $entityName;
+
+                    return $row;
+                };
 
                 if ($servId) {
                     // Existing single service lookup
@@ -1667,7 +1688,7 @@ class Admin extends BaseController
                         if (!$this->canAccessServiceRecord($serv_d, $user)) {
                             $message = 'Service not found';
                         } else {
-                            $data = $serv_d;
+                            $data = $decorateServiceRow($serv_d);
                             $status = 1;
                         }
                     } else {
@@ -1729,7 +1750,7 @@ class Admin extends BaseController
 
                     $data = [];
                     foreach ($results as $row) {
-                        $data[] = $row;
+                        $data[] = $decorateServiceRow($row);
                     }
                     $status = 1;
                 }
