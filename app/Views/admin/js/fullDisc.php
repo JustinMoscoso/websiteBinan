@@ -439,7 +439,14 @@
                     return formatDate(date);
                 }
             },*/
-            { "title": "File Category", "data": "file_category" },
+            {
+                "title": "File Category",
+                "data": "file_category",
+                "className": "text-start",
+                "createdCell": function (td) {
+                    td.style.setProperty('text-align', 'left', 'important');
+                }
+            },
             { "title": "Year", "data": "year" },
             { "title": "Quarter", "data": "quarter" },
             {
