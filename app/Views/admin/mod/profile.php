@@ -795,6 +795,58 @@
 
 <?php /* Modals editLinkedBarangayModal and editLinkedDepartmentModal removed — forms are inline */ ?>
 
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">
+                    <i class="fas fa-key mr-2"></i>Change Password
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="profilePasswordForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="profileOldPassword" class="form-label">Current Password <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="profileOldPassword" name="old_password" required autocomplete="current-password" placeholder="Enter current password">
+                            <button class="btn btn-outline-secondary" type="button" id="toggleOldPassword" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="profileNewPassword" class="form-label">New Password <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="profileNewPassword" name="new_password" required autocomplete="new-password" placeholder="Enter new password">
+                            <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="profileConfirmPassword" class="form-label">Confirm New Password <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="profileConfirmPassword" name="confirm_password" required autocomplete="new-password" placeholder="Repeat new password">
+                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div id="passwordMatchFeedback" class="invalid-feedback">Passwords do not match.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save mr-1"></i> Update Password
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Edit Name Modal -->
 <div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

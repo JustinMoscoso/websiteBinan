@@ -246,7 +246,7 @@
             </div>
 
             <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Close</button>
                 <button id="btnEdit" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
         </form>

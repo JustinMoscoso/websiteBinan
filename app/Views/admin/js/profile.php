@@ -94,6 +94,36 @@
 
         $('#changePasswordModal').on('hidden.bs.modal', function () {
             $('#profilePasswordForm')[0].reset();
+            $('#profileConfirmPassword').removeClass('is-invalid');
+        });
+
+        // ── Show / hide password toggles ────────────────────────────────────
+        function bindPasswordToggle(btnId, inputId) {
+            $('#' + btnId).on('click', function () {
+                var $input = $('#' + inputId);
+                var $icon  = $(this).find('i');
+                if ($input.attr('type') === 'password') {
+                    $input.attr('type', 'text');
+                    $icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    $input.attr('type', 'password');
+                    $icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+        }
+        bindPasswordToggle('toggleOldPassword',     'profileOldPassword');
+        bindPasswordToggle('toggleNewPassword',     'profileNewPassword');
+        bindPasswordToggle('toggleConfirmPassword', 'profileConfirmPassword');
+
+        // ── Real-time confirm-password match check ───────────────────────────
+        $('#profileConfirmPassword').on('input', function () {
+            var newPwd  = $('#profileNewPassword').val();
+            var confPwd = $(this).val();
+            if (confPwd && newPwd !== confPwd) {
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
         });
 
         $('#editNameModal').on('show.bs.modal', function () {
@@ -501,6 +531,17 @@
 
         $('#profilePasswordForm').on('submit', function (e) {
             e.preventDefault();
+
+            // Client-side: confirm passwords match before hitting the server
+            var newPwd  = $('#profileNewPassword').val();
+            var confPwd = $('#profileConfirmPassword').val();
+            if (newPwd !== confPwd) {
+                $('#profileConfirmPassword').addClass('is-invalid');
+                $('#profileConfirmPassword')[0].setCustomValidity('Passwords do not match.');
+                return;
+            }
+            $('#profileConfirmPassword').removeClass('is-invalid');
+            $('#profileConfirmPassword')[0].setCustomValidity('');
 
             const $button = $(this).find('button[type="submit"]');
             $button.prop('disabled', true);

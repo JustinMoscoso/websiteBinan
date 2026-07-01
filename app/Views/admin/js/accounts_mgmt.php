@@ -464,8 +464,8 @@
             text: `Reset password for ${fullName}?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, reset',
-            confirmButtonColor: '#e67e22',
+            confirmButtonText: 'Confirm',
+            confirmButtonColor: '#27ae60',
             cancelButtonColor: '#7f8c8d',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -479,7 +479,7 @@
                                 icon: 'success',
                                 title: 'Password Reset',
                                 html: `The password for <b>${fullName}</b> has been reset.<br><br>` +
-                                    `Temporary Password: <b style="font-size: 1.25rem; color: #d35400; letter-spacing: 1px;">${result.message}</b><br><br>` +
+                                    `Temporary Password: <b style="font-size: 1.25rem; color: #1b4d3e; letter-spacing: 1px;">${result.message}</b><br><br>` +
                                     `<small class="text-muted">An email has also been sent to the user.</small>`
                             });
                         } else {
