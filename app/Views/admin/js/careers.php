@@ -175,7 +175,10 @@
             $('#careerModalTitle').text('Modify Career Entry');
             $('#btnCareerSave').text('Update');
             $('#careerId').val(record.ID || record.id || '');
-            $('#publication').val(record.publication_date || '');
+            // Strip time portion so <input type="date"> receives YYYY-MM-DD only
+            var pubDate = record.publication_date || '';
+            if (pubDate) { pubDate = String(pubDate).substring(0, 10); }
+            $('#publication').val(pubDate);
             $('#level').val(record.level || '');
             $('#careerFile').prop('required', false);
             if (record.file_name) {
@@ -356,7 +359,9 @@
             {
                 "title": "Publication Date", "data": "publication_date",
                 "render": function (data, type, row) {
-                    return moment(data).format('MMMM D, YYYY');
+                    if (!data) return '-';
+                    var d = moment(String(data).substring(0, 10), 'YYYY-MM-DD', true);
+                    return d.isValid() ? d.format('MMMM D, YYYY') : '-';
                 }
             },
             {

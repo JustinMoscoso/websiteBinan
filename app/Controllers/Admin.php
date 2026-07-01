@@ -3025,13 +3025,14 @@ class Admin extends BaseController
                     break;
                 }
 
-                $brgy_contact = $this->request->getPost('editContact');
-                $brgy_about = $this->request->getPost('editAbout');
-                $brgy_name = $this->request->getPost('editBrgy');
-                $brngy_capt = $this->request->getPost('editCapt');
-                $mission = $this->request->getPost('editMission');
-                $vision = $this->request->getPost('editVision');
-                $barangay_staff = $this->request->getPost('editStaff');
+                // Form uses the same field names for add and edit: txt* prefix
+                $brgy_contact = $this->request->getPost('txtContact') ?? $this->request->getPost('editContact');
+                $brgy_about = $this->request->getPost('createAbout') ?? $this->request->getPost('editAbout');
+                $brgy_name = $this->request->getPost('txtBrgy') ?? $this->request->getPost('editBrgy');
+                $brngy_capt = $this->request->getPost('txtCapt') ?? $this->request->getPost('editCapt');
+                $mission = $this->request->getPost('txtMission') ?? $this->request->getPost('editMission');
+                $vision = $this->request->getPost('txtVision') ?? $this->request->getPost('editVision');
+                $barangay_staff = $this->request->getPost('txtStaff') ?? $this->request->getPost('editStaff');
 
                 // Check if the barangay name already exists for other records
                 $existing_brgy = $brgy_m->where('brgy_name', $brgy_name)->where('id !=', $id)->first();
@@ -3055,8 +3056,8 @@ class Admin extends BaseController
                 $maxmb = 4;
                 $file_category = 'BARANGAY';
 
-                // Handle file uploads for barangay logo
-                $imgLogo = $this->request->getFile('editbrgyImg');
+                // Handle file uploads for barangay logo (form sends 'brgyImg' for both add and edit)
+                $imgLogo = $this->request->getFile('brgyImg') ?: $this->request->getFile('editbrgyImg');
                 if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
                     $logoName = $imgLogo->getRandomName();
                     $path = WRITEPATH . 'uploads/' . $file_category;
@@ -3115,14 +3116,15 @@ class Admin extends BaseController
                 }
 
                 if ($department) {
-                    $dept_name = $this->request->getPost('editDept');
-                    $head = $this->request->getPost('editHead');
-                    $post_title = $this->request->getPost('editTitle');
-                    $mission = $this->request->getPost('editMission');
-                    $vision = $this->request->getPost('editVision');
-                    $quality_policy = $this->request->getPost('editPolicy');
-                    $about = $this->request->getPost('editAbout');
-                    $contact = $this->request->getPost('editContact');
+                    // Form sends txt* prefix for both add and edit (same unified form)
+                    $dept_name = $this->request->getPost('txtDept') ?? $this->request->getPost('editDept');
+                    $head = $this->request->getPost('txtHead') ?? $this->request->getPost('editHead');
+                    $post_title = $this->request->getPost('txtTitle') ?? $this->request->getPost('editTitle');
+                    $mission = $this->request->getPost('txtMission') ?? $this->request->getPost('editMission');
+                    $vision = $this->request->getPost('txtVision') ?? $this->request->getPost('editVision');
+                    $quality_policy = $this->request->getPost('txtPolicy') ?? $this->request->getPost('editPolicy');
+                    $about = $this->request->getPost('txtAbout') ?? $this->request->getPost('editAbout');
+                    $contact = $this->request->getPost('txtContact') ?? $this->request->getPost('editContact');
 
                     // Check if the department name already exists, excluding the current department
                     $existing_dept = $dept_m->where('dept_name', $dept_name)->where('id !=', $id)->first();
@@ -3148,8 +3150,8 @@ class Admin extends BaseController
 
                         $logoName = null;
 
-                        // Handle file uploads for dept logo
-                        $imgLogo = $this->request->getFile('editdeptImg');
+                        // Handle file uploads for dept logo (form sends 'deptImg' for both add and edit)
+                        $imgLogo = $this->request->getFile('deptImg') ?: $this->request->getFile('editdeptImg');
                         if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
                             $logoName = $imgLogo->getRandomName();
                             $path = WRITEPATH . 'uploads/' . $file_category;
@@ -3159,8 +3161,8 @@ class Admin extends BaseController
                             }
                         }
 
-                        // Handle file uploads for org chart
-                        $imgOrgChart = $this->request->getFile('editdeptOrgChart');
+                        // Handle file uploads for org chart (form sends 'deptOrgChart' for both add and edit)
+                        $imgOrgChart = $this->request->getFile('deptOrgChart') ?: $this->request->getFile('editdeptOrgChart');
                         if ($imgOrgChart && $imgOrgChart->isValid() && $imgOrgChart->getSize() < ($maxmb * 1024 * 1024)) {
                             $orgChartName = $imgOrgChart->getRandomName();
                             $path = WRITEPATH . 'uploads/' . $file_category;
@@ -3192,12 +3194,13 @@ class Admin extends BaseController
                 $cityofficial = $cityofficialmodel->find($id);
 
                 if ($cityofficial) {
-                    $off_name = $this->request->getPost('editoffname');
-                    $off_position = $this->request->getPost('editoffpos');
-                    $ranking = $this->request->getPost('editoffrank');
-                    $years_of_service = $this->request->getPost('edit_years_of_service');
-                    $awards = $this->request->getPost('edit_awards');
-                    $personal_data = $this->request->getPost('edit_personal_data');
+                    // Form sends field names without 'edit' prefix for both add and edit
+                    $off_name = $this->request->getPost('offname') ?? $this->request->getPost('editoffname');
+                    $off_position = $this->request->getPost('offpos') ?? $this->request->getPost('editoffpos');
+                    $ranking = $this->request->getPost('offrank') ?? $this->request->getPost('editoffrank');
+                    $years_of_service = $this->request->getPost('years_of_service') ?? $this->request->getPost('edit_years_of_service');
+                    $awards = $this->request->getPost('awards') ?? $this->request->getPost('edit_awards');
+                    $personal_data = $this->request->getPost('personal_data') ?? $this->request->getPost('edit_personal_data');
 
                     if (empty($ranking)) {
                         $ranking = null;
@@ -3235,9 +3238,9 @@ class Admin extends BaseController
                         mkdir($upload_path, 0755, true);
                     }
 
-                    // Handle the main image (img_loc)
+                    // Handle the main image (img_loc) - form sends 'offimg' for both add and edit
                     $logoName = null;
-                    $imgLogo = $this->request->getFile('editoffimg');
+                    $imgLogo = $this->request->getFile('offimg') ?: $this->request->getFile('editoffimg');
                     if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
                         $logoName = $imgLogo->getRandomName();
                         if (!$imgLogo->hasMoved() && $imgLogo->move($upload_path, $logoName)) {
@@ -3259,8 +3262,8 @@ class Admin extends BaseController
                         $existing_images = array_filter($existing_images, 'trim');
                     }
 
-                    // Handle new uploads
-                    $files = $this->request->getFileMultiple('editoffcaroimg');
+                    // Handle new uploads - form sends 'offcaroimg[]' for both add and edit
+                    $files = $this->request->getFileMultiple('offcaroimg') ?? $this->request->getFileMultiple('editoffcaroimg');
                     if (!empty($files)) {
                         $max_images = 3;
                         $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif',];
@@ -3555,9 +3558,9 @@ class Admin extends BaseController
                 $policy = $policy_m->find($id);
 
                 if ($policy) {
-                    $fc = $this->request->getPost('editFileCategory');
-                    $yr = $this->request->getPost('edityr');
-                    $qtr = $this->request->getPost('editqtr');
+                    $fc = $this->request->getPost('fileCategory') ?? $this->request->getPost('editFileCategory');
+                    $yr = $this->request->getPost('yr') ?? $this->request->getPost('edityr');
+                    $qtr = $this->request->getPost('qtr') ?? $this->request->getPost('editqtr');
 
                     $data = [
                         'file_category' => $fc,
@@ -3567,7 +3570,7 @@ class Admin extends BaseController
                     ];
 
                     $file_category = 'FULLDISC';
-                    $policyFile = $this->request->getFile('editpolicyFile');
+                    $policyFile = $this->request->getFile('policyFile') ?? $this->request->getFile('editpolicyFile');
 
                     if ($policyFile && $policyFile->isValid()) {
                         $fileName = $policyFile->getRandomName();
@@ -3799,17 +3802,17 @@ class Admin extends BaseController
                 $career = $career_m->find($id);
 
                 if ($career) {
-                    $editpublication = $this->request->getPost('editpublication');
-                    $editlevel = $this->request->getPost('editlevel'); // Get editlevel from POST
+                    $editpublication = $this->request->getPost('publication') ?? $this->request->getPost('editpublication');
+                    $editlevel = $this->request->getPost('level') ?? $this->request->getPost('editlevel'); // Get level from POST
 
                     $data = [
                         'updated_date' => date('Y-m-d H:i:s'),
-                        'publication_date ' => $editpublication,
+                        'publication_date' => $editpublication,
                         'level' => $editlevel // Update level
                     ];
 
                     $file_category = 'CAREERS';
-                    $careerFile = $this->request->getFile('editCareerFile');
+                    $careerFile = $this->request->getFile('careerFile') ?? $this->request->getFile('editCareerFile');
 
                     if ($careerFile && $careerFile->isValid()) {
                         $careerExt = strtolower((string) $careerFile->getClientExtension());
@@ -3850,7 +3853,7 @@ class Admin extends BaseController
                 $inv_d = $invest_m->find($id);
 
                 if ($inv_d) {
-                    $fc = $this->request->getPost('editFileCategory');
+                    $fc = $this->request->getPost('fileCategory') ?? $this->request->getPost('editFileCategory');
 
                     $data = [
                         'file_category' => $fc,
@@ -3858,7 +3861,7 @@ class Admin extends BaseController
                     ];
 
                     $file_category = 'INVEST';
-                    $invFile = $this->request->getFile('editInvestFile');
+                    $invFile = $this->request->getFile('investFile') ?? $this->request->getFile('editInvestFile');
 
                     if ($invFile && $invFile->isValid() && !$invFile->hasMoved()) {
                         $fileName = $invFile->getRandomName();
@@ -3964,13 +3967,13 @@ class Admin extends BaseController
                 }
 
                 if ($hot) {
-                    $telco = $this->normalizePhilippineLandlineNumber($this->request->getPost('editTelco'));
-                    $number = $this->normalizePhilippineLandlineNumber($this->request->getPost('editContact'));
-                    $smart = $this->normalizePhilippineMobileNumber($this->request->getPost('editSmart'));
-                    $globe = $this->normalizePhilippineMobileNumber($this->request->getPost('editGlobe'));
-                    $dept_cont_ID = $this->request->getPost('editDept');
-                    $brngy_cont_ID = $this->request->getPost('editBrgy');
-                    $others_cont_ID = $this->request->getPost('editOthers');
+                    $telco = $this->normalizePhilippineLandlineNumber($this->request->getPost('telco') ?? $this->request->getPost('editTelco'));
+                    $number = $this->normalizePhilippineLandlineNumber($this->request->getPost('contact') ?? $this->request->getPost('editContact'));
+                    $smart = $this->normalizePhilippineMobileNumber($this->request->getPost('smart') ?? $this->request->getPost('editSmart'));
+                    $globe = $this->normalizePhilippineMobileNumber($this->request->getPost('globe') ?? $this->request->getPost('editGlobe'));
+                    $dept_cont_ID = $this->request->getPost('txtDept') ?? $this->request->getPost('editDept');
+                    $brngy_cont_ID = $this->request->getPost('txtBrgy') ?? $this->request->getPost('editBrgy');
+                    $others_cont_ID = $this->request->getPost('txtOthers') ?? $this->request->getPost('editOthers');
 
                     if ($number !== '' && !$this->isValidPhilippineLandlineNumber($number)) {
                         $message = 'PLDT Landline must be in Philippine landline format, for example (049) 123-4567 or (02) 1234-5678.';

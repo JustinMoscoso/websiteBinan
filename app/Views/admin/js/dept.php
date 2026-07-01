@@ -254,6 +254,7 @@
             $('#deptId').val(record.ID || record.id || '');
             $('#txtDept').val(record.dept_name || '');
             $('#txtHead').val(record.head || '');
+            // Set hidden inputs (used for validation checks)
             $('#txtAbout').val(record.about || '');
             $('#txtContact').val(record.contact || '');
             $('#txtMission').val(record.mission || '');
@@ -261,6 +262,9 @@
             $('#txtPolicy').val(record.quality_policy || '');
             $('#deptImg').prop('required', false);
             $('#deptOrgChart').prop('required', false);
+            // Populate visible Quill editors with existing content
+            initDeptQuills();
+            setDeptQuillContents(record);
         }
 
         $('#addModal').modal('show');

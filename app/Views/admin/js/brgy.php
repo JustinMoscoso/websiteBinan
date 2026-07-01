@@ -91,10 +91,11 @@
 
     function syncBarangayEditors() {
         if (quillCreateAbout) $('#createAbout').val(quillCreateAbout.root.innerHTML);
-        if (quillCreateMission) $('#txtMission').val(quillCreateMission.root.innerHTML);
-        if (quillCreateVision) $('#txtVision').val(quillCreateVision.root.innerHTML);
-        if (quillCreateContact) $('#txtContact').val(quillCreateContact.root.innerHTML);
-        if (quillCreateStaff) $('#txtStaff').val(quillCreateStaff.root.innerHTML);
+        // Use name selector for hidden inputs (Quill replaces the containers, so IDs target the Quill div)
+        if (quillCreateMission) $('input[name="txtMission"]').val(quillCreateMission.root.innerHTML);
+        if (quillCreateVision) $('input[name="txtVision"]').val(quillCreateVision.root.innerHTML);
+        if (quillCreateContact) $('input[name="txtContact"]').val(quillCreateContact.root.innerHTML);
+        if (quillCreateStaff) $('input[name="txtStaff"]').val(quillCreateStaff.root.innerHTML);
     }
 
     function clearBarangayEditors() {
@@ -104,10 +105,10 @@
         if (quillCreateContact) quillCreateContact.setContents([]);
         if (quillCreateStaff) quillCreateStaff.setContents([]);
         $('#createAbout').val('');
-        $('#txtMission').val('');
-        $('#txtVision').val('');
-        $('#txtContact').val('');
-        $('#txtStaff').val('');
+        $('input[name="txtMission"]').val('');
+        $('input[name="txtVision"]').val('');
+        $('input[name="txtContact"]').val('');
+        $('input[name="txtStaff"]').val('');
     }
 
     function resetBarangayModalState() {
@@ -150,11 +151,14 @@
             $('#brgyId').val(record.ID || record.id || '');
             $('#txtBrgy').val(record.brgy_name || '');
             $('#txtCapt').val(record.brngy_capt || '');
+            // Populate Quill editors with existing record data
+            if (quillCreateAbout) quillCreateAbout.root.innerHTML = record.about || '';
+            if (quillCreateMission) quillCreateMission.root.innerHTML = record.mission || '';
+            if (quillCreateVision) quillCreateVision.root.innerHTML = record.vision || '';
+            if (quillCreateContact) quillCreateContact.root.innerHTML = record.contact || '';
+            if (quillCreateStaff) quillCreateStaff.root.innerHTML = record.barangay_staff || '';
+            // Also sync hidden inputs
             $('#createAbout').val(record.about || '');
-            $('#txtMission').val(record.mission || '');
-            $('#txtVision').val(record.vision || '');
-            $('#txtContact').val(record.contact || '');
-            $('#txtStaff').val(record.barangay_staff || '');
             $('#brgyImg').prop('required', false);
         }
 
@@ -210,11 +214,11 @@
         const imageFile = formData.get('brgyImg');
 
         formData.set('id', $('#brgyId').val());
-        formData.set('createAbout', $('#createAbout').val());
-        formData.set('txtMission', $('#txtMission').val());
-        formData.set('txtVision', $('#txtVision').val());
-        formData.set('txtContact', $('#txtContact').val());
-        formData.set('txtStaff', $('#txtStaff').val());
+        formData.set('createAbout', quillCreateAbout ? quillCreateAbout.root.innerHTML : '');
+        formData.set('txtMission', quillCreateMission ? quillCreateMission.root.innerHTML : '');
+        formData.set('txtVision', quillCreateVision ? quillCreateVision.root.innerHTML : '');
+        formData.set('txtContact', quillCreateContact ? quillCreateContact.root.innerHTML : '');
+        formData.set('txtStaff', quillCreateStaff ? quillCreateStaff.root.innerHTML : '');
 
         if (!formData.get('txtBrgy') || !formData.get('txtCapt') || !formData.get('createAbout') || !formData.get('txtMission') || !formData.get('txtVision') || !formData.get('txtContact') || !formData.get('txtStaff')) {
             Swal.fire({

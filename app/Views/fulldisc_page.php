@@ -9,6 +9,7 @@
     <link href="<?= base_url('assets/img/binanlogo.png'); ?>" rel="icon" type="image/png">
     <link href="<?= base_url('assets/img/binanlogo.png'); ?>" rel="apple-touch-icon">
     <?php pre_styles('home'); ?>
+    <link href="<?= base_url('assets/css/fulldisc_page.css?v=' . time()); ?>" rel="stylesheet">
 </head>
 <body>
 <?php include "navbar.php"; ?>
@@ -109,9 +110,9 @@
                                                                         
                                                                         if ($is_annual) :
                                                                         ?>
-                                                                            <ul class="mb-0">
+                                                                            <ul class="mb-0" style="padding-left: 0;">
                                                                                 <?php foreach ($files as $file) : ?>
-                                                                                    <li class="d-flex justify-content-between align-items-center mb-2">
+                                                                                    <li class="d-flex justify-content-center align-items-center gap-4 mb-2">
                                                                                         <?php
                                                                                         if (isset($file->file_name) && !empty($file->file_name)) {
                                                                                             $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
@@ -173,9 +174,9 @@
                                                                                             </h2>
                                                                                             <div id="<?= $qCollapseId ?>" class="accordion-collapse collapse" aria-labelledby="<?= $qHeadingId ?>">
                                                                                                 <div class="accordion-body" style="padding: 10px 12px;">
-                                                                                                    <ul class="mb-0">
+                                                                                                    <ul class="mb-0" style="padding-left: 0;">
                                                                                                         <?php foreach ($files_in_quarter as $file) : ?>
-                                                                                                            <li class="d-flex justify-content-between align-items-center mb-2">
+                                                                                                            <li class="d-flex justify-content-center align-items-center gap-4 mb-2">
                                                                                                                 <?php
                                                                                                                 if (isset($file->file_name) && !empty($file->file_name)) {
                                                                                                                     $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
@@ -270,9 +271,9 @@
                                                                         
                                                                         if ($is_annual) :
                                                                         ?>
-                                                                            <ul class="mb-0">
+                                                                            <ul class="mb-0" style="padding-left: 0;">
                                                                                 <?php foreach ($files as $file) : ?>
-                                                                                    <li class="d-flex justify-content-between align-items-center mb-2">
+                                                                                    <li class="d-flex justify-content-center align-items-center gap-4 mb-2">
                                                                                         <?php
                                                                                         if (isset($file->file_name) && !empty($file->file_name)) {
                                                                                             $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
@@ -334,9 +335,9 @@
                                                                                             </h2>
                                                                                             <div id="<?= $qCollapseId ?>" class="accordion-collapse collapse" aria-labelledby="<?= $qHeadingId ?>">
                                                                                                 <div class="accordion-body" style="padding: 10px 12px;">
-                                                                                                    <ul class="mb-0">
+                                                                                                    <ul class="mb-0" style="padding-left: 0;">
                                                                                                         <?php foreach ($files_in_quarter as $file) : ?>
-                                                                                                            <li class="d-flex justify-content-between align-items-center mb-2">
+                                                                                                            <li class="d-flex justify-content-center align-items-center gap-4 mb-2">
                                                                                                                 <?php
                                                                                                                 if (isset($file->file_name) && !empty($file->file_name)) {
                                                                                                                     $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
@@ -382,15 +383,32 @@
 <div class="modal fade" id="filePreviewModal" tabindex="-1" aria-labelledby="filePreviewModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
-      <div class="modal-header text-white px-4 py-3 d-flex justify-content-between align-items-center w-100" style="background-color: #1b4d3e !important; border-bottom: none;">
-        <h5 class="modal-title fw-bold" id="filePreviewModalLabel">File Preview</h5>
-        <div class="d-flex align-items-center gap-2 ms-auto">
-          <a id="fileDownloadBtn" href="" class="btn btn-sm btn-light fw-bold px-3 d-flex align-items-center gap-1 shadow-sm" download>
+     <!-- Cleaned Modal Header Wrapper using the new custom class asset -->
+<div class="modal-header text-white d-flex justify-content-between align-items-center w-100 modal-header-binan">
+
+    <!-- Scaled title safety zone -->
+    <h5 class="modal-title fw-bold" id="filePreviewModalLabel">
+        File Preview
+    </h5>
+
+    <!-- Controls Actions Layout Wrapper -->
+    <div class="d-flex align-items-center gap-2 ps-2">
+        <a id="fileDownloadBtn" 
+           href="" 
+           class="btn btn-sm btn-light fw-bold px-3 d-flex align-items-center gap-1 shadow-sm" 
+           download>
             <i class="fas fa-download"></i> Download
-          </a>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-      </div>
+        </a>
+
+        <button type="button" 
+                class="btn-close btn-close-white" 
+                data-bs-dismiss="modal" 
+                aria-label="Close">
+        </button>
+    </div>
+
+</div>
+
       <div class="modal-body p-0" style="height: 75vh; position: relative; background-color: #f8f9fa;">
         
         <!-- Native Iframe for Previewable Files (PDF, Images) -->
