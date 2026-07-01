@@ -1,4 +1,4 @@
-<h1><?= isset($job) ? 'Edit' : 'Add' ?> Job</h1>
+2<h1><?= isset($job) ? 'Edit' : 'Add' ?> Job</h1>
 <form method="post" action="<?= isset($job) ? site_url('adminjob/update/'.$job['id']) : site_url('adminjob/store') ?>">
     <input type="text" name="title" placeholder="Title" value="<?= isset($job) ? esc($job['title']) : '' ?>" required><br>
     <textarea name="description" placeholder="Description" required><?= isset($job) ? esc($job['description']) : '' ?></textarea><br>

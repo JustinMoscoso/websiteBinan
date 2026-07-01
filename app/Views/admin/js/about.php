@@ -38,110 +38,177 @@
                 $modal.find('.ql-toolbar').hide();
             }, 100);
             setTimeout(function() {
+<script src="<?= base_url('assets/admin/js/quill-init.js') ?>"></script>
+<script>
+    const userLevel = '<?= $user->user_lvl ?>'.toUpperCase(); // Get user level from backend and force uppercase
+    console.log("Current User Role:", userLevel);
+
+    if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
+        $('.button-32').show();
+    } else {
+        $('.button-32').hide();
+    }
+
+    if (userLevel === 'VIEWER') {
+        // Hide add/save buttons on the page layout level
+        $('[data-bs-target="#addModal"]').hide();
+
+        // Lock down elements inside modals when shown
+        $(document).on('show.bs.modal', '.modal', function () {
+            var $modal = $(this);
+            // Disable all input and form controls
+            $modal.find('input, select, textarea, button').prop('disabled', true);
+            // Re-enable close/dismiss buttons so viewer can close the modal
+            $modal.find('button[data-bs-dismiss="modal"], .btn-close, a[data-bs-dismiss="modal"]').prop('disabled', false);
+            // Hide all action/save buttons except close/dismiss buttons
+            $modal.find('button, input[type="submit"], input[type="button"], a.btn').not('[data-bs-dismiss="modal"], .btn-close').hide();
+            // Hide file inputs
+            $modal.find('input[type="file"]').hide();
+        });
+
+        // Lock down Quill editors (prevent typing and hide toolbars)
+        $(document).on('show.bs.modal shown.bs.modal', '.modal', function () {
+            var $modal = $(this);
+            $modal.find('.ql-editor').attr('contenteditable', 'false');
+            $modal.find('.ql-toolbar').hide();
+            
+            // Re-enforce lock down after a short delay for dynamic content loading
+            setTimeout(function() {
+                $modal.find('.ql-editor').attr('contenteditable', 'false');
+                $modal.find('.ql-toolbar').hide();
+            }, 100);
+            setTimeout(function() {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
         });
     }
 
-    // Initialize Quill editors for this page
+    // Initialize Quill editors for this page — single shared instance
     QuillManager.initPageQuillEditors({
         editors: [
             {
                 elementId: 'quillDesc',
-                instanceName: 'aboutAddDesc',
+                instanceName: 'aboutDesc',
                 modalId: 'addModal',
                 shouldInit: function () {
                     return $('#DescGroup').is(':visible');
                 }
-            },
-            {
-                elementId: 'editQuillDesc',
-                instanceName: 'aboutEditDesc',
-                modalId: 'editModal',
-                shouldInit: function () {
-                    return $('#EditDescGroup').is(':visible');
-                }
             }
         ]
     });
 
-    // Setup form submission handlers
+    // Sync Quill content into the hidden input before any submit
     QuillManager.setupQuillFormHandlers({
         formHandlers: [
             {
                 buttonId: 'btnAdd',
-                instanceName: 'aboutAddDesc',
-                hiddenInputId: 'TxtDesc'
-            },
-            {
-                buttonId: 'btnEdit',
-                instanceName: 'aboutEditDesc',
-                hiddenInputId: 'EditTxtDesc'
+                instanceName: 'aboutDesc',
+                hiddenInputId: 'addTxtDesc'
             }
         ]
     });
 
-    // Setup edit content population
-    QuillManager.setupQuillEditHandlers({
-        editHandlers: [
-            {
-                modalId: 'editModal',
-                instanceName: 'aboutEditDesc',
-                contentField: 'EditTxtDesc'
-            }
-        ]
-    });
-
-    // Hide show input fields depending on chosen section
+    // Category change handler (shared modal)
+    // Always reset image group first to avoid stale-visibility when switching categories
     $('#content_category').on('change', function () {
         var selectedCategory = $(this).val();
+
+        // Unconditionally hide & clear image upload every time category changes
+        $('#AboutImgGrp').hide();
+        // Clear the file input by replacing it (val('') alone doesn't reliably clear file inputs)
+        $('#AboutImg').val('');
+        $('#edit_img_preview').addClass('d-none').html('');
+
         if (selectedCategory === 'Content' || selectedCategory === 'Home Page' || selectedCategory === 'Emergency Hotlines') {
             $('#DescGroup').show();
-            $('#AboutImgGrp').hide();
-            $('#AboutImg').val('');
-            // Initialize Quill editor if not already initialized
-            if (!QuillManager.getQuillInstance('aboutAddDesc')) {
-                QuillManager.initQuillEditor('quillDesc', 'aboutAddDesc');
+            // Image group stays hidden (already hidden above)
+            if (!QuillManager.getQuillInstance('aboutDesc')) {
+                QuillManager.initQuillEditor('quillDesc', 'aboutDesc');
             }
         } else if (selectedCategory === 'History') {
             $('#DescGroup').show();
-            $('#AboutImgGrp').show();
-            // Initialize Quill editor if not already initialized
-            if (!QuillManager.getQuillInstance('aboutAddDesc')) {
-                QuillManager.initQuillEditor('quillDesc', 'aboutAddDesc');
+            $('#AboutImgGrp').show(); // Only History reveals the image upload
+            if (!QuillManager.getQuillInstance('aboutDesc')) {
+                QuillManager.initQuillEditor('quillDesc', 'aboutDesc');
             }
         } else {
+            // No category selected — hide everything
+            $('#DescGroup').hide();
+        }
+    });
+
+    // ── openAboutModal helper ──────────────────────────────────────────────────
+    function openAboutModal(mode, record) {
+        $('#recordMode').val(mode);
+
+        if (mode === 'add') {
+            $('#recordModalTitle').text('Add Content');
+            $('#btnAddLabel').text('Save');
+            $('#recordId').val('');
+            $('#addForm')[0].reset();
             $('#DescGroup, #AboutImgGrp').hide();
-        }
-    });
-
-    $('#edit_content_category').on('change', function () {
-        var selectedCategory = $(this).val();
-        if (selectedCategory === 'Content' || selectedCategory === 'Home Page' || selectedCategory === 'Emergency Hotlines') {
-            $('#EditDescGroup').show();
-            $('#EditAboutImgGrp').hide();
-            $('#EditAboutImg').val('');
-            // Initialize Quill editor if not already initialized
-            if (!QuillManager.getQuillInstance('aboutEditDesc')) {
-                QuillManager.initQuillEditor('editQuillDesc', 'aboutEditDesc');
-            }
-        } else if (selectedCategory === 'History') {
-            $('#EditDescGroup').show();
-            $('#EditAboutImgGrp').show();
-            // Initialize Quill editor if not already initialized
-            if (!QuillManager.getQuillInstance('aboutEditDesc')) {
-                QuillManager.initQuillEditor('editQuillDesc', 'aboutEditDesc');
-            }
+            $('#edit_img_preview').addClass('d-none').html('');
+            var quill = QuillManager.getQuillInstance('aboutDesc');
+            if (quill) quill.setContents([]);
         } else {
-            $('#EditDescGroup, #EditAboutImgGrp').hide();
+            // edit mode — populate shared fields from record
+            $('#recordModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Content');
+            $('#btnAddLabel').text('Update');
+            $('#recordId').val(record.ID || record.id);
+            $('#content_category').val(record.section).trigger('change');
+            $('#TxtTitle').val(record.title);
+            $('#addTxtDesc').val(record.description || '');
+
+            // Load Quill content after modal is shown
+            $('#addModal').one('shown.bs.modal', function () {
+                if (record.section !== 'Header') {
+                    if (!QuillManager.getQuillInstance('aboutDesc')) {
+                        QuillManager.initQuillEditor('quillDesc', 'aboutDesc');
+                    }
+                    setTimeout(function () {
+                        var quill = QuillManager.getQuillInstance('aboutDesc');
+                        if (quill && record.description) {
+                            quill.root.innerHTML = record.description;
+                        }
+                    }, 100);
+                }
+            });
+
+            // Show image preview if available
+            if (record.about_img) {
+                $('#edit_img_preview').removeClass('d-none').html(
+                    '<img src="<?php echo base_url('admin/image/ABOUT/'); ?>" style="max-width:100%">'
+                        .replace('"', '"') // placeholder; actual image built below
+                );
+                var imgSrc = '<?php echo base_url("admin/image/ABOUT/"); ?>' + record.about_img;
+                $('#edit_img_preview').removeClass('d-none').html('<img src="' + imgSrc + '" class="img-fluid">');
+            } else {
+                $('#edit_img_preview').addClass('d-none').html('');
+            }
         }
+        $('#addModal').modal('show');
+    }
+
+    // Reset shared modal on close
+    $('#addModal').on('hidden.bs.modal', function () {
+        $('#recordMode').val('add');
+        $('#recordId').val('');
+        $('#recordModalTitle').text('Add Content');
+        $('#btnAddLabel').text('Save');
+        $('#addForm')[0].reset();
+        $('#DescGroup, #AboutImgGrp').hide();
+        $('#edit_img_preview').addClass('d-none').html('');
+        var quill = QuillManager.getQuillInstance('aboutDesc');
+        if (quill) quill.setContents([]);
     });
 
+    // ── Shared submit handler ──────────────────────────────────────────────────
     $('#btnAdd').on('click', function () {
-        // Update Quill content before form submission
+        // Sync Quill content
         QuillManager.updateQuillFormContent();
 
+        var mode = $('#recordMode').val();
         let form = $('#addForm')[0];
         let formData = new FormData(form);
         let selectedCategory = formData.get('content_category');
@@ -149,69 +216,62 @@
         let description = formData.get('TxtDesc');
         let imageFile = formData.get('AboutImg');
 
-        // Form validation
+        // Basic required fields
         if (!selectedCategory || !title) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return; // Stop further execution if validation fails
+            Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please fill in all required fields.' });
+            return;
         }
 
         if (selectedCategory === 'History') {
-            // Description validation
             if (!description) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please enter a description.'
-                });
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter a description.' });
                 return;
             }
-
-            // Image validation
-            if (!imageFile || imageFile.size === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please upload an image.'
-                });
+            // Image required only on add
+            if (mode === 'add' && (!imageFile || imageFile.size === 0)) {
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please upload an image.' });
                 return;
             }
-
-            const maxImageSizeMB = 4;
-            if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: `Image size should not exceed ${maxImageSizeMB} MB.`
-                });
-                return;
-            }
-
-            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!validImageTypes.includes(imageFile.type)) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please upload a valid image file (jpg, png, gif).'
-                });
-                return;
+            if (imageFile && imageFile.size > 0) {
+                const maxImageSizeMB = 4;
+                if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
+                    Swal.fire({ icon: 'warning', title: 'Validation Error', text: `Image size should not exceed ${maxImageSizeMB} MB.` });
+                    return;
+                }
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!validImageTypes.includes(imageFile.type)) {
+                    Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please upload a valid image file (jpg, png, gif).' });
+                    return;
+                }
             }
         } else if (selectedCategory === 'Home Page' || selectedCategory === 'Content' || selectedCategory === 'Emergency Hotlines') {
             if (!description) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please enter a description.'
-                });
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter a description.' });
                 return;
             }
             formData.set('AboutImg', '');
         } else {
             formData.set('TxtDesc', '');
             formData.set('AboutImg', '');
+        }
+
+        var url, successText;
+        if (mode === 'edit') {
+            formData.set('id', $('#recordId').val());
+            // Map shared field names to what the update endpoint expects
+            formData.set('edit_content_category', selectedCategory);
+            formData.set('EditTxtTitle', title);
+            formData.set('EditTxtDesc', description || '');
+            // File: rename AboutImg -> EditAboutImg for the update endpoint
+            var imgFile = formData.get('AboutImg');
+            if (imgFile && imgFile.size > 0) {
+                formData.set('EditAboutImg', imgFile);
+            }
+            url = '<?php echo site_url("admin/ajax/update_about"); ?>';
+            successText = 'Content updated successfully.';
+        } else {
+            url = '<?php echo site_url("admin/ajax/create_about"); ?>';
+            successText = 'Data saved!';
         }
 
         Swal.fire({
@@ -221,47 +281,35 @@
             scrollbarPadding: false,
             allowEscapeKey: () => !Swal.isLoading(),
             allowOutsideClick: () => !Swal.isLoading(),
-            willOpen: () => {
-                Swal.showLoading();
-            }
+            willOpen: () => { Swal.showLoading(); }
         });
 
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_about'); ?>',
+            url: url,
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
                 if (result.status == 1) {
-                    $('#addForm').trigger('reset');
                     $('#addModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data saved!'
-                    });
+                    Swal.fire({ icon: 'success', title: 'Success', text: successText });
                     tbl.ajax.reload(null, false);
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: result.message || 'Data not created. Refresh the page or try logging in again.',
+                        text: result.message || 'Operation failed. Refresh the page or try logging in again.'
                     });
-                    tbl.ajax.reload(null, false);
                 }
             },
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while processing your request. Please try again.'
-                });
+            error: function () {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred while processing your request. Please try again.' });
             }
         });
     });
 
-
+    // ── Edit trigger ───────────────────────────────────────────────────────────
     function edit(id) {
         $.ajax({
             url: '<?php echo site_url('admin/ajax/get_about'); ?>',
@@ -269,169 +317,16 @@
             data: { id: id },
             success: function (response) {
                 if (response.status === 1) {
-                    let res = response.data; // Directly access the data object
-                    $('#editAboutId').val(res.ID);
-                    $('#edit_content_category').val(res.section);
-                    $('#EditTxtTitle').val(res.title);
-
-                    if (res.section != 'Header') {
-                        $('#EditDescGroup').show();
-                        if (res.section === 'History') {
-                            $('#EditAboutImgGrp').show();
-                        } else {
-                            $('#EditAboutImgGrp').hide();
-                            $('#EditAboutImg').val('');
-                        }
-                        $('#EditTxtDesc').val(res.description);
-                    } else {
-                        $('#EditDescGroup, #EditAboutImgGrp').hide();
-                        $('#EditAboutImg').val('');
-                    }
-                    $('#editModal').modal('show');
-
-                    // Set Quill editor content after modal is shown
-                    $('#editModal').on('shown.bs.modal', function () {
-                        if (res.section != 'Header') {
-                            // Initialize Quill editor if not already initialized
-                            if (!QuillManager.getQuillInstance('aboutEditDesc')) {
-                                QuillManager.initQuillEditor('editQuillDesc', 'aboutEditDesc');
-                            }
-                            // Set content after a short delay to ensure Quill is ready
-                            setTimeout(() => {
-                                const quill = QuillManager.getQuillInstance('aboutEditDesc');
-                                if (quill && res.description) {
-                                    quill.root.innerHTML = res.description;
-                                }
-                            }, 100);
-                        }
-                    });
+                    openAboutModal('edit', response.data);
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message || 'Data not found.'
-                    });
+                    Swal.fire({ icon: 'error', title: 'Error', text: response.message || 'Data not found.' });
                 }
             },
             error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to fetch details. Please try again later.'
-                });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to fetch details. Please try again later.' });
             }
         });
     }
-
-    $('#btnEdit').click(function () {
-        // Update Quill content before form submission
-        QuillManager.updateQuillFormContent();
-
-        let form = $('#editForm')[0];
-        let formData = new FormData(form);
-        let selectedCategory = formData.get('edit_content_category');
-        let title = formData.get('EditTxtTitle');
-        let description = formData.get('EditTxtDesc');
-        let imageFile = formData.get('EditAboutImg');
-
-        // Form validation
-        if (!selectedCategory || !title) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return; // Stop further execution if validation fails
-        }
-
-        if (selectedCategory === 'History') {
-            // Description validation
-            if (!description) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please enter a description.'
-                });
-                return;
-            }
-
-            // Image validation
-            if (!imageFile || imageFile.size === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please upload an image.'
-                });
-                return;
-            }
-
-            const maxImageSizeMB = 4;
-            if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: `Image size should not exceed ${maxImageSizeMB} MB.`
-                });
-                return;
-            }
-
-            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!validImageTypes.includes(imageFile.type)) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please upload a valid image file (jpg, png, gif).'
-                });
-                return;
-            }
-        } else if (selectedCategory === 'Home Page' || selectedCategory === 'Content' || selectedCategory === 'Emergency Hotlines') {
-            if (!description) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please enter a description.'
-                });
-                return;
-            }
-            formData.set('EditAboutImg', '');
-        } else {
-            formData.set('EditTxtDesc', '');
-            formData.set('EditAboutImg', '');
-        }
-
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/update_about'); ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        tbl.ajax.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update content. Please try again later.'
-                });
-            }
-        });
-    });
 
     // Toggle Status function
     function toggleStatus(id, currentStatus, forcedStatus) {
@@ -624,7 +519,7 @@
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+                            <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';

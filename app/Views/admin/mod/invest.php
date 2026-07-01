@@ -104,12 +104,15 @@
 
       <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
         <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-
+          <i class="bi bi-plus-circle me-2"></i><span id="investModalTitle">Add Investment Content</span>
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body p-4">
+        <input type="hidden" id="investId" name="id">
+        <input type="hidden" id="investMode" name="mode" value="add">
+
         <div class="row g-3">
 
           <div class="col-12">
@@ -129,7 +132,7 @@
           </div>
 
           <div class="col-12">
-            <label for="investFile" class="form-label small fw-bold text-secondary">Upload File Attachment <span
+            <label for="investFile" id="investFileLabel" class="form-label small fw-bold text-secondary">Upload File Attachment <span
                 class="text-danger">*</span></label>
             <input type="file" class="form-control shadow-sm" id="investFile" name="investFile" accept=".pdf,.xls,.xlsx"
               required>
@@ -142,56 +145,6 @@
       <div class="modal-footer bg-light px-4 py-3">
         <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
         <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
-      </div>
-
-    </form>
-  </div>
-</div>
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <form id="editForm" class="modal-content border-0 shadow-lg">
-      <input type="hidden" id="editInvestId" name="id">
-
-      <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-        <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-          <i class="bi bi-pencil-square me-2"></i>Modify Investment Content
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body p-4">
-        <div class="row g-3">
-
-          <div class="col-12">
-            <label for="editFileCategory" class="form-label small fw-bold text-secondary">File Category <span
-                class="text-danger">*</span></label>
-            <select class="form-control form-select shadow-sm invest-select-menu" id="editFileCategory"
-              name="editFileCategory" required>
-              <option value="" disabled>Select classifications...</option>
-              <option value="Local Revenue Code">Local Revenue Code</option>
-              <option value="Local Investment and Incentive Code">Local Investment and Incentive Code</option>
-              <option value="Market Value">Market Value</option>
-              <option value="Cost of Doing Business">Cost of Doing Business</option>
-              <option value="Investment Opportunities and Priorities">Investment Opportunities and Priorities</option>
-              <option value="Business Directory">Business Directory</option>
-              <option value="Safety Seal Certification">Safety Seal Certification</option>
-            </select>
-          </div>
-
-          <div class="col-12">
-            <label for="editInvestFile" class="form-label small fw-bold text-secondary">Replace File Attachment</label>
-            <input type="file" class="form-control shadow-sm" id="editInvestFile" name="editInvestFile"
-              accept=".pdf,.xls,.xlsx">
-            <div class="form-text text-muted small mt-1">Leave blank to retain current file. Formats: PDF, XLS, XLSX
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="modal-footer bg-light px-4 py-3">
-        <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-        <button id="btnEdit" type="submit" class="btn btn-theme px-4">Update Content</button>
       </div>
 
     </form>

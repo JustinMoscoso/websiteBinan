@@ -110,8 +110,10 @@
 <div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true" style="overflow-y: auto;">
     <div class="modal-dialog modal-xl custom-wide-modal my-3">
         <form id="addForm" class="modal-content border-0 shadow-lg" style="max-height: none;">
+            <input type="hidden" id="deptId" name="id">
+            <input type="hidden" id="deptMode" name="mode" value="add">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;"></h5>
+                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;" id="deptModalTitle">Add Department Details</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -175,88 +177,10 @@
 
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
+                <button id="btnDeptSave" type="submit" class="btn btn-success px-4">Save</button>
             </div>
         </form>
     </div>
 </div>
-
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true" style="overflow-y: auto;">
-    <div class="modal-dialog modal-xl custom-wide-modal my-3">
-        <form id="editForm" class="modal-content border-0 shadow-lg">
-            <input type="hidden" id="editDeptId" name="id">
-
-            <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">Edit Department Details</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4">
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <label for="editDept" class="form-label small fw-bold text-secondary">Department Name</label>
-                        <input type="text" class="form-control shadow-sm" id="editDept" name="editDept"
-                            placeholder="Enter department name" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="editHead" class="form-label small fw-bold text-secondary">Officer in Charge</label>
-                        <input type="text" class="form-control shadow-sm" id="editHead" name="editHead"
-                            placeholder="Enter full name" required>
-                    </div>
-
-                    <div class="col-12 mt-3">
-                        <label for="editQuillAbout" class="form-label small fw-bold text-secondary">About</label>
-                        <div id="editQuillAbout" style="height: 150px;"></div>
-                        <input type="hidden" id="editAbout" name="editAbout">
-                    </div>
-
-                    <div class="col-12 mt-3">
-                        <label for="editQuillContact" class="form-label small fw-bold text-secondary">Contact Information</label>
-                        <div id="editQuillContact" style="height: 150px;"></div>
-                        <input type="hidden" id="editContact" name="editContact">
-                    </div>
-
-                    <div class="col-12 mt-3">
-                        <label for="editQuillMission" class="form-label small fw-bold text-secondary">Mission</label>
-                        <div id="editQuillMission" style="height: 150px;"></div>
-                        <input type="hidden" id="editMission" name="editMission" required>
-                    </div>
-
-                    <div class="col-12 mt-3">
-                        <label for="editQuillVision" class="form-label small fw-bold text-secondary">Vision</label>
-                        <div id="editQuillVision" style="height: 150px;"></div>
-                        <input type="hidden" id="editVision" name="editVision" required>
-                    </div>
-
-                    <div class="col-12 mt-3">
-                        <label for="editQuillPolicy" class="form-label small fw-bold text-secondary">Policy Objectives</label>
-                        <div id="editQuillPolicy" style="height: 150px;"></div>
-                        <input type="hidden" id="editPolicy" name="editPolicy" required>
-                    </div>
-
-                    <div class="col-md-6 mt-3">
-                        <label for="editdeptImg" class="form-label small fw-bold text-secondary">Department Logo</label>
-                        <input type="file" class="form-control shadow-sm" id="editdeptImg" name="editdeptImg"
-                            accept="image/*">
-                        <div id="editDeptLogoPreview" class="mt-2"></div>
-                    </div>
-                    <div class="col-md-6 mt-3">
-                        <label for="editdeptOrgChart" class="form-label small fw-bold text-secondary">Organizational Chart</label>
-                        <input type="file" class="form-control shadow-sm" id="editdeptOrgChart" name="editdeptOrgChart"
-                            accept="image/*">
-                        <div id="editDeptOrgChartPreview" class="mt-2"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnEdit" type="submit" class="btn btn-success px-4">Save</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>

@@ -43,8 +43,65 @@
         });
     }
 
-    // Initialize selectize for all selects
-    $('#fileCategory, #editFileCategory').selectize({
+    var fullDiscModalMode = 'add';
+
+    function resetFullDiscModalState() {
+        fullDiscModalMode = 'add';
+        $('#addForm')[0].reset();
+        $('#policyId').val('');
+        $('#policyMode').val('add');
+        $('#policyModalTitle').text('Add Policy');
+        $('#btnAdd').text('Save');
+        $('#policyFile').prop('required', true).val('');
+
+        var policyCategory = $('#fileCategory')[0] && $('#fileCategory')[0].selectize ? $('#fileCategory')[0].selectize : null;
+        if (policyCategory) {
+            policyCategory.clear(true);
+        }
+
+        var addYrPicker = $('#yr').data('yearpicker');
+        if (addYrPicker) {
+            addYrPicker.year = new Date().getFullYear();
+            addYrPicker.setValue();
+        }
+        $('#yr').val('');
+        $('#qtr').val('');
+        toggleQuarterField(true);
+    }
+
+    function openFullDiscModal(mode, policy) {
+        fullDiscModalMode = mode;
+        $('#policyMode').val(mode);
+        $('#policyModalTitle').text(mode === 'edit' ? 'Edit Policy' : 'Add Policy');
+        $('#btnAdd').text(mode === 'edit' ? 'Update' : 'Save');
+        $('#policyFile').prop('required', mode === 'add');
+
+        if (mode === 'edit' && policy) {
+            $('#policyId').val(policy.ID || policy.id || '');
+            var policyCategory = $('#fileCategory')[0] && $('#fileCategory')[0].selectize ? $('#fileCategory')[0].selectize : null;
+            if (policyCategory) {
+                policyCategory.setValue(policy.file_category || '');
+            } else {
+                $('#fileCategory').val(policy.file_category || '');
+            }
+            $('#yr').val(policy.year || '');
+            var editYrPicker = $('#yr').data('yearpicker');
+            if (editYrPicker) {
+                editYrPicker.year = parseInt(policy.year, 10) || new Date().getFullYear();
+                editYrPicker.setValue();
+            }
+            $('#qtr').val(policy.quarter || '');
+            toggleQuarterField(!isAnnualCategory(policy.file_category || ''));
+            $('#policyFile').val('');
+        } else {
+            resetFullDiscModalState();
+        }
+
+        $('#addModal').modal('show');
+    }
+
+    // Initialize selectize for the shared category select
+    $('#fileCategory').selectize({
         sortField: 'text',
         placeholder: 'Choose file category',
         allowClear: true
@@ -57,8 +114,8 @@
     // Initially clear the add year input text box so it shows the placeholder
     $('#yr').val('');
 
-    // Restrict file inputs to one file upload only
-    $('#policyFile, #editpolicyFile').on('change', function () {
+    // Restrict file input to one file upload only
+    $('#policyFile').on('change', function () {
         if (this.files && this.files.length > 1) {
             Swal.fire({
                 icon: 'warning',
@@ -81,56 +138,56 @@
     }
 
     // Function to toggle quarter field visibility
-    function toggleQuarterField(show, modalType = 'add') {
-        const quarterField = modalType === 'add' ? '#qtr' : '#editqtr';
-        const quarterLabel = modalType === 'add' ? 'label[for="qtr"]' : 'label[for="editqtr"]';
-
+    function toggleQuarterField(show) {
         if (show) {
-            $(quarterField).closest('.col-md-6').show();
-            $(quarterField).prop('required', true);
+            $('#qtr').closest('.col-md-6').show();
+            $('#qtr').prop('required', true);
         } else {
-            $(quarterField).closest('.col-md-6').hide();
-            $(quarterField).prop('required', false);
-            $(quarterField).val(''); // Clear the value
+            $('#qtr').closest('.col-md-6').hide();
+            $('#qtr').prop('required', false);
+            $('#qtr').val('');
         }
     }
 
-    // Handle file category change in Add Modal
     $('#fileCategory').on('change', function () {
         const selectedCategory = $(this).val();
         const isAnnual = isAnnualCategory(selectedCategory);
-        toggleQuarterField(!isAnnual, 'add');
+        toggleQuarterField(!isAnnual);
     });
 
-    // Handle file category change in Edit Modal
-    $('#editFileCategory').on('change', function () {
-        const selectedCategory = $(this).val();
-        const isAnnual = isAnnualCategory(selectedCategory);
-        toggleQuarterField(!isAnnual, 'edit');
-    });
-
-    // Initialize quarter field visibility when Add modal opens
     $('#addModal').on('shown.bs.modal', function () {
-        const selectedCategory = $('#fileCategory').val();
-        if (selectedCategory) {
-            const isAnnual = isAnnualCategory(selectedCategory);
-            toggleQuarterField(!isAnnual, 'add');
-        } else {
-            // Default to showing quarter field if no category is selected
-            toggleQuarterField(true, 'add');
+        if (fullDiscModalMode === 'edit') {
+            return;
         }
+        const selectedCategory = $('#fileCategory').val();
+        const isAnnual = isAnnualCategory(selectedCategory);
+        toggleQuarterField(!isAnnual);
     });
 
-    $('#btnAdd').on('click', function () {
+    $('#addModal').on('hidden.bs.modal', function () {
+        resetFullDiscModalState();
+    });
+
+    $('#btnAdd').on('click', function (e) {
+        e.preventDefault();
         let form = $('#addForm')[0];
         let formData = new FormData(form);
         const selectedCategory = formData.get('fileCategory');
         const isAnnual = isAnnualCategory(selectedCategory);
+        const isEdit = $('#policyMode').val() === 'edit';
+        const policyId = $('#policyId').val();
+
+        if (isEdit) {
+            formData.set('id', policyId);
+        }
 
         // Check required fields based on category type
-        let requiredFields = ['fileCategory', 'yr', 'policyFile'];
+        let requiredFields = ['fileCategory', 'yr'];
         if (!isAnnual) {
             requiredFields.push('qtr');
+        }
+        if (!isEdit) {
+            requiredFields.push('policyFile');
         }
 
         // Validate required fields
@@ -157,22 +214,14 @@
             }
         });
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_fulldiscpol'); ?>',
+            url: isEdit ? '<?php echo site_url('admin/ajax/update_fulldiscpol'); ?>' : '<?php echo site_url('admin/ajax/create_fulldiscpol'); ?>',
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
                 if (result.status == 1) {
-                    $('#addForm').trigger('reset');
-                    $('#fileCategory')[0].selectize.clear();
-                    let addYrPicker = $('#yr').data('yearpicker');
-                    if (addYrPicker) {
-                        addYrPicker.year = new Date().getFullYear();
-                        addYrPicker.setValue();
-                    }
-                    // Reset add year input text box to empty so it displays placeholder
-                    $('#yr').val('');
+                    resetFullDiscModalState();
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
@@ -207,21 +256,7 @@
             success: function (response) {
                 if (response.status === 1) {
                     let res = response.data; // Directly access the data object
-                    $('#editPolicyId').val(res.ID);
-                    $('#editFileCategory')[0].selectize.setValue(res.file_category); // Set the value for selectize
-                    $('#edityr').val(res.year);
-                    let editYrPicker = $('#edityr').data('yearpicker');
-                    if (editYrPicker) {
-                        editYrPicker.year = parseInt(res.year);
-                        editYrPicker.setValue();
-                    }
-                    $('#editqtr').val(res.quarter);
-
-                    // Handle quarter field visibility based on category
-                    const isAnnual = isAnnualCategory(res.file_category);
-                    toggleQuarterField(!isAnnual, 'edit');
-
-                    $('#editModal').modal('show');
+                    openFullDiscModal('edit', res);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -239,64 +274,6 @@
             }
         });
     }
-
-
-    // Function to submit the edit user form
-    $('#btnEdit').click(function () {
-        let formData = new FormData($('#editForm')[0]);
-        const selectedCategory = formData.get('editFileCategory');
-        const isAnnual = isAnnualCategory(selectedCategory);
-
-        // Check required fields based on category type
-        let requiredFields = ['editFileCategory', 'edityr'];
-        if (!isAnnual) {
-            requiredFields.push('editqtr');
-        }
-
-        // Validate required fields
-        for (let field of requiredFields) {
-            if (!formData.get(field)) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please fill in all required fields.'
-                });
-                return;
-            }
-        }
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/update_fulldiscpol'); ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        tbl.ajax.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update policy. Please try again later.'
-                });
-            }
-        });
-    });
 
     // Toggle Status function
     function toggleStatus(id, currentStatus, forcedStatus) {
@@ -492,7 +469,7 @@
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="${fileUrl}" target="_blank"><i class="bi bi-eye me-1"></i>View File</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i>Edit</a></li>`;
+                            <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i>Edit</a></li>`;
 
                     // Developer, Superadmin, and Admin have full access (Toggle Status, Delete)
                     if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {

@@ -43,18 +43,96 @@
         });
     }
 
+    var contactModalMode = 'add';
+
+    function resetContactModalState() {
+        contactModalMode = 'add';
+        const form = document.getElementById('addForm');
+        if (form) {
+            form.reset();
+        }
+
+        const deptSelectEl = $('#txtDept')[0];
+        const brgySelectEl = $('#txtBrgy')[0];
+        const deptSelect = deptSelectEl ? deptSelectEl.selectize : null;
+        const brgySelect = brgySelectEl ? brgySelectEl.selectize : null;
+        if (deptSelect) {
+            deptSelect.clear(true);
+        }
+        if (brgySelect) {
+            brgySelect.clear(true);
+        }
+
+        $('#contactId').val('');
+        $('#contactMode').val('add');
+        $('#contactModalTitle').text('Add Contact');
+        $('#btnAdd').text('Save');
+        $('#deptGroup, #brgyGroup, #othersGrp').hide();
+        setPhilippineMobilePrefix('#smart');
+        setPhilippineMobilePrefix('#globe');
+    }
+
+    function setContactModalMode(mode) {
+        contactModalMode = mode;
+        $('#contactMode').val(mode);
+        $('#contactModalTitle').text(mode === 'edit' ? '' : 'Add Contact');
+        $('#btnAdd').text(mode === 'edit' ? 'Update' : 'Save');
+    }
+
+    function openContactModal(mode, res) {
+        setContactModalMode(mode);
+
+        if (mode === 'edit' && res) {
+            $('#contactId').val(res.ID);
+            $('#contact').val(res.number ? formatPhilippineLandline(res.number) : '');
+            $('#smart').val(res.smart ? formatPhilippineMobile(res.smart) : '+63 9');
+            $('#globe').val(res.globe ? formatPhilippineMobile(res.globe) : '+63 9');
+            $('#telco').val(res.telco ? formatPhilippineLandline(res.telco) : '');
+
+            if (res.brgy_name) {
+                $('#category').val('BRGY');
+                $('#deptGroup').hide();
+                $('#brgyGroup').show();
+                $('#othersGrp').hide();
+                populateBrgyDropdown($('#txtBrgy'), res.content_ref_id);
+                $('#txtDept')[0].selectize.clear(true);
+                $('#txtOthers').val('');
+            } else if (res.dept_name) {
+                $('#category').val('DEPT');
+                $('#deptGroup').show();
+                $('#brgyGroup').hide();
+                $('#othersGrp').hide();
+                populateDepartmentDropdown($('#txtDept'), res.content_ref_id);
+                $('#txtBrgy')[0].selectize.clear(true);
+                $('#txtOthers').val('');
+            } else {
+                $('#category').val('Others');
+                $('#deptGroup').hide();
+                $('#brgyGroup').hide();
+                $('#othersGrp').show();
+                $('#txtOthers').val(res.content_ref_id);
+                $('#txtDept')[0].selectize.clear(true);
+                $('#txtBrgy')[0].selectize.clear(true);
+            }
+        } else {
+            resetContactModalState();
+        }
+
+        $('#addModal').modal('show');
+    }
+
     // Initialize selectize for all selects
     // Placeholder must be passed in the config — Selectize ignores the HTML placeholder attribute
     // dropdownParent: 'body' appends the dropdown list to <body> so it fully escapes
     // the modal's stacking context and always renders on top without bleed-through
-    $('#txtDept, #editDept').selectize({
+    $('#txtDept').selectize({
         sortField: 'text',
         allowClear: true,
         placeholder: 'Select Department',
         dropdownParent: 'body'
     });
 
-    $('#txtBrgy, #editBrgy').selectize({
+    $('#txtBrgy').selectize({
         sortField: 'text',
         allowClear: true,
         placeholder: 'Select Barangay',
@@ -199,51 +277,11 @@
         });
     }
 
-    bindPhilippineMobileFormatting('#smart, #globe, #editSmart, #editGlobe');
-    bindPhilippineLandlineFormatting('#contact, #telco, #editContact, #editTelco');
+    bindPhilippineMobileFormatting('#smart, #globe');
+    bindPhilippineLandlineFormatting('#contact, #telco');
 
     $('#addModal').on('hidden.bs.modal', function () {
-        const form = document.getElementById('addForm');
-        if (form) {
-            form.reset();
-        }
-
-        const deptSelectEl = $('#txtDept')[0];
-        const brgySelectEl = $('#txtBrgy')[0];
-        const deptSelect = deptSelectEl ? deptSelectEl.selectize : null;
-        const brgySelect = brgySelectEl ? brgySelectEl.selectize : null;
-        if (deptSelect) {
-            deptSelect.clear(true);
-        }
-        if (brgySelect) {
-            brgySelect.clear(true);
-        }
-
-        $('#deptGroup, #brgyGroup, #othersGrp').hide();
-        setPhilippineMobilePrefix('#smart');
-        setPhilippineMobilePrefix('#globe');
-    });
-
-    $('#editModal').on('hidden.bs.modal', function () {
-        const form = document.getElementById('editForm');
-        if (form) {
-            form.reset();
-        }
-
-        const deptSelectEl = $('#editDept')[0];
-        const brgySelectEl = $('#editBrgy')[0];
-        const deptSelect = deptSelectEl ? deptSelectEl.selectize : null;
-        const brgySelect = brgySelectEl ? brgySelectEl.selectize : null;
-        if (deptSelect) {
-            deptSelect.clear(true);
-        }
-        if (brgySelect) {
-            brgySelect.clear(true);
-        }
-
-        $('#editdeptGroup, #editbrgyGroup, #editothersGrp').hide();
-        setPhilippineMobilePrefix('#editSmart');
-        setPhilippineMobilePrefix('#editGlobe');
+        resetContactModalState();
     });
 
 
@@ -421,56 +459,37 @@
             $('#deptGroup').show();
             $('#brgyGroup').hide();
             $('#othersGrp').hide();
+            $('#txtBrgy')[0].selectize.clear(true);
+            $('#txtOthers').val('');
             populateDepartmentDropdown($('#txtDept'));
         } else if (selectedCategory === 'BRGY') {
             $('#deptGroup').hide();
             $('#brgyGroup').show();
             $('#othersGrp').hide();
+            $('#txtDept')[0].selectize.clear(true);
+            $('#txtOthers').val('');
             populateBrgyDropdown($('#txtBrgy'));
         } else if (selectedCategory === 'Others') {
             $('#deptGroup').hide();
             $('#brgyGroup').hide();
             $('#othersGrp').show();
+            $('#txtDept')[0].selectize.clear(true);
+            $('#txtBrgy')[0].selectize.clear(true);
         } else {
             $('#deptGroup, #brgyGroup').hide();
         }
     });
 
-    // Same for edit modal
-    $('#editcategory').on('change', function () {
-        var selectedCategory = $(this).val();
-        if (selectedCategory === 'DEPT') {
-            $('#editdeptGroup').show();
-            $('#editbrgyGroup').hide();
-            $('#editothersGrp').hide();
-            populateDepartmentDropdown($('#editDept'));
-        } else if (selectedCategory === 'BRGY') {
-            $('#editdeptGroup').hide();
-            $('#editbrgyGroup').show();
-            $('#editothersGrp').hide();
-            populateBrgyDropdown($('#editBrgy'));
-        } else if (selectedCategory === 'Others') {
-            $('#editdeptGroup').hide();
-            $('#editbrgyGroup').hide();
-            $('#editothersGrp').show();
-        }
-        else {
-            $('#editdeptGroup, #editbrgyGroup').hide();
-        }
-    });
-
     // Populate departments dropdown
     $('#addModal').on('show.bs.modal', function (e) {
-        // Reset the category selection
-        $('#category').val('').trigger('change');
-    });
-
-    $('#editModal').on('show.bs.modal', function (e) {
-        $('#category').val('').trigger('change');
+        if (contactModalMode !== 'edit') {
+            resetContactModalState();
+        }
     });
 
     // Save new hotlines
-    $('#btnAdd').on('click', function () {
+    $('#btnAdd').on('click', function (e) {
+        e.preventDefault();
         let form = $('#addForm')[0];
 
         $('#contact').val(formatPhilippineLandline($('#contact').val()));
@@ -491,6 +510,7 @@
         }
 
         let formData = new FormData(form);
+        const isEdit = $('#contactMode').val() === 'edit';
 
         // Form validation — category is always required
         if (!formData.get('category')) {
@@ -575,21 +595,18 @@
         });
 
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_contact'); ?>',
+            url: isEdit ? '<?php echo site_url('admin/ajax/update_contact'); ?>' : '<?php echo site_url('admin/ajax/create_contact'); ?>',
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
                 if (result.status == 1) {
-                    $('#addForm').trigger('reset');
-                    $('#txtDept')[0].selectize.clear();
-                    $('#txtBrgy')[0].selectize.clear();
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Data saved!'
+                        text: isEdit ? 'Contact updated successfully.' : 'Data saved!'
                     });
                     tbl.ajax.reload(null, false);
                 } else {
@@ -618,38 +635,7 @@
             data: { id: id },
             success: function (response) {
                 if (response.status === 1) {
-                    let res = response.data; // Directly access the data object
-                    $('#editId').val(res.ID);
-                    $('#editTelco').val(res.telco ? formatPhilippineLandline(res.telco) : '');
-                    $('#editContact').val(res.number ? formatPhilippineLandline(res.number) : '');
-                    $('#editSmart').val(res.smart ? formatPhilippineMobile(res.smart) : '+63 9');
-                    $('#editGlobe').val(res.globe ? formatPhilippineMobile(res.globe) : '+63 9');
-
-                    if (res.brgy_name) {
-                        $('#editcategory').val('BRGY').trigger('change'); // Set the category and trigger change
-                        $('#editdeptGroup').hide();
-                        $('#editbrgyGroup').show();
-                        $('#editothersGrp').hide();
-                        populateBrgyDropdown($('#editBrgy'), res.content_ref_id);
-                        $('#editDept').val(null); // Set editDept to null
-                        $('#editOthers').val(null); // Set editOthers to null
-                    } else if (res.dept_name) {
-                        $('#editcategory').val('DEPT').trigger('change');
-                        $('#editdeptGroup').show();
-                        $('#editothersGrp').hide();
-                        populateDepartmentDropdown($('#editDept'), res.content_ref_id);
-                        $('#editBrgy').val(null); // Set editBrgy to null
-                        $('#editOthers').val(null); // Set editOthers to null
-                    } else {
-                        $('#editcategory').val('Others').trigger('change');
-                        $('#editdeptGroup').hide();
-                        $('#editbrgyGroup').hide();
-                        $('#editothersGrp').show();
-                        $('#editOthers').val(res.content_ref_id);
-                        $('#editBrgy').val(null); // Set editBrgy to null
-                        $('#editDept').val(null); // Set editDept to null
-                    }
-                    $('#editModal').modal('show');
+                    openContactModal('edit', response.data);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -668,8 +654,8 @@
         });
     }
 
-
-    $('#btnEdit').click(function () {
+    /*
+    if (false) {
         let form = $('#editForm')[0];
 
         $('#editContact').val(formatPhilippineLandline($('#editContact').val()));
@@ -764,7 +750,7 @@
                         title: 'Success',
                         text: response.message
                     }).then(() => {
-                        $('#editModal').modal('hide');
+                        $('#addModal').modal('hide');
                         tbl.ajax.reload();
                     });
                 } else {
@@ -783,7 +769,8 @@
                 });
             }
         });
-    });
+    }
+    */
 
     // datatable init
     var tbl = $('#tblhotlines').DataTable({
@@ -897,7 +884,7 @@
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+                            <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';

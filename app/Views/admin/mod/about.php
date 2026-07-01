@@ -104,13 +104,18 @@
     </div>
 </section>
 
+<!-- Shared Add / Edit Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <form id="addForm" class="modal-content border-0 shadow-lg" enctype="multipart/form-data">
 
+            <!-- Hidden fields: record ID and mode (add | edit) -->
+            <input type="hidden" id="recordId" name="id">
+            <input type="hidden" id="recordMode" name="mode" value="add">
+
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-
+                    <span id="recordModalTitle">Add Content</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -145,7 +150,7 @@
                             <div class="editor-wrapper shadow-sm mb-1">
                                 <div id="quillDesc" class="quill-editor-full" style="height: 150px;"></div>
                             </div>
-                            <input type="hidden" id="addTxtDesc" name="TxtDesc" required>
+                            <input type="hidden" id="addTxtDesc" name="TxtDesc">
                         </div>
                     </div>
 
@@ -155,75 +160,9 @@
                                 Banner Image</label>
                             <input type="file" class="form-control" id="AboutImg" name="AboutImg" accept="image/*">
                             <div class="form-text text-muted">Accepted extensions: PNG, JPG, JPEG, WEBP.</div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="modal-footer bg-light px-4 py-3 border-top">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
-            </div>
-
-        </form>
-    </div>
-</div>
-
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <form id="editForm" class="modal-content border-0 shadow-lg" enctype="multipart/form-data">
-            <input type="hidden" id="editAboutId" name="id">
-
-            <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-pencil-square me-2"></i>Modify System Display Content
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4">
-                <div class="row g-3">
-
-                    <div class="col-md-6">
-                        <label for="edit_content_category" class="form-label small fw-bold text-secondary">Category
-                            <span class="text-danger">*</span></label>
-                        <select class="form-select" id="edit_content_category" name="edit_content_category" required>
-                            <option disabled value="">Select Category</option>
-                            <option value="Home Page">Home Page</option>
-                            <option value="History">History</option>
-                            <option value="Content">About - Content</option>
-                            <option value="Emergency Hotlines">Emergency Hotlines</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="EditTxtTitle" class="form-label small fw-bold text-secondary">Title
-                            <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="EditTxtTitle" name="EditTxtTitle"
-                            placeholder="Enter headline/header title" required>
-                    </div>
-
-                    <div class="col-12">
-                        <div id="EditDescGroup" style="display: none;">
-                            <label class="form-label small fw-bold text-secondary mb-1">Body Description / Content
-                                Copy</label>
-                            <div class="editor-wrapper shadow-sm mb-1">
-                                <div id="editQuillDesc" class="quill-editor-full" style="height: 150px;"></div>
-                            </div>
-                            <input type="hidden" id="EditTxtDesc" name="EditTxtDesc" required>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div id="EditAboutImgGrp" style="display: none;">
-                            <label for="EditAboutImg" class="form-label small fw-bold text-secondary">Update Graphic
-                                Asset File</label>
-                            <input type="file" class="form-control" id="EditAboutImg" name="EditAboutImg"
-                                accept="image/*">
+                            <!-- Image preview (shown in edit mode only) -->
                             <div id="edit_img_preview"
-                                class="mt-3 p-2 border border-dashed rounded bg-light text-center"
+                                class="mt-3 p-2 border rounded bg-light text-center d-none"
                                 style="max-width: 250px;">
                             </div>
                         </div>
@@ -233,8 +172,10 @@
             </div>
 
             <div class="modal-footer bg-light px-4 py-3 border-top">
-                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnEdit" type="submit" class="btn btn-theme px-4">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button id="btnAdd" type="submit" class="btn btn-success px-4">
+                    <span id="btnAddLabel">Save</span>
+                </button>
             </div>
 
         </form>

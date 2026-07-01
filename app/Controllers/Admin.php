@@ -2883,20 +2883,21 @@ class Admin extends BaseController
             ------------------- */
 
             case 'update_user': {
-                $user_m = new \App\Models\UserAccount();
-                $id = $this->request->getPost('id');
-                $fname = $this->request->getPost('editFirstName');
-                $mname = $this->request->getPost('editMiddleName') ?: '';
-                $lname = $this->request->getPost('editLastName');
-                $suffix = $this->request->getPost('editSuffix') ?: '';
-                $usern = $this->request->getPost('editUsername');
-                $email = $this->request->getPost('editEmail');
-                $acclvl = $this->request->getPost('editAccLevel');
-                $dept = $this->request->getPost('editDept') ?: '';
-                $passw = $this->request->getPost('editPassword');
-                // #25 – account type & linked entity
-                $acct_type = $this->request->getPost('editAccountType') ?: null;
-                $entity_ref = $this->request->getPost('editEntityRef') ?: null;
+                $user_m     = new \App\Models\UserAccount();
+                $id         = $this->request->getPost('id');
+                // Shared modal uses 'txt*' field names; fall back to legacy 'edit*' names
+                $fname      = $this->request->getPost('txtFirstName')   ?: $this->request->getPost('editFirstName');
+                $mname      = $this->request->getPost('txtMiddleName')  ?: $this->request->getPost('editMiddleName')  ?: '';
+                $lname      = $this->request->getPost('txtLastName')    ?: $this->request->getPost('editLastName');
+                $suffix     = $this->request->getPost('txtSuffix')      ?: $this->request->getPost('editSuffix')      ?: '';
+                $usern      = $this->request->getPost('txtUsername')    ?: $this->request->getPost('editUsername');
+                $email      = $this->request->getPost('txtEmail')       ?: $this->request->getPost('editEmail');
+                $acclvl     = $this->request->getPost('txtAccLevel')    ?: $this->request->getPost('editAccLevel');
+                $dept       = $this->request->getPost('editDept')       ?: '';
+                $passw      = $this->request->getPost('txtPassword')    ?: $this->request->getPost('editPassword');
+                // Account type & linked entity
+                $acct_type  = $this->request->getPost('txtAccountType') ?: $this->request->getPost('editAccountType') ?: null;
+                $entity_ref = $this->request->getPost('txtEntityRef')   ?: $this->request->getPost('editEntityRef')   ?: null;
 
                 if (empty($fname) || empty($mname) || empty($lname) || empty($usern) || empty($email) || empty($acclvl)) {
                     $message = 'Please fill in all required fields (First, Middle, and Last Names are required).';
@@ -3449,16 +3450,22 @@ class Admin extends BaseController
                     break;
                 }
                 $may_m = new \App\Models\MayorContent();
-                $id = $this->request->getPost('id');
+                // Accept shared modal 'id'; fall back to 'recordId' if needed
+                $id = $this->request->getPost('id') ?: $this->request->getPost('recordId');
+                if (!$id || !is_numeric($id)) {
+                    $message = 'Invalid record ID.';
+                    break;
+                }
                 $mayorcontent = $may_m->find($id);
 
                 if ($mayorcontent) {
                     $currentMayorImagesRaw = is_object($mayorcontent)
                         ? ($mayorcontent->mayor_img ?? '')
                         : (is_array($mayorcontent) ? ($mayorcontent['mayor_img'] ?? '') : '');
-                    $mayor_name = $this->request->getPost('editmyrname');
-                    $section = $this->request->getPost('edit_content_category');
-                    $content = $this->request->getPost('editperdata');
+                    // Shared modal uses shared names; fall back to legacy edit-prefixed names
+                    $mayor_name = $this->request->getPost('myrname')            ?: $this->request->getPost('editmyrname');
+                    $section    = $this->request->getPost('content_category')   ?: $this->request->getPost('edit_content_category');
+                    $content    = $this->request->getPost('perdata')             ?: $this->request->getPost('editperdata');
 
                     // Check if the section already exists
                     $existing_section = $may_m->where('section', $section)->where('id !=', $id)->first();
@@ -3478,7 +3485,8 @@ class Admin extends BaseController
                         $path = WRITEPATH . 'uploads/' . $file_category;
 
                         // Handle file uploads for mayor image if new files are selected
-                        $mayor_img = $this->request->getFileMultiple('editmayorimg');
+                        // Shared modal uses 'mayorimg[]'; fall back to legacy 'editmayorimg[]'
+                        $mayor_img = $this->request->getFileMultiple('mayorimg') ?: $this->request->getFileMultiple('editmayorimg');
                         $uploaded_files = [];
                         if ($mayor_img) {
                             foreach ($mayor_img as $img) {

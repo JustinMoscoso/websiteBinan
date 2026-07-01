@@ -100,13 +100,16 @@
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-
+                    <i class="bi bi-plus-circle me-2"></i><span id="jobModalTitle">Add Job</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
 
             <div class="modal-body p-4">
+                <input type="hidden" id="jobId" name="id">
+                <input type="hidden" id="jobMode" name="mode" value="add">
+
                 <div class="row g-3">
                     <div class="col-12">
                         <label for="title" class="form-label small fw-bold text-secondary">Job Title <span
@@ -159,75 +162,6 @@
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
                 <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <form id="editForm" class="modal-content border-0 shadow-lg">
-            <input type="hidden" id="editJobId" name="id">
-
-            <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-pencil-square me-2"></i>Modify Job Details
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4">
-                <div class="row g-3">
-                    <div class="col-12">
-                        <label for="editTitle" class="form-label small fw-bold text-secondary">Job Title <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control shadow-sm" id="editTitle" name="title" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editCompany" class="form-label small fw-bold text-secondary">Company / Department
-                            <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control shadow-sm" id="editCompany" name="company" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editType" class="form-label small fw-bold text-secondary">Job Type <span
-                                class="text-danger">*</span></label>
-                        <select class="form-control form-select shadow-sm" id="editType" name="type" required>
-                            <option value="Full Time">Full Time</option>
-                            <option value="Part Time">Part Time</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editPublicationDate" class="form-label small fw-bold text-secondary">Publication
-                            Date <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control shadow-sm" id="editPublicationDate"
-                            name="publication_date" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editEmail" class="form-label small fw-bold text-secondary">Contact Email <span
-                                class="text-danger">*</span></label>
-                        <input type="email" class="form-control shadow-sm" id="editEmail" name="email" required>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="editDescription" class="form-label small fw-bold text-secondary">Job Description
-                            <span class="text-danger">*</span></label>
-                        <div id="editQuillDescription" class="quill-editor-full border rounded-3 bg-white shadow-sm"
-                            style="height: 160px;"></div>
-                        <input type="hidden" id="editDescription" name="description" required>
-                    </div>
-
-
-                </div>
-            </div>
-
-            <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnEdit" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
         </form>
     </div>

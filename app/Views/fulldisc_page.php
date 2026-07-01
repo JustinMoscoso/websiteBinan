@@ -46,6 +46,7 @@
                             ];
                             
                             $categories = array_merge($annual_categories, $quarterly_categories);
+                            sort($categories); // Sort alphabetically
                             $quarters = [
                                 "First Quarter",
                                 "Second Quarter",

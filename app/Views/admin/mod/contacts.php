@@ -96,17 +96,20 @@
 
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-plus-circle me-2"></i>
+                    <i class="bi bi-plus-circle me-2"></i><span id="contactModalTitle">Add Contact</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
 
             <div class="modal-body p-4">
+                <input type="hidden" id="contactId" name="id">
+                <input type="hidden" id="contactMode" name="mode" value="add">
+
                 <div class="row g-3">
 
                     <div class="col-12">
-                        <label for="category" class="form-label small fw-bold text-secondary">Directory Section <span
+                        <label for="category" class="form-label small fw-bold text-secondary">Section <span
                                 class="text-danger">*</span></label>
                         <select class="form-select shadow-sm" id="category" name="category" required>
                             <option value="" selected disabled>Select a section</option>
@@ -172,96 +175,6 @@
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
                 <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
-            </div>
-
-        </form>
-    </div>
-</div>
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <form id="editForm" class="modal-content border-0 shadow-lg">
-
-            <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-pencil-square me-2"></i>Modify Contact Details
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4">
-                <input type="hidden" id="editId" name="id">
-
-                <div class="row g-3">
-
-                    <div class="col-12">
-                        <label for="editcategory" class="form-label small fw-bold text-secondary">Directory Section
-                            <span class="text-danger">*</span></label>
-                        <select class="form-select shadow-sm" id="editcategory" name="editcategory" required>
-                            <option value="" disabled>Choose a section...</option>
-                            <option value="BRGY">Barangay</option>
-                            <option value="DEPT">Department</option>
-                            <option value="Others">Others</option>
-                        </select>
-                    </div>
-
-                    <div class="col-12" id="editdeptGroup" style="display: none;">
-                        <label for="editDept" class="form-label small fw-bold text-secondary">Department Assignment
-                            <span class="text-danger">*</span></label>
-                        <select class="form-select shadow-sm" id="editDept" name="editDept" required>
-                        </select>
-                    </div>
-
-                    <div class="col-12" id="editbrgyGroup" style="display: none;">
-                        <label for="editBrgy" class="form-label small fw-bold text-secondary">Barangay Location <span
-                                class="text-danger">*</span></label>
-                        <select class="form-control form-select shadow-sm" id="editBrgy" name="editBrgy" required>
-                        </select>
-                    </div>
-
-                    <div class="col-12" id="editothersGrp" style="display: none;">
-                        <label for="editOthers" class="form-label small fw-bold text-secondary">Office Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" id="editOthers" name="editOthers" class="form-control shadow-sm" required>
-                    </div>
-
-                    <div class="col-12 mt-4 mb-1">
-                        <h6 class="small text-uppercase fw-bold text-muted tracking-wider border-bottom pb-2">
-                            Telecommunications Channels</h6>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editContact" class="form-label small fw-bold text-secondary">PLDT Landline</label>
-                        <input type="text" class="form-control shadow-sm" id="editContact" name="editContact"
-                            inputmode="tel" maxlength="15">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editSmart" class="form-label small fw-bold text-secondary">SMART Network
-                            Mobile</label>
-                        <input type="text" class="form-control shadow-sm" id="editSmart" name="editSmart"
-                            placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editTelco" class="form-label small fw-bold text-secondary">INTELCO Line</label>
-                        <input type="text" class="form-control shadow-sm" id="editTelco" name="editTelco"
-                            inputmode="tel" maxlength="15">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editGlobe" class="form-label small fw-bold text-secondary">GLOBE Network
-                            Mobile</label>
-                        <input type="text" class="form-control shadow-sm" id="editGlobe" name="editGlobe"
-                            placeholder="+63 9XX XXX XXXX" inputmode="tel" maxlength="16">
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnEdit" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
 
         </form>

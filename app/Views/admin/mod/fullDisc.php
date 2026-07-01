@@ -173,13 +173,15 @@
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-plus-circle me-2"></i>Add Policy
+                    <i class="bi bi-plus-circle me-2"></i><span id="policyModalTitle">Add Policy</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
 
             <div class="modal-body p-4">
+                <input type="hidden" id="policyId" name="id">
+                <input type="hidden" id="policyMode" name="mode" value="add">
                 <div class="row g-3">
 
                     <div class="col-12">
@@ -247,89 +249,6 @@
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Close</button>
                 <button id="btnAdd" type="submit" class="btn btn-success px-4">Save</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <form id="editForm" class="modal-content border-0 shadow-lg">
-            <input type="hidden" id="editPolicyId" name="id">
-
-            <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">Edit Policy Details</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4">
-                <div class="row g-3">
-                    <div class="col-12">
-                        <label for="editFileCategory" class="form-label small fw-bold text-secondary">File
-                            Category</label>
-                        <select class="form-control form-select shadow-sm" id="editFileCategory" name="editFileCategory"
-                            required>
-                            <optgroup label="Annual Reports">
-                                <option value="Annual Budget Report">Annual Budget Report</option>
-                                <option value="Annual Procurement Plan or Procurement List">Annual Procurement Plan or
-                                    Procurement List</option>
-                                <option value="Supplemental Procurement Plan">Supplemental Procurement Plan</option>
-                                <option value="Annual Gender and Development Accomplishment Report">Annual Gender and
-                                    Development Accomplishment Report</option>
-                            </optgroup>
-                            <optgroup label="Quarterly Reports">
-                                <option value="Quarterly Statement of Cash Flow">Quarterly Statement of Cash Flow
-                                </option>
-                                <option value="Statement of Receipts and Expenditures">Statement of Receipts and
-                                    Expenditures</option>
-                                <option value="20% Component of the Internal Revenue Allotment Utilization">20%
-                                    Component of the Internal Revenue Allotment Utilization</option>
-                                <option value="Local Disaster Risk Reduction and Management Fund Utilization">Local
-                                    Disaster Risk Reduction and Management Fund Utilization</option>
-                                <option value="Report of Special Education Fund Utilization">Report of Special Education
-                                    Fund Utilization</option>
-                                <option value="Trust Fund (PDAF) Utilization">Trust Fund (PDAF) Utilization</option>
-                                <option value="Unliquidated Cash Advances">Unliquidated Cash Advances</option>
-                                <option value="Bid Results on Civil Works and Goods and Services">Bid Results on Civil
-                                    Works and Goods and Services</option>
-                                <option value="Manpower Complement">Manpower Complement</option>
-                                <option value="Annual Statement of Indebtedness, Payments and Balances">Annual Statement
-                                    of Indebtedness, Payments and Balances</option>
-                            </optgroup>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="edityr" class="form-label small fw-bold text-secondary">Year</label>
-                        <input type="text" class="form-control shadow-sm yearpicker" id="edityr" name="edityr" placeholder="Select Year" readonly required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="editqtr" class="form-label small fw-bold text-secondary">Quarter</label>
-                        <select class="form-control form-select shadow-sm" id="editqtr" name="editqtr" required>
-                            <option value="First">First Quarter</option>
-                            <option value="Second">Second Quarter</option>
-                            <option value="Third">Third Quarter</option>
-                            <option value="Fourth">Fourth Quarter</option>
-                        </select>
-                    </div>
-
-                    <div class="col-12 mt-2">
-                        <label for="editpolicyFile" class="form-label small fw-bold text-secondary">Replace
-                            Document</label>
-                        <input type="file" class="form-control shadow-sm" id="editpolicyFile" name="editpolicyFile"
-                            accept=".pdf,.xls,.xlsx">
-                        <div class="form-text text-muted" style="font-size: 0.78rem;">Leave blank if you wish to retain
-                            the current file.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Close</button>
-                <button id="btnEdit" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
         </form>
     </div>

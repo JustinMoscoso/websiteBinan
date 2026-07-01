@@ -52,7 +52,7 @@
     }
 
     // Initialize selectize for all selects
-    $('#txtDept, #editDept, #txtBrgy, #editBrgy').selectize({
+    $('#txtDept, #txtBrgy').selectize({
         sortField: 'text',
         allowClear: true
     });
@@ -139,7 +139,7 @@
         });
     }
 
-    // Show/hide department or barangay dropdowns based on category selection
+    // Show/hide department or barangay dropdowns based on category selection (shared modal)
     $('#category').on('change', function () {
         var selectedCategory = $(this).val();
         if (selectedCategory === 'DEPT') {
@@ -155,42 +155,6 @@
         }
     });
 
-    // Same for edit modal
-    $('#editcategory').on('change', function () {
-        var selectedCategory = $(this).val();
-        if (selectedCategory === 'DEPT') {
-            $('#editDeptFieldGroup').show();
-            $('#editBrgyFieldGroup').hide();
-            if ($('#editDept').length) populateDepartmentDropdown($('#editDept'));
-        } else if (selectedCategory === 'BRGY') {
-            $('#editDeptFieldGroup').hide();
-            $('#editBrgyFieldGroup').show();
-            if ($('#editBrgy').length) populateBrgyDropdown($('#editBrgy'));
-        } else {
-            $('#editDeptFieldGroup, #editBrgyFieldGroup').hide();
-        }
-    });
-
-    // Reset Add modal on open
-    $('#addModal').on('show.bs.modal', function (e) {
-        if (isEntityScopedAdmin) {
-            $('#category').val(isBrgyScopedAdmin ? 'BRGY' : 'DEPT');
-            $('#deptGroup, #brgyGroup').hide();
-            return;
-        }
-        $('#category').val('').trigger('change');
-    });
-
-    $('#addModal').on('hidden.bs.modal', function (e) {
-        if (typeof quillContent !== 'undefined' && quillContent) {
-            quillContent.setContents([]);
-        }
-    });
-
-    $('#editModal').on('show.bs.modal', function (e) {
-        $('#category').val('').trigger('change');
-    });
-
     // Quill toolbar options
     var quillToolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -200,50 +164,105 @@
         ['clean']
     ];
 
-    // Add Modal Quill editor
+    // Single shared Quill editor instance
     var quillContent;
-    // Initialize on 'show' (before animation) so Quill is ready immediately
     $('#addModal').on('show.bs.modal', function () {
         if (!quillContent) {
             quillContent = new Quill('#quillContent', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
         }
     });
 
-    // Edit Modal Quill editor
-    var editQuillContent;
-    $('#editModal').on('show.bs.modal', function () {
-        if (!editQuillContent) {
-            editQuillContent = new Quill('#editQuillContent', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+    // ── openServiceModal helper ───────────────────────────────────────────────
+    function openServiceModal(mode, record) {
+        $('#recordMode').val(mode);
+
+        if (mode === 'add') {
+            $('#recordModalTitle').text('Add Service');
+            $('#btnAddLabel').text('Save');
+            $('#recordId').val('');
+            $('#addForm')[0].reset();
+            if (quillContent) quillContent.setContents([]);
+            if (isEntityScopedAdmin) {
+                $('#category').val(isBrgyScopedAdmin ? 'BRGY' : 'DEPT');
+                $('#deptGroup, #brgyGroup').hide();
+            } else {
+                $('#category').val('').trigger('change');
+            }
+        } else {
+            // edit mode
+            $('#recordModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Service');
+            $('#btnAddLabel').text('Update');
+            $('#recordId').val(record.ID || record.id);
+            $('#serviceName').val(record.serv_name);
+
+            // Load Quill content after modal is shown
+            $('#addModal').one('shown.bs.modal', function () {
+                if (quillContent) quillContent.root.innerHTML = record.content || '';
+            });
+
+            if (isEntityScopedAdmin) {
+                $('#category').val(isBrgyScopedAdmin ? 'BRGY' : 'DEPT');
+                $('#deptGroup, #brgyGroup').hide();
+            } else if (record.brngy_cont_ID) {
+                $('#category').val('BRGY').trigger('change');
+                populateBrgyDropdown($('#txtBrgy'), record.brngy_cont_ID);
+            } else if (record.dept_cont_ID) {
+                $('#category').val('DEPT').trigger('change');
+                populateDepartmentDropdown($('#txtDept'), record.dept_cont_ID);
+            } else {
+                $('#category').val('').trigger('change');
+            }
+        }
+        $('#addModal').modal('show');
+    }
+
+    // Reset shared modal on close
+    $('#addModal').on('hidden.bs.modal', function () {
+        $('#recordMode').val('add');
+        $('#recordId').val('');
+        $('#recordModalTitle').text('Add Service');
+        $('#btnAddLabel').text('Save');
+        $('#addForm')[0].reset();
+        if (quillContent) quillContent.setContents([]);
+        if (!isEntityScopedAdmin) {
+            $('#deptGroup, #brgyGroup').hide();
+            if ($('#txtDept')[0] && $('#txtDept')[0].selectize) $('#txtDept')[0].selectize.clear();
+            if ($('#txtBrgy')[0] && $('#txtBrgy')[0].selectize) $('#txtBrgy')[0].selectize.clear();
         }
     });
 
-    // Save new service
+    // ── Shared Add / Edit submit handler ─────────────────────────────────────
     $('#btnAdd').on('click', function () {
-        let form = $('#addForm')[0];
-        let formData = new FormData(form);
+        var mode = $('#recordMode').val();
+        var form = $('#addForm')[0];
+        var formData = new FormData(form);
 
-        // Read Quill content directly from the instance and set it in FormData.
-        // Do NOT rely on the hidden #content input — it may be empty if the
-        // input was not explicitly set before FormData was constructed.
-        var quillHtml = (quillContent && quillContent.root)
-            ? quillContent.root.innerHTML
-            : '';
-        // Treat Quill's empty-paragraph state as blank
+        // Sync Quill content into FormData
+        var quillHtml = (quillContent && quillContent.root) ? quillContent.root.innerHTML : '';
         if (quillHtml === '<p><br></p>') quillHtml = '';
         formData.set('content', quillHtml);
-
-        // Also update the hidden input so the value is visible in the DOM
         $('#content').val(quillHtml);
 
-        // Only validate the truly required fields (category + service name).
-        // Content is optional and handled server-side.
+        // Validation
         if (!formData.get('category') || !formData.get('serviceName')) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
+            Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please fill in all required fields.' });
             return;
+        }
+
+        var url, successText;
+        if (mode === 'edit') {
+            // Explicitly set the record ID
+            formData.set('id', $('#recordId').val());
+            // Map shared field names to what the update endpoint expects
+            formData.set('editServiceName', formData.get('serviceName'));
+            formData.set('editContent', quillHtml);
+            formData.set('editDept', formData.get('txtDept') || '');
+            formData.set('editBrgy', formData.get('txtBrgy') || '');
+            url = '<?php echo site_url('admin/ajax/update_services'); ?>';
+            successText = 'Service updated successfully.';
+        } else {
+            url = '<?php echo site_url('admin/ajax/create_services'); ?>';
+            successText = 'Data saved!';
         }
 
         Swal.fire({
@@ -253,50 +272,35 @@
             scrollbarPadding: false,
             allowEscapeKey: () => !Swal.isLoading(),
             allowOutsideClick: () => !Swal.isLoading(),
-            willOpen: () => {
-                Swal.showLoading();
-            }
+            willOpen: () => { Swal.showLoading(); }
         });
 
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_services'); ?>',
+            url: url,
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
                 if (result.status == 1) {
-                    $('#addForm').trigger('reset');
-                    if ($('#txtDept')[0] && $('#txtDept')[0].selectize) $('#txtDept')[0].selectize.clear();
-                    if ($('#txtBrgy')[0] && $('#txtBrgy')[0].selectize) $('#txtBrgy')[0].selectize.clear();
-                    if (quillContent) quillContent.setContents([]);
                     $('#addModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Data saved!'
-                    });
+                    Swal.fire({ icon: 'success', title: 'Success', text: successText });
                     tbl.ajax.reload(null, false);
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: result.message || 'Data not created. Refresh the page or try logging in again.',
+                        text: result.message || 'Operation failed. Please try again.'
                     });
-                    tbl.ajax.reload(null, false);
                 }
             },
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while processing your request. Please try again.'
-                });
+            error: function () {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred. Please try again.' });
             }
         });
     });
 
-    // Function to handle edit button click
+    // ── Edit trigger (called from DataTable action button) ────────────────────
     function edit(id) {
         $.ajax({
             url: '<?php echo site_url('admin/ajax/get_services'); ?>',
@@ -304,103 +308,16 @@
             data: { id: id },
             success: function (response) {
                 if (response.status === 1) {
-                    let res = response.data;
-                    $('#editId').val(res.ID);
-                    $('#editServiceName').val(res.serv_name);
-                    $('#editContent').val(res.content);
-                    // Set Quill editor content after initialization
-                    $('#editModal').on('shown.bs.modal', function () {
-                        if (editQuillContent) editQuillContent.root.innerHTML = res.content || '';
-                    });
-                    if (isEntityScopedAdmin) {
-                        $('#editcategory').val(isBrgyScopedAdmin ? 'BRGY' : 'DEPT');
-                        $('#editDeptFieldGroup, #editBrgyFieldGroup').hide();
-                    } else if (res.brngy_cont_ID) {
-                        $('#editcategory').val('BRGY').trigger('change');
-                        $('#editDeptFieldGroup').hide();
-                        $('#editBrgyFieldGroup').show();
-                        populateBrgyDropdown($('#editBrgy'), res.brngy_cont_ID);
-                        $('#editDept').val(null);
-                    } else if (res.dept_cont_ID) {
-                        $('#editcategory').val('DEPT').trigger('change');
-                        $('#editDeptFieldGroup').show();
-                        $('#editBrgyFieldGroup').hide();
-                        populateDepartmentDropdown($('#editDept'), res.dept_cont_ID);
-                        $('#editBrgy').val(null);
-                    }
-                    $('#editModal').modal('show');
+                    openServiceModal('edit', response.data);
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message || 'Service not found.'
-                    });
+                    Swal.fire({ icon: 'error', title: 'Error', text: response.message || 'Service not found.' });
                 }
             },
             error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to fetch details. Please try again later.'
-                });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to fetch details. Please try again later.' });
             }
         });
     }
-    // Function to submit the edit form
-    $('#btnEdit').click(function () {
-        let form = $('#editForm')[0];
-        let formData = new FormData(form);
-
-        // Read Quill content directly from the instance and set it in FormData.
-        var editQuillHtml = (editQuillContent && editQuillContent.root)
-            ? editQuillContent.root.innerHTML
-            : '';
-        if (editQuillHtml === '<p><br></p>') editQuillHtml = '';
-        formData.set('editContent', editQuillHtml);
-        $('#editContent').val(editQuillHtml);
-
-        // Form validation
-        if (!formData.get('editServiceName')) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return;
-        }
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/update_services'); ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        tbl.ajax.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update. Please try again later.'
-                });
-            }
-        });
-    });
 
     function activate(servId) {
         Swal.fire({
@@ -648,7 +565,7 @@
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+                            <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';

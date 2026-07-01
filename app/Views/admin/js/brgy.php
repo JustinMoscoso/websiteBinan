@@ -42,90 +42,25 @@
         });
     }
 
-    //for edit function
-    var quillCreatAbout, quillEditAbout, quillMission, quillVision, quillContact, quillStaff;
+    var barangayState = {
+        mode: 'add',
+        record: null
+    };
 
-    //for add function
     var quillCreateAbout, quillCreateMission, quillCreateVision, quillCreateContact, quillCreateStaff;
 
-    // Initialize all Quill editors
-    function initializeQuillEditors() {
-        if (!quillEditAbout) {
-            quillEditAbout = new Quill('#editabout', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'],
-                        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link']
-                    ]
-                }
-            });
-        }
-
-        if (!quillMission) {
-            quillMission = new Quill('#editMission', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'],
-                        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link']
-                    ]
-                }
-            });
-        }
-
-        if (!quillVision) {
-            quillVision = new Quill('#editVision', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'],
-                        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link']
-                    ]
-                }
-            });
-        }
-
-        if (!quillContact) {
-            quillContact = new Quill('#editContact', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'],
-                        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link']
-                    ]
-                }
-            });
-        }
-
-        if (!quillStaff) {
-            quillStaff = new Quill('#editStaff', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'],
-                        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link']
-                    ]
-                }
-            });
-        }
-    }
-
-    function initializeAddQuillEditors() {
+    function initBarangayEditors() {
         if (!quillCreateAbout) {
             quillCreateAbout = new Quill('#createabout', {
                 theme: 'snow',
-                modules: { toolbar: true } // Customize toolbar as needed
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['link']
+                    ]
+                }
             });
         }
         if (!quillCreateMission) {
@@ -154,84 +89,134 @@
         }
     }
 
-    // Initialize when Add Modal opens
-    $('#addModal').on('shown.bs.modal', function () {
-        initializeAddQuillEditors();
+    function syncBarangayEditors() {
+        if (quillCreateAbout) $('#createAbout').val(quillCreateAbout.root.innerHTML);
+        if (quillCreateMission) $('#txtMission').val(quillCreateMission.root.innerHTML);
+        if (quillCreateVision) $('#txtVision').val(quillCreateVision.root.innerHTML);
+        if (quillCreateContact) $('#txtContact').val(quillCreateContact.root.innerHTML);
+        if (quillCreateStaff) $('#txtStaff').val(quillCreateStaff.root.innerHTML);
+    }
 
-        // Add image preview on file input change for Add modal
-        $('#brgyImg').off('change').on('change', function () {
-            const file = this.files[0];
-            const preview = $('#addBrgyLogoPreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.html('');
-            }
-        });
+    function clearBarangayEditors() {
+        if (quillCreateAbout) quillCreateAbout.setContents([]);
+        if (quillCreateMission) quillCreateMission.setContents([]);
+        if (quillCreateVision) quillCreateVision.setContents([]);
+        if (quillCreateContact) quillCreateContact.setContents([]);
+        if (quillCreateStaff) quillCreateStaff.setContents([]);
+        $('#createAbout').val('');
+        $('#txtMission').val('');
+        $('#txtVision').val('');
+        $('#txtContact').val('');
+        $('#txtStaff').val('');
+    }
 
-        $('#brgyImgCapt').off('change').on('change', function () {
-            const file = this.files[0];
-            const preview = $('#addBrgyCaptPreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.html('');
-            }
-        });
-    });
-
-    // Clear Quill when Add Modal closes
-    $('#addModal').on('hidden.bs.modal', function () {
-        if (quillCreateAbout) {
-            quillCreateAbout.root.innerHTML = '';
-        }
-        if (quillCreateContact) {
-            quillCreateContact.root.innerHTML = '';
-        }
-        if (quillCreateStaff) {
-            quillCreateStaff.root.innerHTML = '';
-        }
-        // Clear image previews
+    function resetBarangayModalState() {
+        $('#addForm')[0].reset();
+        $('#brgyId').val('');
+        $('#brgyMode').val('add');
+        $('#brgyModalTitle').text('Add Barangay Details');
+        $('#btnBrgySave').text('Save');
+        $('#brgyImg').prop('required', true);
         $('#addBrgyLogoPreview').html('');
-        // $('#addBrgyCaptPreview').html(''); // Captain image preview - commented out as not needed
-    });
+        barangayState.mode = 'add';
+        barangayState.record = null;
+        clearBarangayEditors();
+    }
 
-    $('#btnAdd').on('click', function (e) {
-        e.preventDefault();
-        // Ensure all Quill editors are initialized
-        if (!quillCreateAbout || !quillCreateMission || !quillCreateVision || !quillCreateContact || !quillCreateStaff) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Editors not properly initialized. Please refresh the page.'
-            });
+    function renderBarangayLogoPreview(file, fallbackHtml) {
+        const preview = $('#addBrgyLogoPreview');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
+            };
+            reader.readAsDataURL(file);
             return;
         }
+        preview.html(fallbackHtml || '');
+    }
 
-        let form = $('#addForm')[0];
-        let formData = new FormData(form);
+    function openBarangayModal(mode, record) {
+        resetBarangayModalState();
+        barangayState.mode = mode;
+        barangayState.record = record || null;
+        $('#brgyMode').val(mode);
 
-        // Add Quill content to formData (using set() to avoid duplicates)
-        formData.set('createAbout', quillCreateAbout.root.innerHTML);
-        formData.set('txtMission', quillCreateMission.root.innerHTML);
-        formData.set('txtVision', quillCreateVision.root.innerHTML);
-        formData.set('txtContact', quillCreateContact.root.innerHTML);
-        formData.set('txtStaff', quillCreateStaff.root.innerHTML);
+        initBarangayEditors();
 
-        // Form validation - check both form fields and Quill content
-        if (!formData.get('txtBrgy') || !formData.get('txtCapt') ||
-            quillCreateAbout.root.innerHTML.trim() === '' ||
-            quillCreateMission.root.innerHTML.trim() === '' ||
-            quillCreateVision.root.innerHTML.trim() === '' ||
-            quillCreateContact.root.innerHTML.trim() === '') {
+        if (mode === 'edit' && record) {
+            $('#brgyModalTitle').text('Edit Barangay Details');
+            $('#btnBrgySave').text('Update');
+            $('#brgyId').val(record.ID || record.id || '');
+            $('#txtBrgy').val(record.brgy_name || '');
+            $('#txtCapt').val(record.brngy_capt || '');
+            $('#createAbout').val(record.about || '');
+            $('#txtMission').val(record.mission || '');
+            $('#txtVision').val(record.vision || '');
+            $('#txtContact').val(record.contact || '');
+            $('#txtStaff').val(record.barangay_staff || '');
+            $('#brgyImg').prop('required', false);
+        }
+
+        $('#addModal').modal('show');
+    }
+
+    function isValidBarangayImage(file) {
+        if (!file || file.size === 0) {
+            return false;
+        }
+
+        const maxImageSizeMB = 4;
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+        if (file.size > maxImageSizeMB * 1024 * 1024) {
+            return 'size';
+        }
+        if (!validImageTypes.includes(file.type)) {
+            return 'type';
+        }
+        return true;
+    }
+
+    $('#addModal').on('shown.bs.modal', function () {
+        initBarangayEditors();
+
+        if (barangayState.mode === 'edit' && barangayState.record) {
+            quillCreateAbout.root.innerHTML = barangayState.record.about || '';
+            quillCreateMission.root.innerHTML = barangayState.record.mission || '';
+            quillCreateVision.root.innerHTML = barangayState.record.vision || '';
+            quillCreateContact.root.innerHTML = barangayState.record.contact || '';
+            quillCreateStaff.root.innerHTML = barangayState.record.barangay_staff || '';
+        }
+
+        $('#brgyImg').off('change').on('change', function () {
+            renderBarangayLogoPreview(this.files[0], barangayState.mode === 'edit' && barangayState.record && barangayState.record.img_logo
+                ? `<img src="<?php echo base_url('admin/image/BARANGAY/') ?>${barangayState.record.img_logo}" alt="Current Barangay Logo" style="max-width: 120px; margin-top: 5px;">`
+                : '');
+        });
+    });
+
+    $('#addModal').on('hidden.bs.modal', function () {
+        resetBarangayModalState();
+    });
+
+    function submitBarangayForm() {
+        initBarangayEditors();
+        syncBarangayEditors();
+
+        const mode = ($('#brgyMode').val() || 'add').toLowerCase();
+        const form = $('#addForm')[0];
+        const formData = new FormData(form);
+        const imageFile = formData.get('brgyImg');
+
+        formData.set('id', $('#brgyId').val());
+        formData.set('createAbout', $('#createAbout').val());
+        formData.set('txtMission', $('#txtMission').val());
+        formData.set('txtVision', $('#txtVision').val());
+        formData.set('txtContact', $('#txtContact').val());
+        formData.set('txtStaff', $('#txtStaff').val());
+
+        if (!formData.get('txtBrgy') || !formData.get('txtCapt') || !formData.get('createAbout') || !formData.get('txtMission') || !formData.get('txtVision') || !formData.get('txtContact') || !formData.get('txtStaff')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
@@ -240,13 +225,7 @@
             return;
         }
 
-        // Image validation
-        let imageFile = formData.get('brgyImg');
-        // let imageFile2 = formData.get('brgyImgCapt'); // Captain image - commented out as not needed
-        const maxImageSizeMB = 4;
-        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-
-        if (!imageFile || imageFile.size === 0) {
+        if (mode === 'add' && (!imageFile || imageFile.size === 0)) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
@@ -255,48 +234,29 @@
             return;
         }
 
-        // Captain image validation - commented out as not needed
-        /*
-        if (!imageFile2 || imageFile2.size === 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please upload a captain image.'
-            });
-            return;
-        }
-        */
-
-        if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: `Barangay logo size should not exceed ${maxImageSizeMB} MB.`
-            });
-            return;
-        }
-
-        // Captain image size validation - commented out as not needed
-        /*
-        if (imageFile2.size > maxImageSizeMB * 1024 * 1024) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: `Captain image size should not exceed ${maxImageSizeMB} MB.`
-            });
-            return;
-        }
-        */
-
-        if (!validImageTypes.includes(imageFile.type)) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please upload a valid barangay logo (jpg, png, gif).'
-            });
-            return;
+        if (imageFile && imageFile.size > 0) {
+            const imageValidation = isValidBarangayImage(imageFile);
+            if (imageValidation === 'size') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Barangay logo size should not exceed 4 MB.'
+                });
+                return;
+            }
+            if (imageValidation === 'type') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Please upload a valid barangay logo (jpg, png, gif).'
+                });
+                return;
+            }
         }
 
+        const url = mode === 'edit'
+            ? '<?php echo site_url('admin/ajax/update_barangay'); ?>'
+            : '<?php echo site_url('admin/ajax/create_barangay'); ?>';
 
         Swal.fire({
             title: 'Please wait...',
@@ -306,23 +266,18 @@
         });
 
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_barangay'); ?>',
+            url: url,
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
                 if (result.status == 1) {
-                    $('#addForm').trigger('reset');
-                    quillCreateAbout.root.innerHTML = '';
-                    quillCreateMission.root.innerHTML = '';
-                    quillCreateVision.root.innerHTML = '';
-                    quillCreateContact.root.innerHTML = '';
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Barangay data saved!'
+                        text: result.message || (mode === 'edit' ? 'Barangay updated successfully!' : 'Barangay data saved!')
                     });
                     tbl.ajax.reload(null, false);
                 } else {
@@ -333,15 +288,19 @@
                     });
                 }
             },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", status, error); // Log error for debugging
+            error: function (xhr, statusText, errorThrown) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'An error occurred while processing your request. Please check console for details.'
+                    text: xhr.responseText || errorThrown || statusText || 'An error occurred while processing your request.'
                 });
             }
         });
+    }
+
+    $('#addForm').on('submit', function (e) {
+        e.preventDefault();
+        submitBarangayForm();
     });
 
     function edit(brgyId) {
@@ -351,217 +310,19 @@
             data: { id: brgyId },
             success: function (response) {
                 if (response.status === 1) {
-                    let barangay = response.data;
-
-                    // Set basic form values
-                    $('#editBrgyId').val(barangay.ID);
-                    $('#editBrgy').val(barangay.brgy_name);
-                    $('#editCapt').val(barangay.brngy_capt);
-
-                    // Initialize Quill editors
-                    initializeQuillEditors();
-
-                    // Set Quill content
-                    if (barangay.about) {
-                        quillEditAbout.root.innerHTML = barangay.about;
-                        $('#editAbout').val(barangay.about);
-                    }
-
-                    if (barangay.mission) {
-                        quillMission.root.innerHTML = barangay.mission;
-                        $('#editMissionInput').val(barangay.mission);
-                    }
-
-                    if (barangay.vision) {
-                        quillVision.root.innerHTML = barangay.vision;
-                        $('#editVisionInput').val(barangay.vision);
-                    }
-
-                    if (barangay.contact) {
-                        quillContact.root.innerHTML = barangay.contact;
-                        $('#editContactInput').val(barangay.contact);
-                    }
-
-                    if (barangay.barangay_staff) {
-                        quillStaff.root.innerHTML = barangay.barangay_staff;
-                        $('#editStaffInput').val(barangay.barangay_staff);
-                    }
-
-                    // Show current images in preview
-                    $('#editBrgyLogoPreview').html(
+                    const barangay = response.data;
+                    openBarangayModal('edit', barangay);
+                    $('#addBrgyLogoPreview').html(
                         barangay.img_logo
                             ? `<img src="<?php echo base_url('admin/image/BARANGAY/') ?>${barangay.img_logo}" alt="Current Barangay Logo" style="max-width: 120px; margin-top: 5px;">`
                             : '<small>No logo available.</small>'
                     );
-
-                // Captain image preview - commented out as not needed
-                /*
-                $('#editBrgyCaptPreview').html(
-                    barangay.img_capt
-                        ? `<img src="<?php echo base_url('admin/image/BARANGAY/') ?>${ barangay.img_capt } " alt="Current Captain Image" style="max - width: 120px; margin - top: 5px; ">`
-                        : '<small>No captain image available.</small>'
-                );
-                */
-
-        // Reset file inputs
-        $('#editbrgyImg').val('');
-        // $('#editbrgyImgCapt').val(''); // Captain image input - commented out as not needed
-
-        // Add image preview on file input change for Barangay Logo
-        $('#editbrgyImg').off('change').on('change', function () {
-            const file = this.files[0];
-            const preview = $('#editBrgyLogoPreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // If no file, show the original image again (if any)
-                if (barangay.img_logo) {
-                    preview.html(`<img src="<?php echo base_url('admin/image/BARANGAY/') ?>${barangay.img_logo}" alt="Current Barangay Logo" style="max-width: 120px; margin-top: 5px;">`);
-                } else {
-                    preview.html('<small>No logo available.</small>');
-                }
-            }
-        });
-
-                // Captain image preview functionality - commented out as not needed
-                /*
-                // Add image preview on file input change for Captain Image
-                $('#editbrgyImgCapt').off('change').on('change', function() {
-                    const file = this.files[0];
-                    const preview = $('#editBrgyCaptPreview');
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        // If no file, show the original image again (if any)
-                        if (barangay.img_capt) {
-                            preview.html(`<img src="<?php echo base_url('admin/image/BARANGAY/') ?>${ barangay.img_capt } " alt="Current Captain Image" style="max - width: 120px; margin - top: 5px; ">`);
-    } else {
-        preview.html('<small>No captain image available.</small>');
-    }
-                    }
-                });
-                */
-
-    $('#editModal').modal('show');
-            } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response.message || 'Barangay not found.'
-        });
-    }
-        },
-    error: function () {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Unable to fetch barangay details. Please try again later.'
-        });
-    }
-    });
-}
-
-    // Update function
-    $('#btnEdit').click(function (e) {
-        e.preventDefault();
-        let form = $('#editForm')[0];
-        let formData = new FormData(form);
-
-        // Add Quill content to formData
-        formData.set('editAbout', quillEditAbout.root.innerHTML);
-        formData.set('editMission', quillMission.root.innerHTML);
-        formData.set('editVision', quillVision.root.innerHTML);
-        formData.set('editContact', quillContact.root.innerHTML);
-        formData.set('editStaff', quillStaff.root.innerHTML);
-
-        // Form validation
-        if (!formData.get('editBrgy') || !formData.get('editCapt') ||
-            !formData.get('editAbout') || !formData.get('editMission') ||
-            !formData.get('editVision') || !formData.get('editContact')) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return;
-        }
-
-        // Image validation
-        let imageFile = formData.get('editbrgyImg');
-        // let imageFile2 = formData.get('editbrgyImgCapt'); // Captain image - commented out as not needed
-        const maxImageSizeMB = 4;
-        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-
-        if (imageFile && imageFile.size > 0) {
-            if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: `Logo image size should not exceed ${maxImageSizeMB} MB.`
-                });
-                return;
-            }
-            if (!validImageTypes.includes(imageFile.type)) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please upload a valid logo image file (jpg, png, gif).'
-                });
-                return;
-            }
-        }
-
-        // Captain image validation - commented out as not needed
-        /*
-        if (imageFile2 && imageFile2.size > 0) {
-            if (imageFile2.size > maxImageSizeMB * 1024 * 1024) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: `Captain image size should not exceed ${maxImageSizeMB} MB.`
-                });
-                return;
-            }
-            if (!validImageTypes.includes(imageFile2.type)) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please upload a valid captain image file (jpg, png, gif).'
-                });
-                return;
-            }
-        }
-        */
-
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/update_barangay'); ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        tbl.ajax.reload();
-                    });
+                    $('#brgyImg').val('');
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: response.message
+                        text: response.message || 'Barangay not found.'
                     });
                 }
             },
@@ -569,11 +330,11 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Unable to update barangay. Please try again later.'
+                    text: 'Unable to fetch barangay details. Please try again later.'
                 });
             }
         });
-    });
+    }
 
     // Toggle Status function
     function toggleStatus(id, currentStatus, forcedStatus) {
@@ -777,7 +538,7 @@
                 <i class="bi bi-list"></i> Actions
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+                <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
             if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                 var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';

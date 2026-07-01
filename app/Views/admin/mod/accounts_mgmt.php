@@ -9,7 +9,7 @@
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
             <h6 class="fw-bold mb-3 small text-uppercase tracking-wider text-secondary">
-                <i class="bi bi-funnel-fill me-2" style="color: var(--theme-mid-green);"></i
+                <i class="bi bi-funnel-fill me-2" style="color: var(--theme-mid-green);"></i>
             </h6>
             <form id="userSearchForm">
                 <div class="row g-3 align-items-end">
@@ -61,7 +61,7 @@
                             <div class="col-12 col-md-4">
                                 <button type="button"
                                     class="btn btn-success w-100 shadow-sm fw-semibold text-nowrap flex-grow-1"
-                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    onclick="openUserModal('add')" style="height: 38px;">
                                     <i class="bi bi-person-plus-fill me-1"></i>Add Record
                                 </button>
                             </div>
@@ -78,11 +78,10 @@
     <div class="row">
         <div class="col-lg-12">
 
-
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-               
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tbluser" class="table table-bordered table-hover align-middle mb-0" cellspacing="0"
@@ -96,26 +95,30 @@
     </div>
 </section>
 
+<!-- Shared Add / Edit Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" data-bs-backdrop="static">
     <form id="addForm" class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
 
-                <div class="modal-header modal-header-theme py-3 px-4"style="background-color: var(--theme-dark-green);">
-                    <h5 class="modal-title fw-bold d-inline-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                        <i class="bi bi-person-plus"></i> 
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
+            <!-- Hidden control fields -->
+            <input type="hidden" id="userRecordId" name="id">
+            <input type="hidden" id="userMode" name="mode" value="add">
+
+            <div class="modal-header modal-header-theme py-3 px-4" style="background-color: var(--theme-dark-green);">
+                <h5 class="modal-title fw-bold d-inline-flex align-items-center gap-2" style="font-size: 1.1rem;">
+                    <i id="userModalIcon" class="bi bi-person-plus"></i>
+                    <span id="userModalTitle">Add Account</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
 
             <div class="modal-body p-4 bg-light-surface">
 
                 <!-- Section: Personal Information -->
                 <div class="mb-4">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                       
                         <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Personal Information</span>
-                        
                     </div>
                     <hr>
                     <div class="row g-3">
@@ -157,7 +160,6 @@
                 <!-- Section: Account Credentials -->
                 <div class="mb-4">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        
                         <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Credentials</span>
                     </div>
                     <hr>
@@ -171,8 +173,11 @@
                             <input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="username@domain.com" required>
                         </div>
                         <div class="col-md-6 col-sm-12">
-                            <label for="txtPassword" class="form-label small fw-bold text-secondary">Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" id="txtPassword" name="txtPassword" placeholder="*********" required>
+                            <label for="txtPassword" class="form-label small fw-bold text-secondary">
+                                Password <span class="text-danger" id="passwordRequiredStar">*</span>
+                                <small id="passwordOptionalHint" class="text-muted fw-normal" style="display:none;">(leave blank to keep current)</small>
+                            </label>
+                            <input type="password" class="form-control" id="txtPassword" name="txtPassword" placeholder="*********">
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <label for="txtAccLevel" class="form-label small fw-bold text-secondary">Account Level <span class="text-danger">*</span></label>
@@ -192,8 +197,7 @@
                     <!-- Section: Account Scope & Boundaries -->
                     <div class="mb-2">
                         <div class="d-flex align-items-center gap-2 mb-3">
-                          
-                            <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Scope & Boundaries</span>
+                            <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Scope &amp; Boundaries</span>
                         </div>
                         <hr>
                         <div class="row g-3">
@@ -223,138 +227,6 @@
                     data-bs-dismiss="modal">Cancel</button>
                 <button id="btnAdd" type="button" class="btn btn-sm text-white fw-semibold px-4"
                     style="background-color: var(--theme-mid-green);">Save</button>
-            </div>
-
-        </div>
-    </form>
-</div>
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" data-bs-backdrop="static">
-    <form id="editForm" class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
-
-            <div class="modal-header modal-header-theme py-3 px-4"style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold d-inline-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                    <i class="bi bi-pencil-square"></i>
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4 bg-light-surface">
-                <input type="hidden" id="editUserId" name="id">
-
-                <!-- Section: Personal Information -->
-                <div class="mb-4">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                      
-                        <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Personal Information</span>
-                    </div>
-                    <hr>
-                    <div class="row g-3">
-                        <div class="col-md-6 col-sm-12">
-                            <label for="editFirstName" class="form-label small fw-bold text-secondary">First Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="editFirstName" name="editFirstName" placeholder="Update first name" required>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <label for="editMiddleName" class="form-label small fw-bold text-secondary">Middle Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="editMiddleName" name="editMiddleName" placeholder="Update middle name" required>
-                        </div>
-                        <div class="w-100"></div>
-                        <div class="col-md-6 col-sm-12">
-                            <label for="editLastName" class="form-label small fw-bold text-secondary">Last Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="editLastName" name="editLastName" placeholder="Update last name" required>
-                        </div>
-                        <div class="col-md-3 col-sm-2">
-                            <label for="editSuffix" class="form-label small fw-bold text-secondary">Suffix</label>
-                            <select class="form-select" id="editSuffix" name="editSuffix">
-                                <option value="">None</option>
-                                <option value="Jr.">Jr.</option>
-                                <option value="Sr.">Sr.</option>
-                                <option value="II">II</option>
-                                <option value="III">III</option>
-                                <option value="IV">IV</option>
-                                <option value="V">V</option>
-                                <option value="VI">VI</option>
-                                <option value="VII">VII</option>
-                                <option value="VIII">VIII</option>
-                                <option value="IX">IX</option>
-                                <option value="X">X</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="my-4" style="opacity: 0.15;">
-
-                <!-- Section: Account Credentials -->
-                <div class="mb-4">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                      
-                        <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Credentials</span>
-                    </div>
-                    <hr>
-                    <div class="row g-3">
-                        <div class="col-md-6 col-sm-12">
-                            <label for="editUsername" class="form-label small fw-bold text-secondary">Username <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="editUsername" name="editUsername" placeholder="Modify account username string" required>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <label for="editEmail" class="form-label small fw-bold text-secondary">Email-Address <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="editEmail" name="editEmail" placeholder="Modify account email address location" required>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <label for="editPassword" class="form-label small fw-bold text-secondary">Password</label>
-                            <input type="password" class="form-control" id="editPassword" name="editPassword" placeholder="Leave empty unless you want to change password">
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <label for="editAccLevel" class="form-label small fw-bold text-secondary">Account Level <span class="text-danger">*</span></label>
-                            <select id="editAccLevel" name="editAccLevel" class="form-select" required>
-                                <option selected disabled value="">— Select Authorization Level —</option>
-                                <option value="SUPERADMIN">Super Administrator</option>
-                                <option value="ADMIN">Standard Administrator</option>
-                                <option value="ENCODER">Data Encoder Entry</option>
-                                <option value="VIEWER">System Read Auditor</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="editAccountTypeRow" style="display: none;">
-                    <hr class="my-4" style="opacity: 0.15;">
-                    <!-- Section: Account Scope & Boundaries -->
-                    <div class="mb-2">
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                          
-                            <span class="fw-bold small text-uppercase tracking-wider" style="color: var(--theme-dark-green); letter-spacing: 0.5px;">Account Scope & Boundaries</span>
-                        </div>
-                        <hr>
-                        <div class="row g-3">
-                            <div class="col-md-6 col-sm-12">
-                                <label for="editAccountType" class="form-label small fw-bold text-secondary">Account Type</label>
-                                <select id="editAccountType" name="editAccountType" class="form-select">
-                                    <option value="DEPARTMENT">Department</option>
-                                    <option value="BARANGAY">Barangay</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 col-sm-12" id="editEntityRefGroup">
-                                <label for="editEntityRef" class="form-label small fw-bold text-secondary">Select Department or Barangay <span class="text-danger">*</span></label>
-                                <select id="editEntityRef" name="editEntityRef" class="form-control form-select">
-                                    <option value="" disabled selected>Select department / barangay</option>
-                                </select>
-                                <div class="form-text text-info" id="editEntityRefHint" style="font-size: 0.75rem;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="modal-footer bg-light py-2 px-4">
-                <button type="button" class="btn btn-sm btn-secondary fw-semibold px-3" data-bs-dismiss="modal">Cancel
-                    </button>
-                <button id="btnEdit" type="button" class="btn btn-sm text-white fw-semibold px-4"
-                    style="background-color: var(--theme-mid-green);">Save
-                    </button>
             </div>
 
         </div>

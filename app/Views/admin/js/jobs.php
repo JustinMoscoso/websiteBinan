@@ -45,18 +45,51 @@
             });
         }
 
+        var jobsModalMode = 'add';
+        var pendingJobDescription = '';
+
+        function resetJobsModalState() {
+            jobsModalMode = 'add';
+            pendingJobDescription = '';
+            $('#addForm')[0].reset();
+            $('#jobId').val('');
+            $('#jobMode').val('add');
+            $('#jobModalTitle').text('Add Job');
+            $('#btnAdd').text('Save');
+            $('#publication_date').val(moment().format('YYYY-MM-DD'));
+            if (QuillManager.getQuillInstance('jobsDesc')) {
+                QuillManager.setQuillContent('jobsDesc', '');
+            }
+        }
+
+        function openJobModal(mode, job) {
+            jobsModalMode = mode;
+            $('#jobMode').val(mode);
+            $('#jobModalTitle').text(mode === 'edit' ? 'Edit Job' : 'Add Job');
+            $('#btnAdd').text(mode === 'edit' ? 'Update' : 'Save');
+
+            if (mode === 'edit' && job) {
+                $('#jobId').val(job.ID || job.id || '');
+                $('#title').val(job.title || '');
+                $('#company').val(job.company || '');
+                $('#type').val(job.type || '');
+                $('#publication_date').val(job.publication_date || moment().format('YYYY-MM-DD'));
+                $('#email').val(job.email || '');
+                pendingJobDescription = job.description || '';
+            } else {
+                resetJobsModalState();
+            }
+
+            $('#addModal').modal('show');
+        }
+
         // Initialize Quill editors for this page
         QuillManager.initPageQuillEditors({
             editors: [
                 {
                     elementId: 'quillDescription',
-                    instanceName: 'jobsAddDesc',
+                    instanceName: 'jobsDesc',
                     modalId: 'addModal'
-                },
-                {
-                    elementId: 'editQuillDescription',
-                    instanceName: 'jobsEditDesc',
-                    modalId: 'editModal'
                 }
             ]
         });
@@ -66,18 +99,25 @@
             formHandlers: [
                 {
                     buttonId: 'btnAdd',
-                    instanceName: 'jobsAddDesc',
+                    instanceName: 'jobsDesc',
                     hiddenInputId: 'description'
-                },
-                {
-                    buttonId: 'btnEdit',
-                    instanceName: 'jobsEditDesc',
-                    hiddenInputId: 'editDescription'
                 }
             ]
         });
 
-        // Note: Edit content population is handled manually in the edit function
+        $('#addModal').on('shown.bs.modal', function () {
+            if (jobsModalMode === 'edit') {
+                setTimeout(function () {
+                    QuillManager.setQuillContent('jobsDesc', pendingJobDescription);
+                    pendingJobDescription = '';
+                    QuillManager.updateQuillFormContent();
+                }, 0);
+            }
+        });
+
+        $('#addForm').on('submit', function (e) {
+            e.preventDefault();
+        });
 
         // Initialize DataTable
         var table = $('#tbljobs').DataTable({
@@ -238,15 +278,22 @@
         });
 
         // Add Job
-        $('#btnAdd').click(function () {
+        $('#btnAdd').click(function (e) {
+            e.preventDefault();
             // Update Quill content before form submission
             QuillManager.updateQuillFormContent();
 
             let form = $('#addForm')[0];
             let formData = new FormData(form);
+            let isEdit = $('#jobMode').val() === 'edit';
+            let jobId = $('#jobId').val();
+
+            if (isEdit) {
+                formData.set('id', jobId);
+            }
 
             $.ajax({
-                url: '<?php echo site_url('admin/ajax/create_job'); ?>',
+                url: isEdit ? '<?php echo site_url('admin/ajax/update_job'); ?>' : '<?php echo site_url('admin/ajax/create_job'); ?>',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -254,7 +301,7 @@
                 success: function (response) {
                     if (response.status === 1) {
                         $('#addModal').modal('hide');
-                        $('#addForm')[0].reset();
+                        resetJobsModalState();
                         table.ajax.reload();
                         Swal.fire({
                             icon: 'success',
@@ -323,9 +370,6 @@
         $(document).on('click', '.edit-job', function () {
             var jobId = $(this).data('id');
 
-            // Store job ID globally for debugging
-            window.currentEditJobId = jobId;
-
             $.ajax({
                 url: '<?php echo site_url('admin/ajax/get_job'); ?>',
                 type: 'POST',
@@ -333,34 +377,7 @@
                 success: function (response) {
                     if (response.status === 1) {
                         var job = response.data;
-
-                        // Set all form fields BEFORE showing modal
-                        $('#editJobId').val(job.ID);
-                        $('#editTitle').val(job.title);
-                        $('#editCompany').val(job.company);
-                        $('#editType').val(job.type);
-                        $('#editPublicationDate').val(job.publication_date);
-                        $('#editEmail').val(job.email);
-                        $('#editDescription').val(job.description);
-
-                        // Debug: Log the job ID being set
-                        console.log('Setting job ID:', job.ID);
-                        console.log('Job ID field value after setting:', $('#editJobId').val());
-
-                        // Show modal AFTER setting all values
-                        $('#editModal').modal('show');
-
-                        // Set Quill editor content after modal is shown
-                        $('#editModal').one('shown.bs.modal', function () {
-                            setTimeout(function () {
-                                const quill = QuillManager.getQuillInstance('jobsEditDesc');
-                                if (quill) {
-                                    QuillManager.setQuillContent('jobsEditDesc', job.description);
-                                } else {
-                                    console.error('Quill instance not found for jobsEditDesc');
-                                }
-                            }, 300);
-                        });
+                        openJobModal('edit', job);
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -374,73 +391,6 @@
                         icon: 'error',
                         title: 'Error!',
                         text: 'An error occurred while loading job details.'
-                    });
-                }
-            });
-        });
-
-        // Update Job
-        $('#btnEdit').click(function () {
-            // Update Quill content before form submission
-            QuillManager.updateQuillFormContent();
-
-            // Get the job ID from the hidden field or global variable
-            var jobId = $('#editJobId').val() || window.currentEditJobId;
-
-            // Debug: Log the job ID
-            console.log('Job ID from hidden field:', $('#editJobId').val());
-            console.log('Job ID from global variable:', window.currentEditJobId);
-            console.log('Final job ID being used:', jobId);
-
-            // Ensure job ID is available
-            if (!jobId) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Job ID is missing. Please try again.'
-                });
-                return;
-            }
-
-            var formData = new FormData($('#editForm')[0]);
-
-            // Always ensure job ID is in form data
-            formData.set('id', jobId);
-
-            // Debug: Log the form data
-            console.log('Final form data:', Object.fromEntries(formData));
-
-            $.ajax({
-                url: '<?php echo site_url('admin/ajax/update_job'); ?>',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response.status === 1) {
-                        $('#editModal').modal('hide');
-                        $('#editForm')[0].reset();
-                        table.ajax.reload();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: response.message,
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: response.message
-                        });
-                    }
-                },
-                error: function () {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'An error occurred while updating the job.'
                     });
                 }
             });
@@ -550,21 +500,9 @@
         // Set today's date as default for publication date
         $('#publication_date').val(moment().format('YYYY-MM-DD'));
 
-        // Form validation
-        $('#addForm, #editForm').on('submit', function (e) {
-            e.preventDefault();
-        });
-
         // Clear form when modal is closed
         $('#addModal').on('hidden.bs.modal', function () {
-            $('#addForm')[0].reset();
-            $('#publication_date').val(moment().format('YYYY-MM-DD'));
-        });
-
-        $('#editModal').on('hidden.bs.modal', function () {
-            // Don't reset the form immediately, just clear the job ID
-            $('#editJobId').val('');
-            window.currentEditJobId = null;
+            resetJobsModalState();
         });
 
         // Advanced Search form — submit reloads table with filters

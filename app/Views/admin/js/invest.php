@@ -43,8 +43,50 @@
         });
     }
 
+    var investModalMode = 'add';
+
+    function resetInvestModalState() {
+        investModalMode = 'add';
+        const form = document.getElementById('addForm');
+        if (form) {
+            form.reset();
+        }
+
+        $('#investId').val('');
+        $('#investMode').val('add');
+        $('#investModalTitle').text('Add Investment Content');
+        $('#investFileLabel').html('Upload File Attachment <span class="text-danger">*</span>');
+        $('#investFile').prop('required', true);
+        $('#btnAdd').text('Save');
+        $('#fileCategory')[0].selectize.clear(true);
+    }
+
+    function setInvestModalMode(mode) {
+        investModalMode = mode;
+        $('#investMode').val(mode);
+        $('#investModalTitle').text(mode === 'edit' ? 'Edit Investment Content' : 'Add Investment Content');
+        $('#investFileLabel').html(mode === 'edit'
+            ? 'Replace File Attachment'
+            : 'Upload File Attachment <span class="text-danger">*</span>');
+        $('#investFile').prop('required', mode !== 'edit');
+        $('#btnAdd').text(mode === 'edit' ? 'Update Content' : 'Save');
+    }
+
+    function openInvestModal(mode, res) {
+        setInvestModalMode(mode);
+
+        if (mode === 'edit' && res) {
+            $('#investId').val(res.ID);
+            $('#fileCategory')[0].selectize.setValue(res.file_category || '');
+        } else {
+            resetInvestModalState();
+        }
+
+        $('#addModal').modal('show');
+    }
+
     // Initialize selectize for all selects
-    $('#fileCategory, #editFileCategory').selectize({
+    $('#fileCategory').selectize({
         sortField: 'text',
         placeholder: 'Choose file category',
         allowClear: true
@@ -147,15 +189,27 @@
         });
     }
 
-    $('#btnAdd').on('click', function () {
+    $('#btnAdd').on('click', function (e) {
+        e.preventDefault();
         let form = $('#addForm')[0];
         let formData = new FormData(form);
+        const isEdit = $('#investMode').val() === 'edit';
 
-        if (!formData.get('fileCategory') || !formData.get('investFile').size) {
+        if (!formData.get('fileCategory')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
-                text: 'Please fill in all required fields and upload a file.'
+                text: 'Please select a file category.'
+            });
+            return;
+        }
+
+        const investFile = formData.get('investFile');
+        if (!isEdit && (!investFile || !investFile.size)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'Please upload a file.'
             });
             return;
         }
@@ -172,20 +226,18 @@
             }
         });
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_invest'); ?>',
+            url: isEdit ? '<?php echo site_url('admin/ajax/update_invest'); ?>' : '<?php echo site_url('admin/ajax/create_invest'); ?>',
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
                 if (result.status == 1) {
-                    $('#addForm').trigger('reset');
-                    $('#fileCategory')[0].selectize.clear();
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Data saved!'
+                        text: isEdit ? 'Content updated successfully.' : 'Data saved!'
                     });
                     tbl.ajax.reload(null, false);
                 } else {
@@ -214,10 +266,7 @@
             data: { id: id },
             success: function (response) {
                 if (response.status === 1) {
-                    let res = response.data; // Directly access the data object
-                    $('#editInvestId').val(res.ID);
-                    $('#editFileCategory')[0].selectize.setValue(res.file_category);
-                    $('#editModal').modal('show');
+                    openInvestModal('edit', response.data);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -237,51 +286,14 @@
     }
 
 
-    // Function to submit the edit user form
-    $('#btnEdit').click(function () {
-        let formData = new FormData($('#editForm')[0]);
+    $('#addModal').on('hidden.bs.modal', function () {
+        resetInvestModalState();
+    });
 
-        if (!formData.get('editFileCategory')) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please select a file category.'
-            });
-            return;
+    $('#addModal').on('show.bs.modal', function () {
+        if (investModalMode !== 'edit') {
+            resetInvestModalState();
         }
-
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/update_invest'); ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        tbl.ajax.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update. Please try again later.'
-                });
-            }
-        });
     });
 
     var tbl = $('#tblinvest').DataTable({
@@ -366,7 +378,7 @@
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+                            <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';

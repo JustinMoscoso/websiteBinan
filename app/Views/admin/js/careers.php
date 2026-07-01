@@ -10,7 +10,7 @@
 
     if (userLevel === 'VIEWER') {
         // Hide add/save buttons on the page layout level
-        $('[data-bs-target="#addModal"]').hide();
+        $('[data-bs-target="#careerModal"]').hide();
 
         // Lock down elements inside modals when shown
         $(document).on('show.bs.modal', '.modal', function () {
@@ -142,10 +142,7 @@
 
     // Set maximum date for input
     if (document.getElementById('publication')) {
-        publication.max = new Date().toISOString().split("T")[0];
-    }
-    if (document.getElementById('editpublication')) {
-        editpublication.max = new Date().toISOString().split("T")[0];
+        document.getElementById('publication').max = new Date().toISOString().split("T")[0];
     }
 
     function isPdfFile(file) {
@@ -159,12 +156,46 @@
         return fileName.endsWith('.pdf') || fileType === 'application/pdf';
     }
 
-    $('#btnAdd').on('click', function () {
-        let form = $('#addForm')[0];
+    function resetCareerModalState() {
+        $('#careerForm')[0].reset();
+        $('#careerId').val('');
+        $('#careerMode').val('add');
+        $('#careerModalTitle').text('Add Career Entry');
+        $('#btnCareerSave').text('Save');
+        $('#careerFile').prop('required', true);
+        $('#currentCareerFileWrap').addClass('d-none');
+        $('#currentCareerFileName').text('');
+    }
+
+    function openCareerModal(mode, record) {
+        resetCareerModalState();
+
+        if (mode === 'edit' && record) {
+            $('#careerMode').val('edit');
+            $('#careerModalTitle').text('Modify Career Entry');
+            $('#btnCareerSave').text('Update');
+            $('#careerId').val(record.ID || record.id || '');
+            $('#publication').val(record.publication_date || '');
+            $('#level').val(record.level || '');
+            $('#careerFile').prop('required', false);
+            if (record.file_name) {
+                $('#currentCareerFileName').text(record.file_name);
+                $('#currentCareerFileWrap').removeClass('d-none');
+            }
+        }
+
+        $('#careerModal').modal('show');
+    }
+
+    function submitCareerForm() {
+        let mode = ($('#careerMode').val() || 'add').toLowerCase();
+        let form = $('#careerForm')[0];
         let formData = new FormData(form);
         let careerFile = formData.get('careerFile');
 
-        if (!formData.get('publication') || !careerFile || !careerFile.name) {
+        formData.set('id', $('#careerId').val());
+
+        if (!formData.get('publication') || !formData.get('level')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
@@ -173,7 +204,18 @@
             return;
         }
 
-        if (!isPdfFile(careerFile)) {
+        if (mode === 'add') {
+            if (!careerFile || !careerFile.name) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Please upload a PDF file.'
+                });
+                return;
+            }
+        }
+
+        if (careerFile && careerFile.name && !isPdfFile(careerFile)) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
@@ -181,6 +223,10 @@
             });
             return;
         }
+
+        let url = mode === 'edit'
+            ? '<?php echo site_url('admin/ajax/update_career'); ?>'
+            : '<?php echo site_url('admin/ajax/create_career'); ?>';
 
         Swal.fire({
             title: 'Please wait...',
@@ -193,39 +239,48 @@
                 Swal.showLoading();
             }
         });
+
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_career'); ?>',
+            url: url,
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
                 if (result.status == 1) {
-                    $('#addForm').trigger('reset');
-                    $('#addModal').modal('hide');
+                    $('#careerModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Data saved!'
+                        text: result.message || (mode === 'edit' ? 'Career updated successfully.' : 'Data saved!')
                     });
                     tbl.ajax.reload(null, false);
                 } else {
                     Swal.fire({
-                        icon: 'warning' || 'error',
+                        icon: 'error',
                         title: 'Error',
-                        text: result.message || 'Data not created. Refresh the page or try logging in again.',
+                        text: result.message || 'Request failed.'
                     });
                     tbl.ajax.reload(null, false);
                 }
             },
-            error: function () {
+            error: function (xhr, statusText, errorThrown) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'An error occurred while processing your request. Please try again.'
+                    text: xhr.responseText || errorThrown || statusText || 'An error occurred while processing your request.'
                 });
             }
         });
+    }
+
+    $('#careerForm').on('submit', function (e) {
+        e.preventDefault();
+        submitCareerForm();
+    });
+
+    $('#careerModal').on('hidden.bs.modal', function () {
+        resetCareerModalState();
     });
 
     function edit(id) {
@@ -236,10 +291,7 @@
             success: function (response) {
                 if (response.status === 1) {
                     let res = response.data; // Directly access the data object
-                    $('#editCareerId').val(res.ID);
-                    $('#editpublication').val(res.publication_date);
-                    $('#editlevel').val(res.level);
-                    $('#editModal').modal('show');
+                    openCareerModal('edit', res);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -257,63 +309,6 @@
             }
         });
     }
-
-
-    // Function to submit the edit user form
-    $('#btnEdit').click(function () {
-        let formData = new FormData($('#editForm')[0]);
-        let careerFile = formData.get('editCareerFile');
-
-        if (!formData.get('editpublication')) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return;
-        }
-
-        if (careerFile && careerFile.size > 0 && !isPdfFile(careerFile)) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please upload a PDF file only.'
-            });
-            return;
-        }
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/update_career'); ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        tbl.ajax.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update career. Please try again later.'
-                });
-            }
-        });
-    });
 
     var tbl = $('#tblcareer').DataTable({
         select: false,
@@ -403,7 +398,7 @@
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+                            <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';

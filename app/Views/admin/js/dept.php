@@ -149,126 +149,169 @@
         ['clean']
     ];
 
-    // Add Modal Quill editors
-    var quillAbout, quillMission, quillVision, quillPolicy, quillContact;
-    $('#addModal').on('shown.bs.modal', function () {
-        if (!quillAbout) {
-            quillAbout = new Quill('#quillAbout', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
-        if (!quillMission) {
-            quillMission = new Quill('#quillMission', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
-        if (!quillVision) {
-            quillVision = new Quill('#quillVision', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
-        if (!quillPolicy) {
-            quillPolicy = new Quill('#quillPolicy', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
-        if (!quillContact) {
-            quillContact = new Quill('#quillContact', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
+    var deptState = {
+        mode: 'add',
+        record: null
+    };
 
-        // Add image preview on file input change for Add modal
-        $('#deptImg').off('change').on('change', function () {
-            const file = this.files[0];
-            const preview = $('#addDeptLogoPreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.html('');
-            }
-        });
+    var deptQuills = {
+        about: null,
+        mission: null,
+        vision: null,
+        policy: null,
+        contact: null
+    };
 
-        // Add org chart preview on file input change for Add modal
-        $('#deptOrgChart').off('change').on('change', function () {
-            const file = this.files[0];
-            const preview = $('#addDeptOrgChartPreview');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.html('');
-            }
-        });
-    });
+    function initDeptQuills() {
+        if (!deptQuills.about) {
+            deptQuills.about = new Quill('#quillAbout', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!deptQuills.mission) {
+            deptQuills.mission = new Quill('#quillMission', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!deptQuills.vision) {
+            deptQuills.vision = new Quill('#quillVision', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!deptQuills.policy) {
+            deptQuills.policy = new Quill('#quillPolicy', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+        if (!deptQuills.contact) {
+            deptQuills.contact = new Quill('#quillContact', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+        }
+    }
 
-    // Clear image preview when Add Modal closes
-    $('#addModal').on('hidden.bs.modal', function () {
-        $('#addDeptLogoPreview').html('');
-        $('#addDeptOrgChartPreview').html('');
-        if (quillAbout) quillAbout.setContents([]);
-        if (quillMission) quillMission.setContents([]);
-        if (quillVision) quillVision.setContents([]);
-        if (quillPolicy) quillPolicy.setContents([]);
-        if (quillContact) quillContact.setContents([]);
+    function setDeptQuillContents(record) {
+        if (!record) {
+            return;
+        }
+        if (deptQuills.about) deptQuills.about.root.innerHTML = record.about || '';
+        if (deptQuills.mission) deptQuills.mission.root.innerHTML = record.mission || '';
+        if (deptQuills.vision) deptQuills.vision.root.innerHTML = record.vision || '';
+        if (deptQuills.policy) deptQuills.policy.root.innerHTML = record.quality_policy || '';
+        if (deptQuills.contact) deptQuills.contact.root.innerHTML = record.contact || '';
+    }
+
+    function clearDeptQuillContents() {
+        if (deptQuills.about) deptQuills.about.setContents([]);
+        if (deptQuills.mission) deptQuills.mission.setContents([]);
+        if (deptQuills.vision) deptQuills.vision.setContents([]);
+        if (deptQuills.policy) deptQuills.policy.setContents([]);
+        if (deptQuills.contact) deptQuills.contact.setContents([]);
         $('#txtAbout').val('');
         $('#txtMission').val('');
         $('#txtVision').val('');
         $('#txtPolicy').val('');
         $('#txtContact').val('');
-    });
+    }
 
-    // Edit Modal Quill editors
-    var editQuillAbout, editQuillMission, editQuillVision, editQuillPolicy, editQuillContact;
-    $('#editModal').on('shown.bs.modal', function () {
-        if (!editQuillAbout) {
-            editQuillAbout = new Quill('#editQuillAbout', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
+    function syncDeptHiddenFields() {
+        if (deptQuills.about && deptQuills.mission && deptQuills.vision && deptQuills.policy && deptQuills.contact) {
+            $('#txtAbout').val(deptQuills.about.root.innerHTML);
+            $('#txtMission').val(deptQuills.mission.root.innerHTML);
+            $('#txtVision').val(deptQuills.vision.root.innerHTML);
+            $('#txtPolicy').val(deptQuills.policy.root.innerHTML);
+            $('#txtContact').val(deptQuills.contact.root.innerHTML);
         }
-        if (!editQuillMission) {
-            editQuillMission = new Quill('#editQuillMission', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
-        if (!editQuillVision) {
-            editQuillVision = new Quill('#editQuillVision', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
-        if (!editQuillPolicy) {
-            editQuillPolicy = new Quill('#editQuillPolicy', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
-        if (!editQuillContact) {
-            editQuillContact = new Quill('#editQuillContact', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
-    });
+    }
 
-    // On Add submit, copy Quill HTML to hidden inputs
-    $('#btnAdd').on('click', function () {
-        if (quillAbout && quillMission && quillVision && quillPolicy && quillContact) {
-            $('#txtAbout').val(quillAbout.root.innerHTML);
-            $('#txtMission').val(quillMission.root.innerHTML);
-            $('#txtVision').val(quillVision.root.innerHTML);
-            $('#txtPolicy').val(quillPolicy.root.innerHTML);
-            $('#txtContact').val(quillContact.root.innerHTML);
-        }
-        // Validation: check Quill content is not empty
-        if (
-            quillAbout.root.innerHTML.trim() === '' ||
-            quillAbout.root.innerHTML === '<p><br></p>' ||
-            quillMission.root.innerHTML.trim() === '' ||
-            quillMission.root.innerHTML === '<p><br></p>' ||
-            quillVision.root.innerHTML.trim() === '' ||
-            quillVision.root.innerHTML === '<p><br></p>' ||
-            quillPolicy.root.innerHTML.trim() === '' ||
-            quillPolicy.root.innerHTML === '<p><br></p>' ||
-            quillContact.root.innerHTML.trim() === '' ||
-            quillContact.root.innerHTML === '<p><br></p>'
-        ) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
+    function resetDeptModalState() {
+        $('#addForm')[0].reset();
+        $('#deptId').val('');
+        $('#deptMode').val('add');
+        $('#deptModalTitle').text('Add Department Details');
+        $('#btnDeptSave').text('Save');
+        $('#deptImg').prop('required', true);
+        $('#deptOrgChart').prop('required', false);
+        $('#addDeptLogoPreview').html('');
+        $('#addDeptOrgChartPreview').html('');
+        deptState.mode = 'add';
+        deptState.record = null;
+        clearDeptQuillContents();
+    }
+
+    function renderDeptImagePreview($preview, file, fallbackHtml) {
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                $preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
+            };
+            reader.readAsDataURL(file);
             return;
         }
 
-        let form = $('#addForm')[0];
-        let formData = new FormData(form);
+        $preview.html(fallbackHtml || '');
+    }
 
-        // Form validation
+    function openDeptModal(mode, record) {
+        resetDeptModalState();
+        deptState.mode = mode;
+        deptState.record = record || null;
+        $('#deptMode').val(mode);
+
+        if (mode === 'edit' && record) {
+            $('#deptModalTitle').text('Edit Department Details');
+            $('#btnDeptSave').text('Update');
+            $('#deptId').val(record.ID || record.id || '');
+            $('#txtDept').val(record.dept_name || '');
+            $('#txtHead').val(record.head || '');
+            $('#txtAbout').val(record.about || '');
+            $('#txtContact').val(record.contact || '');
+            $('#txtMission').val(record.mission || '');
+            $('#txtVision').val(record.vision || '');
+            $('#txtPolicy').val(record.quality_policy || '');
+            $('#deptImg').prop('required', false);
+            $('#deptOrgChart').prop('required', false);
+        }
+
+        $('#addModal').modal('show');
+    }
+
+    function isValidDeptImage(file) {
+        if (!file || file.size === 0) {
+            return false;
+        }
+
+        const maxImageSizeMB = 4;
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+        if (file.size > maxImageSizeMB * 1024 * 1024) {
+            return 'size';
+        }
+        if (!validImageTypes.includes(file.type)) {
+            return 'type';
+        }
+        return true;
+    }
+
+    $('#addModal').on('shown.bs.modal', function () {
+        initDeptQuills();
+        setDeptQuillContents(deptState.record);
+
+        $('#deptImg').off('change').on('change', function () {
+            renderDeptImagePreview($('#addDeptLogoPreview'), this.files[0]);
+        });
+
+        $('#deptOrgChart').off('change').on('change', function () {
+            renderDeptImagePreview($('#addDeptOrgChartPreview'), this.files[0]);
+        });
+    });
+
+    $('#addModal').on('hidden.bs.modal', function () {
+        resetDeptModalState();
+    });
+
+    function submitDeptForm() {
+        initDeptQuills();
+        syncDeptHiddenFields();
+
+        const mode = ($('#deptMode').val() || 'add').toLowerCase();
+        const form = $('#addForm')[0];
+        const formData = new FormData(form);
+        const logoFile = formData.get('deptImg');
+        const orgChartFile = formData.get('deptOrgChart');
+
+        formData.set('id', $('#deptId').val());
+
         if (!formData.get('txtDept') || !formData.get('txtHead') || !formData.get('txtMission') || !formData.get('txtVision') || !formData.get('txtPolicy') || !formData.get('txtContact')) {
             Swal.fire({
                 icon: 'warning',
@@ -278,9 +321,20 @@
             return;
         }
 
-        // Image validation
-        let imageFile = formData.get('deptImg');
-        if (!imageFile || imageFile.size === 0) {
+        if (!deptQuills.about.root.innerHTML || deptQuills.about.root.innerHTML.trim() === '' || deptQuills.about.root.innerHTML === '<p><br></p>' ||
+            !deptQuills.mission.root.innerHTML || deptQuills.mission.root.innerHTML.trim() === '' || deptQuills.mission.root.innerHTML === '<p><br></p>' ||
+            !deptQuills.vision.root.innerHTML || deptQuills.vision.root.innerHTML.trim() === '' || deptQuills.vision.root.innerHTML === '<p><br></p>' ||
+            !deptQuills.policy.root.innerHTML || deptQuills.policy.root.innerHTML.trim() === '' || deptQuills.policy.root.innerHTML === '<p><br></p>' ||
+            !deptQuills.contact.root.innerHTML || deptQuills.contact.root.innerHTML.trim() === '' || deptQuills.contact.root.innerHTML === '<p><br></p>') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'Please fill in all required fields.'
+            });
+            return;
+        }
+
+        if (mode === 'add' && (!logoFile || logoFile.size === 0)) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
@@ -288,25 +342,50 @@
             });
             return;
         }
-        const maxImageSizeMB = 4;
-        if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: `Image size should not exceed ${maxImageSizeMB} MB.`
-            });
-            return;
+
+        if (logoFile && logoFile.size > 0) {
+            const logoValidation = isValidDeptImage(logoFile);
+            if (logoValidation === 'size') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Image size should not exceed 4 MB.'
+                });
+                return;
+            }
+            if (logoValidation === 'type') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Please upload a valid image file (jpg, png, gif).'
+                });
+                return;
+            }
         }
 
-        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!validImageTypes.includes(imageFile.type)) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please upload a valid image file (jpg, png, gif).'
-            });
-            return;
+        if (orgChartFile && orgChartFile.size > 0) {
+            const orgValidation = isValidDeptImage(orgChartFile);
+            if (orgValidation === 'size') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Image size should not exceed 4 MB.'
+                });
+                return;
+            }
+            if (orgValidation === 'type') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Please upload a valid image file (jpg, png, gif).'
+                });
+                return;
+            }
         }
+
+        const url = mode === 'edit'
+            ? '<?php echo site_url('admin/ajax/update_dept'); ?>'
+            : '<?php echo site_url('admin/ajax/create_dept'); ?>';
 
         Swal.fire({
             title: 'Please wait...',
@@ -321,48 +400,41 @@
         });
 
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_dept'); ?>',
-            type: 'POST',
+            url: url,
+            method: 'POST',
             data: formData,
-            contentType: false,
             processData: false,
-            success: function (result) {
-                if (result.status == 1) {
-                    $('#addForm').trigger('reset');
+            contentType: false,
+            success: function (response) {
+                if (response.status === 1) {
                     $('#addModal').modal('hide');
-                    if (quillAbout) quillAbout.setContents([]);
-                    if (quillMission) quillMission.setContents([]);
-                    if (quillVision) quillVision.setContents([]);
-                    if (quillPolicy) quillPolicy.setContents([]);
-                    if (quillContact) quillContact.setContents([]);
-                    $('#txtAbout').val('');
-                    $('#txtMission').val('');
-                    $('#txtVision').val('');
-                    $('#txtPolicy').val('');
-                    $('#txtContact').val('');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Department data saved!'
+                        text: response.message || (mode === 'edit' ? 'Department updated successfully.' : 'Department data saved!')
                     });
                     deptTable.ajax.reload(null, false);
                 } else {
                     Swal.fire({
-                        icon: 'warning' || 'error',
+                        icon: 'error',
                         title: 'Error',
-                        text: result.message || 'Data not created. Refresh the page or try logging in again.',
+                        text: response.message || 'Request failed.'
                     });
-                    deptTable.ajax.reload(null, false);
                 }
             },
-            error: function () {
+            error: function (xhr, statusText, errorThrown) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'An error occurred while processing your request. Please try again.'
+                    text: xhr.responseText || errorThrown || statusText || 'Unable to process the department request.'
                 });
             }
         });
+    }
+
+    $('#addForm').on('submit', function (e) {
+        e.preventDefault();
+        submitDeptForm();
     });
 
     function edit(deptId) {
@@ -372,84 +444,19 @@
             data: { id: deptId },
             success: function (response) {
                 if (response.status === 1) {
-                    let res = response.data; // Directly access the data object
-                    $('#editDeptId').val(res.ID);
-                    $('#editDept').val(res.dept_name);
-                    $('#editHead').val(res.head);
-                    $('#editTitle').val(res.post_title);
-                    $('#editMission').val(res.mission);
-                    $('#editVision').val(res.vision);
-                    $('#editPolicy').val(res.quality_policy);
-                    $('#editAbout').val(res.about || '');
-                    $('#editContact').val(res.contact || '');
-                    // Set Quill editor content after initialization
-                    $('#editModal').on('shown.bs.modal', function () {
-                        if (editQuillAbout) editQuillAbout.root.innerHTML = res.about || '';
-                        if (editQuillMission) editQuillMission.root.innerHTML = res.mission || '';
-                        if (editQuillVision) editQuillVision.root.innerHTML = res.vision || '';
-                        if (editQuillPolicy) editQuillPolicy.root.innerHTML = res.quality_policy || '';
-                        if (editQuillContact) editQuillContact.root.innerHTML = res.contact || '';
-                    });
-
-                    // Show current image in preview
-                    $('#editDeptLogoPreview').html(
-                        res.img_logo
-                            ? `<img src="<?php echo base_url('admin/image/DEPT/') ?>${res.img_logo}" alt="Current Department Logo" style="max-width: 120px; margin-top: 5px;">`
+                    openDeptModal('edit', response.data);
+                    $('#addDeptLogoPreview').html(
+                        response.data.img_logo
+                            ? `<img src="<?php echo base_url('admin/image/DEPT/') ?>${response.data.img_logo}" alt="Current Department Logo" style="max-width: 120px; margin-top: 5px;">`
                             : '<small>No logo available.</small>'
                     );
-
-                    // Show current org chart in preview
-                    $('#editDeptOrgChartPreview').html(
-                        res.org_chart_img
-                            ? `<img src="<?php echo base_url('admin/image/DEPT/') ?>${res.org_chart_img}" alt="Current Organizational Chart" style="max-width: 120px; margin-top: 5px;">`
+                    $('#addDeptOrgChartPreview').html(
+                        response.data.org_chart_img
+                            ? `<img src="<?php echo base_url('admin/image/DEPT/') ?>${response.data.org_chart_img}" alt="Current Organizational Chart" style="max-width: 120px; margin-top: 5px;">`
                             : '<small>No org chart available.</small>'
                     );
-
-                    // Reset file inputs
-                    $('#editdeptImg').val('');
-                    $('#editdeptOrgChart').val('');
-
-                    // Add image preview on file input change for Edit modal
-                    $('#editdeptImg').off('change').on('change', function () {
-                        const file = this.files[0];
-                        const preview = $('#editDeptLogoPreview');
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = function (e) {
-                                preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                            };
-                            reader.readAsDataURL(file);
-                        } else {
-                            // If no file, show the original image again (if any)
-                            if (res.img_logo) {
-                                preview.html(`<img src="<?php echo base_url('admin/image/DEPT/') ?>${res.img_logo}" alt="Current Department Logo" style="max-width: 120px; margin-top: 5px;">`);
-                            } else {
-                                preview.html('<small>No logo available.</small>');
-                            }
-                        }
-                    });
-
-                    // Add org chart preview on file input change for Edit modal
-                    $('#editdeptOrgChart').off('change').on('change', function () {
-                        const file = this.files[0];
-                        const preview = $('#editDeptOrgChartPreview');
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = function (e) {
-                                preview.html('<img src="' + e.target.result + '" style="max-width: 120px; margin-top: 5px;">');
-                            };
-                            reader.readAsDataURL(file);
-                        } else {
-                            // If no file, show the original image again (if any)
-                            if (res.org_chart_img) {
-                                preview.html(`<img src="<?php echo base_url('admin/image/DEPT/') ?>${res.org_chart_img}" alt="Current Organizational Chart" style="max-width: 120px; margin-top: 5px;">`);
-                            } else {
-                                preview.html('<small>No org chart available.</small>');
-                            }
-                        }
-                    });
-
-                    $('#editModal').modal('show');
+                    $('#deptImg').val('');
+                    $('#deptOrgChart').val('');
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -467,106 +474,6 @@
             }
         });
     }
-
-
-    // Function to submit the edit user form
-    $('#btnEdit').click(function () {
-        // Always update hidden inputs with Quill content before creating FormData
-        if (editQuillAbout && editQuillMission && editQuillVision && editQuillPolicy && editQuillContact) {
-            $('#editAbout').val(editQuillAbout.root.innerHTML);
-            $('#editMission').val(editQuillMission.root.innerHTML);
-            $('#editVision').val(editQuillVision.root.innerHTML);
-            $('#editPolicy').val(editQuillPolicy.root.innerHTML);
-            $('#editContact').val(editQuillContact.root.innerHTML);
-        }
-        let form = $('#editForm')[0];
-        let formData = new FormData(form);
-
-        // Form validation
-        if (!formData.get('editDept') || !formData.get('editHead') || !formData.get('editMission') || !formData.get('editVision') || !formData.get('editPolicy') || !formData.get('editContact')) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return; // Stop further execution if validation fails
-        }
-        // Image validation
-        let imageFile = formData.get('editdeptImg');
-        const maxImageSizeMB = 4;
-        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-
-        if (imageFile && imageFile.size > 0) {
-            if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: `Logo image size should not exceed ${maxImageSizeMB} MB.`
-                });
-                return;
-            }
-            if (!validImageTypes.includes(imageFile.type)) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please upload a valid logo image file (jpg, png, gif).'
-                });
-                return;
-            }
-        }
-        // Validation: check Quill content is not empty
-        if (
-            editQuillAbout.root.innerHTML.trim() === '' ||
-            editQuillAbout.root.innerHTML === '<p><br></p>' ||
-            editQuillMission.root.innerHTML.trim() === '' ||
-            editQuillMission.root.innerHTML === '<p><br></p>' ||
-            editQuillVision.root.innerHTML.trim() === '' ||
-            editQuillVision.root.innerHTML === '<p><br></p>' ||
-            editQuillPolicy.root.innerHTML.trim() === '' ||
-            editQuillPolicy.root.innerHTML === '<p><br></p>' ||
-            editQuillContact.root.innerHTML.trim() === '' ||
-            editQuillContact.root.innerHTML === '<p><br></p>'
-        ) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Validation Error',
-                text: 'Please fill in all required fields.'
-            });
-            return;
-        }
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/update_dept'); ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        deptTable.ajax.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update department. Please try again later.'
-                });
-            }
-        });
-    });
 
     var deptTable = $('#tbldept').DataTable({
         select: false,
@@ -644,7 +551,7 @@
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+                            <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';

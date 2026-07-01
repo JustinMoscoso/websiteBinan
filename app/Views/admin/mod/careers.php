@@ -67,7 +67,7 @@
 
                             <div class="col-12 col-md-4">
                                 <button type="button" class="btn btn-success w-100 shadow-sm fw-semibold text-nowrap "
-                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    data-bs-toggle="modal" data-bs-target="#careerModal" style="height: 38px;">
                                     <i class="bi bi-plus-circle me-1"></i>Add Record
                                 </button>
                             </div>
@@ -100,11 +100,13 @@
     </div>
 </section>
 
-<div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+<div class="modal fade" id="careerModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form id="addForm" class="modal-content border-0 shadow-lg">
+        <form id="careerForm" class="modal-content border-0 shadow-lg">
+            <input type="hidden" id="careerId" name="id">
+            <input type="hidden" id="careerMode" name="mode" value="add">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;"></h5>
+                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;" id="careerModalTitle">Add Career Entry</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -131,56 +133,15 @@
                             accept=".pdf,application/pdf" required>
                         <div class="form-text text-muted" style="font-size: 0.75rem;">Supported type: .pdf only
                         </div>
+                        <div class="form-text text-muted d-none" id="currentCareerFileWrap" style="font-size: 0.75rem;">
+                            Current file: <span id="currentCareerFileName"></span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer bg-light px-4 py-3">
                 <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnAdd" type="submit" class="btn btn-theme px-4">Save</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <form id="editForm" class="modal-content border-0 shadow-lg">
-            <input type="hidden" id="editCareerId" name="id">
-            <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">Modify Career Entry</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="editpublication" class="form-label small fw-bold text-secondary">
-                            Date</label>
-                        <input type="date" class="form-control shadow-sm" id="editpublication" name="editpublication"
-                            required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="editlevel" class="form-label small fw-bold text-secondary">Level</label>
-                        <select class="form-select shadow-sm" id="editlevel" name="editlevel" required>
-                            <option selected disabled value="">Select Level</option>
-                            <option value="1">Level 1</option>
-                            <option value="2">Level 2</option>
-                            <option value="3">Level 1 &amp; 2</option>
-                        </select>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <label for="editCareerFile" class="form-label small fw-bold text-secondary">Upload Document
-                            </label>
-                        <input type="file" class="form-control shadow-sm" id="editCareerFile" name="editCareerFile"
-                            accept=".pdf,application/pdf">
-                        <div class="form-text text-muted" style="font-size: 0.75rem;">Supported type: .pdf only
-                            </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer bg-light px-4 py-3">
-                <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                <button id="btnEdit" type="submit" class="btn btn-theme px-4">Save</button>
+                <button id="btnCareerSave" type="submit" class="btn btn-theme px-4">Save</button>
             </div>
         </form>
     </div>

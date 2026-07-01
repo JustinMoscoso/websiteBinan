@@ -31,7 +31,7 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
             setTimeout(function() {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
@@ -141,11 +141,10 @@
         });
     }
 
-    // Initialize Quill editors
+    // ─── Single Quill instance ───────────────────────────────────────────────
     var quillPerData = new Quill('#addPerdataEditor', {
         modules: {
             toolbar: [
-                // Removed font and size dropdowns
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
                 [{ 'script': 'sub' }, { 'script': 'super' }],
@@ -153,39 +152,22 @@
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
                 [{ 'align': [] }],
-                ['link'], // removed image, video
+                ['link'],
                 ['clean']
             ]
         },
         theme: 'snow'
     });
 
-    var quillEditPerData = new Quill('#editperdataEditor', {
-        modules: {
-            toolbar: [
-                // Removed font and size dropdowns
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub' }, { 'script': 'super' }],
-                [{ 'header': 1 }, { 'header': 2 }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                [{ 'direction': 'rtl' }],
-                [{ 'align': [] }],
-                ['link'], // removed image, video
-                ['clean']
-            ]
-        },
-        theme: 'snow'
-    });
-
+    // ─── Mayor Name field visibility helper ──────────────────────────────────
     function shouldShowMayorNameField(section) {
         return section === 'Personal Data';
     }
 
     function syncMayorNameField(section, mayorName) {
         var showNameField = shouldShowMayorNameField(section);
-        var $group = $('#editMayorNameGroup');
-        var $field = $('#editmyrname');
+        var $group = $('#mayorNameGroup');
+        var $field = $('#myrname');
         var nextValue = typeof mayorName === 'undefined' ? $field.val() : (mayorName || '');
 
         $group.toggle(showNameField);
@@ -193,36 +175,70 @@
         $field.val(nextValue);
     }
 
+    // ─── Shared modal open helper ─────────────────────────────────────────────
+    function openMayorModal(mode, record) {
+        $('#mayorMode').val(mode);
 
-
-    // Show/hide the "Name of Mayor" input based on the selected category
-    $('#content_category').on('change', function () {
-        if ($(this).val() === 'Personal Data') {
-            $('#myrname').closest('.form-group').show();
+        if (mode === 'add') {
+            $('#mayorModalTitle').text('Add Record');
+            $('#btnAdd').text('Save');
+            $('#mayorRecordId').val('');
+            $('#addForm')[0].reset();
+            $('#add_img_preview').html('');
+            $('#existing_mayor_images').val('');
+            quillPerData.root.innerHTML = '';
+            syncMayorNameField('');
         } else {
-            $('#myrname').closest('.form-group').hide();
+            $('#mayorModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Modify Profile Configuration');
+            $('#btnAdd').text('Update');
+            $('#mayorRecordId').val(record.ID);
+            $('#content_category').val(record.section);
+            syncMayorNameField(record.section, record.mayor_name);
+
+            // Load content into the single Quill editor after modal is shown
+            $('#addModal').one('shown.bs.modal', function () {
+                quillPerData.root.innerHTML = record.content || '';
+            });
+
+            $('#mayorimg').val('');
+            renderMayorExistingImages(record.mayor_img);
         }
-    }).trigger('change');
 
+        $('#addModal').modal('show');
+    }
 
-    // Add Mayor's Content
+    // ─── Category change handler ──────────────────────────────────────────────
+    $('#content_category').on('change', function () {
+        syncMayorNameField($(this).val());
+    });
+
+    // ─── Unified submit handler ───────────────────────────────────────────────
     $('#btnAdd').on('click', function () {
-        let form = $('#addForm')[0];
-        let formData = new FormData(form);
+        var mode = $('#mayorMode').val();
+        var form = $('#addForm')[0];
+        var formData = new FormData(form);
 
-        // Validate image file
-        let mayorImg = $('#mayorimg')[0].files[0];
+        // Sync Quill content into hidden field
+        formData.set('perdata', quillPerData.root.innerHTML);
+
+        // Explicitly set ID for edit mode
+        if (mode === 'edit') {
+            formData.set('id', $('#mayorRecordId').val());
+        }
+
+        // Validate image file (add mode only validates the new selection)
+        var mayorImg = $('#mayorimg')[0].files[0];
         if (mayorImg) {
-            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
             if (!validImageTypes.includes(mayorImg.type)) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Invalid Image Type',
-                    text: 'Only JPG, PNG, and GIF files are allowed.'
+                    text: 'Only JPG, PNG, GIF, and WEBP files are allowed.'
                 });
                 return;
             }
-            if (mayorImg.size > 2 * 1024 * 1024) { // 2MB
+            if (mayorImg.size > 2 * 1024 * 1024) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Image Too Large',
@@ -231,9 +247,10 @@
                 return;
             }
         }
-        // Extract the content of the Quill editors
-        let quillContentPerData = quillPerData.root.innerHTML;
-        formData.append('perdata', quillContentPerData);
+
+        var url = mode === 'edit'
+            ? '<?php echo site_url('admin/ajax/update_mayor'); ?>'
+            : '<?php echo site_url('admin/ajax/create_mayor'); ?>';
 
         Swal.fire({
             title: 'Please wait...',
@@ -246,33 +263,32 @@
                 Swal.showLoading();
             }
         });
+
         $.ajax({
-            url: '<?php echo site_url('admin/ajax/create_mayor'); ?>',
+            url: url,
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (result) {
                 if (result.status == 1) {
-                    $('#addForm').trigger('reset');
-                    $('#add_img_preview').html('');
                     $('#addModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Mayor\'s Content data saved!'
+                        text: result.message || (mode === 'edit' ? 'Content updated successfully.' : "Mayor's Content data saved!")
                     });
                     tbl.ajax.reload(null, false);
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: result.message || 'Data not created. Refresh the page or try logging in again.',
+                        text: result.message || 'Operation failed. Refresh the page or try logging in again.',
                     });
                     tbl.ajax.reload(null, false);
                 }
             },
-            error: function (xhr, status, error) {
+            error: function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -282,7 +298,7 @@
         });
     });
 
-    // Edit Mayor's Content
+    // ─── Edit record fetch then open modal ───────────────────────────────────
     function edit(mayId) {
         $.ajax({
             url: '<?php echo site_url('admin/ajax/get_mayor'); ?>',
@@ -290,17 +306,14 @@
             data: { id: mayId },
             success: function (response) {
                 if (response.status === 1) {
-                    let official = response.data;
-                    $('#editMayorId').val(official.ID);
-                    $('#edit_content_category').val(official.section);
-                    syncMayorNameField(official.section, official.mayor_name);
-
-                    // Set the content of the Quill editor
-                    quillEditPerData.root.innerHTML = official.content;
-                    $('#editmayorimg').val('');
-                    renderMayorExistingImages(official.mayor_img);
-
-                    $('#editModal').modal('show');
+                    var official = response.data;
+                    // Normalize ID key
+                    if (!official.ID && official.id) {
+                        official.ID = official.id;
+                    }
+                    // Normalize mayor_img
+                    official.mayor_img = parseMayorImages(official.mayor_img);
+                    openMayorModal('edit', official);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -319,89 +332,7 @@
         });
     }
 
-
-    $('#btnEdit').click(function () {
-        Swal.fire({
-            title: 'Please wait...',
-            showConfirmButton: false,
-            backdrop: true,
-            scrollbarPadding: false,
-            allowEscapeKey: () => !Swal.isLoading(),
-            allowOutsideClick: () => !Swal.isLoading(),
-            willOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        let formData = new FormData($('#editForm')[0]);
-
-        if (!shouldShowMayorNameField($('#edit_content_category').val())) {
-            formData.set('editmyrname', $('#editmyrname').val() || '');
-        }
-
-        // Extract the content from the Quill editors
-        let quillContentPerData = quillEditPerData.root.innerHTML;
-        formData.append('editperdata', quillContentPerData);
-
-        $.ajax({
-            url: '<?php echo site_url('admin/ajax/update_mayor'); ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#editModal').modal('hide');
-                        $('#edit_img_preview').html('');
-                        $('#editmayorimg').val('');
-                        tbl.ajax.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update Mayor\'s Content. Please try again later.'
-                });
-            }
-        });
-    });
-
-
-    // Function to preview selected images in edit modal
-    function previewImages(input, previewContainer) {
-        if (input.files) {
-            var files = input.files;
-            $(previewContainer).html(''); // Clear previous previews
-            for (var i = 0; i < files.length; i++) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $(previewContainer).append(
-                        '<div class="text-center d-inline-block" style="width: 100px; vertical-align: top; margin: 10px;">' +
-                        '<div class="position-relative" style="width: 100px; height: 100px;">' +
-                        '<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-flex align-items-center justify-content-center remove-image-btn" style="width: 22px; height: 22px; padding: 0; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.25); transform: translate(35%, -35%); z-index: 2; font-size: 14px; font-weight: bold;">&times;</button>' +
-                        '<img src="' + e.target.result + '" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: contain; background-color: #f8f9fa;" alt="Selected image">' +
-                        '</div>' +
-                        '</div>'
-                    );
-                }
-                reader.readAsDataURL(files[i]);
-            }
-        }
-    }
-
+    // ─── Image preview helpers ────────────────────────────────────────────────
     function setFileInputFiles(input, files) {
         var dt = new DataTransfer();
         files.forEach(function (file) {
@@ -452,13 +383,13 @@
     function renderMayorExistingImages(images) {
         var list = parseMayorImages(images);
         $('#existing_mayor_images').val(JSON.stringify(list));
-        renderEditMayorPreview();
+        renderMayorPreview();
     }
 
-    function renderEditMayorPreview() {
-        var preview = $('#edit_img_preview');
+    function renderMayorPreview() {
+        var preview = $('#add_img_preview');
         var existing = parseMayorImages($('#existing_mayor_images').val());
-        var selected = Array.from($('#editmayorimg')[0].files || []);
+        var selected = Array.from($('#mayorimg')[0].files || []);
         var html = '';
 
         if (!existing.length && !selected.length) {
@@ -479,7 +410,7 @@
         selected.forEach(function (file, index) {
             html += '<div class="text-center d-inline-block" style="width: 100px; vertical-align: top; margin: 10px;">' +
                 '<div class="position-relative" style="width: 100px; height: 100px;">' +
-                '<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-flex align-items-center justify-content-center remove-selected-image" data-input="#editmayorimg" data-index="' + index + '" style="width: 22px; height: 22px; padding: 0; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.25); transform: translate(35%, -35%); z-index: 2; font-size: 14px; font-weight: bold;">&times;</button>' +
+                '<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle d-flex align-items-center justify-content-center remove-selected-image" data-input="#mayorimg" data-index="' + index + '" style="width: 22px; height: 22px; padding: 0; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.25); transform: translate(35%, -35%); z-index: 2; font-size: 14px; font-weight: bold;">&times;</button>' +
                 '<img src="" class="img-thumbnail selected-image-preview" data-file-index="' + index + '" style="width: 100px; height: 100px; object-fit: contain; background-color: #f8f9fa;" alt="Selected image">' +
                 '</div>' +
                 '<div class="text-truncate mt-1" style="font-size: 0.75rem; color: #6c757d;" title="New: ' + file.name + '">New: ' + file.name + '</div>' +
@@ -517,7 +448,7 @@
                     });
                 }
             } catch (e) {
-                // Treat plain strings as a single filename below.
+                // fall through
             }
 
             return value.split(',').map(function (image) {
@@ -530,36 +461,28 @@
         return [];
     }
 
-    // Preview images in edit modal
-    $('#editmayorimg').on('change', function () {
-        renderEditMayorPreview();
-    });
-
-    $('#edit_content_category').on('change', function () {
-        syncMayorNameField($(this).val());
-    });
-
+    // Image change events
     $('#mayorimg').on('change', function () {
-        renderFilePreview('#mayorimg', '#add_img_preview');
+        if ($('#mayorMode').val() === 'edit') {
+            renderMayorPreview();
+        } else {
+            renderFilePreview('#mayorimg', '#add_img_preview');
+        }
     });
 
-    $('#addForm').on('reset', function () {
-        setTimeout(function () {
-            $('#add_img_preview').html('');
-        }, 0);
-    });
-
+    // Remove selected new file
     $(document).on('click', '.remove-selected-image', function () {
         var inputSelector = $(this).data('input');
         var index = parseInt($(this).data('index'), 10);
         removeSelectedFile(inputSelector, index);
-        if (inputSelector === '#mayorimg') {
-            renderFilePreview('#mayorimg', '#add_img_preview');
+        if ($('#mayorMode').val() === 'edit') {
+            renderMayorPreview();
         } else {
-            renderEditMayorPreview();
+            renderFilePreview('#mayorimg', '#add_img_preview');
         }
     });
 
+    // Remove existing image
     $(document).on('click', '.remove-existing-mayor-image', function () {
         var imageName = String($(this).data('image') || '');
         var existing = parseMayorImages($('#existing_mayor_images').val());
@@ -569,14 +492,21 @@
         renderMayorExistingImages(existing);
     });
 
-    $('#editModal').on('hidden.bs.modal', function () {
-        $('#edit_img_preview').html('');
-        $('#editmayorimg').val('');
+    // Reset modal state on close
+    $('#addModal').on('hidden.bs.modal', function () {
+        $('#addForm')[0].reset();
+        $('#add_img_preview').html('');
         $('#existing_mayor_images').val('');
+        $('#mayorImg').val('');
+        $('#mayorRecordId').val('');
+        $('#mayorMode').val('add');
+        $('#mayorModalTitle').text('Add Record');
+        $('#btnAdd').text('Save');
+        quillPerData.root.innerHTML = '';
+        syncMayorNameField('');
     });
 
-
-    // DataTable initialization
+    // ─── DataTable ────────────────────────────────────────────────────────────
     var tbl = $('#tblmayor').DataTable({
         select: false,
         searching: true,
@@ -595,7 +525,6 @@
             "dataSrc": function (json) {
                 if (json.data && Array.isArray(json.data)) {
                     return json.data.map(function (item) {
-                        // Normalize mayor_img so the table can render existing uploads safely.
                         item.mayor_img = parseMayorImages(item.mayor_img);
                         return item;
                     });
@@ -612,7 +541,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tblmayor_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({
@@ -626,7 +555,6 @@
             {
                 "title": "Content", "data": "content", "className": "dt-body-justify", width: '50%',
                 "render": function (data, type, row) {
-                    // Strip HTML tags for length check
                     var text = data.replace(/<[^>]*>?/gm, '');
                     if (typeof text === 'string' && text.length > 500) {
                         text = text.substring(0, 500) + '...';
@@ -680,7 +608,7 @@
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal" onclick="edit(${row.ID})"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
+                            <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                         var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
