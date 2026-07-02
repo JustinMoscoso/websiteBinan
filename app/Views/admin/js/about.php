@@ -109,26 +109,34 @@
         ]
     });
 
+    function syncAboutImageUI(selectedCategory) {
+        var showImageUpload = selectedCategory === 'History' || selectedCategory === 'Emergency Hotlines';
+        var labelText = selectedCategory === 'Emergency Hotlines'
+            ? 'Logo Image'
+            : 'Feature Illustration / Banner Image';
+
+        $('#AboutImgLabel').text(labelText);
+        $('#AboutImgGrp').toggle(showImageUpload);
+
+        if (!showImageUpload) {
+            $('#AboutImg').val('');
+            $('#edit_img_preview').addClass('d-none').html('');
+        }
+    }
+
     // Category change handler (shared modal)
     // Always reset image group first to avoid stale-visibility when switching categories
     $('#content_category').on('change', function () {
         var selectedCategory = $(this).val();
-
-        // Unconditionally hide & clear image upload every time category changes
-        $('#AboutImgGrp').hide();
-        // Clear the file input by replacing it (val('') alone doesn't reliably clear file inputs)
-        $('#AboutImg').val('');
-        $('#edit_img_preview').addClass('d-none').html('');
+        syncAboutImageUI(selectedCategory);
 
         if (selectedCategory === 'Content' || selectedCategory === 'Home Page' || selectedCategory === 'Emergency Hotlines') {
             $('#DescGroup').show();
-            // Image group stays hidden (already hidden above)
             if (!QuillManager.getQuillInstance('aboutDesc')) {
                 QuillManager.initQuillEditor('quillDesc', 'aboutDesc');
             }
         } else if (selectedCategory === 'History') {
             $('#DescGroup').show();
-            $('#AboutImgGrp').show(); // Only History reveals the image upload
             if (!QuillManager.getQuillInstance('aboutDesc')) {
                 QuillManager.initQuillEditor('quillDesc', 'aboutDesc');
             }
@@ -148,6 +156,7 @@
             $('#recordId').val('');
             $('#addForm')[0].reset();
             $('#DescGroup, #AboutImgGrp').hide();
+            $('#AboutImgLabel').text('Feature Illustration / Banner Image');
             $('#edit_img_preview').addClass('d-none').html('');
             var quill = QuillManager.getQuillInstance('aboutDesc');
             if (quill) quill.setContents([]);
@@ -198,6 +207,7 @@
         $('#btnAddLabel').text('Save');
         $('#addForm')[0].reset();
         $('#DescGroup, #AboutImgGrp').hide();
+        $('#AboutImgLabel').text('Feature Illustration / Banner Image');
         $('#edit_img_preview').addClass('d-none').html('');
         var quill = QuillManager.getQuillInstance('aboutDesc');
         if (quill) quill.setContents([]);
@@ -244,7 +254,24 @@
                     return;
                 }
             }
-        } else if (selectedCategory === 'Home Page' || selectedCategory === 'Content' || selectedCategory === 'Emergency Hotlines') {
+        } else if (selectedCategory === 'Emergency Hotlines') {
+            if (!description) {
+                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter a description.' });
+                return;
+            }
+            if (imageFile && imageFile.size > 0) {
+                const maxImageSizeMB = 4;
+                if (imageFile.size > maxImageSizeMB * 1024 * 1024) {
+                    Swal.fire({ icon: 'warning', title: 'Validation Error', text: `Image size should not exceed ${maxImageSizeMB} MB.` });
+                    return;
+                }
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                if (!validImageTypes.includes(imageFile.type)) {
+                    Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please upload a valid image file (jpg, png, gif, webp).' });
+                    return;
+                }
+            }
+        } else if (selectedCategory === 'Home Page' || selectedCategory === 'Content') {
             if (!description) {
                 Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter a description.' });
                 return;
@@ -266,6 +293,8 @@
             var imgFile = formData.get('AboutImg');
             if (imgFile && imgFile.size > 0) {
                 formData.set('EditAboutImg', imgFile);
+            } else {
+                formData.delete('EditAboutImg');
             }
             url = '<?php echo site_url("admin/ajax/update_about"); ?>';
             successText = 'Content updated successfully.';

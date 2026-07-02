@@ -2833,6 +2833,8 @@ class Admin extends BaseController
                 $title = $this->request->getPost('TxtTitle');
                 $description = $this->request->getPost('TxtDesc');
                 $about_img = $this->request->getFile('AboutImg');
+                $maxmb = 4;
+                $allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
                 $existing = $about_m->where('section', $section)->first();
                 if ($existing && $section === 'Home Page') {
@@ -2840,6 +2842,14 @@ class Admin extends BaseController
                 } else {
                     $logoName = null;
                     if ($about_img && $about_img->isValid() && !$about_img->hasMoved()) {
+                        if ($about_img->getSize() > ($maxmb * 1024 * 1024)) {
+                            $message = 'Image size should not exceed ' . $maxmb . ' MB.';
+                            break;
+                        }
+                        if (!in_array(strtolower((string) $about_img->getMimeType()), $allowedImageTypes, true)) {
+                            $message = 'Please upload a valid image file (jpg, png, gif, webp).';
+                            break;
+                        }
                         $logoName = $about_img->getRandomName();
                         $file_category = 'ABOUT';
                         $path = WRITEPATH . 'uploads/' . $file_category;
@@ -4066,9 +4076,14 @@ class Admin extends BaseController
 
                 $maxmb = 4;
                 $file_category = 'ABOUT';
+                $allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
                 $imgLogo = $this->request->getFile('EditAboutImg');
                 if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
+                    if (!in_array(strtolower((string) $imgLogo->getMimeType()), $allowedImageTypes, true)) {
+                        $message = 'Please upload a valid image file (jpg, png, gif, webp).';
+                        break;
+                    }
                     $logoName = $imgLogo->getRandomName();
                     $path = WRITEPATH . 'uploads/' . $file_category;
 

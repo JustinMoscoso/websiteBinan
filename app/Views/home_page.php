@@ -410,12 +410,14 @@
 
 				<?php if (!empty($emergency_hotlines)): ?>
 
-					<?php foreach ($emergency_hotlines as $hotline): ?>
-						<?php
+				<?php foreach ($emergency_hotlines as $hotline): ?>
+					<?php
 						$icon = 'fas fa-phone-alt';
 						$image = 'assets/img/default.png';
 
-						if (stripos($hotline->title, 'Police') !== false) {
+						if (!empty($hotline->about_img)) {
+							$image = 'admin/image/ABOUT/' . $hotline->about_img;
+						} elseif (stripos($hotline->title, 'Police') !== false) {
 							$icon = 'fas fa-shield-alt';
 							$image = 'assets/img/Emergency_Hotline/PNP.png';
 						} elseif (stripos($hotline->title, 'Fire') !== false) {

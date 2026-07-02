@@ -156,7 +156,7 @@
 
                     <div class="col-12">
                         <div id="AboutImgGrp" style="display: none;">
-                            <label for="AboutImg" class="form-label small fw-bold text-secondary">Feature Illustration /
+                            <label for="AboutImg" class="form-label small fw-bold text-secondary" id="AboutImgLabel">Feature Illustration /
                                 Banner Image</label>
                             <input type="file" class="form-control" id="AboutImg" name="AboutImg" accept="image/*">
                             <div class="form-text text-muted">Accepted extensions: PNG, JPG, JPEG, WEBP.</div>
