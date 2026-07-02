@@ -112,7 +112,7 @@
                                                                         ?>
                                                                             <ul class="mb-0" style="padding-left: 0;">
                                                                                 <?php foreach ($files as $file) : ?>
-                                                                                    <li class="d-flex justify-content-center align-items-center gap-4 mb-2">
+                                                                                    <li class="d-flex justify-content-start align-items-center gap-4 mb-2">
                                                                                         <?php
                                                                                         if (isset($file->file_name) && !empty($file->file_name)) {
                                                                                             $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
@@ -180,8 +180,19 @@
                                                                                                                 <?php
                                                                                                                 if (isset($file->file_name) && !empty($file->file_name)) {
                                                                                                                     $fileUrl = base_url('admin/preview_file/FULLDISC/') . urlencode($file->file_name);
-                                                                                                                    echo '<a href="#" class="preview-link fw-semibold text-decoration-none" data-fileurl="' . htmlspecialchars($fileUrl) . '"><i class="fas fa-eye me-1"></i>Preview</a>';
-                                                                                                                    echo '<a href="' . htmlspecialchars($fileUrl) . '" class="p-1 d-inline-flex align-items-center gap-1 text-decoration-none fw-semibold" style="color: var(--binan-green); font-size: 0.875rem; transition: transform 0.2s, color 0.2s;" onmouseover="this.style.transform=\'scale(1.05)\'; this.style.color=\'var(--binan-green-dark)\'" onmouseout="this.style.transform=\'scale(1)\'; this.style.color=\'var(--binan-green)\'" title="Download File" download>Download <i class="fas fa-download"></i></a>';
+                                                                                                                    echo '<a href="#" class="preview-link fw-semibold text-decoration-none ps-2 " data-fileurl="' . htmlspecialchars($fileUrl) . '"><i class="fas fa-eye me-1"></i>Preview</a>';
+                                                                                                                            echo '
+                                                                                                                            <div class="d-flex align-items-center">
+                                                                                                                                <a href="' . htmlspecialchars($fileUrl) . '" 
+                                                                                                                                class="p-1 d-inline-flex align-items-center gap-1 text-decoration-none fw-semibold ms-auto" 
+                                                                                                                                style="color: var(--binan-green); font-size: 0.875rem; transition: transform 0.2s, color 0.2s;" 
+                                                                                                                                onmouseover="this.style.transform=\'scale(1.05)\'; this.style.color=\'var(--binan-green-dark)\'" 
+                                                                                                                                onmouseout="this.style.transform=\'scale(1)\'; this.style.color=\'var(--binan-green)\'" 
+                                                                                                                                title="Download File" 
+                                                                                                                                download>
+                                                                                                                                Download <i class="fas fa-download"></i>
+                                                                                                                                </a>
+                                                                                                                            </div>';
                                                                                                                 } else {
                                                                                                                     echo '<span class="text-muted small">No File Name Available</span>';
                                                                                                                 }
