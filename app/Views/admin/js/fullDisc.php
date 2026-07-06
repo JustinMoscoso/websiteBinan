@@ -471,15 +471,7 @@
                             <li><a class="dropdown-item" href="${fileUrl}" target="_blank"><i class="bi bi-eye me-1"></i>View File</a></li>
                             <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i>Edit</a></li>`;
 
-                    // Developer, Superadmin, and Admin have full access (Toggle Status, Delete)
-                    if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
-                        var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
-                        var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-
-                        actionHtml += `
-                            <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i>${statusText}</a></li>`;
-                    }
-                    actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
+                    actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
                     actionHtml += renderDeleteAction(userLevel, row.ID, 'deletePol');
 
                     actionHtml += `</ul></div>`;

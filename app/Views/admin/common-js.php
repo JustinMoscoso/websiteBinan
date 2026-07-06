@@ -35,31 +35,16 @@
         return monthNames[monthIndex] + ' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds + ' ' + ampm;
     }
 
-    function adminCanArchive(level) {
-        return ['ADMIN', 'SUPERADMIN', 'DEVELOPER'].includes((level || '').toUpperCase());
-    }
-
-    function adminCanRestore(level) {
+    function adminCanDelete(level) {
         return ['SUPERADMIN', 'DEVELOPER'].includes((level || '').toUpperCase());
     }
 
-    function adminCanDelete(level) {
-        return adminCanRestore(level);
-    }
-
-    function renderArchiveRestoreAction(level, row, toggleFnName) {
+    function renderStatusToggleAction(level, row, toggleFnName) {
         const status = (row.status || '').toUpperCase();
         if (status === 'ARCHIVED') {
-            if (!adminCanRestore(level)) {
-                return '';
-            }
-            return `<li><a class="dropdown-item" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}')"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</a></li>`;
-        }
-
-        if (!adminCanArchive(level)) {
             return '';
         }
-        return `<li><a class="dropdown-item" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}', 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
+        return `<li><a class="dropdown-item" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}')"><i class="bi bi-toggle-${status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>`;
     }
 
     function renderDeleteAction(level, rowId, deleteFnName) {
@@ -77,21 +62,15 @@
     }
 
     function statusActionText(newStatus) {
-        if (newStatus === 'ARCHIVED') {
-            return 'archive';
-        }
         return newStatus === 'ACTIVE' ? 'activate' : 'deactivate';
     }
 
     function statusActionTitle(newStatus, noun) {
-        if (newStatus === 'ARCHIVED') {
-            return 'Archive ' + noun;
-        }
         return (newStatus === 'ACTIVE' ? 'Activate ' : 'Deactivate ') + noun;
     }
 
     function statusSuccessText(noun, actionText) {
-        return noun + ' ' + (actionText === 'archive' ? 'archived' : actionText + 'd') + ' successfully';
+        return noun + ' ' + (actionText + 'd') + ' successfully';
     }
 
 </script>

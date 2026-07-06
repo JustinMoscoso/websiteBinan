@@ -70,7 +70,6 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
-                            <option value="ARCHIVED">Archived</option>
                         </select>
                     </div>
 
@@ -219,4 +218,4 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
+

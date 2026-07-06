@@ -567,15 +567,7 @@
                           <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
-                    if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
-                        var statusIcon = row.status === 'ACTIVE' ? 'bi-toggle-on' : 'bi-toggle-off';
-                        var statusText = row.status === 'ACTIVE' ? 'Deactivate' : 'Activate';
-
-                        actionHtml += `
-                            <li><a class="dropdown-item" href="#" onclick="toggleStatus(${row.ID}, '${row.status}')"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
-                    }
-
-                    actionHtml += renderArchiveRestoreAction(userLevel, row, 'toggleStatus');
+                    actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
                     actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteService');
 
                     actionHtml += `</ul></div>`;

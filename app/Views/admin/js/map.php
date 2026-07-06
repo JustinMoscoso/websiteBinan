@@ -489,11 +489,6 @@
                             var statusFunc = row.status === 'ACTIVE' ? 'deactivate' : 'activate';
                             actions += `<li><a class="dropdown-item" href="#" onclick="${statusFunc}(${row.ID})"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
-                        if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
-                            actions += `<li><a class="dropdown-item" href="#" onclick="setMapStatus(${row.ID}, 'ACTIVE')"><i class="bi bi-arrow-counterclockwise me-1"></i> Restore</a></li>`;
-                        } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
-                            actions += `<li><a class="dropdown-item text-warning" href="#" onclick="setMapStatus(${row.ID}, 'ARCHIVED')"><i class="bi bi-archive me-1"></i> Archive</a></li>`;
-                        }
                         if (adminCanDelete(userLevel)) {
                             actions += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="deleteMap(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
                         }

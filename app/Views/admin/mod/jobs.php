@@ -20,7 +20,7 @@
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0" name="search"
-                                placeholder="Search Title / Company / Email">
+                                placeholder="Search Title / Company">
                         </div>
                     </div>
 
@@ -41,7 +41,6 @@
                             <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
-                            <option value="ARCHIVED">Archived</option>
                         </select>
                     </div>
 

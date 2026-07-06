@@ -160,7 +160,7 @@
                     "data": "title",
                     "render": function (data, type, row) {
                         if (type === 'display') {
-                            return '<strong>' + data + '</strong>';
+                            return  data;
                         }
                         return data;
                     }
@@ -243,11 +243,6 @@
                             if ((userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') && row.status !== 'ARCHIVED') {
                                 actionHtml += `
                                 <li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}"><i class="bi bi-toggle-${row.status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${row.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>`;
-                            }
-                            if (row.status === 'ARCHIVED' && adminCanRestore(userLevel)) {
-                                actionHtml += `<li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}" data-forced-status="ACTIVE"><i class="bi bi-arrow-counterclockwise me-1"></i>Restore</a></li>`;
-                            } else if (row.status !== 'ARCHIVED' && adminCanArchive(userLevel)) {
-                                actionHtml += `<li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}" data-forced-status="ARCHIVED"><i class="bi bi-archive me-1"></i>Archive</a></li>`;
                             }
                             if (adminCanDelete(userLevel)) {
                                 actionHtml += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item delete-job" href="#" data-id="${row.ID}"><i class="bi bi-trash me-1"></i>Delete</a></li>`;

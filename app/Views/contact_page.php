@@ -116,7 +116,7 @@
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="<?= base_url('assets/js/sweetalert.js') ?>"></script>
 
 </body>
 

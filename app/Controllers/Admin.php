@@ -516,6 +516,18 @@ class Admin extends BaseController
             'browser' => $browserName,
         ];
 
+        if (str_starts_with($mode, 'set_status_')) {
+            $requestedStatus = $this->request->getPost('status');
+            if ($requestedStatus !== null && !in_array(strtoupper(trim((string) $requestedStatus)), ['ACTIVE', 'INACTIVE'], true)) {
+                echo json_encode([
+                    'status' => 0,
+                    'data' => [],
+                    'message' => 'Invalid status value',
+                ]);
+                return;
+            }
+        }
+
         switch ($mode) {
 
             /* -------------------
@@ -731,14 +743,8 @@ class Admin extends BaseController
                     break;
                 }
 
-                if (!in_array($deptStatus, ['ACTIVE', 'INACTIVE', 'ARCHIVED'], true)) {
+                if (!in_array($deptStatus, ['ACTIVE', 'INACTIVE'], true)) {
                     $message = 'Invalid department status.';
-                    break;
-                }
-
-                // Encoders cannot archive a department
-                if ($user->user_lvl === 'ENCODER' && $deptStatus === 'ARCHIVED') {
-                    $message = 'Encoders are not permitted to archive a department.';
                     break;
                 }
 
@@ -1004,7 +1010,7 @@ class Admin extends BaseController
                         $message = 'Barangay not found';
                     }
                 } else {
-                    $builder = $brgy_m->orderBy('created_date', 'desc');
+                    $builder = $brgy_m->orderBy("brgy_name" ,"ASC");
                     if (($user->user_lvl === 'ENCODER' && $user->account_type === 'BARANGAY') || $isBrgyScopedAdmin) {
                         $builder->where('ID', $user->entity_ref_id);
                     }
@@ -1025,7 +1031,7 @@ class Admin extends BaseController
                         $builder->where('status', $status);
                     }
 
-                    $brgy_d = $builder->findAll();
+                    $brgy_d = $builder->findAll(10);
 
                     foreach ($brgy_d as $brgy) {
                         $data[] = $brgy;
@@ -1110,7 +1116,7 @@ class Admin extends BaseController
                         $builder->where('status', $status);
                     }
 
-                    $deptData = $builder->findAll();
+                    $deptData = $builder->findAll(10);
 
                     foreach ($deptData as $dept) {
                         $data[] = $dept;
@@ -1575,7 +1581,7 @@ class Admin extends BaseController
 
                     $career_builder = $career_m
                         ->where('category', 'CAREER')
-                        ->orderBy('created_date', 'desc');
+                        ->orderBy('publication_date', 'desc');
                     // Non-privileged users cannot see archived career postings
                     if (!$canSeeArchived) {
                         $career_builder->where('status !=', 'ARCHIVED');
@@ -1604,7 +1610,7 @@ class Admin extends BaseController
                     if (!empty($status_filter)) {
                         $career_builder->where('status', $status_filter);
                     }
-                    $career_d = $career_builder->findAll();
+                    $career_d = $career_builder->findAll(1000);
                     foreach ($career_d as $car) {
                         $data[] = $car;
                     }
@@ -1923,7 +1929,7 @@ class Admin extends BaseController
                 $type_filter  = $this->request->getPost('type');
                 $status_filter = $this->request->getPost('status');
 
-                $jobs_builder = $job_m->orderBy('created_date', 'desc');
+                $jobs_builder = $job_m->orderBy('title', 'asc');
                 // Non-privileged users cannot see archived jobs
                 if (!$canSeeArchived) {
                     $jobs_builder->where('status !=', 'ARCHIVED');
@@ -4280,7 +4286,7 @@ class Admin extends BaseController
                     $post = $anns_m->find($id);
                     $deptNames = $this->getDepartmentUserNames($user);
                     if ($post && !in_array($post->author, $deptNames)) {
-                        $message = 'Unauthorized: You can only archive your own created data.';
+                        $message = 'Unauthorized: You can only manage your own created data.';
                         break;
                     }
                 }
@@ -4334,7 +4340,7 @@ class Admin extends BaseController
 
             case 'delete_fulldiscpol': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4365,7 +4371,7 @@ class Admin extends BaseController
 
             case 'delete_contacts': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4408,7 +4414,7 @@ class Admin extends BaseController
 
             case 'delete_invest': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4436,7 +4442,7 @@ class Admin extends BaseController
 
             case 'delete_careers': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4489,7 +4495,7 @@ class Admin extends BaseController
 
             case 'delete_mayor': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4517,7 +4523,7 @@ class Admin extends BaseController
 
             case 'delete_postcontent': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4556,7 +4562,7 @@ class Admin extends BaseController
 
             case 'delete_about': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4610,7 +4616,7 @@ class Admin extends BaseController
 
             case 'delete_services': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4644,7 +4650,7 @@ class Admin extends BaseController
 
             case 'delete_map': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     $status = 0;
                     break;
                 }
@@ -4807,7 +4813,7 @@ class Admin extends BaseController
                     break;
                 }
 
-                if (!in_array($statusVal, ['ACTIVE', 'INACTIVE', 'ARCHIVED'])) {
+                if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'], true)) {
                     $message = 'Invalid status value';
                     break;
                 }
@@ -4839,7 +4845,7 @@ class Admin extends BaseController
             }
             case 'delete_job': {
                 if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts can archive records, but cannot delete them.';
+                    $message = 'Unauthorized access. Department accounts cannot delete records.';
                     break;
                 }
 

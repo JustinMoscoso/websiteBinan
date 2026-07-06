@@ -46,7 +46,6 @@
                             <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
-                            <option value="ARCHIVED">Archived</option>
                         </select>
                     </div>
 
