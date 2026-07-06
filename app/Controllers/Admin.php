@@ -1770,7 +1770,7 @@ class Admin extends BaseController
                     $builder->orderBy('service_content.created_date', 'desc');
 
                     // Get results
-                    $results = $builder->findAll();
+                    $results = $builder->findAll(1000);
 
                     $data = [];
                     foreach ($results as $row) {
