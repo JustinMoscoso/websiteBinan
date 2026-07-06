@@ -462,7 +462,6 @@
         },
         columns: [
             { title: 'ID', data: 'ID', visible: false },
-            { title: 'Username', data: 'username' },
             {
                 title: 'Name', data: 'fname',
                 className: 'dt-head-center dt-body-justify', width: '15%',
@@ -470,7 +469,7 @@
                     return toPascalName(row.fname, row.mname, row.lname, row.suffix);
                 }
             },
-            { title: 'Email', data: 'email', visible: false },
+            { title: 'Username', data: 'username' },
             { title: 'Account Level', data: 'user_lvl' },
             {
                 title: 'Account Type', data: 'account_type', className: 'dt-center', defaultContent: 'System',
@@ -484,6 +483,7 @@
                     return '<span class="status-badge acctype-badge-system"><span class="status-dot acctype-dot-system"></span>System</span>';
                 }
             },
+            { title: 'Email', data: 'email', visible: false },
             {
                 title: 'Status', data: 'status', className: 'dt-center', width: '10%',
                 render: function (data) {
