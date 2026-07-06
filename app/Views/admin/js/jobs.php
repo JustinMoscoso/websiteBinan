@@ -244,9 +244,6 @@
                                 actionHtml += `
                                 <li><a class="dropdown-item toggle-status" href="#" data-id="${row.ID}" data-status="${row.status}"><i class="bi bi-toggle-${row.status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${row.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>`;
                             }
-                            if (adminCanDelete(userLevel)) {
-                                actionHtml += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item delete-job" href="#" data-id="${row.ID}"><i class="bi bi-trash me-1"></i>Delete</a></li>`;
-                            }
                         }
 
                         actionHtml += `
@@ -437,54 +434,6 @@
                                 icon: 'error',
                                 title: 'Error!',
                                 text: 'An error occurred while updating the status.'
-                            });
-                        }
-                    });
-                }
-            });
-        });
-
-        // Delete Job
-        $(document).on('click', '.delete-job', function () {
-            var jobId = $(this).data('id');
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '<?php echo site_url('admin/ajax/delete_job'); ?>',
-                        type: 'POST',
-                        data: { id: jobId },
-                        success: function (response) {
-                            if (response.status === 1) {
-                                table.ajax.reload();
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Deleted!',
-                                    text: response.message,
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error!',
-                                    text: response.message
-                                });
-                            }
-                        },
-                        error: function () {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: 'An error occurred while deleting the job.'
                             });
                         }
                     });

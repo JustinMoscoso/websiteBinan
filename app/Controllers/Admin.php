@@ -528,6 +528,15 @@ class Admin extends BaseController
             }
         }
 
+        if (str_starts_with($mode, 'delete_')) {
+            echo json_encode([
+                'status' => 0,
+                'data' => [],
+                'message' => 'Delete actions have been removed from the system.',
+            ]);
+            return;
+        }
+
         switch ($mode) {
 
             /* -------------------

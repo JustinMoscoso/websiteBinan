@@ -489,10 +489,6 @@
                             var statusFunc = row.status === 'ACTIVE' ? 'deactivate' : 'activate';
                             actions += `<li><a class="dropdown-item" href="#" onclick="${statusFunc}(${row.ID})"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
-                        if (adminCanDelete(userLevel)) {
-                            actions += `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="#" onclick="deleteMap(${row.ID})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
-                        }
-
                         actions += '</ul></div>';
                         return actions;
                     }
