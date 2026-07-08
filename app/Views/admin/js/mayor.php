@@ -85,7 +85,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: result.msg,
+                                text: result.message || result.msg || 'Unable to update status.',
                             });
                         }
                     }

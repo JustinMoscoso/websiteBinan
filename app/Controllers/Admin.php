@@ -2521,11 +2521,9 @@ class Admin extends BaseController
                 $section = $this->request->getPost('content_category');
                 $content = $this->request->getPost('perdata');
 
-                // Check if the section already exists
-                $existing_section = $may_m->where('section', $section)->first();
-
-                if ($existing_section) {
-                    $message = 'Only one entry per section';
+                // Only one ACTIVE record is allowed per section.
+                if ($this->mayorSectionHasActiveEntry($may_m, $section)) {
+                    $message = 'Only one active entry can exist for this section.';
                 } else {
                     // Prepare data for saving
                     $data = [
@@ -3494,15 +3492,15 @@ class Admin extends BaseController
                     $currentMayorImagesRaw = is_object($mayorcontent)
                         ? ($mayorcontent->mayor_img ?? '')
                         : (is_array($mayorcontent) ? ($mayorcontent['mayor_img'] ?? '') : '');
+                    $currentStatus = strtoupper(trim((string) ($mayorcontent->status ?? '')));
                     // Shared modal uses shared names; fall back to legacy edit-prefixed names
                     $mayor_name = $this->request->getPost('myrname')            ?: $this->request->getPost('editmyrname');
                     $section    = $this->request->getPost('content_category')   ?: $this->request->getPost('edit_content_category');
                     $content    = $this->request->getPost('perdata')             ?: $this->request->getPost('editperdata');
 
-                    // Check if the section already exists
-                    $existing_section = $may_m->where('section', $section)->where('id !=', $id)->first();
-                    if ($existing_section) {
-                        $message = 'Section already exists.';
+                    // Only block edits when this row is active and another active row already exists.
+                    if ($currentStatus === 'ACTIVE' && $this->mayorSectionHasActiveEntry($may_m, $section, (int) $id)) {
+                        $message = 'Only one active entry can exist for this section.';
                     } else {
                         // Prepare data for saving
                         $data = [
@@ -4282,6 +4280,11 @@ class Admin extends BaseController
                 $mayorRecord = $may_m->find($id);
                 if ($mayorRecord) {
                     $sect = $mayorRecord->section ?? '';
+                    if ($statusVal === 'ACTIVE' && $this->mayorSectionHasActiveEntry($may_m, $sect, (int) $id)) {
+                        $message = 'Only one active entry can exist for this section.';
+                        $status = 0;
+                        break;
+                    }
                     $data = [
                         'status' => $statusVal,
                         'updated_date' => date('Y-m-d H:i:s')
@@ -5083,6 +5086,32 @@ class Admin extends BaseController
     private function isValidPhilippineMobileNumber($value): bool
     {
         return (bool) preg_match('/^\+63\s9\d{2}\s\d{3}\s\d{4}$/', trim((string) $value));
+    }
+
+    private function mayorSectionHasActiveEntry($mayorModel, ?string $section, ?int $excludeId = null): bool
+    {
+        $needle = strtolower(trim((string) $section));
+        if ($needle === '') {
+            return false;
+        }
+
+        $rows = $mayorModel->select('ID, section')
+            ->where('status', 'ACTIVE')
+            ->findAll();
+
+        foreach ($rows as $row) {
+            $rowId = is_object($row) ? (int) ($row->ID ?? 0) : (int) ($row['ID'] ?? 0);
+            if ($excludeId !== null && $rowId === (int) $excludeId) {
+                continue;
+            }
+
+            $rowSection = strtolower(trim((string) (is_object($row) ? ($row->section ?? '') : ($row['section'] ?? ''))));
+            if ($rowSection === $needle) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function fullDisclosurePolicyExists($policyModel, ?string $fileCategory, ?string $year, string $quarter, ?int $excludeId = null): bool
