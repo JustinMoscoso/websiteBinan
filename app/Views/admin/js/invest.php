@@ -30,13 +30,13 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -308,8 +308,8 @@
             "type": "POST",
             "data": function (d) {
                 d.search_kw = $('form#investSearchForm input[name="search"]').val();
-                d.category  = $('form#investSearchForm select[name="category"]').val();
-                d.status    = $('form#investSearchForm select[name="status"]').val();
+                d.category = $('form#investSearchForm select[name="category"]').val();
+                d.status = $('form#investSearchForm select[name="status"]').val();
             }
         },
         initComplete: function () {
@@ -320,7 +320,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tblinvest_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({
@@ -330,7 +330,7 @@
         },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
-            { "title": "File Category", "data": "file_category", width: '30%' },
+            { "title": "File Category", "data": "file_category", width: '30%', 'className': 'align-middle' },
             {
                 "title": "Date Created", "data": "created_date",
                 "render": function (data, type, row) {

@@ -32,13 +32,13 @@
                 var $modal = $(this);
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
-                
+
                 // Re-enforce lock down after a short delay for dynamic content loading
-                setTimeout(function() {
+                setTimeout(function () {
                     $modal.find('.ql-editor').attr('contenteditable', 'false');
                     $modal.find('.ql-toolbar').hide();
                 }, 100);
-                setTimeout(function() {
+                setTimeout(function () {
                     $modal.find('.ql-editor').attr('contenteditable', 'false');
                     $modal.find('.ql-toolbar').hide();
                 }, 500);
@@ -126,8 +126,8 @@
                 "type": "POST",
                 "data": function (d) {
                     d.search_kw = $('form#jobsSearchForm input[name="search"]').val();
-                    d.type      = $('form#jobsSearchForm select[name="type"]').val();
-                    d.status    = $('form#jobsSearchForm select[name="status"]').val();
+                    d.type = $('form#jobsSearchForm select[name="type"]').val();
+                    d.status = $('form#jobsSearchForm select[name="status"]').val();
                 },
                 "dataSrc": function (json) {
                     if (json.status === 1) {
@@ -146,7 +146,7 @@
                     'width': '250px',
                     'margin-left': '0.5rem'
                 });
-                
+
                 var lengthSelect = $('#tbljobs_length select');
                 lengthSelect.addClass('form-select form-select-sm d-inline-block');
                 lengthSelect.css({
@@ -158,9 +158,10 @@
                 {
                     "title": "Job Title",
                     "data": "title",
+                    "className": "align-middle",
                     "render": function (data, type, row) {
                         if (type === 'display') {
-                            return  data;
+                            return data;
                         }
                         return data;
                     }
@@ -168,6 +169,7 @@
                 {
                     "title": "Company",
                     "data": "company",
+                    "className": "align-middle",
                     "render": function (data, type, row) {
                         return data || 'N/A';
                     }
@@ -175,7 +177,7 @@
                 {
                     "title": "Job Type",
                     "data": "type",
-                    "className": "dt-center",
+                    "className": "dt-center align-middle",
                     "render": function (data, type, row) {
                         if (type === 'display') {
                             if (!data) return '<div class="d-flex justify-content-center">N/A</div>';
@@ -193,6 +195,7 @@
                 {
                     "title": "Publication Date",
                     "data": "publication_date",
+                    "className": "dt-center align-middle",
                     "render": function (data, type, row) {
                         if (type === 'display' && data) {
                             return moment(data).format('MMM DD, YYYY');

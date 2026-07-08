@@ -211,7 +211,9 @@
             </div>
 
             <!-- Desktop View Header -->
-            <h2 class="fw-bold text-dark mb-1 d-none d-lg-block">Sign Up</h2>
+            <h2 class="fw-bold text-dark mb-1 d-none d-lg-flex justify-content-center align-items-center">
+              Sign In
+            </h2>
           </div>
 
           <form method="post" autocomplete="off">

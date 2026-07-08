@@ -233,8 +233,15 @@
             });
         },
         columns: [
-            { "title": "ID", "data": "ID", "visible": false },
-            { "title": "Title", "data": "title" },
+
+            {
+                title: "Title",
+                data: "title",
+                className: "align-middle",
+                render: function (data) {
+                    return '<div class="d-flex justify-content-start">' + data + '</div>';
+                }
+            },
             { "title": "Author Name", "data": "author", width: '15%' },
             {
                 "title": "Date Created", "data": "created_date",

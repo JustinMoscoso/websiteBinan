@@ -88,7 +88,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="tblnews" class="table table-bordered table-hover align-middle w-100" cellspacing="0">
+                        <table id="tblnews" class="table table-bordered table-hover w-100" cellspacing="0">
                         </table>
                     </div>
                 </div>

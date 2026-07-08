@@ -30,13 +30,13 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -551,9 +551,9 @@
 
         // At least one telecom field must be filled
         const addContact = formData.get('contact') || '';
-        const addSmart   = formData.get('smart')   || '';
-        const addGlobe   = formData.get('globe')   || '';
-        const addTelco   = formData.get('telco')   || '';
+        const addSmart = formData.get('smart') || '';
+        const addGlobe = formData.get('globe') || '';
+        const addTelco = formData.get('telco') || '';
 
         if (!addContact && !addSmart && !addGlobe && !addTelco) {
             Swal.fire({
@@ -739,35 +739,35 @@
 
         $.ajax({
             url: '<?php echo site_url('admin/ajax/update_contact'); ?>',
-            method: 'POST',
-            data: formData,
+    method: 'POST',
+        data: formData,
             processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.status === 1) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    }).then(() => {
-                        $('#addModal').modal('hide');
-                        tbl.ajax.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Unable to update. Please try again later.'
-                });
-            }
+                contentType: false,
+                    success: function (response) {
+                        if (response.status === 1) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message
+                            }).then(() => {
+                                $('#addModal').modal('hide');
+                                tbl.ajax.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    },
+    error: function () {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Unable to update. Please try again later.'
+        });
+    }
         });
     }
     */
@@ -800,7 +800,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tblhotlines_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({
@@ -811,7 +811,7 @@
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
             {
-                "title": "Office", "data": "office", width: '25%',
+                "title": "Office", "data": "office", width: '25%', 'className': 'align-middle',
                 "render": function (data, type, row) {
                     if (row.brgy_name) {
                         return row.brgy_name;
@@ -827,6 +827,7 @@
             {
                 "title": "PLDT LOCAL ",
                 "data": "number",
+                "className": "align-middle",
                 "render": function (data) {
                     return data ? formatPhilippineLandline(data) : '-';
                 }
@@ -834,6 +835,7 @@
             {
                 "title": "SMART",
                 "data": "smart",
+                "className": "align-middle",
                 "render": function (data) {
                     return data ? formatPhilippineMobile(data) : '-';
                 }
@@ -841,6 +843,7 @@
             {
                 "title": "GLOBE",
                 "data": "globe",
+                "className": "align-middle",
                 "render": function (data) {
                     return data ? formatPhilippineMobile(data) : '-';
                 }
@@ -848,6 +851,7 @@
             {
                 "title": "INTELCO",
                 "data": "telco",
+                "className": "align-middle",
                 "render": function (data) {
                     return data ? formatPhilippineLandline(data) : '-';
                 }
@@ -855,7 +859,7 @@
             {
                 "title": "Status",
                 "data": "status",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 width: '10%',
                 "render": function (data, type, row) {
                     var status = data;
@@ -871,7 +875,7 @@
             {
                 "title": "Actions",
                 "data": "ID",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 "render": function (data, type, row) {
                     if (userLevel === 'VIEWER') {
                         return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
