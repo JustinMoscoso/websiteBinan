@@ -43,6 +43,15 @@
         return `<li><a class="dropdown-item" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}')"><i class="bi bi-toggle-${status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>`;
     }
 
+    function renderDeleteAction(level, id, deleteFnName) {
+        const normalizedLevel = (level || '').toUpperCase();
+        if (!['DEVELOPER', 'SUPERADMIN', 'ADMIN'].includes(normalizedLevel)) {
+            return '';
+        }
+
+        return `<li><a class="dropdown-item text-danger" href="#" onclick="${deleteFnName}(${id}); return false;"><i class="bi bi-trash me-1"></i>Delete</a></li>`;
+    }
+
     function nextRecordStatus(currentStatus, forcedStatus) {
         if (forcedStatus) {
             return forcedStatus;

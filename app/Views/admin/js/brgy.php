@@ -391,52 +391,6 @@
         });
     }
 
-    function deleteBrgy(id) {
-        Swal.fire({
-            heightAuto: false,
-            title: 'Delete Barangay',
-            text: "Are you sure you want to delete this barangay? This action cannot be undone.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#c0392b',
-            cancelButtonColor: '#7f8c8d',
-            confirmButtonText: 'Yes, Delete',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Deleting...',
-                    showConfirmButton: false,
-                    backdrop: true,
-                    scrollbarPadding: false,
-                    allowEscapeKey: () => !Swal.isLoading(),
-                    allowOutsideClick: () => !Swal.isLoading(),
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-                $.post("<?php echo site_url('admin/ajax/delete_barangay') ?>",
-                    { id: id },
-                    function (result) {
-                        if (result.status == 1) {
-                            tbl.ajax.reload(null, false);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Deleted',
-                                text: 'Barangay deleted successfully'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: result.message || 'Failed to delete barangay',
-                            });
-                        }
-                    }
-                );
-            }
-        });
-    }
-
     var tbl = $('#tblbrgy').DataTable({
         select: false,
         searching: true,
@@ -545,7 +499,6 @@
                 <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                             actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
-                            actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteBrgy');
 
                             actionHtml += `</ul></div>`;
                             return actionHtml;

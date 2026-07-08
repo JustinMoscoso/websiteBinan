@@ -4610,32 +4610,6 @@ class Admin extends BaseController
                 break;
             }
 
-            case 'delete_barangay': {
-                if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts cannot delete barangays.';
-                    $status = 0;
-                    break;
-                }
-                // Only Developer and Superadmin can delete barangays
-                if (!in_array($user->user_lvl, ['DEVELOPER', 'SUPERADMIN'], true)) {
-                    $message = 'Unauthorized access.';
-                    $status = 0;
-                    break;
-                }
-                $brgy_m = new \App\Models\Barangay();
-                $id = $this->request->getPost('id');
-                if ($brgy_m->find($id)) {
-                    $brgy_m->delete($id);
-                    $message = 'Barangay deleted successfully.';
-                    $log_c['processDetails'] = 'BRGY_ID: ' . $id . ' - DELETED';
-                    $status = 1;
-                } else {
-                    $message = 'Barangay not found.';
-                    $status = 0;
-                }
-                break;
-            }
-
             case 'delete_services': {
                 if ($isSpecialDeptAdmin) {
                     $message = 'Unauthorized access. Department accounts cannot delete records.';
