@@ -477,6 +477,19 @@ class Home extends BaseController
             ->where('section', 'History')
             ->findAll();
 
+        usort($about_d, static function ($left, $right) {
+            $leftTitle = trim((string) ($left->title ?? ''));
+            $rightTitle = trim((string) ($right->title ?? ''));
+            $leftYear = preg_match('/\d{3,4}/', $leftTitle, $leftMatch) ? (int) $leftMatch[0] : PHP_INT_MAX;
+            $rightYear = preg_match('/\d{3,4}/', $rightTitle, $rightMatch) ? (int) $rightMatch[0] : PHP_INT_MAX;
+
+            if ($leftYear === $rightYear) {
+                return strnatcasecmp($leftTitle, $rightTitle);
+            }
+
+            return $leftYear <=> $rightYear;
+        });
+
         $data['history_content'] = $about_d;
         return view('history', $data);
     }

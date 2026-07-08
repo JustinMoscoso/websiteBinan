@@ -147,7 +147,7 @@
 						<?= isset($knowmore['title']) ? esc($knowmore['title']) : 'Biñan City' ?>
 					</h1>
 					<p class="text-white">
-						<?= isset($knowmore['description']) ? esc($knowmore['description']) : 'No content' ?>
+						<?= isset($knowmore['description']) ? esc(trim(strip_tags(html_entity_decode($knowmore['description'])))) : 'No content' ?>
 					</p>
 					<div class="morebutton text-uppercase mx-auto d-block">
 						<a href="<?= base_url('/history') ?>">Know more about Biñan</a>

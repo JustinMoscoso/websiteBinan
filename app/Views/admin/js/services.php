@@ -467,7 +467,7 @@
         select: false,
         searching: true,
         ordering: true,
-        "order": [],
+        "order": [[6, 'asc'], [4, 'asc'], [5, 'asc'], [2, 'asc']],
         pageLength: 10,
         processing: true,
         ajax: {
@@ -510,9 +510,9 @@
                 },
                 "visible": false
             },
-            { "title": "Services", "data": "serv_name", "className": "align-middle" },
+            { "title": "Service Title", "data": "serv_name", "className": "align-middle" },
             {
-                "title": "Content", "data": "content", "className": "dt-head-center dt-body-justify align-middle", width: '35%',
+                "title": "Description", "data": "content", "className": "dt-head-center dt-body-justify align-middle", width: '35%',
                 "render": function (data, type, row) {
                     if (!data) return '—';
                     // Strip HTML tags from Quill-generated content for plain-text display in table
@@ -525,11 +525,17 @@
             {
                 "title": "Category", "data": "service_scope", "className": "align-middle", width: '16%',
                 "render": function (data, type, row) {
+                    if (type === 'sort' || type === 'type') {
+                        var scope = String(data || '').toUpperCase();
+                        if (scope === 'DEPARTMENT') return 0;
+                        if (scope === 'BARANGAY') return 1;
+                        return 2;
+                    }
                     return data || 'Unknown';
                 }
             },
             {
-                "title": "Office / Locality", "data": "service_entity_name", width: '24%', 'className': 'dt-body-justify align-middle',
+                "title": "Office / Barangay", "data": "service_entity_name", width: '24%', 'className': 'dt-body-justify align-middle',
                 "render": function (data, type, row) {
                     return data || '—';
                 }

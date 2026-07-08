@@ -459,7 +459,7 @@
                             select: false,
                         searching: true,
                         ordering: true,
-                        "order": [],
+                        "order": [[5, 'asc'], [1, 'asc'], [2, 'asc']],
                         pageLength: 10,
                         processing: true,
                         ajax: {

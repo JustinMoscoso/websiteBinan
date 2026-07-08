@@ -33,7 +33,6 @@
                             <option value="History">History</option>
                             <option value="Content">About - Content</option>
                             <option value="Emergency Hotlines">Emergency Hotlines</option>
-                            <option value="Header">Header</option>
                         </select>
                     </div>
 

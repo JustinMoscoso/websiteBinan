@@ -167,13 +167,6 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                             </select>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="serviceName" class="form-label small fw-bold text-secondary">Service
-                                <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="serviceName" name="serviceName"
-                                placeholder="Enter Service Title" required>
-                        </div>
-
                         <div class="col-12">
                             <div id="deptGroup" style="display:none;">
                                 <label for="txtDept" class="form-label small fw-bold text-secondary">Department
@@ -190,6 +183,13 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                                     <option selected disabled value="">Select Barangay</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="serviceName" class="form-label small fw-bold text-secondary">Service
+                                <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="serviceName" name="serviceName"
+                                placeholder="Enter Service Title" required>
                         </div>
                     <?php endif; ?>
 
