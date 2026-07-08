@@ -81,7 +81,7 @@
 
                         <select class="form-control form-select bg-light border-secondary-subtle" name="frequency"
                             style="height: 38px; cursor: pointer;">
-                            <option value="">Search Frequencies</option>
+                            <option value="">Select Frequencies</option>
                             <option value="ANNUAL">Annual</option>
                             <option value="QUARTERLY">Quarterly</option>
                         </select>
