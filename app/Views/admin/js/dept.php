@@ -30,13 +30,13 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -538,7 +538,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tbldept_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({
@@ -548,7 +548,7 @@
         },
         columns: [
             { "title": "Department ID", "data": "ID", "visible": false },
-            { "title": "Dept. Name", "data": "dept_name", width: '30%' },
+            { "title": "Department", "data": "dept_name", width: '30%', 'className': 'align-middle' },
             {
                 "title": "Logo",
                 "data": "img_logo",
@@ -560,11 +560,11 @@
                     return '<div class="dept-logo-thumb"><img id="img_logo" src="' + getDeptImageUrl(data, row.updated_date) + '" alt="Department logo"></div>';
                 }
             },
-            { "title": "Officer in Charge", "data": "head", width: '25%' },
+            { "title": "Officer in Charge", "data": "head", width: '25%', 'className': 'align-middle' },
             {
                 "title": "Status",
                 "data": "status",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 width: '10%',
                 "render": function (data, type, row) {
                     if (data == 'ACTIVE') {
@@ -579,7 +579,7 @@
             {
                 "title": "Actions",
                 "data": "ID",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 "render": function (data, type, row) {
                     if (userLevel === 'VIEWER') {
                         return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">

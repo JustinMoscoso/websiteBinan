@@ -166,9 +166,9 @@
             cityOffState.currentImages.forEach(function (image) {
                 html.push(
                     '<div style="display: inline-block; margin: 5px;" class="image-container">' +
-                        '<img src="' + cityOffImageBaseUrl + image + '" alt="Carousel Image" style="max-width: 100px; margin: 5px;">' +
-                        '<br><small>' + image + '</small>' +
-                        '<br><button type="button" class="btn btn-danger btn-sm remove-image" data-image="' + image + '" style="margin-top: 5px;">Remove</button>' +
+                    '<img src="' + cityOffImageBaseUrl + image + '" alt="Carousel Image" style="max-width: 100px; margin: 5px;">' +
+                    '<br><small>' + image + '</small>' +
+                    '<br><button type="button" class="btn btn-danger btn-sm remove-image" data-image="' + image + '" style="margin-top: 5px;">Remove</button>' +
                     '</div>'
                 );
             });
@@ -182,8 +182,8 @@
             var url = URL.createObjectURL(file);
             html.push(
                 '<div style="display: inline-block; margin: 5px;" class="image-container">' +
-                    '<img src="' + url + '" alt="Selected Carousel Image" style="max-width: 100px; margin: 5px;">' +
-                    '<br><small>' + file.name + '</small>' +
+                '<img src="' + url + '" alt="Selected Carousel Image" style="max-width: 100px; margin: 5px;">' +
+                '<br><small>' + file.name + '</small>' +
                 '</div>'
             );
         });
@@ -699,12 +699,19 @@
         },
         columns: [
             { title: 'City Official ID', data: 'ID', visible: false },
-            { title: 'Official Name', data: 'off_name' },
-            { title: 'Position', data: 'off_position', width: '15%' },
+            {
+                title: "Title",
+                data: "off_name",
+                className: "align-middle",
+                render: function (data) {
+                    return '<div class="d-flex justify-content-start">' + data + '</div>';
+                }
+            },
+            { title: 'Position', data: 'off_position', width: '15%', 'className': 'align-middle' },
             {
                 title: 'Rank',
                 data: 'ranking',
-                className: 'dt-center',
+                className: 'dt-center align-middle',
                 width: '5%',
                 render: function (data) {
                     return data ? data : '-';
@@ -764,7 +771,7 @@
             {
                 title: 'Status',
                 data: 'status',
-                className: 'dt-center',
+                className: 'dt-center align-middle',
                 width: '10%',
                 render: function (data) {
                     if (data == 'ACTIVE') {
@@ -778,7 +785,7 @@
             {
                 title: 'Actions',
                 data: 'ID',
-                className: 'dt-center',
+                className: 'dt-center align-middle',
                 render: function (data, type, row) {
                     var recordId = row.ID || row.id;
 

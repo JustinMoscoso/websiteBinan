@@ -33,11 +33,11 @@
             $modal.find('.ql-toolbar').hide();
 
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -519,8 +519,8 @@
             "type": "POST",
             "data": function (d) {
                 d.search_kw = $('form#mayorSearchForm input[name="search"]').val();
-                d.category  = $('form#mayorSearchForm select[name="category"]').val();
-                d.status    = $('form#mayorSearchForm select[name="status"]').val();
+                d.category = $('form#mayorSearchForm select[name="category"]').val();
+                d.status = $('form#mayorSearchForm select[name="status"]').val();
             },
             "dataSrc": function (json) {
                 if (json.data && Array.isArray(json.data)) {
@@ -551,9 +551,9 @@
         },
         columns: [
             { "title": "ID", "data": "ID", "className": "dt-center", width: '20%', "visible": false },
-            { "title": "Section", "data": "section", "className": "dt-body-justify", width: '10%' },
+            { "title": "Section", "data": "section", "className": "dt-body-justify align-middle", width: '10%' },
             {
-                "title": "Content", "data": "content", "className": "dt-body-justify", width: '50%',
+                "title": "Content", "data": "content", "className": "dt-body-justify align-middle ", width: '50%',
                 "render": function (data, type, row) {
                     var text = data.replace(/<[^>]*>?/gm, '');
                     if (typeof text === 'string' && text.length > 500) {
@@ -563,7 +563,7 @@
                 }
             },
             {
-                "title": "Image", "data": "mayor_img", "className": "dt-center", width: '20%',
+                "title": "Image", "data": "mayor_img", "className": "dt-center align-middle", width: '20%',
                 "render": function (data, type, row) {
                     var imageHtml = '';
                     if (data && data.length > 0) {
@@ -579,7 +579,7 @@
             {
                 "title": "Status",
                 "data": "status",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 width: '10%',
                 "render": function (data, type, row) {
                     var status = data;
@@ -595,7 +595,7 @@
             {
                 "title": "Actions",
                 "data": "ID",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 "render": function (data, type, row) {
                     if (userLevel === 'VIEWER') {
                         return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">

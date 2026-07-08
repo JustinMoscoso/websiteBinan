@@ -12,22 +12,22 @@
     }
 
     function toPascalName(fname, mname, lname, suffix) {
-        var last  = toTitleCase(lname  || '');
-        var first = toTitleCase(fname  || '');
-        var mid   = toTitleCase(mname  || '');
-        var suf   = toTitleCase(suffix || '');
-        var full  = last + ', ' + first;
-        if (mid)  full += ' ' + mid;
-        if (suf)  full += ' ' + suf;
+        var last = toTitleCase(lname || '');
+        var first = toTitleCase(fname || '');
+        var mid = toTitleCase(mname || '');
+        var suf = toTitleCase(suffix || '');
+        var full = last + ', ' + first;
+        if (mid) full += ' ' + mid;
+        if (suf) full += ' ' + suf;
         return full;
     }
 
     // ── Auto Title-Case name inputs ───────────────────────────────────────
     $(document).on('input blur', '#txtFirstName, #txtMiddleName, #txtLastName', function () {
-        var el    = this;
+        var el = this;
         var start = el.selectionStart;
-        var end   = el.selectionEnd;
-        el.value  = toTitleCase(el.value);
+        var end = el.selectionEnd;
+        el.value = toTitleCase(el.value);
         if (el.setSelectionRange) { el.setSelectionRange(start, end); }
     });
 
@@ -53,11 +53,11 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -85,7 +85,7 @@
 
     // ── Entity Ref helpers ────────────────────────────────────────────────
     function loadEntityOptions(type, selectId, hintId, currentVal) {
-        var $raw  = $(selectId);
+        var $raw = $(selectId);
         var $hint = $(hintId);
 
         if ($raw[0] && $raw[0].selectize) {
@@ -96,11 +96,11 @@
 
         var url, labelKey;
         if (type === 'DEPARTMENT') {
-            url      = '<?= site_url('admin/ajax/get_dept') ?>';
+            url = '<?= site_url('admin/ajax/get_dept') ?>';
             labelKey = 'dept_name';
             if ($hint && $hint.length) $hint.text('Select the department this account manages.');
         } else if (type === 'BARANGAY') {
-            url      = '<?= site_url('admin/ajax/get_barangay') ?>';
+            url = '<?= site_url('admin/ajax/get_barangay') ?>';
             labelKey = 'brgy_name';
             if ($hint && $hint.length) $hint.text('Select the barangay this account manages.');
         } else {
@@ -120,12 +120,12 @@
             }
 
             $raw.selectize({
-                sortField:       'text',
-                searchField:     'text',
-                placeholder:     'Select department / barangay',
+                sortField: 'text',
+                searchField: 'text',
+                placeholder: 'Select department / barangay',
                 allowEmptyOption: true,
-                allowClear:      true,
-                onInitialize:    function () {
+                allowClear: true,
+                onInitialize: function () {
                     if (currentVal) {
                         this.setValue(String(currentVal));
                     } else {
@@ -203,8 +203,8 @@
             $('#txtPassword').removeAttr('required');
 
             // Populate Account Level dropdown
-            var targetRole  = (record.user_lvl || '').toUpperCase();
-            var $editLvl    = $('#txtAccLevel');
+            var targetRole = (record.user_lvl || '').toUpperCase();
+            var $editLvl = $('#txtAccLevel');
             $editLvl.empty();
             $editLvl.append('<option value="" disabled>Select Level</option>');
             if (userLevel === 'DEVELOPER') {
@@ -236,8 +236,8 @@
 
     // ── Unified submit handler ────────────────────────────────────────────
     $('#btnAdd').on('click', function () {
-        var mode     = $('#userMode').val();
-        var form     = $('#addForm')[0];
+        var mode = $('#userMode').val();
+        var form = $('#addForm')[0];
         var formData = new FormData(form);
 
         // Explicitly set ID for edit
@@ -258,11 +258,12 @@
 
         // Validation
         var basicFields = [
-            { name: 'txtFirstName',  label: 'First Name'     },
-            { name: 'txtLastName',   label: 'Last Name'       },
-            { name: 'txtUsername',   label: 'Username'        },
-            { name: 'txtEmail',      label: 'Email'           },
-            { name: 'txtAccLevel',   label: 'Account Level'   }
+            { name: 'txtFirstName', label: 'First Name' },
+            { name: 'txtMiddleName', label: 'Middle Name' },
+            { name: 'txtLastName', label: 'Last Name' },
+            { name: 'txtUsername', label: 'Username' },
+            { name: 'txtEmail', label: 'Email' },
+            { name: 'txtAccLevel', label: 'Account Level' }
         ];
         for (var f of basicFields) {
             if (!formData.get(f.name)) {
@@ -277,7 +278,7 @@
             return;
         }
 
-        var acctType  = formData.get('txtAccountType');
+        var acctType = formData.get('txtAccountType');
         var acctLevel = formData.get('txtAccLevel') || '';
         var needsEntity = !HIGH_PRIV.includes(acctLevel.toUpperCase())
             && userLevel !== 'ADMIN'
@@ -371,7 +372,7 @@
 
     // ── toggleStatus ──────────────────────────────────────────────────────
     function toggleStatus(userId, currentStatus, forcedStatus) {
-        var newStatus  = nextRecordStatus(currentStatus, forcedStatus);
+        var newStatus = nextRecordStatus(currentStatus, forcedStatus);
         var actionText = statusActionText(newStatus);
 
         Swal.fire({
@@ -450,8 +451,8 @@
                 xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             },
             data: function (d) {
-                d.searchUser      = $('#searchUser').val();
-                d.searchStatus    = $('#searchStatus').val();
+                d.searchUser = $('#searchUser').val();
+                d.searchStatus = $('#searchStatus').val();
                 d.searchUserLevel = $('#searchUserLevel').val();
             },
             dataSrc: function (json) {
@@ -463,15 +464,22 @@
             { title: 'ID', data: 'ID', visible: false },
             {
                 title: 'Name', data: 'fname',
-                className: 'dt-head-center dt-body-justify', width: '15%',
+                className: 'dt-head-center dt-body-justify d-flex justify-content-start', width: '15%',
                 render: function (data, type, row) {
                     return toPascalName(row.fname, row.mname, row.lname, row.suffix);
                 }
             },
-            { title: 'Username', data: 'username' },
-            { title: 'Account Level', data: 'user_lvl' },
             {
-                title: 'Account Type', data: 'account_type', className: 'dt-center', defaultContent: 'System',
+                title: "Title",
+                data: "username",
+                className: "align-middle",
+                render: function (data) {
+                    return '<div class="d-flex justify-content-start">' + data + '</div>';
+                }
+            },
+            { title: 'Account Level', data: 'user_lvl', 'className': 'align-middle' },
+            {
+                title: 'Account Type', data: 'account_type', className: 'dt-center align-middle', defaultContent: 'System',
                 render: function (data) {
                     if (data === 'DEPARTMENT') {
                         return '<span class="status-badge acctype-badge-dept"><span class="status-dot acctype-dot-dept"></span>Department</span>';
@@ -484,15 +492,15 @@
             },
             { title: 'Email', data: 'email', visible: false },
             {
-                title: 'Status', data: 'status', className: 'dt-center', width: '10%',
+                title: 'Status', data: 'status', className: 'dt-center align-middle', width: '10%',
                 render: function (data) {
-                    if (data === 'ACTIVE')   return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
+                    if (data === 'ACTIVE') return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
                     if (data === 'INACTIVE') return '<span class="status-badge status-badge-inactive"><span class="status-dot status-dot-inactive"></span>Inactive</span>';
                     return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>Archived</span>';
                 }
             },
             {
-                title: 'Actions', data: 'ID', className: 'dt-center',
+                title: 'Actions', data: 'ID', className: 'dt-center align-middle',
                 render: function (data, type, row) {
                     if (userLevel === 'VIEWER') {
                         return `<a class="btn btn-sm btn-outline-primary d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">

@@ -29,13 +29,13 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -461,7 +461,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tblbrgy_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({
@@ -471,7 +471,7 @@
         },
         columns: [
             { "title": "Barangay ID", "data": "ID", "visible": false },
-            { "title": "Barangay", "data": "brgy_name", width: '18%' },
+            { "title": "Barangay", "data": "brgy_name", width: '18%', "className": "align-middle" },
             {
                 "title": "Logo",
                 "data": "img_logo",
@@ -484,9 +484,9 @@
                     return '<div class="brgy-logo-thumb"><img id="img_logo" src="<?php echo base_url('admin/image/BARANGAY/') ?>' + data + '" alt="Barangay logo"></div>';
                 }
             },
-            { "title": "Captain", "data": "brngy_capt", width: '15%', "className": "dt-body-left" },
+            { "title": "Captain", "data": "brngy_capt", width: '15%', "className": "dt-body-left align-middle" },
             {
-                "title": "Barangay Staff", "data": "barangay_staff", width: '30%',
+                "title": "Barangay Staff", "data": "barangay_staff", width: '30%', 'className': 'dt-body-justify align-middle',
                 "render": function (data, type, row) {
                     if (data && data.trim() !== '') {
                         // Strip HTML tags and limit text length for table display
@@ -511,32 +511,32 @@
         */
     {
         "title": "Status",
-        "data": "status",
-        "className": "dt-center",
-        width: '10%',
-        "render": function (data, type, row) {
-            var status = data;
-            if (status == 'ACTIVE') {
-                return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
-            } else if (status == 'INACTIVE') {
-                return '<span class="status-badge status-badge-inactive"><span class="status-dot status-dot-inactive"></span>Inactive</span>';
-            } else {
-                return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>Archived</span>';
-            }
-        }
+            "data": "status",
+                "className": "dt-center align-middle",
+                    width: '10%',
+                        "render": function (data, type, row) {
+                            var status = data;
+                            if (status == 'ACTIVE') {
+                                return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
+                            } else if (status == 'INACTIVE') {
+                                return '<span class="status-badge status-badge-inactive"><span class="status-dot status-dot-inactive"></span>Inactive</span>';
+                            } else {
+                                return '<span class="status-badge status-badge-archived"><span class="status-dot status-dot-archived"></span>Archived</span>';
+                            }
+                        }
     },
     {
         "title": "Actions",
-        "data": "ID",
-        "className": "dt-center",
-        "width": '15%',
-        "render": function (data, type, row) {
-            if (userLevel === 'VIEWER') {
-                return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
+            "data": "ID",
+                "className": "dt-center align-middle",
+                    "width": '15%',
+                        "render": function (data, type, row) {
+                            if (userLevel === 'VIEWER') {
+                                return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
                     <i class="fas fa-eye"></i>
                 </a>`;
-            }
-            let actionHtml = `
+                            }
+                            let actionHtml = `
             <div class="dropdown">
               <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                 <i class="bi bi-list"></i> Actions
@@ -544,10 +544,12 @@
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
-            actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
-            actionHtml += `</ul></div>`;
-            return actionHtml;
-        }
+                            actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
+                            actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteBrgy');
+
+                            actionHtml += `</ul></div>`;
+                            return actionHtml;
+                        }
     },
     ]
 });

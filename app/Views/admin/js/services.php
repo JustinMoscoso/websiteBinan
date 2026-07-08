@@ -38,13 +38,13 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -492,7 +492,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tblservice_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({
@@ -510,9 +510,9 @@
                 },
                 "visible": false
             },
-            { "title": "Services", "data": "serv_name" },
+            { "title": "Services", "data": "serv_name", "className": "align-middle" },
             {
-                "title": "Content", "data": "content", "className": "dt-head-center dt-body-justify", width: '35%',
+                "title": "Content", "data": "content", "className": "dt-head-center dt-body-justify align-middle", width: '35%',
                 "render": function (data, type, row) {
                     if (!data) return '—';
                     // Strip HTML tags from Quill-generated content for plain-text display in table
@@ -523,13 +523,13 @@
                 }
             },
             {
-                "title": "Category", "data": "service_scope", width: '16%',
+                "title": "Category", "data": "service_scope", "className": "align-middle", width: '16%',
                 "render": function (data, type, row) {
                     return data || 'Unknown';
                 }
             },
             {
-                "title": "Office / Locality", "data": "service_entity_name", width: '24%',
+                "title": "Office / Locality", "data": "service_entity_name", width: '24%', 'className': 'dt-body-justify align-middle',
                 "render": function (data, type, row) {
                     return data || '—';
                 }
@@ -537,7 +537,7 @@
             {
                 "title": "Status",
                 "data": "status",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 width: '10%',
                 "render": function (data, type, row) {
                     var status = data;

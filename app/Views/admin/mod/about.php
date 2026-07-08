@@ -93,8 +93,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="tblabout" class="table table-bordered table-hover align-middle w-100"
-                            cellspacing="0">
+                        <table id="tblabout" class="table table-bordered table-hover w-100" cellspacing="0">
                         </table>
                     </div>
                 </div>
@@ -155,13 +154,13 @@
 
                     <div class="col-12">
                         <div id="AboutImgGrp" style="display: none;">
-                            <label for="AboutImg" class="form-label small fw-bold text-secondary" id="AboutImgLabel">Feature Illustration /
+                            <label for="AboutImg" class="form-label small fw-bold text-secondary"
+                                id="AboutImgLabel">Feature Illustration /
                                 Banner Image</label>
                             <input type="file" class="form-control" id="AboutImg" name="AboutImg" accept="image/*">
                             <div class="form-text text-muted">Accepted extensions: PNG, JPG, JPEG, WEBP.</div>
                             <!-- Image preview (shown in edit mode only) -->
-                            <div id="edit_img_preview"
-                                class="mt-3 p-2 border rounded bg-light text-center d-none"
+                            <div id="edit_img_preview" class="mt-3 p-2 border rounded bg-light text-center d-none"
                                 style="max-width: 250px;">
                             </div>
                         </div>
