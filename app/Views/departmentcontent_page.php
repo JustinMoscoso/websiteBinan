@@ -270,7 +270,7 @@ include_header(htmlspecialchars($dept->dept_name), $breadcrumbs, [
           </div>
           <?php if (!empty($dept->quality_policy)): ?>
           <div class="col-12 mb-4">
-            <h5 class="text-dark text-center">Policy Objectives</h5>
+            <h5 class="text-dark text-center">Quality Objectives</h5>
             <hr />
             <div><?= $dept->quality_policy ?></div>
           </div>
