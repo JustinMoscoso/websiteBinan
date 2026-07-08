@@ -259,7 +259,6 @@
         // Validation
         var basicFields = [
             { name: 'txtFirstName',  label: 'First Name'     },
-            { name: 'txtMiddleName', label: 'Middle Name'     },
             { name: 'txtLastName',   label: 'Last Name'       },
             { name: 'txtUsername',   label: 'Username'        },
             { name: 'txtEmail',      label: 'Email'           },

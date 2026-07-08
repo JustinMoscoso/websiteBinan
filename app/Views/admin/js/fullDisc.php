@@ -379,14 +379,13 @@
         select: false,
         searching: true,
         ordering: true,
-        "order": [],
+        "order": [[5, 'asc'], [2, 'desc'], [3, 'desc'], [1, 'asc']],
         pageLength: 10,
         processing: true,
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_fulldiscpol'); ?>",
             "type": "POST",
             "data": function (d) {
-                d.search = $('input[name="search"]').val();
                 d.frequency = $('select[name="frequency"]').val();
                 d.file_category = $('select[name="file_category"]').val();
                 d.status = $('select[name="status"]').val();
@@ -460,15 +459,12 @@
                         </a>`;
                     }
                     console.log("Rendering actions for row:", row.ID, "detected userLevel:", userLevel);
-                    var fileUrl = "<?php echo base_url('admin/preview_file/FULLDISC/'); ?>" + encodeURIComponent(row.file_name);
-
                     let actionHtml = `
                         <div class="dropdown">
                           <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
                             <i class="bi bi-list"></i> Actions
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="${fileUrl}" target="_blank"><i class="bi bi-eye me-1"></i>View File</a></li>
                             <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i>Edit</a></li>`;
 
                     actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
@@ -489,14 +485,6 @@
     $('#docSearchForm').on('submit', function (e) {
         e.preventDefault(); // stop page reload
 
-        // Grab values
-        const query = $('[name="search"]').val().trim();
-        const frequency = $('[name="frequency"]').val();
-        const category = $('[name="file_category"]').val();
-        const status = $('[name="status"]').val();
-
-        console.log("Searching for:", query, "Frequency:", frequency, "Category:", category, "Status:", status);
-
         // Example: reload your DataTable with filters
         tbl.ajax.reload();
     });
@@ -506,8 +494,6 @@
         // reset form fields
         $('#docSearchForm')[0].reset();
 
-        // also clear individual inputs if needed
-        $('[name="search"]').val('');
         $('[name="frequency"]').val('');
         $('[name="file_category"]').val('');
         $('[name="status"]').val('');
