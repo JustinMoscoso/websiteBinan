@@ -14,6 +14,51 @@
 
 <body>
 	<?php include "navbar.php"; ?>
+	<style>
+		.mayor-fixed-row {
+			display: flex;
+			align-items: center;
+			gap: 48px;
+			min-height: 400px;
+		}
+
+		.mayor-fixed-image {
+			flex: 0 0 330px;
+			display: flex;
+			justify-content: center;
+		}
+
+		.mayor-fixed-text {
+			flex: 1 1 auto;
+			max-width: 760px;
+		}
+
+		.mayor-message-content {
+			min-height: 150px;
+			overflow-wrap: anywhere;
+		}
+
+		@media (max-width: 767.98px) {
+			.mayor-fixed-row {
+				display: block;
+				min-height: unset;
+			}
+
+			.mayor-fixed-image {
+				display: flex;
+				justify-content: center;
+				margin-bottom: 1.5rem;
+			}
+
+			.mayor-fixed-text {
+				max-width: none;
+			}
+
+			.mayor-message-content {
+				min-height: unset;
+			}
+		}
+	</style>
 	<!--MAIN-->
 	<section data-aos="fade-up" id="hero" class="hero position-relative" style="overflow: hidden; min-height: 100vh;">
 		<!-- Responsive Video Background -->
@@ -43,9 +88,9 @@
 	<!-- Mayor's Message -->
 	<section data-aos="fade-up" class="sec mayorsec py-5" id="mayorsec">
 		<div class="container-fluid mayorbox border border-5 p-4 p-md-5" style="min-height: 500px;">
-			<div class="row g-4 align-items-center">
+			<div class="mayor-fixed-row">
 				<!-- Mayor Image -->
-				<div class="col-12 col-md-4 d-flex justify-content-center">
+				<div class="mayor-fixed-image">
 					<?php if (!empty($mayor_content) && !empty($mayor_content['mayor_img'])): ?>
 						<?php
 						$mayor_images = json_decode($mayor_content['mayor_img'], true);
@@ -65,7 +110,7 @@
 				</div>
 
 				<!-- Mayor Text Content -->
-				<div class="col-12 col-md-8 d-flex flex-column justify-content-center">
+				<div class="mayor-fixed-text">
 					<h1 class="mayorheader mb-3">
 						<b>Mayor's Message</b>
 					</h1>
