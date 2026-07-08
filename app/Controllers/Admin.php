@@ -2359,12 +2359,15 @@ class Admin extends BaseController
                     $message = 'Department name already exists.';
                 } else {
                     $logoName = $imgLogo->getRandomName();
-                    $orgChartName = $imgOrgChart ? $imgOrgChart->getRandomName() : null;
+                    $orgChartName = ($imgOrgChart && $imgOrgChart->isValid()) ? $imgOrgChart->getRandomName() : null;
 
                     $file_category = 'DEPT';
                     $path = WRITEPATH . 'uploads/' . $file_category;
 
                     if ($imgLogo->move($path, $logoName)) {
+                        if ($orgChartName && !$imgOrgChart->hasMoved()) {
+                            $imgOrgChart->move($path, $orgChartName);
+                        }
                         // Save other form data to the database
                         $data = [
                             'dept_name' => $dept_name,
