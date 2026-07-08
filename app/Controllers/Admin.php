@@ -1503,8 +1503,8 @@ class Admin extends BaseController
                         $message = 'Policy not found';
                     }
                 } else {
-                    $frequency = $this->request->getPost('frequency');
                     $file_category = $this->request->getPost('file_category');
+                    $year_filter = $this->request->getPost('year');
                     $status_filter = $this->request->getPost('status');
 
                     // Build the query with filters
@@ -1515,38 +1515,13 @@ class Admin extends BaseController
                         $query = $query->where('status !=', 'ARCHIVED');
                     }
 
-                    // Apply frequency filter
-                    if (!empty($frequency)) {
-                        if ($frequency === 'ANNUAL') {
-                            // Annual reports
-                            $annual_categories = [
-                                'Annual Budget Report',
-                                'Annual Procurement Plan or Procurement List',
-                                'Supplemental Procurement Plan',
-                                'Annual Gender and Development Accomplishment Report'
-                            ];
-                            $query = $query->whereIn('file_category', $annual_categories);
-                        } elseif ($frequency === 'QUARTERLY') {
-                            // Quarterly reports
-                            $quarterly_categories = [
-                                'Quarterly Statement of Cash Flow',
-                                'Statement of Receipts and Expenditures',
-                                '20% Component of the Internal Revenue Allotment Utilization',
-                                'Local Disaster Risk Reduction and Management Fund Utilization',
-                                'Report of Special Education Fund Utilization',
-                                'Trust Fund (PDAF) Utilization',
-                                'Unliquidated Cash Advances',
-                                'Bid Results on Civil Works and Goods and Services',
-                                'Manpower Complement',
-                                'Annual Statement of Indebtedness, Payments and Balances'
-                            ];
-                            $query = $query->whereIn('file_category', $quarterly_categories);
-                        }
-                    }
-
                     // Apply filters if they are provided and not empty
                     if (!empty($file_category) && $file_category !== '- File Category -') {
                         $query = $query->where('file_category', $file_category);
+                    }
+
+                    if (!empty($year_filter)) {
+                        $query = $query->where('year', $year_filter);
                     }
 
                     if (!empty($status_filter) && $status_filter !== '- Status -') {

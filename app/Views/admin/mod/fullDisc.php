@@ -73,18 +73,15 @@
                         </select>
                     </div>
 
-                    <!-- Frequency -->
+                    <!-- Year -->
                     <div class="col-xl-2 col-lg-3">
                         <label class="form-label small fw-bold text-secondary">
-                            Frequency
+                            Year
                         </label>
 
-                        <select class="form-control form-select bg-light border-secondary-subtle" name="frequency"
+                        <input type="text" class="form-control bg-light border-secondary-subtle yearpicker"
+                            id="searchYear" name="year" placeholder="Select Year" readonly
                             style="height: 38px; cursor: pointer;">
-                            <option value="">Select Frequencies</option>
-                            <option value="ANNUAL">Annual</option>
-                            <option value="QUARTERLY">Quarterly</option>
-                        </select>
                     </div>
 
                     <!-- Status -->
