@@ -242,6 +242,39 @@
         $preview.html(fallbackHtml || '');
     }
 
+    function getDeptImageUrl(fileName, cacheKey) {
+        return '<?php echo base_url('admin/image/DEPT/') ?>'
+            + encodeURIComponent(fileName)
+            + '?v='
+            + encodeURIComponent(cacheKey || fileName);
+    }
+
+    function renderExistingDeptImagePreview($preview, fileName, altText, emptyText, updatedDate) {
+        const cleanFileName = (fileName || '').toString().trim();
+
+        if (!cleanFileName) {
+            $preview.html($('<small>').text(emptyText));
+            return;
+        }
+
+        const $image = $('<img>', {
+            src: getDeptImageUrl(cleanFileName, updatedDate),
+            alt: altText
+        }).css({
+            'max-width': '120px',
+            'margin-top': '5px'
+        });
+
+        $image.on('error', function () {
+            $preview.html($('<small>', {
+                class: 'text-muted',
+                text: 'Image file not found on server.'
+            }));
+        });
+
+        $preview.empty().append($image);
+    }
+
     function openDeptModal(mode, record) {
         resetDeptModalState();
         deptState.mode = mode;
@@ -449,15 +482,19 @@
             success: function (response) {
                 if (response.status === 1) {
                     openDeptModal('edit', response.data);
-                    $('#addDeptLogoPreview').html(
-                        response.data.img_logo
-                            ? `<img src="<?php echo base_url('admin/image/DEPT/') ?>${response.data.img_logo}" alt="Current Department Logo" style="max-width: 120px; margin-top: 5px;">`
-                            : '<small>No logo available.</small>'
+                    renderExistingDeptImagePreview(
+                        $('#addDeptLogoPreview'),
+                        response.data.img_logo,
+                        'Current Department Logo',
+                        'No logo available.',
+                        response.data.updated_date
                     );
-                    $('#addDeptOrgChartPreview').html(
-                        response.data.org_chart_img
-                            ? `<img src="<?php echo base_url('admin/image/DEPT/') ?>${response.data.org_chart_img}" alt="Current Organizational Chart" style="max-width: 120px; margin-top: 5px;">`
-                            : '<small>No org chart available.</small>'
+                    renderExistingDeptImagePreview(
+                        $('#addDeptOrgChartPreview'),
+                        response.data.org_chart_img,
+                        'Current Organizational Chart',
+                        'No org chart available.',
+                        response.data.updated_date
                     );
                     $('#deptImg').val('');
                     $('#deptOrgChart').val('');
@@ -520,7 +557,7 @@
                     if (!data) {
                         return '<div class="dept-logo-thumb"><small class="text-muted">No logo</small></div>';
                     }
-                    return '<div class="dept-logo-thumb"><img id="img_logo" src="<?php echo base_url('admin/image/DEPT/') ?>' + data + '" alt="Department logo"></div>';
+                    return '<div class="dept-logo-thumb"><img id="img_logo" src="' + getDeptImageUrl(data, row.updated_date) + '" alt="Department logo"></div>';
                 }
             },
             { "title": "Officer in Charge", "data": "head", width: '25%', 'className': 'align-middle' },
@@ -558,8 +595,6 @@
                             <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
-                    actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteDept');
-
                     actionHtml += `</ul></div>`;
                     return actionHtml;
                 }

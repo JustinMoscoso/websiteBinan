@@ -35,23 +35,12 @@
         return monthNames[monthIndex] + ' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds + ' ' + ampm;
     }
 
-    function adminCanDelete(level) {
-        return ['SUPERADMIN', 'DEVELOPER'].includes((level || '').toUpperCase());
-    }
-
     function renderStatusToggleAction(level, row, toggleFnName) {
         const status = (row.status || '').toUpperCase();
         if (status === 'ARCHIVED') {
             return '';
         }
         return `<li><a class="dropdown-item" href="#" onclick="${toggleFnName}(${row.ID}, '${row.status}')"><i class="bi bi-toggle-${status === 'ACTIVE' ? 'on' : 'off'} me-1"></i>${status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</a></li>`;
-    }
-
-    function renderDeleteAction(level, rowId, deleteFnName) {
-        if (!adminCanDelete(level)) {
-            return '';
-        }
-        return `<li><hr class="dropdown-divider"></li><li><a class="dropdown-item" href="#" onclick="${deleteFnName}(${rowId})"><i class="bi bi-trash me-1"></i> Delete</a></li>`;
     }
 
     function nextRecordStatus(currentStatus, forcedStatus) {

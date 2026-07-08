@@ -17,7 +17,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Account</label>
                         <input type="text" class="form-control" id="searchUser"
-                            placeholder="Search accounts by username">
+                            placeholder="Search accounts by name">
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
@@ -127,8 +127,8 @@
                             <input type="text" class="form-control" id="txtFirstName" name="txtFirstName" placeholder="e.g. John" required>
                         </div>
                         <div class="col-md-6 col-sm-12">
-                            <label for="txtMiddleName" class="form-label small fw-bold text-secondary">Middle Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="txtMiddleName" name="txtMiddleName" placeholder="e.g. Smith" required>
+                            <label for="txtMiddleName" class="form-label small fw-bold text-secondary">Middle Name</label>
+                            <input type="text" class="form-control" id="txtMiddleName" name="txtMiddleName" placeholder="e.g. Smith">
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-6 col-sm-10">

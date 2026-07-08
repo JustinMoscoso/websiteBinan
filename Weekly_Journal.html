@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weekly Practicum Journal - Website Biñan</title>
+  <style>
+    :root {
+      --primary-color: #000;
+      --border-color: #000;
+      --text-color: #111;
+      --font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      color: var(--text-color);
+      line-height: 1.4;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+
+    /* Page container optimized for screen preview */
+    .journal-page {
+      background: #fff;
+      width: 8.5in;
+      height: 11in;
+      margin: 0 auto 30px auto;
+      padding: 0.4in 0.5in;
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      .journal-page {
+        margin: 0;
+        border: none;
+        box-shadow: none;
+        page-break-after: always;
+        width: 8.5in;
+        height: 11in;
+      }
+    }
+
+    /* Header section representing the Mapua Form Header */
+    .header-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+
+    .header-table td {
+      border: 1px solid var(--border-color);
+      padding: 6px;
+      vertical-align: middle;
+    }
+
+    .logo-container {
+      width: 25%;
+      text-align: center;
+    }
+
+    /* Crest/logo placeholder design */
+    .logo-text-large {
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      font-size: 24px;
+      letter-spacing: 2px;
+      color: #990000;
+    }
+    
+    .logo-subtext {
+      font-size: 8px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #003366;
+    }
+
+    .logo-title-center {
+      text-align: center;
+      width: 50%;
+    }
+
+    .logo-title-center h1 {
+      font-size: 14px;
+      font-weight: bold;
+      color: #990000;
+      letter-spacing: 1px;
+    }
+
+    .logo-title-center p {
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .revision-info {
+      width: 25%;
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .revision-info table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .revision-info td {
+      border: none;
+      padding: 2px 0;
+    }
+
+    .document-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin: 8px 0;
+      text-transform: uppercase;
+    }
+
+    /* Important Information box */
+    .important-info-box {
+      border: 2px solid var(--border-color);
+      padding: 6px 10px;
+      font-size: 9px;
+      margin-bottom: 12px;
+    }
+
+    .important-info-box h3 {
+      font-size: 10px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .important-info-box ul {
+      margin-left: 15px;
+    }
+
+    .important-info-box li {
+      margin-bottom: 2px;
+    }
+
+    /* Metadata details table */
+    .metadata-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+
+    .metadata-table td {
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    .metadata-label {
+      font-weight: bold;
+      width: 15%;
+      text-transform: uppercase;
+    }
+
+    .metadata-value {
+      width: 35%;
+    }
+
+    /* Content tables for Software Dev and Technical Docs */
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      text-decoration: underline;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .activities-box {
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    .activity-row {
+      border-bottom: 1px solid var(--border-color);
+      padding: 8px 10px;
+      font-size: 11.5px;
+      min-height: 35px;
+      display: flex;
+      align-items: center;
+    }
+
+    .activity-date {
+      font-weight: bold;
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    .activity-desc {
+      flex-grow: 1;
+    }
+
+    .blank-row {
+      flex-grow: 1;
+      background-image: linear-gradient(to bottom, transparent 34px, var(--border-color) 35px);
+      background-size: 100% 35px;
+    }
+
+    /* Signature area */
+    .signature-area {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    .signature-box {
+      border: 1px solid var(--border-color);
+      width: 300px;
+      height: 45px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 2px;
+    }
+
+    .signature-label {
+      font-size: 9px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Footer section */
+    .footer-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 8px;
+      border-top: 2px solid var(--border-color);
+      padding-top: 4px;
+      margin-top: auto;
+    }
+
+    .footer-left {
+      text-transform: uppercase;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .form-id {
+      font-weight: bold;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== WEEK 2 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">April 27 to 30, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">Database Management</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">April 27.</span>
+        <span class="activity-desc">Started planning the database schema architecture and scoping boundaries for the Website Biñan User Access Leveling.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">April 28.</span>
+        <span class="activity-desc">Created the Data Flow Diagram (DFD) to map the movement of admin inputs and restrict local/department accounts to their own scopes.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">April 29.</span>
+        <span class="activity-desc">Designed the Entity-Relationship Diagram (ERD) mapping the roles (Superadmin, Admin, Encoder, Viewer) to respective data tables.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">April 30.</span>
+        <span class="activity-desc">Reviewed the database structure, defined foreign key relationships, and performed normalization on the user roles and department schemas.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">April 27.</span>
+        <span class="activity-desc">Documented the initial system flow and identified the data restriction boundaries needed for local accounts.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">April 28.</span>
+        <span class="activity-desc">Reviewed the DFD to ensure data movement and restriction points are easy to understand.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">April 29.</span>
+        <span class="activity-desc">Prepared the ERD to define the connections between user roles, department tables, and services.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">April 30.</span>
+        <span class="activity-desc">Documented the normalized database structure for better security and scalability.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 3 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">May 4 to 8, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">ERD Finalization</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">May 4.</span>
+        <span class="activity-desc">Continued improving and finalizing the ERD schema for emergency hotlines (supporting PLDT, Smart, Globe, and Intelco) and user profiles.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 5.</span>
+        <span class="activity-desc">Revised tables, primary keys, foreign keys, and relationships to support role-based query isolation.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 6.</span>
+        <span class="activity-desc">Prepared the revised database schema layout for approval and verified all relational constraints.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 7.</span>
+        <span class="activity-desc">Started planning the mock design of the restricted admin dashboard and hotline CMS cards.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 8.</span>
+        <span class="activity-desc">Brainstormed the UI pages, buttons, forms, and navigation flow based on permission levels.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">May 4.</span>
+        <span class="activity-desc">Documented the ERD revisions and reviewed database accuracy for the new hotline columns.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 5.</span>
+        <span class="activity-desc">Checked if the finalized ERD was fully aligned with the application requirements and scoping boundaries.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 6.</span>
+        <span class="activity-desc">Finalized the important database relationships for approval by the supervisor.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 7.</span>
+        <span class="activity-desc">Prepared notes for the UI dashboard mock designs based on the approved database structures.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 8.</span>
+        <span class="activity-desc">Documented the planned navigation flow and permission checks for the user interface.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 4 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">May 11 to 15, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">UI Design and Gantt Chart</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">May 11.</span>
+        <span class="activity-desc">Improved the mock design of the login page layout, spacing, and error alerts.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 12.</span>
+        <span class="activity-desc">Worked on the dashboard overview layout and organized the project tasks in the Gantt Chart.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 13.</span>
+        <span class="activity-desc">Discussed Superadmin, Admin, Encoder, and Viewer roles and access restrictions across departments.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 14.</span>
+        <span class="activity-desc">Planned how front-end templates should hide/show sidebar menu items and elements dynamically based on user session roles.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 15.</span>
+        <span class="activity-desc">Improved the UI login page fields, dashboard elements, and input validation styles.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">May 11.</span>
+        <span class="activity-desc">Documented the improvements made to the login page mock layout and user feedback alerts.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 12.</span>
+        <span class="activity-desc">Prepared the Gantt Chart tracking tasks, development schedules, and deadlines.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 13.</span>
+        <span class="activity-desc">Documented the planned user roles, permission matrices, and path restrictions.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 14.</span>
+        <span class="activity-desc">Reviewed and documented the front-end template conditional visibility checks and layout logic.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 15.</span>
+        <span class="activity-desc">Noted the validation fixes, input patterns, and interface design changes.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 5 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">May 18 to 22, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">Database and Back End Development</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">May 18.</span>
+        <span class="activity-desc">Reviewed SQL tables for users, barangays, departments, services, and audit trails to ensure integrity.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 19.</span>
+        <span class="activity-desc">Checked how system controller forms should validate, save, and update database records securely.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 20.</span>
+        <span class="activity-desc">Reviewed member and sector relationships in the database for the Barangay Staff rich-text integration.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 21.</span>
+        <span class="activity-desc">Improved back-end controller logic to enforce user roles, checking that departments/barangays can only modify their own content.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 22.</span>
+        <span class="activity-desc">Reviewed and implemented the audit trail feature for recording administrator and encoder actions in the database.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">May 18.</span>
+        <span class="activity-desc">Documented the database tables, data types, and schemas implemented for Website Biñan.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 19.</span>
+        <span class="activity-desc">Recorded data input validation rules and controller update methods.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 20.</span>
+        <span class="activity-desc">Documented the member and sector database relationships for barangay content.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 21.</span>
+        <span class="activity-desc">Documented the role validation logic and permission boundary checks inside PHP controllers.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 22.</span>
+        <span class="activity-desc">Documented the purpose, schema, and logging structure of the user audit trail feature.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 6 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">May 25 to 26, 2026 and May 28 to 29, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">System Flow and Database Review</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">May 25.</span>
+        <span class="activity-desc">Continued revising the database structure, member fields, and Quill.js implementation helper.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 26.</span>
+        <span class="activity-desc">Tested the system flow on localhost from login, session creation, to database updating.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 28.</span>
+        <span class="activity-desc">Reviewed member data handling and how sector classifications should be restricted in the controller.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 29.</span>
+        <span class="activity-desc">Reviewed overall system progress, user roles, database functions, and security boundaries.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">May 25.</span>
+        <span class="activity-desc">Documented database tweaks and integration steps for Quill.js in the member edit forms.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 26.</span>
+        <span class="activity-desc">Noted test results for the login flow, session timing, and dashboard access checks.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 28.</span>
+        <span class="activity-desc">Documented the access restriction checks and verified that routes were securely blocked.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">May 29.</span>
+        <span class="activity-desc">Organized project documentation based on the completed system parts and role tests.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 7 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">June 1 to 5, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">System Development Review</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">June 1.</span>
+        <span class="activity-desc">Reviewed the system flow on localhost from login to dashboard access and checked for layout errors.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 2.</span>
+        <span class="activity-desc">Checked how system features connect with stored database records for emergency hotlines.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 3.</span>
+        <span class="activity-desc">Reviewed back-end issues, database connection queries, and CDN asset localization files.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 4.</span>
+        <span class="activity-desc">Checked completed project parts (e.g. Globe/Smart hotline cards) and identified remaining fixes.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 5.</span>
+        <span class="activity-desc">Continued checking system progress, testing all roles (Viewer, Encoder, Admin, Superadmin).</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">June 1.</span>
+        <span class="activity-desc">Documented the current system flow and local testing progress for the unified website.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 2.</span>
+        <span class="activity-desc">Reviewed the integration between database records and the emergency hotline dynamic cards.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 3.</span>
+        <span class="activity-desc">Noted the downloaded third-party libraries (bootstrap, fontawesome, jquery, etc.) for local asset storage.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 4.</span>
+        <span class="activity-desc">Documented the overall completion status and final checklist items.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 5.</span>
+        <span class="activity-desc">Documented the final role validation results and remaining cosmetic adjustments.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 8 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">June 8 to 12, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">System Optimization and Form Validation</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">June 8.</span>
+        <span class="activity-desc">Enhanced front-end and back-end form validation patterns for the hotline numbers (PLDT, Smart, Globe, Intelco).</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 9.</span>
+        <span class="activity-desc">Implemented custom regex rules to ensure users input valid phone formats (e.g. XXXX-XXX-XXXX and XXX-XXXX).</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 10.</span>
+        <span class="activity-desc">Fixed validation message alerts in the admin panel contacts modal.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 11.</span>
+        <span class="activity-desc">Optimized AJAX calls for dynamic retrieval of department-specific hotlines.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 12.</span>
+        <span class="activity-desc">Conducted cross-browser testing for the contact forms on both mobile and desktop.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">June 8.</span>
+        <span class="activity-desc">Updated the Hotline Management API schemas and validation guides.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 9.</span>
+        <span class="activity-desc">Documented the regular expression pattern configurations for telecom numbers.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 10.</span>
+        <span class="activity-desc">Recorded contact validation test scenarios and troubleshooting procedures.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 11.</span>
+        <span class="activity-desc">Documented the optimized AJAX response models for system admins.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 12.</span>
+        <span class="activity-desc">Noted layout compatibility issues and browser-specific CSS adjustments.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 9 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">June 15 to 19, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">Dynamic Hotline Render and Sidebar Refactoring</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">June 15.</span>
+        <span class="activity-desc">Refactored the dashboard sidebar to dynamically display menus (Barangays, Departments, Careers) according to role limitations.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 16.</span>
+        <span class="activity-desc">Integrated PHP session validation checks inside the sidebar template rendering process.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 17.</span>
+        <span class="activity-desc">Fixed navigation links so department and barangay sub-admins can only see options within their scopes.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 18.</span>
+        <span class="activity-desc">Updated the public Hotlines view to dynamically display the new Smart and Globe columns.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 19.</span>
+        <span class="activity-desc">Managed layout pagination settings for hotlines table lists containing extensive records.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">June 15.</span>
+        <span class="activity-desc">Documented the sidebar menu access-scoping hierarchy.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 16.</span>
+        <span class="activity-desc">Recorded session verification protocols used in standard template views.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 17.</span>
+        <span class="activity-desc">Noted fixes for URL routing overrides and sidebar boundary protection.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 18.</span>
+        <span class="activity-desc">Documented the updated public hotline card CSS styling guidelines.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 19.</span>
+        <span class="activity-desc">Recorded performance guidelines for large-table rendering and pagination.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 10 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">June 22 to 26, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">Barangay Staff Rich-Text Integration</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">June 22.</span>
+        <span class="activity-desc">Integrated Quill.js rich-text editor inside the Barangay Content modal for staff lists.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 23.</span>
+        <span class="activity-desc">Configured the toolbar buttons for Quill.js (bold, italic, list types, and link formats).</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 24.</span>
+        <span class="activity-desc">Bound the Quill.js editors to hidden inputs on the main form submission for saving.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 25.</span>
+        <span class="activity-desc">Handled data extraction and sanitization on the controller to prevent security risks (XSS).</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 26.</span>
+        <span class="activity-desc">Populated the editor with existing database data during record edit routines.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">June 22.</span>
+        <span class="activity-desc">Documented the rich-text editor integration plan for the Barangay Staff module.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 23.</span>
+        <span class="activity-desc">Recorded configuration parameters and active toolbar settings for Quill.js.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 24.</span>
+        <span class="activity-desc">Documented the DOM event handlers binding Quill.js outputs to forms.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 25.</span>
+        <span class="activity-desc">Recorded sanitization logic and anti-XSS rules in the controllers.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 26.</span>
+        <span class="activity-desc">Documented the data population flows for edit forms.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 11 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">June 29 to July 3, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">Local Asset Integration (CDN Localization)</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">June 29.</span>
+        <span class="activity-desc">Identified all external CDNs being used for stylesheets and scripts.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 30.</span>
+        <span class="activity-desc">Downloaded external libraries (Bootstrap, Font Awesome, jQuery, AOS, SweetAlert2) locally.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 1.</span>
+        <span class="activity-desc">Created directories under public/assets/ for vendor files.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 2.</span>
+        <span class="activity-desc">Updated the PHP asset helper to load files using the local asset folder paths.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 3.</span>
+        <span class="activity-desc">Verified system layout rendering without internet access to confirm offline capability.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">June 29.</span>
+        <span class="activity-desc">Documented the list of CDN dependencies and asset sizes.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">June 30.</span>
+        <span class="activity-desc">Created a log of local library versions and sources.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 1.</span>
+        <span class="activity-desc">Recorded the local directory path layout for vendor assets.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 2.</span>
+        <span class="activity-desc">Documented the updated PHP asset helper logic and usage references.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 3.</span>
+        <span class="activity-desc">Created the Asset Localization Summary documentation.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 12 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">July 6 to 10, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">User Access Leveling Verification</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">July 6.</span>
+        <span class="activity-desc">Audited Controller routes (Admin, Career, Services) for role check compliance.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 7.</span>
+        <span class="activity-desc">Implemented strict direct-link blocks in the controllers for unauthorized roles.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 8.</span>
+        <span class="activity-desc">Tested the system using Viewer, Encoder, Admin, and Superadmin test accounts.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 9.</span>
+        <span class="activity-desc">Fixed privilege escalation issues on AJAX update endpoints.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 10.</span>
+        <span class="activity-desc">Added user audit trail entries for unauthorized URL access attempts.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">July 6.</span>
+        <span class="activity-desc">Documented the system path security checklist.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 7.</span>
+        <span class="activity-desc">Recorded path access enforcement methods and boundary checks.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 8.</span>
+        <span class="activity-desc">Compiled role-specific test results and account access tables.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 9.</span>
+        <span class="activity-desc">Noted security fixes for the API updates endpoints.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 10.</span>
+        <span class="activity-desc">Documented the audit trail schema update and logging structure.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEEK 13 ==================== -->
+  <div class="journal-page">
+    <table class="header-table">
+      <tr>
+        <td class="logo-container">
+          <div class="logo-text-large">M</div>
+          <div class="logo-subtext">Mapúa Malayan</div>
+        </td>
+        <td class="logo-title-center">
+          <h1>MAPÚA</h1>
+          <p>Malayan Colleges Laguna</p>
+        </td>
+        <td class="revision-info">
+          <table>
+            <tr><td>REVISION NO.:</td><td style="text-align: right; font-weight: bold;">00</td></tr>
+            <tr><td>REVISION DATE:</td><td style="text-align: right; font-weight: bold;">May 10, 2016</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <div class="document-title">Weekly Journal</div>
+
+    <div class="important-info-box">
+      <h3>Important Information</h3>
+      <ul>
+        <li>Include task assignments or movements, reflection on the day's new learning, accomplishment, challenges faced and how you responded. Observations and recommendations on the improvement of systems / operation / management, etc.</li>
+        <li>Scanned copies of this form shall be submitted on a weekly basis through approved LMS.</li>
+        <li>Hard copies of this form should be compiled as part of the student's portfolio.</li>
+      </ul>
+    </div>
+
+    <table class="metadata-table">
+      <tr>
+        <td class="metadata-label">Date</td>
+        <td class="metadata-value">July 13 to 17, 2026</td>
+        <td class="metadata-label">Area Assignment</td>
+        <td class="metadata-value">ICTO</td>
+      </tr>
+      <tr>
+        <td class="metadata-label">Task</td>
+        <td class="metadata-value">Final Integration Testing and Turnover</td>
+        <td class="metadata-label">Shift/Time</td>
+        <td class="metadata-value">8:00 am to 5:00 pm</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Software Development:</div>
+    <div class="activities-box" style="flex-grow: 0;">
+      <div class="activity-row">
+        <span class="activity-date">July 13.</span>
+        <span class="activity-desc">Performed full staging checks on the MySQL database, tables, and relationships.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 14.</span>
+        <span class="activity-desc">Ran cross-browser testing for rich-text rendering and layout responsiveness.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 15.</span>
+        <span class="activity-desc">Fixed secondary CSS alignment issues on the municipal contact details.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 16.</span>
+        <span class="activity-desc">Gathered final patch logs and compiled the database update scripts.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 17.</span>
+        <span class="activity-desc">Handed over all system files, database scripts, and project documentation to the supervisor.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 15px;">Technical Documents:</div>
+    <div class="activities-box" style="flex-grow: 1;">
+      <div class="activity-row">
+        <span class="activity-date">July 13.</span>
+        <span class="activity-desc">Compiled final database validation reports.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 14.</span>
+        <span class="activity-desc">Documented multi-device layout responsiveness and browser compatibility lists.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 15.</span>
+        <span class="activity-desc">Recorded minor interface fixes and alignment styling parameters.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 16.</span>
+        <span class="activity-desc">Prepared the final release notes and patch notes documentation.</span>
+      </div>
+      <div class="activity-row">
+        <span class="activity-date">July 17.</span>
+        <span class="activity-desc">Documented the final handover logs and project completion checklists.</span>
+      </div>
+      <div class="blank-row"></div>
+    </div>
+
+    <div class="signature-area">
+      <div>
+        <div class="signature-box"></div>
+        <div class="signature-label" style="text-align: center;">Trainee's Signature</div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-left">
+        Copy: (1) Student; (2) Practicum Adviser
+      </div>
+      <div class="footer-right">
+        <span class="form-id">FORM OVPAA 030G</span><br>
+        This form is available at the OVPAA.
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+

@@ -85,7 +85,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: result.msg,
+                                text: result.message || result.msg || 'Unable to update status.',
                             });
                         }
                     }
@@ -611,8 +611,6 @@
                             <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
-                    actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteMayor');
-
                     actionHtml += `</ul></div>`;
                     return actionHtml;
                 }

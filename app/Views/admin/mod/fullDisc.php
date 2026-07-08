@@ -15,32 +15,6 @@
 
                 <div class="row g-3">
 
-                    <!-- Search -->
-                    <div class="col-xl-4 col-lg-6">
-                        <label class="form-label small fw-bold text-secondary">
-                            Search Category
-                        </label>
-
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Type category or year"
-                                style="height: 38px;">
-                        </div>
-                    </div>
-
-                    <!-- Frequency -->
-                    <div class="col-xl-2 col-lg-3">
-                        <label class="form-label small fw-bold text-secondary">
-                            Frequency
-                        </label>
-
-                        <select class="form-control form-select bg-light border-secondary-subtle" name="frequency"
-                            style="height: 38px; cursor: pointer;">
-                            <option value="">Search Frequencies</option>
-                            <option value="ANNUAL">Annual</option>
-                            <option value="QUARTERLY">Quarterly</option>
-                        </select>
-                    </div>
-
                     <!-- Category -->
                     <div class="col-xl-4 col-lg-6">
                         <label class="form-label small fw-bold text-secondary">
@@ -49,7 +23,7 @@
 
                         <select class="form-control form-select bg-light border-secondary-subtle" name="file_category"
                             style="height: 38px; cursor: pointer;">
-                            <option value="">Search Categories</option>
+                            <option value="">Select Categories</option>
 
                             <optgroup label="Annual Reports">
                                 <option value="Annual Budget Report">Annual Budget Report</option>
@@ -96,6 +70,20 @@
                                     Annual Statement of Indebtedness, Payments and Balances
                                 </option>
                             </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Frequency -->
+                    <div class="col-xl-2 col-lg-3">
+                        <label class="form-label small fw-bold text-secondary">
+                            Frequency
+                        </label>
+
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="frequency"
+                            style="height: 38px; cursor: pointer;">
+                            <option value="">Select Frequencies</option>
+                            <option value="ANNUAL">Annual</option>
+                            <option value="QUARTERLY">Quarterly</option>
                         </select>
                     </div>
 

@@ -800,7 +800,6 @@
                         '<li><a class="dropdown-item" href="#" onclick="edit(' + recordId + '); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>';
 
                     actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
-                    actionHtml += renderDeleteAction(userLevel, recordId, 'deleteCityOff');
                     actionHtml += '</ul></div>';
                     return actionHtml;
                 }

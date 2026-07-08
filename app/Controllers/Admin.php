@@ -528,6 +528,15 @@ class Admin extends BaseController
             }
         }
 
+        if (str_starts_with($mode, 'delete_')) {
+            echo json_encode([
+                'status' => 0,
+                'data' => [],
+                'message' => 'Delete actions have been removed from the system.',
+            ]);
+            return;
+        }
+
         switch ($mode) {
 
             /* -------------------
@@ -943,7 +952,10 @@ class Admin extends BaseController
                         $message = 'User not found';
                     }
                 } else {
-                    $builder = $user_m->orderBy('created_date', 'desc');
+                    $builder = $user_m
+                        ->orderBy('lname', 'asc')
+                        ->orderBy('fname', 'asc')
+                        ->orderBy('mname', 'asc');
 
                     // Non-developers never see DEVELOPER accounts
                     if ($user->user_lvl !== 'DEVELOPER') {
@@ -1491,11 +1503,6 @@ class Admin extends BaseController
                         $message = 'Policy not found';
                     }
                 } else {
-                    // Get filter parameters from the search form
-                    $search = $this->request->getPost('search');
-                    if (is_array($search)) {
-                        $search = $search['value'] ?? '';
-                    }
                     $frequency = $this->request->getPost('frequency');
                     $file_category = $this->request->getPost('file_category');
                     $status_filter = $this->request->getPost('status');
@@ -1506,14 +1513,6 @@ class Admin extends BaseController
                     // Non-privileged users cannot see archived full disclosure policies
                     if (!$canSeeArchived) {
                         $query = $query->where('status !=', 'ARCHIVED');
-                    }
-
-                    // Apply combined search filter: category text and year
-                    if (!empty($search)) {
-                        $query = $query->groupStart()
-                            ->like('file_category', $search)
-                            ->orWhere('year', $search)
-                            ->groupEnd();
                     }
 
                     // Apply frequency filter
@@ -1554,7 +1553,12 @@ class Admin extends BaseController
                         $query = $query->where('status', $status_filter);
                     }
 
-                    $policy_d = $query->orderBy('created_date', 'desc')->findAll();
+                    $policy_d = $query
+                        ->orderBy('status', 'asc')
+                        ->orderBy('year', 'desc')
+                        ->orderBy('quarter', 'desc')
+                        ->orderBy('file_category', 'asc')
+                        ->findAll();
                     foreach ($policy_d as $pol) {
                         $data[] = $pol;
                     }
@@ -1761,7 +1765,7 @@ class Admin extends BaseController
                     $builder->orderBy('service_content.created_date', 'desc');
 
                     // Get results
-                    $results = $builder->findAll();
+                    $results = $builder->findAll(1000);
 
                     $data = [];
                     foreach ($results as $row) {
@@ -2176,8 +2180,8 @@ class Admin extends BaseController
                 $acct_type = $this->request->getPost('txtAccountType') ?: null;
                 $entity_ref = $this->request->getPost('txtEntityRef') ?: null;
 
-                if (empty($fname) || empty($mname) || empty($lname) || empty($usern) || empty($email) || empty($passw) || empty($acclvl)) {
-                    $message = 'Please fill in all required fields (First, Middle, and Last Names are required).';
+                if (empty($fname) || empty($lname) || empty($usern) || empty($email) || empty($passw) || empty($acclvl)) {
+                    $message = 'Please fill in all required fields (First and Last Names are required).';
                     break;
                 }
 
@@ -2350,12 +2354,15 @@ class Admin extends BaseController
                     $message = 'Department name already exists.';
                 } else {
                     $logoName = $imgLogo->getRandomName();
-                    $orgChartName = $imgOrgChart ? $imgOrgChart->getRandomName() : null;
+                    $orgChartName = ($imgOrgChart && $imgOrgChart->isValid()) ? $imgOrgChart->getRandomName() : null;
 
                     $file_category = 'DEPT';
                     $path = WRITEPATH . 'uploads/' . $file_category;
 
                     if ($imgLogo->move($path, $logoName)) {
+                        if ($orgChartName && !$imgOrgChart->hasMoved()) {
+                            $imgOrgChart->move($path, $orgChartName);
+                        }
                         // Save other form data to the database
                         $data = [
                             'dept_name' => $dept_name,
@@ -2514,11 +2521,9 @@ class Admin extends BaseController
                 $section = $this->request->getPost('content_category');
                 $content = $this->request->getPost('perdata');
 
-                // Check if the section already exists
-                $existing_section = $may_m->where('section', $section)->first();
-
-                if ($existing_section) {
-                    $message = 'Only one entry per section';
+                // Only one ACTIVE record is allowed per section.
+                if ($this->mayorSectionHasActiveEntry($may_m, $section)) {
+                    $message = 'Only one active entry can exist for this section.';
                 } else {
                     // Prepare data for saving
                     $data = [
@@ -2571,6 +2576,12 @@ class Admin extends BaseController
                 $yr = $this->request->getPost('yr');
                 $qtr = $this->request->getPost('qtr');
                 $policyFile = $this->request->getFile('policyFile');
+                $normalizedQuarter = trim((string) $qtr);
+
+                if ($this->fullDisclosurePolicyExists($policy_m, $fc, $yr, $normalizedQuarter)) {
+                    $message = 'A policy with the same category, year, and quarter already exists.';
+                    break;
+                }
 
                 // Validate the file
                 if ($policyFile->isValid() && !$policyFile->hasMoved()) {
@@ -2588,7 +2599,7 @@ class Admin extends BaseController
                     'file_category' => $fc,
                     'category' => $file_category,
                     'created_date' => date('Y-m-d H:i:s'),
-                    'quarter' => $qtr,
+                    'quarter' => $normalizedQuarter === '' ? null : $normalizedQuarter,
                     'status' => 'ACTIVE',
                     'year' => $yr,
                 ];
@@ -2915,8 +2926,8 @@ class Admin extends BaseController
                 $acct_type  = $this->request->getPost('txtAccountType') ?: $this->request->getPost('editAccountType') ?: null;
                 $entity_ref = $this->request->getPost('txtEntityRef')   ?: $this->request->getPost('editEntityRef')   ?: null;
 
-                if (empty($fname) || empty($mname) || empty($lname) || empty($usern) || empty($email) || empty($acclvl)) {
-                    $message = 'Please fill in all required fields (First, Middle, and Last Names are required).';
+                if (empty($fname) || empty($lname) || empty($usern) || empty($email) || empty($acclvl)) {
+                    $message = 'Please fill in all required fields (First and Last Names are required).';
                     break;
                 }
 
@@ -3481,15 +3492,15 @@ class Admin extends BaseController
                     $currentMayorImagesRaw = is_object($mayorcontent)
                         ? ($mayorcontent->mayor_img ?? '')
                         : (is_array($mayorcontent) ? ($mayorcontent['mayor_img'] ?? '') : '');
+                    $currentStatus = strtoupper(trim((string) ($mayorcontent->status ?? '')));
                     // Shared modal uses shared names; fall back to legacy edit-prefixed names
                     $mayor_name = $this->request->getPost('myrname')            ?: $this->request->getPost('editmyrname');
                     $section    = $this->request->getPost('content_category')   ?: $this->request->getPost('edit_content_category');
                     $content    = $this->request->getPost('perdata')             ?: $this->request->getPost('editperdata');
 
-                    // Check if the section already exists
-                    $existing_section = $may_m->where('section', $section)->where('id !=', $id)->first();
-                    if ($existing_section) {
-                        $message = 'Section already exists.';
+                    // Only block edits when this row is active and another active row already exists.
+                    if ($currentStatus === 'ACTIVE' && $this->mayorSectionHasActiveEntry($may_m, $section, (int) $id)) {
+                        $message = 'Only one active entry can exist for this section.';
                     } else {
                         // Prepare data for saving
                         $data = [
@@ -3577,11 +3588,17 @@ class Admin extends BaseController
                     $fc = $this->request->getPost('fileCategory') ?? $this->request->getPost('editFileCategory');
                     $yr = $this->request->getPost('yr') ?? $this->request->getPost('edityr');
                     $qtr = $this->request->getPost('qtr') ?? $this->request->getPost('editqtr');
+                    $normalizedQuarter = trim((string) $qtr);
+
+                    if ($this->fullDisclosurePolicyExists($policy_m, $fc, $yr, $normalizedQuarter, (int) $id)) {
+                        $message = 'A policy with the same category, year, and quarter already exists.';
+                        break;
+                    }
 
                     $data = [
                         'file_category' => $fc,
                         'updated_date' => date('Y-m-d H:i:s'),
-                        'quarter' => $qtr,
+                        'quarter' => $normalizedQuarter === '' ? null : $normalizedQuarter,
                         'year' => $yr,
                     ];
 
@@ -4263,6 +4280,11 @@ class Admin extends BaseController
                 $mayorRecord = $may_m->find($id);
                 if ($mayorRecord) {
                     $sect = $mayorRecord->section ?? '';
+                    if ($statusVal === 'ACTIVE' && $this->mayorSectionHasActiveEntry($may_m, $sect, (int) $id)) {
+                        $message = 'Only one active entry can exist for this section.';
+                        $status = 0;
+                        break;
+                    }
                     $data = [
                         'status' => $statusVal,
                         'updated_date' => date('Y-m-d H:i:s')
@@ -5064,6 +5086,61 @@ class Admin extends BaseController
     private function isValidPhilippineMobileNumber($value): bool
     {
         return (bool) preg_match('/^\+63\s9\d{2}\s\d{3}\s\d{4}$/', trim((string) $value));
+    }
+
+    private function mayorSectionHasActiveEntry($mayorModel, ?string $section, ?int $excludeId = null): bool
+    {
+        $needle = strtolower(trim((string) $section));
+        if ($needle === '') {
+            return false;
+        }
+
+        $rows = $mayorModel->select('ID, section')
+            ->where('status', 'ACTIVE')
+            ->findAll();
+
+        foreach ($rows as $row) {
+            $rowId = is_object($row) ? (int) ($row->ID ?? 0) : (int) ($row['ID'] ?? 0);
+            if ($excludeId !== null && $rowId === (int) $excludeId) {
+                continue;
+            }
+
+            $rowSection = strtolower(trim((string) (is_object($row) ? ($row->section ?? '') : ($row['section'] ?? ''))));
+            if ($rowSection === $needle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function fullDisclosurePolicyExists($policyModel, ?string $fileCategory, ?string $year, string $quarter, ?int $excludeId = null): bool
+    {
+        $fileCategory = trim((string) $fileCategory);
+        $year = trim((string) $year);
+
+        if ($fileCategory === '' || $year === '') {
+            return false;
+        }
+
+        $builder = $policyModel->where('category', 'FULLDISC')
+            ->where('file_category', $fileCategory)
+            ->where('year', $year);
+
+        if ($excludeId !== null) {
+            $builder->where('ID !=', $excludeId);
+        }
+
+        if ($quarter === '') {
+            $builder->groupStart()
+                ->where('quarter', '')
+                ->orWhere('quarter', null)
+                ->groupEnd();
+        } else {
+            $builder->where('quarter', $quarter);
+        }
+
+        return (bool) $builder->first();
     }
 
     public function preview_file($category, $filename)
