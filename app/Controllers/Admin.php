@@ -2851,6 +2851,23 @@ class Admin extends BaseController
                 $maxmb = 4;
                 $allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
+                if ($section === 'History' && !preg_match('/^\d{4}$/', (string) $title)) {
+                    $message = 'Please select a valid history year.';
+                    break;
+                }
+
+                if ($section === 'History') {
+                    $existingHistoryYear = $about_m
+                        ->where('section', 'History')
+                        ->where('title', $title)
+                        ->first();
+
+                    if ($existingHistoryYear) {
+                        $message = 'History year already exists.';
+                        break;
+                    }
+                }
+
                 $existing = $about_m->where('section', $section)->first();
                 if ($existing && $section === 'Home Page') {
                     $message = 'Home Page content cannot be repeated.';
@@ -4115,6 +4132,24 @@ class Admin extends BaseController
                 $title = $this->request->getPost('EditTxtTitle');
                 $description = $this->request->getPost('EditTxtDesc');
 
+                if ($section === 'History' && !preg_match('/^\d{4}$/', (string) $title)) {
+                    $message = 'Please select a valid history year.';
+                    break;
+                }
+
+                if ($section === 'History') {
+                    $existingHistoryYear = $about_m
+                        ->where('section', 'History')
+                        ->where('title', $title)
+                        ->where('ID !=', $id)
+                        ->first();
+
+                    if ($existingHistoryYear) {
+                        $message = 'History year already exists.';
+                        break;
+                    }
+                }
+
                 $data = [
                     'section' => $section,
                     'title' => $title,
@@ -4599,34 +4634,6 @@ class Admin extends BaseController
                     $con_m->delete($id);
                     $message = 'Post content deleted successfully.';
                     $log_c['processDetails'] = 'POSTCONTENT_ID: ' . $id . ' TITLE: ' . $title . ' - DELETED';
-                    $status = 1;
-                } else {
-                    $message = 'Content not found.';
-                    $status = 0;
-                }
-                break;
-            }
-
-            case 'delete_about': {
-                if ($isSpecialDeptAdmin) {
-                    $message = 'Unauthorized access. Department accounts cannot delete records.';
-                    $status = 0;
-                    break;
-                }
-
-                if (!$canManageAbout) {
-                    $message = 'Unauthorized access.';
-                    $status = 0;
-                    break;
-                }
-                $about_m = new \App\Models\About();
-                $id = $this->request->getPost('id');
-                $aboutRecord = $about_m->find($id);
-                if ($aboutRecord) {
-                    $title = $aboutRecord->title ?? '';
-                    $about_m->delete($id);
-                    $message = 'About content deleted successfully.';
-                    $log_c['processDetails'] = 'ABOUT_ID: ' . $id . ' TITLE: ' . $title . ' - DELETED';
                     $status = 1;
                 } else {
                     $message = 'Content not found.';

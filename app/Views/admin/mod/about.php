@@ -26,7 +26,7 @@
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Category</label>
-                        <select class="form-select bg-light border-secondary-subtle" name="section"
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="section"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">Select Categories</option>
                             <option value="Home Page">Home Page</option>
@@ -38,7 +38,7 @@
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
-                        <select class="form-select bg-light border-secondary-subtle" name="status"
+                        <select class="form-control form-select bg-light border-secondary-subtle" name="status"
                             style="height: 38px; cursor: pointer;">
                             <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
@@ -124,7 +124,7 @@
                     <div class="col-md-6">
                         <label for="content_category" class="form-label small fw-bold text-secondary">
                             Category <span class="text-danger">*</span></label>
-                        <select class="form-select" id="content_category" name="content_category" required>
+                        <select class="form-control form-select" id="content_category" name="content_category" required>
                             <option selected disabled value="">Select Category</option>
                             <option value="Home Page">Home Page</option>
                             <option value="History">History</option>
@@ -134,10 +134,11 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="TxtTitle" class="form-label small fw-bold text-secondary">Title <span
+                        <label for="TxtTitle" id="TxtTitleLabel" class="form-label small fw-bold text-secondary">Title <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="TxtTitle" name="TxtTitle"
                             placeholder="Enter headline/header title" required>
+                        <select class="form-control form-select d-none" id="HistoryYearPicker" aria-label="History year"></select>
                     </div>
 
                     <div class="col-12">

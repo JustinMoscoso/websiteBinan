@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320" role="img" aria-labelledby="title desc">
+  <title id="title">Mayor silhouette placeholder</title>
+  <desc id="desc">A neutral person silhouette used when no active mayor homepage image is available.</desc>
+  <g fill="#c7d4c9">
+    <circle cx="150" cy="92" r="48"/>
+    <path d="M66 274c8-63 41-104 84-104s76 41 84 104c2 15-10 28-25 28H91c-15 0-27-13-25-28z"/>
+  </g>
+  <path fill="#aab9ad" d="M105 282c5-44 22-75 45-75s40 31 45 75H105z" opacity=".35"/>
+</svg>
