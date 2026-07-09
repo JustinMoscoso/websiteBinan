@@ -87,26 +87,25 @@
 
 	<!-- Mayor's Message -->
 	<section data-aos="fade-up" class="sec mayorsec py-5" id="mayorsec">
+		<?php
+		$mayor_images = [];
+		if (!empty($mayor_content['mayor_img'])) {
+			$decoded_mayor_images = json_decode($mayor_content['mayor_img'], true);
+			$mayor_images = is_array($decoded_mayor_images) ? array_values(array_filter($decoded_mayor_images)) : [];
+		}
+		$mayor_image_src = !empty($mayor_images)
+			? base_url('admin/image/MAYOR/' . $mayor_images[0])
+			: base_url('assets/img/mayor-silhouette.svg');
+		$mayor_image_alt = !empty($mayor_images) ? "Mayor's Image" : 'Mayor silhouette placeholder';
+		?>
 		<div class="container-fluid mayorbox border border-5 p-4 p-md-5" style="min-height: 500px;">
 			<div class="mayor-fixed-row">
 				<!-- Mayor Image -->
 				<div class="mayor-fixed-image">
-					<?php if (!empty($mayor_content) && !empty($mayor_content['mayor_img'])): ?>
-						<?php
-						$mayor_images = json_decode($mayor_content['mayor_img'], true);
-						if (!empty($mayor_images) && is_array($mayor_images)):
-							?>
-							<div class="mayor-img-wrapper">
-								<img src="<?= base_url('admin/image/MAYOR/' . $mayor_images[0]) ?>" class="img-fluid rounded"
-									alt="Mayor's Image" style="width: 100%; max-width: 300px; height: auto;">
-							</div>
-						<?php endif; ?>
-					<?php else: ?>
-						<div class="mayor-img-wrapper">
-							<img src="<?= base_url('assets/img/mayor.png') ?>" class="img-fluid rounded"
-								alt="Default Mayor Image" style="width: 100%; max-width: 300px; height: auto;">
-						</div>
-					<?php endif; ?>
+					<div class="mayor-img-wrapper <?= empty($mayor_images) ? 'mayor-img-placeholder' : '' ?>">
+						<img src="<?= $mayor_image_src ?>" class="img-fluid rounded"
+							alt="<?= esc($mayor_image_alt) ?>" style="width: 100%; max-width: 300px; height: auto;">
+					</div>
 				</div>
 
 				<!-- Mayor Text Content -->
