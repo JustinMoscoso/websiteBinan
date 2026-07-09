@@ -1558,7 +1558,7 @@ class Admin extends BaseController
                         $message = 'Career not found';
                     }
                 } else {
-                    $search_kw    = $this->request->getPost('search_kw');
+                    $publication_date = trim((string) $this->request->getPost('publication_date'));
                     $level_filter = $this->request->getPost('level');
                     $status_filter = $this->request->getPost('status');
 
@@ -1569,21 +1569,10 @@ class Admin extends BaseController
                     if (!$canSeeArchived) {
                         $career_builder->where('status !=', 'ARCHIVED');
                     }
-                    // Date filter (supports YYYY, YYYY-MM, or YYYY-MM-DD)
-                    if (!empty($search_kw)) {
-                        $search_kw = trim((string) $search_kw);
-
-                        if (preg_match('/^\d{4}$/', $search_kw)) {
-                            $career_builder->where('YEAR(publication_date)', $search_kw);
-                        } elseif (preg_match('/^\d{4}-\d{2}$/', $search_kw)) {
-                            [$year, $month] = explode('-', $search_kw, 2);
-                            $career_builder->where('YEAR(publication_date)', $year)
-                                ->where('MONTH(publication_date)', $month);
-                        } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $search_kw)) {
-                            $career_builder->where('DATE(publication_date)', $search_kw);
-                        } else {
-                            $career_builder->like('publication_date', $search_kw);
-                        }
+                    if ($publication_date !== '' && preg_match('/^\d{4}-\d{2}$/', $publication_date)) {
+                        [$year, $month] = explode('-', $publication_date, 2);
+                        $career_builder->where('YEAR(publication_date)', $year)
+                            ->where('MONTH(publication_date)', $month);
                     }
                     // Level dropdown filter
                     if ($level_filter !== null && $level_filter !== '') {

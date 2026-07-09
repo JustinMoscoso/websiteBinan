@@ -145,6 +145,56 @@
         document.getElementById('publication').max = new Date().toISOString().split("T")[0];
     }
 
+    function padDatePart(value) {
+        return String(value).padStart(2, '0');
+    }
+
+    function populateCareerDateSearchPicker() {
+        var currentYear = new Date().getFullYear();
+        var monthOptions = '<option value="">Month</option>';
+        var yearOptions = '<option value="">Year</option>';
+        var monthNames = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+        ];
+
+        for (var month = 1; month <= 12; month++) {
+            monthOptions += '<option value="' + padDatePart(month) + '">' + monthNames[month - 1] + '</option>';
+        }
+
+        for (var year = currentYear; year >= 2000; year--) {
+            yearOptions += '<option value="' + year + '">' + year + '</option>';
+        }
+
+        $('#careerSearchMonth').html(monthOptions);
+        $('#careerSearchYear').html(yearOptions);
+    }
+
+    function syncCareerDateSearch() {
+        var month = $('#careerSearchMonth').val();
+        var year = $('#careerSearchYear').val();
+
+        if (month && year) {
+            $('#careerPublicationDateSearch').val(year + '-' + month);
+            return;
+        }
+
+        $('#careerPublicationDateSearch').val('');
+    }
+
+    populateCareerDateSearchPicker();
+    $('#careerSearchMonth, #careerSearchYear').on('change', syncCareerDateSearch);
+
     function isPdfFile(file) {
         if (!file) {
             return false;
@@ -324,9 +374,9 @@
             "url": "<?php echo base_url('admin/ajax/get_career'); ?>",
             "type": "POST",
             "data": function (d) {
-                d.search_kw = $('form#careerSearchForm input[name="search"]').val();
-                d.level     = $('form#careerSearchForm select[name="level"]').val();
-                d.status    = $('form#careerSearchForm select[name="status"]').val();
+                d.publication_date = $('form#careerSearchForm input[name="publication_date"]').val();
+                d.level            = $('form#careerSearchForm select[name="level"]').val();
+                d.status           = $('form#careerSearchForm select[name="status"]').val();
             }
         },
         initComplete: function () {
@@ -348,20 +398,20 @@
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
             {
+                "title": "Publication Date", "data": "publication_date",
+                "render": function (data, type, row) {
+                    if (!data) return '-';
+                    var d = moment(String(data).substring(0, 10), 'YYYY-MM-DD', true);
+                    return d.isValid() ? d.format('MMMM D, YYYY') : '-';
+                }
+            },
+            {
                 "title": "Level", "data": "level",
                 "render": function (data, type, row) {
                     if (data == 1) return 'Level 1';
                     if (data == 2) return 'Level 2';
                     if (data == 3) return 'Level 1 & 2';
                     return '-';
-                }
-            },
-            {
-                "title": "Publication Date", "data": "publication_date",
-                "render": function (data, type, row) {
-                    if (!data) return '-';
-                    var d = moment(String(data).substring(0, 10), 'YYYY-MM-DD', true);
-                    return d.isValid() ? d.format('MMMM D, YYYY') : '-';
                 }
             },
             {
@@ -422,11 +472,16 @@
     // Advanced Search form — submit reloads table with filters
     $('#careerSearchForm').on('submit', function (e) {
         e.preventDefault();
+        syncCareerDateSearch();
         tbl.ajax.reload();
     });
     // Clear filters — reset then reload
     $('#careerSearchForm').on('reset', function () {
-        setTimeout(function () { tbl.ajax.reload(); }, 0);
+        setTimeout(function () {
+            populateCareerDateSearchPicker();
+            syncCareerDateSearch();
+            tbl.ajax.reload();
+        }, 0);
     });
 
 </script>
