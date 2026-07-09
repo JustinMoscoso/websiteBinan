@@ -1262,7 +1262,8 @@ class Admin extends BaseController
                     ->orderBy('audit_trails.created_date', 'desc');
 
                 $searchAction = $this->request->getPost('searchAction');
-                $searchDate = $this->request->getPost('searchDate');
+                $searchDateFrom = $this->request->getPost('searchDateFrom');
+                $searchDateTo = $this->request->getPost('searchDateTo');
                 $isSearching = false;
 
                 if (!empty($searchAction)) {
@@ -1275,8 +1276,15 @@ class Admin extends BaseController
                     $isSearching = true;
                 }
 
-                if (!empty($searchDate)) {
-                    $query->where('DATE(audit_trails.created_date)', $searchDate);
+                if (!empty($searchDateFrom) && !empty($searchDateTo)) {
+                    $query->where('DATE(audit_trails.created_date) >=', $searchDateFrom)
+                        ->where('DATE(audit_trails.created_date) <=', $searchDateTo);
+                    $isSearching = true;
+                } elseif (!empty($searchDateFrom)) {
+                    $query->where('DATE(audit_trails.created_date) >=', $searchDateFrom);
+                    $isSearching = true;
+                } elseif (!empty($searchDateTo)) {
+                    $query->where('DATE(audit_trails.created_date) <=', $searchDateTo);
                     $isSearching = true;
                 }
 
