@@ -368,14 +368,38 @@
         return monthNames[index] || '';
     }
 
+    var currentAuditYear = <?= (int) date('Y'); ?>;
+    var defaultAuditYearStart = getAuditYearWindowStart(currentAuditYear);
+
     var auditPickerState = {
-        from: { yearStart: 2011, selectedYear: '', selectedMonth: '' },
-        to: { yearStart: 2011, selectedYear: '', selectedMonth: '' }
+        from: { yearStart: defaultAuditYearStart, selectedYear: '', selectedMonth: '' },
+        to: { yearStart: defaultAuditYearStart, selectedYear: '', selectedMonth: '' }
     };
+
+    function getAuditYearWindowStart(year) {
+        var baseYear = 2011;
+        var numericYear = parseInt(year, 10);
+
+        if (isNaN(numericYear) || numericYear < baseYear) {
+            return baseYear;
+        }
+
+        return baseYear + (Math.floor((numericYear - baseYear) / 12) * 12);
+    }
 
     function getYearWindow(state) {
         var start = state.yearStart;
         return [start, start + 11];
+    }
+
+    function getDefaultYearForTarget(target) {
+        var yearWindow = getYearWindow(auditPickerState[target]);
+
+        if (currentAuditYear >= yearWindow[0] && currentAuditYear <= yearWindow[1]) {
+            return String(currentAuditYear);
+        }
+
+        return String(yearWindow[0]);
     }
 
     function renderAuditMonthGrid(target) {
@@ -461,70 +485,36 @@
         $('#auditRangeToggle').attr('aria-expanded', 'false');
     }
 
-    function applyAuditPreset(preset) {
-        var today = new Date();
-        var currentMonth = pad2(today.getMonth() + 1);
-        var currentYear = String(today.getFullYear());
-        var lastMonthDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-        var lastMonth = pad2(lastMonthDate.getMonth() + 1);
-        var lastMonthYear = String(lastMonthDate.getFullYear());
-
-        if (preset === 'thisMonth') {
-            auditPickerState.from.selectedMonth = currentMonth;
-            auditPickerState.from.selectedYear = currentYear;
-            auditPickerState.to.selectedMonth = currentMonth;
-            auditPickerState.to.selectedYear = currentYear;
-        } else if (preset === 'lastMonth') {
-            auditPickerState.from.selectedMonth = lastMonth;
-            auditPickerState.from.selectedYear = lastMonthYear;
-            auditPickerState.to.selectedMonth = lastMonth;
-            auditPickerState.to.selectedYear = lastMonthYear;
-        } else if (preset === 'thisYear') {
-            auditPickerState.from.selectedMonth = '01';
-            auditPickerState.from.selectedYear = currentYear;
-            auditPickerState.to.selectedMonth = '12';
-            auditPickerState.to.selectedYear = currentYear;
-        } else {
-            auditPickerState.from.selectedMonth = '';
-            auditPickerState.from.selectedYear = '';
-            auditPickerState.to.selectedMonth = '';
-            auditPickerState.to.selectedYear = '';
-        }
-
-        renderAuditYearGrid('from');
-        renderAuditYearGrid('to');
-        renderAuditPickerDisplays();
-        syncAuditRange();
-    }
-
     renderAuditYearGrid('from');
     renderAuditYearGrid('to');
     renderAuditPickerDisplays();
 
     $('#auditRangeToggle').on('click', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         $('#auditRangePopover').toggleClass('is-open');
         $('#auditRangeToggle').attr('aria-expanded', $('#auditRangePopover').hasClass('is-open') ? 'true' : 'false');
     });
 
-    $('#auditRangeCancel').on('click', function () {
+    $('#auditRangePopover').on('click', function (e) {
+        e.stopPropagation();
+    });
+
+    $('#auditRangeCancel').on('click', function (e) {
+        e.stopPropagation();
         closeAuditRangePopover();
     });
 
-    $('#auditRangeApply').on('click', function () {
+    $('#auditRangeApply').on('click', function (e) {
+        e.stopPropagation();
         syncAuditRange();
         closeAuditRangePopover();
         tbl.ajax.reload();
     });
 
-    $('.audit-range-preset').on('click', function () {
-        $('.audit-range-preset').removeClass('active');
-        $(this).addClass('active');
-        applyAuditPreset($(this).data('range'));
-        tbl.ajax.reload();
-    });
-
-    $(document).on('click', '.audit-range-picker-nav', function () {
+    $('#auditRangePopover').on('click', '.audit-range-picker-nav', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         var target = $(this).data('target');
         var nav = $(this).data('nav');
         var state = auditPickerState[target];
@@ -535,7 +525,9 @@
         renderAuditYearGrid(target);
     });
 
-    $(document).on('click', '.audit-range-picker-cell', function () {
+    $('#auditRangePopover').on('click', '.audit-range-picker-cell', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         var target = $(this).data('target');
         auditPickerState[target].selectedYear = String($(this).data('year'));
         renderAuditYearGrid(target);
@@ -543,9 +535,15 @@
         syncAuditRange();
     });
 
-    $(document).on('click', '.audit-range-month', function () {
+    $('#auditRangePopover').on('click', '.audit-range-month', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         var target = $(this).data('target');
+        if (!auditPickerState[target].selectedYear) {
+            auditPickerState[target].selectedYear = getDefaultYearForTarget(target);
+        }
         auditPickerState[target].selectedMonth = String($(this).data('month'));
+        renderAuditYearGrid(target);
         renderAuditMonthGrid(target);
         renderAuditPickerDisplays();
         syncAuditRange();
@@ -576,18 +574,16 @@
             $('#searchAction').val('');
             $('#searchDateFrom').val('');
             $('#searchDateTo').val('');
-            auditPickerState.from.yearStart = 2011;
+            auditPickerState.from.yearStart = defaultAuditYearStart;
             auditPickerState.from.selectedYear = '';
             auditPickerState.from.selectedMonth = '';
-            auditPickerState.to.yearStart = 2011;
+            auditPickerState.to.yearStart = defaultAuditYearStart;
             auditPickerState.to.selectedYear = '';
             auditPickerState.to.selectedMonth = '';
             renderAuditYearGrid('from');
             renderAuditYearGrid('to');
             renderAuditPickerDisplays();
-            $('#auditRangeLabel').text('Custom Range');
-            $('.audit-range-preset').removeClass('active');
-            $('.audit-range-preset[data-range="custom"]').addClass('active');
+            $('#auditRangeLabel').text('Select Range');
             tbl.ajax.reload();
         }, 0);
     });

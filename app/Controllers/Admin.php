@@ -980,7 +980,10 @@ class Admin extends BaseController
                         $builder->groupStart()
                             ->like('username', $searchUser)
                             ->orLike('fname', $searchUser)
+                            ->orLike('mname', $searchUser)
                             ->orLike('lname', $searchUser)
+                            ->orLike('suffix', $searchUser)
+                            ->orLike('email', $searchUser)
                             ->groupEnd();
                     }
                     if (!empty($searchStatus)) {

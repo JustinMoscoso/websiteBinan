@@ -17,7 +17,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <label class="form-label small fw-bold text-secondary">Search Account</label>
                         <input type="text" class="form-control" id="searchUser"
-                            placeholder="Search accounts by name">
+                            placeholder="Search accounts by Name">
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">

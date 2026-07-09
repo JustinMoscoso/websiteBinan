@@ -2,6 +2,14 @@
     <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">System Audit Logs</h1>
 </div>
 
+<?php
+$auditCurrentYear = (int) date('Y');
+$auditBaseYear = 2011;
+$auditDefaultYearStart = $auditBaseYear + (int) (floor(max(0, $auditCurrentYear - $auditBaseYear) / 12) * 12);
+$auditDefaultYearEnd = $auditDefaultYearStart + 11;
+$auditDefaultYearLabel = $auditDefaultYearStart . '-' . $auditDefaultYearEnd;
+?>
+
 <style>
     /* Admin UI Layout Theme Variable Definitions */
     :root {
@@ -155,44 +163,21 @@
     .audit-range-popover {
         position: absolute;
         top: calc(100% + 0.5rem);
-        left: 0;
+        left: 50%;
         z-index: 1055;
         display: none;
-        width: min(820px, 92vw);
+        width: min(980px, calc(100vw - 2rem));
+        max-height: calc(100vh - 12rem);
         background: #fff;
         border: 1px solid #d1d3e2;
         border-radius: 0.5rem;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
-        overflow: hidden;
+        overflow: auto;
+        transform: translateX(-50%);
     }
 
     .audit-range-popover.is-open {
         display: flex;
-    }
-
-    .audit-range-presets {
-        width: 190px;
-        background: linear-gradient(180deg, #fbfcfe 0%, #f4f7fb 100%);
-        border-right: 1px solid #e3e6f0;
-        padding: 0.8rem 0.65rem;
-    }
-
-    .audit-range-preset {
-        width: 100%;
-        border: 0;
-        background: transparent;
-        color: #1b4d3e;
-        padding: 0.7rem 0.8rem;
-        border-radius: 0.4rem;
-        text-align: left;
-        font-size: 0.9rem;
-        transition: background-color 0.15s ease, color 0.15s ease;
-    }
-
-    .audit-range-preset:hover,
-    .audit-range-preset.active {
-        background: #e9f5ee;
-        color: #163c31;
     }
 
     .audit-range-body {
@@ -330,10 +315,11 @@
             flex-direction: column;
         }
 
-        .audit-range-presets {
-            width: 100%;
-            border-right: 0;
-            border-bottom: 1px solid #e3e6f0;
+        .audit-range-popover {
+            width: calc(100vw - 1rem);
+            max-height: calc(100vh - 1rem);
+            left: 0;
+            transform: none;
         }
 
         .audit-range-grid {
@@ -368,23 +354,15 @@
                                 <span id="auditRangeLabel">Select Range</span>
                             </button>
                             <div class="audit-range-popover" id="auditRangePopover" role="dialog" aria-label="Audit date range picker">
-                                <div class="audit-range-presets">
-                                    <button type="button" class="audit-range-preset" data-range="thisMonth">This Month</button>
-                                    <button type="button" class="audit-range-preset" data-range="lastMonth">Last Month</button>
-                                    <button type="button" class="audit-range-preset" data-range="thisYear">This Year</button>
-                                    <button type="button" class="audit-range-preset active" data-range="custom">Custom Range</button>
-                                </div>
                                 <div class="audit-range-body">
                                     <div class="audit-range-grid">
                                         <div class="audit-range-group">
                                             <div class="audit-range-group-title">From</div>
-                                            <button type="button" class="audit-range-display" id="rangeDisplayFrom">
-                                                <span>Month Year</span>
-                                            </button>
+                                           
                                             <div class="audit-range-picker mt-3">
                                                 <div class="audit-range-picker-header">
                                                     <button type="button" class="audit-range-picker-nav" data-target="from" data-nav="prev" aria-label="Previous years">‹</button>
-                                                    <div class="audit-range-picker-title" id="rangeHeaderFrom">2011-2022</div>
+                                                    <div class="audit-range-picker-title" id="rangeHeaderFrom"><?= esc($auditDefaultYearLabel) ?></div>
                                                     <button type="button" class="audit-range-picker-nav" data-target="from" data-nav="next" aria-label="Next years">›</button>
                                                 </div>
                                                 <div class="audit-range-picker-grid" id="yearGridFrom"></div>
@@ -393,13 +371,11 @@
                                         </div>
                                         <div class="audit-range-group">
                                             <div class="audit-range-group-title">To</div>
-                                            <button type="button" class="audit-range-display" id="rangeDisplayTo">
-                                                <span>Month Year</span>
-                                            </button>
+                                            
                                             <div class="audit-range-picker mt-3">
                                                 <div class="audit-range-picker-header">
                                                     <button type="button" class="audit-range-picker-nav" data-target="to" data-nav="prev" aria-label="Previous years">‹</button>
-                                                    <div class="audit-range-picker-title" id="rangeHeaderTo">2011-2022</div>
+                                                    <div class="audit-range-picker-title" id="rangeHeaderTo"><?= esc($auditDefaultYearLabel) ?></div>
                                                     <button type="button" class="audit-range-picker-nav" data-target="to" data-nav="next" aria-label="Next years">›</button>
                                                 </div>
                                                 <div class="audit-range-picker-grid" id="yearGridTo"></div>
