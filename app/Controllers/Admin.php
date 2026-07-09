@@ -1154,7 +1154,11 @@ class Admin extends BaseController
                     $position_filter = $this->request->getPost('position');
                     $status_filter  = $this->request->getPost('status');
 
-                    $co_builder = $co_m->orderBy('ranking', 'ASC');
+                    $co_builder = $co_m
+                        ->orderBy("CASE status WHEN 'ACTIVE' THEN 1 WHEN 'INACTIVE' THEN 2 WHEN 'ARCHIVED' THEN 3 ELSE 99 END", 'ASC', false)
+                        ->orderBy("CASE off_position WHEN 'CONGRESS' THEN 1 WHEN 'CITY MAYOR' THEN 2 WHEN 'CITY VICE MAYOR' THEN 3 WHEN 'CITY COUNCILOR' THEN 4 WHEN 'ABC PRESIDENT' THEN 5 WHEN 'SK FEDERATION PRESIDENT' THEN 6 ELSE 99 END", 'ASC', false)
+                        ->orderBy('ranking', 'ASC')
+                        ->orderBy('off_name', 'ASC');
                     // Non-privileged users cannot see archived city officials
                     if (!$canSeeArchived) {
                         $co_builder->where('status !=', 'ARCHIVED');
