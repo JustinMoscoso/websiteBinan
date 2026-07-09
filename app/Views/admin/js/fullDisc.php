@@ -113,6 +113,7 @@
     });
     // Initially clear the add year input text box so it shows the placeholder
     $('#yr').val('');
+    $('#searchYear').val('');
 
     // Restrict file input to one file upload only
     $('#policyFile').on('change', function () {
@@ -386,8 +387,8 @@
             "url": "<?php echo base_url('admin/ajax/get_fulldiscpol'); ?>",
             "type": "POST",
             "data": function (d) {
-                d.frequency = $('select[name="frequency"]').val();
                 d.file_category = $('select[name="file_category"]').val();
+                d.year = $('input[name="year"]').val();
                 d.status = $('select[name="status"]').val();
             }
         },
@@ -494,8 +495,8 @@
         // reset form fields
         $('#docSearchForm')[0].reset();
 
-        $('[name="frequency"]').val('');
         $('[name="file_category"]').val('');
+        $('[name="year"]').val('');
         $('[name="status"]').val('');
 
         // reload table back to default

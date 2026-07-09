@@ -154,7 +154,7 @@
                         <input type="hidden" id="addPerdataHidden" name="perdata" required>
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-12" id="mayorImageGroup">
                         <label for="mayorimg" class="form-label small fw-bold text-secondary">Upload Image
                             </label>
                         <input type="file" class="form-control" id="mayorimg" name="mayorimg[]" accept="image/*" multiple>

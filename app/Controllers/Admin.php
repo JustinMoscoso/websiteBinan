@@ -1503,8 +1503,8 @@ class Admin extends BaseController
                         $message = 'Policy not found';
                     }
                 } else {
-                    $frequency = $this->request->getPost('frequency');
                     $file_category = $this->request->getPost('file_category');
+                    $year_filter = $this->request->getPost('year');
                     $status_filter = $this->request->getPost('status');
 
                     // Build the query with filters
@@ -1515,38 +1515,13 @@ class Admin extends BaseController
                         $query = $query->where('status !=', 'ARCHIVED');
                     }
 
-                    // Apply frequency filter
-                    if (!empty($frequency)) {
-                        if ($frequency === 'ANNUAL') {
-                            // Annual reports
-                            $annual_categories = [
-                                'Annual Budget Report',
-                                'Annual Procurement Plan or Procurement List',
-                                'Supplemental Procurement Plan',
-                                'Annual Gender and Development Accomplishment Report'
-                            ];
-                            $query = $query->whereIn('file_category', $annual_categories);
-                        } elseif ($frequency === 'QUARTERLY') {
-                            // Quarterly reports
-                            $quarterly_categories = [
-                                'Quarterly Statement of Cash Flow',
-                                'Statement of Receipts and Expenditures',
-                                '20% Component of the Internal Revenue Allotment Utilization',
-                                'Local Disaster Risk Reduction and Management Fund Utilization',
-                                'Report of Special Education Fund Utilization',
-                                'Trust Fund (PDAF) Utilization',
-                                'Unliquidated Cash Advances',
-                                'Bid Results on Civil Works and Goods and Services',
-                                'Manpower Complement',
-                                'Annual Statement of Indebtedness, Payments and Balances'
-                            ];
-                            $query = $query->whereIn('file_category', $quarterly_categories);
-                        }
-                    }
-
                     // Apply filters if they are provided and not empty
                     if (!empty($file_category) && $file_category !== '- File Category -') {
                         $query = $query->where('file_category', $file_category);
+                    }
+
+                    if (!empty($year_filter)) {
+                        $query = $query->where('year', $year_filter);
                     }
 
                     if (!empty($status_filter) && $status_filter !== '- Status -') {
@@ -2517,9 +2492,34 @@ class Admin extends BaseController
                     break;
                 }
                 $may_m = new \App\Models\MayorContent();
-                $mayor_name = $this->request->getPost('myrname');
-                $section = $this->request->getPost('content_category');
-                $content = $this->request->getPost('perdata');
+                $mayor_name = trim((string) $this->request->getPost('myrname'));
+                $section = trim((string) $this->request->getPost('content_category'));
+                $content = (string) $this->request->getPost('perdata');
+                $mayor_img = $this->request->getFileMultiple('mayorimg');
+
+                if (!$this->isValidMayorSection($section)) {
+                    $message = 'Please select a valid category.';
+                    break;
+                }
+
+                if (trim(strip_tags($content)) === '') {
+                    $message = 'Content is required.';
+                    break;
+                }
+
+                if ($section === 'Personal Data' && $mayor_name === '') {
+                    $message = 'Mayor name is required for Personal Data.';
+                    break;
+                }
+
+                if ($section !== 'Personal Data') {
+                    $mayor_name = '';
+                }
+
+                if (!$this->mayorSectionAllowsImages($section) && $this->hasMayorUpload($mayor_img)) {
+                    $message = 'Image upload is not allowed for Awards or Years Service.';
+                    break;
+                }
 
                 // Only one ACTIVE record is allowed per section.
                 if ($this->mayorSectionHasActiveEntry($may_m, $section)) {
@@ -2536,17 +2536,15 @@ class Admin extends BaseController
 
                     $file_category = 'MAYOR';
                     $path = WRITEPATH . 'uploads/' . $file_category;
+                    $data['mayor_img'] = json_encode([]);
 
-                    // Handle file upload
-                    $mayor_img = $this->request->getFileMultiple('mayorimg');
-                    if ($mayor_img) {
-                        $uploaded_files = [];
-                        foreach ($mayor_img as $img) {
-                            if ($img->isValid() && !$img->hasMoved() && $img->move($path, $img->getRandomName())) {
-                                $uploaded_files[] = $img->getName();
-                            }
+                    if ($this->mayorSectionAllowsImages($section)) {
+                        $uploadResult = $this->validateAndMoveMayorImages($mayor_img, $path);
+                        if (!$uploadResult['ok']) {
+                            $message = $uploadResult['message'];
+                            break;
                         }
-                        $data['mayor_img'] = json_encode($uploaded_files); // Store as JSON
+                        $data['mayor_img'] = json_encode($uploadResult['files']);
                     }
 
                     // Insert data into the database
@@ -3494,9 +3492,34 @@ class Admin extends BaseController
                         : (is_array($mayorcontent) ? ($mayorcontent['mayor_img'] ?? '') : '');
                     $currentStatus = strtoupper(trim((string) ($mayorcontent->status ?? '')));
                     // Shared modal uses shared names; fall back to legacy edit-prefixed names
-                    $mayor_name = $this->request->getPost('myrname')            ?: $this->request->getPost('editmyrname');
-                    $section    = $this->request->getPost('content_category')   ?: $this->request->getPost('edit_content_category');
-                    $content    = $this->request->getPost('perdata')             ?: $this->request->getPost('editperdata');
+                    $mayor_name = trim((string) ($this->request->getPost('myrname') ?: $this->request->getPost('editmyrname')));
+                    $section    = trim((string) ($this->request->getPost('content_category') ?: $this->request->getPost('edit_content_category')));
+                    $content    = (string) ($this->request->getPost('perdata') ?: $this->request->getPost('editperdata'));
+                    $mayor_img = $this->request->getFileMultiple('mayorimg') ?: $this->request->getFileMultiple('editmayorimg');
+
+                    if (!$this->isValidMayorSection($section)) {
+                        $message = 'Please select a valid category.';
+                        break;
+                    }
+
+                    if (trim(strip_tags($content)) === '') {
+                        $message = 'Content is required.';
+                        break;
+                    }
+
+                    if ($section === 'Personal Data' && $mayor_name === '') {
+                        $message = 'Mayor name is required for Personal Data.';
+                        break;
+                    }
+
+                    if ($section !== 'Personal Data') {
+                        $mayor_name = '';
+                    }
+
+                    if (!$this->mayorSectionAllowsImages($section) && $this->hasMayorUpload($mayor_img)) {
+                        $message = 'Image upload is not allowed for Awards or Years Service.';
+                        break;
+                    }
 
                     // Only block edits when this row is active and another active row already exists.
                     if ($currentStatus === 'ACTIVE' && $this->mayorSectionHasActiveEntry($may_m, $section, (int) $id)) {
@@ -3516,19 +3539,21 @@ class Admin extends BaseController
 
                         // Handle file uploads for mayor image if new files are selected
                         // Shared modal uses 'mayorimg[]'; fall back to legacy 'editmayorimg[]'
-                        $mayor_img = $this->request->getFileMultiple('mayorimg') ?: $this->request->getFileMultiple('editmayorimg');
-                        $uploaded_files = [];
-                        if ($mayor_img) {
-                            foreach ($mayor_img as $img) {
-                                if ($img->isValid() && !$img->hasMoved() && $img->move($path, $img->getRandomName())) {
-                                    $uploaded_files[] = $img->getName();
-                                }
+                        $uploadResult = ['ok' => true, 'files' => [], 'message' => ''];
+                        if ($this->mayorSectionAllowsImages($section)) {
+                            $uploadResult = $this->validateAndMoveMayorImages($mayor_img, $path);
+                            if (!$uploadResult['ok']) {
+                                $message = $uploadResult['message'];
+                                break;
                             }
                         }
+                        $uploaded_files = $uploadResult['files'];
 
                         $existing_mayor_images = $this->request->getPost('existing_mayor_images');
                         $retained_images = [];
-                        if (!empty($existing_mayor_images)) {
+                        if (!$this->mayorSectionAllowsImages($section)) {
+                            $retained_images = [];
+                        } elseif (!empty($existing_mayor_images)) {
                             $decoded_images = json_decode($existing_mayor_images, true);
                             if (is_array($decoded_images)) {
                                 $retained_images = array_values(array_filter($decoded_images, static function ($image) {
@@ -5060,6 +5085,74 @@ class Admin extends BaseController
     private function isValidPhilippineMobileNumber($value): bool
     {
         return (bool) preg_match('/^\+63\s9\d{2}\s\d{3}\s\d{4}$/', trim((string) $value));
+    }
+
+    private function isValidMayorSection(?string $section): bool
+    {
+        return in_array(trim((string) $section), $this->mayorSections(), true);
+    }
+
+    private function mayorSectionAllowsImages(?string $section): bool
+    {
+        return in_array(trim((string) $section), ['Personal Data', 'Gallery', 'Home Page'], true);
+    }
+
+    private function mayorSections(): array
+    {
+        return ['Personal Data', 'Awards', 'Years Service', 'Gallery', 'Home Page'];
+    }
+
+    private function hasMayorUpload($files): bool
+    {
+        foreach ((array) $files as $file) {
+            if ($file && method_exists($file, 'getError') && (int) $file->getError() !== UPLOAD_ERR_NO_FILE) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function validateAndMoveMayorImages($files, string $path): array
+    {
+        $uploadedFiles = [];
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $maxBytes = 2 * 1024 * 1024;
+
+        if (!$this->hasMayorUpload($files)) {
+            return ['ok' => true, 'files' => $uploadedFiles, 'message' => ''];
+        }
+
+        if (!is_dir($path) && !mkdir($path, 0775, true) && !is_dir($path)) {
+            return ['ok' => false, 'files' => [], 'message' => 'Upload directory is not available.'];
+        }
+
+        foreach ((array) $files as $img) {
+            if (!$img || !method_exists($img, 'getError') || (int) $img->getError() === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if (!$img->isValid() || $img->hasMoved()) {
+                return ['ok' => false, 'files' => [], 'message' => 'Invalid image upload.'];
+            }
+
+            $mimeType = method_exists($img, 'getMimeType') ? $img->getMimeType() : $img->getClientMimeType();
+            if (!in_array($mimeType, $allowedMimeTypes, true)) {
+                return ['ok' => false, 'files' => [], 'message' => 'Only JPG, PNG, GIF, and WEBP images are allowed.'];
+            }
+
+            if ($img->getSize() > $maxBytes) {
+                return ['ok' => false, 'files' => [], 'message' => 'Each image must not exceed 2MB.'];
+            }
+
+            if (!$img->move($path, $img->getRandomName())) {
+                return ['ok' => false, 'files' => [], 'message' => 'Failed to upload image.'];
+            }
+
+            $uploadedFiles[] = $img->getName();
+        }
+
+        return ['ok' => true, 'files' => $uploadedFiles, 'message' => ''];
     }
 
     private function mayorSectionHasActiveEntry($mayorModel, ?string $section, ?int $excludeId = null): bool

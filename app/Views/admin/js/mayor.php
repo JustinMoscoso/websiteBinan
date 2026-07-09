@@ -164,6 +164,10 @@
         return section === 'Personal Data';
     }
 
+    function shouldShowMayorImageField(section) {
+        return ['Personal Data', 'Gallery', 'Home Page'].includes(section);
+    }
+
     function syncMayorNameField(section, mayorName) {
         var showNameField = shouldShowMayorNameField(section);
         var $group = $('#mayorNameGroup');
@@ -173,6 +177,29 @@
         $group.toggle(showNameField);
         $field.prop('required', showNameField);
         $field.val(nextValue);
+    }
+
+    function syncMayorImageField(section, images) {
+        var showImageField = shouldShowMayorImageField(section);
+        var $group = $('#mayorImageGroup');
+
+        $group.toggle(showImageField);
+
+        if (!showImageField) {
+            $('#mayorimg').val('');
+            $('#existing_mayor_images').val('');
+            $('#add_img_preview').html('');
+            return;
+        }
+
+        if (typeof images !== 'undefined') {
+            renderMayorExistingImages(images);
+        }
+    }
+
+    function syncMayorCategoryFields(section, mayorName, images) {
+        syncMayorNameField(section, mayorName);
+        syncMayorImageField(section, images);
     }
 
     // ─── Shared modal open helper ─────────────────────────────────────────────
@@ -187,13 +214,13 @@
             $('#add_img_preview').html('');
             $('#existing_mayor_images').val('');
             quillPerData.root.innerHTML = '';
-            syncMayorNameField('');
+            syncMayorCategoryFields('');
         } else {
             $('#mayorModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Modify Profile Configuration');
             $('#btnAdd').text('Update');
             $('#mayorRecordId').val(record.ID);
             $('#content_category').val(record.section);
-            syncMayorNameField(record.section, record.mayor_name);
+            syncMayorCategoryFields(record.section, record.mayor_name, record.mayor_img);
 
             // Load content into the single Quill editor after modal is shown
             $('#addModal').one('shown.bs.modal', function () {
@@ -201,7 +228,6 @@
             });
 
             $('#mayorimg').val('');
-            renderMayorExistingImages(record.mayor_img);
         }
 
         $('#addModal').modal('show');
@@ -209,17 +235,24 @@
 
     // ─── Category change handler ──────────────────────────────────────────────
     $('#content_category').on('change', function () {
-        syncMayorNameField($(this).val());
+        syncMayorCategoryFields($(this).val());
     });
 
     // ─── Unified submit handler ───────────────────────────────────────────────
-    $('#btnAdd').on('click', function () {
+    $('#btnAdd').on('click', function (e) {
+        e.preventDefault();
         var mode = $('#mayorMode').val();
         var form = $('#addForm')[0];
         var formData = new FormData(form);
 
         // Sync Quill content into hidden field
         formData.set('perdata', quillPerData.root.innerHTML);
+
+        if (!shouldShowMayorImageField($('#content_category').val())) {
+            formData.delete('mayorimg[]');
+            formData.delete('mayorimg');
+            formData.set('existing_mayor_images', '[]');
+        }
 
         // Explicitly set ID for edit mode
         if (mode === 'edit') {
@@ -497,13 +530,13 @@
         $('#addForm')[0].reset();
         $('#add_img_preview').html('');
         $('#existing_mayor_images').val('');
-        $('#mayorImg').val('');
+        $('#mayorimg').val('');
         $('#mayorRecordId').val('');
         $('#mayorMode').val('add');
         $('#mayorModalTitle').text('Add Record');
         $('#btnAdd').text('Save');
         quillPerData.root.innerHTML = '';
-        syncMayorNameField('');
+        syncMayorCategoryFields('');
     });
 
     // ─── DataTable ────────────────────────────────────────────────────────────

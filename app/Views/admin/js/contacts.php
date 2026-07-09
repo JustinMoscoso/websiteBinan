@@ -777,7 +777,7 @@
         select: false,
         searching: true,
         ordering: true,
-        "order": [],
+        "order": [[6, 'asc'], [1, 'asc']],
         pageLength: 10,
         processing: true,
         ajax: {
