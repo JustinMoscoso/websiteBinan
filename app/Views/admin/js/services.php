@@ -177,7 +177,7 @@
         $('#recordMode').val(mode);
 
         if (mode === 'add') {
-            $('#recordModalTitle').text('Add Service');
+            $('#recordModalTitle').text('Add Record');
             $('#btnAddLabel').text('Save');
             $('#recordId').val('');
             $('#addForm')[0].reset();
@@ -190,7 +190,7 @@
             }
         } else {
             // edit mode
-            $('#recordModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Service');
+            $('#recordModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Record');
             $('#btnAddLabel').text('Update');
             $('#recordId').val(record.ID || record.id);
             $('#serviceName').val(record.serv_name);
@@ -220,7 +220,7 @@
     $('#addModal').on('hidden.bs.modal', function () {
         $('#recordMode').val('add');
         $('#recordId').val('');
-        $('#recordModalTitle').text('Add Service');
+        $('#recordModalTitle').text('Add Record');
         $('#btnAddLabel').text('Save');
         $('#addForm')[0].reset();
         if (quillContent) quillContent.setContents([]);
@@ -510,7 +510,14 @@
                 },
                 "visible": false
             },
-            { "title": "Service Title", "data": "serv_name", "className": "align-middle" },
+            {
+                title: "Service Title",
+                data: "serv_name",
+                className: "align-middle",
+                render: function (data) {
+                    return '<div class="d-flex justify-content-start">' + data + '</div>';
+                }
+            },
             {
                 "title": "Description", "data": "content", "className": "dt-head-center dt-body-justify align-middle", width: '35%',
                 "render": function (data, type, row) {
@@ -559,6 +566,7 @@
             {
                 "title": "Actions",
                 "data": "ID",
+                "className": "dt-center align-middle",
                 "render": function (data, type, row) {
                     if (userLevel === 'VIEWER') {
                         return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">

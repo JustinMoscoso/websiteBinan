@@ -54,7 +54,7 @@
 
         $('#investId').val('');
         $('#investMode').val('add');
-        $('#investModalTitle').text('Add Investment Content');
+        $('#investModalTitle').text('Add Record');
         $('#investFileLabel').html('Upload File Attachment <span class="text-danger">*</span>');
         $('#investFile').prop('required', true);
         $('#btnAdd').text('Save');
@@ -64,7 +64,7 @@
     function setInvestModalMode(mode) {
         investModalMode = mode;
         $('#investMode').val(mode);
-        $('#investModalTitle').text(mode === 'edit' ? 'Edit Investment Content' : 'Add Investment Content');
+        $('#investModalTitle').text(mode === 'edit' ? 'Edit Investment Content' : 'Add Record');
         $('#investFileLabel').html(mode === 'edit'
             ? 'Replace File Attachment'
             : 'Upload File Attachment <span class="text-danger">*</span>');
@@ -365,7 +365,8 @@
             {
                 "title": "Actions",
                 "data": "ID",
-                "className": "dt-center",
+                "className": "align-middle",
+                "width": "10%",
                 "render": function (data, type, row) {
                     if (userLevel === 'VIEWER') {
                         return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">

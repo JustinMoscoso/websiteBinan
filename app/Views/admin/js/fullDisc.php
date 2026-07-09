@@ -30,13 +30,13 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -50,7 +50,7 @@
         $('#addForm')[0].reset();
         $('#policyId').val('');
         $('#policyMode').val('add');
-        $('#policyModalTitle').text('Add Policy');
+        $('#policyModalTitle').text('Add Record');
         $('#btnAdd').text('Save');
         $('#policyFile').prop('required', true).val('');
 
@@ -72,7 +72,7 @@
     function openFullDiscModal(mode, policy) {
         fullDiscModalMode = mode;
         $('#policyMode').val(mode);
-        $('#policyModalTitle').text(mode === 'edit' ? 'Edit Policy' : 'Add Policy');
+        $('#policyModalTitle').text(mode === 'edit' ? 'Edit Record' : 'Add Record');
         $('#btnAdd').text(mode === 'edit' ? 'Update' : 'Save');
         $('#policyFile').prop('required', mode === 'add');
 
@@ -400,7 +400,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tblfdp_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({

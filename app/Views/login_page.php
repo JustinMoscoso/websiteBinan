@@ -170,14 +170,14 @@
 
         <div class="text-center d-flex flex-column align-items-center w-100" style="max-width: 280px;">
           <span
-            style="font-size: 11px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: rgba(255, 255, 255, 0.8); letter-spacing: 1px; line-height: 1.2;">
+            style="font-size: 15px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: rgba(255, 255, 255, 0.8); letter-spacing: 1px; line-height: 1.2;">
             REPUBLIC OF THE PHILIPPINES
           </span>
 
           <hr style="width: 100%; margin: 6px 0; border: none; border-top: 2px solid rgba(255, 255, 255, 0.4);">
 
           <span
-            style="font-size: 11px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: rgba(255, 255, 255, 0.8); letter-spacing: 0.5px; line-height: 1.2;">
+            style="font-size: 15px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: rgba(255, 255, 255, 0.8); letter-spacing: 0.5px; line-height: 1.2;">
             CITY GOVERNMENT OF BIÑAN
           </span>
 
@@ -193,7 +193,7 @@
             <div class="d-lg-none text-center mb-4">
               <div class="d-flex align-items-center justify-content-center mb-3" style="gap: 12px;">
                 <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="img-fluid flex-shrink-0"
-                  style="max-height: 60px;" alt="Biñan Logo">
+                  style="max-height: 400px;" alt="Biñan Logo">
                 <div class="text-start d-flex flex-column align-items-start" style="max-width: 200px;">
                   <span
                     style="font-size: 9px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: #1B4332; letter-spacing: 0.5px; line-height: 1.2;">
@@ -240,22 +240,13 @@
               </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <div class="form-check m-0">
-                <input class="form-check-input" type="checkbox" id="check" style="cursor: pointer;">
-                <label class="form-check-label small text-secondary user-select-none" for="check"
-                  style="cursor: pointer;">
-                  Remember me
-                </label>
-              </div>
-            </div>
 
             <div class="d-grid gap-2">
               <button id="btnLoad" class="btn theme-login-action-btn d-none" type="button" disabled>
                 <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Verifying Credentials...
+                Logging in...
               </button>
-
+              <br>
               <button id="btnLogin" class="btn theme-login-action-btn w-100" type="submit">
                 <i class='bx bx-log-in-circle me-2 align-middle fs-5'></i>
                 <span class="align-middle">Login</span>

@@ -30,13 +30,13 @@
             var $modal = $(this);
             $modal.find('.ql-editor').attr('contenteditable', 'false');
             $modal.find('.ql-toolbar').hide();
-            
+
             // Re-enforce lock down after a short delay for dynamic content loading
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 100);
-            setTimeout(function() {
+            setTimeout(function () {
                 $modal.find('.ql-editor').attr('contenteditable', 'false');
                 $modal.find('.ql-toolbar').hide();
             }, 500);
@@ -160,7 +160,7 @@
         $('#careerForm')[0].reset();
         $('#careerId').val('');
         $('#careerMode').val('add');
-        $('#careerModalTitle').text('Add Career Entry');
+        $('#careerModalTitle').text('Add Record');
         $('#btnCareerSave').text('Save');
         $('#careerFile').prop('required', true);
         $('#currentCareerFileWrap').addClass('d-none');
@@ -172,7 +172,7 @@
 
         if (mode === 'edit' && record) {
             $('#careerMode').val('edit');
-            $('#careerModalTitle').text('Modify Career Entry');
+            $('#careerModalTitle').text('Edit Record');
             $('#btnCareerSave').text('Update');
             $('#careerId').val(record.ID || record.id || '');
             // Strip time portion so <input type="date"> receives YYYY-MM-DD only
@@ -325,8 +325,8 @@
             "type": "POST",
             "data": function (d) {
                 d.search_kw = $('form#careerSearchForm input[name="search"]').val();
-                d.level     = $('form#careerSearchForm select[name="level"]').val();
-                d.status    = $('form#careerSearchForm select[name="status"]').val();
+                d.level = $('form#careerSearchForm select[name="level"]').val();
+                d.status = $('form#careerSearchForm select[name="status"]').val();
             }
         },
         initComplete: function () {
@@ -337,7 +337,7 @@
                 'width': '250px',
                 'margin-left': '0.5rem'
             });
-            
+
             var lengthSelect = $('#tblcareer_length select');
             lengthSelect.addClass('form-select form-select-sm d-inline-block');
             lengthSelect.css({
@@ -391,6 +391,7 @@
                 "title": "Actions",
                 "data": "ID",
                 "className": "dt-center",
+                width: "10%",
                 "render": function (data, type, row) {
                     if (userLevel === 'VIEWER') {
                         return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">

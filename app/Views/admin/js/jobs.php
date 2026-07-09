@@ -54,7 +54,7 @@
             $('#addForm')[0].reset();
             $('#jobId').val('');
             $('#jobMode').val('add');
-            $('#jobModalTitle').text('Add Job');
+            $('#jobModalTitle').text('Add Record');
             $('#btnAdd').text('Save');
             $('#publication_date').val(moment().format('YYYY-MM-DD'));
             if (QuillManager.getQuillInstance('jobsDesc')) {
@@ -65,7 +65,7 @@
         function openJobModal(mode, job) {
             jobsModalMode = mode;
             $('#jobMode').val(mode);
-            $('#jobModalTitle').text(mode === 'edit' ? 'Edit Job' : 'Add Job');
+            $('#jobModalTitle').text(mode === 'edit' ? 'Edit Record' : 'Add Record');
             $('#btnAdd').text(mode === 'edit' ? 'Update' : 'Save');
 
             if (mode === 'edit' && job) {
@@ -156,14 +156,11 @@
             },
             "columns": [
                 {
-                    "title": "Job Title",
-                    "data": "title",
-                    "className": "align-middle",
-                    "render": function (data, type, row) {
-                        if (type === 'display') {
-                            return data;
-                        }
-                        return data;
+                    title: "Job Title",
+                    data: "title",
+                    className: "align-middle",
+                    render: function (data) {
+                        return '<div class="d-flex justify-content-start">' + data + '</div>';
                     }
                 },
                 {

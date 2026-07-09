@@ -65,7 +65,7 @@
 
         $('#contactId').val('');
         $('#contactMode').val('add');
-        $('#contactModalTitle').text('Add Contact');
+        $('#contactModalTitle').text('Add Record');
         $('#btnAdd').text('Save');
         $('#deptGroup, #brgyGroup, #othersGrp').hide();
         setPhilippineMobilePrefix('#smart');
@@ -75,7 +75,7 @@
     function setContactModalMode(mode) {
         contactModalMode = mode;
         $('#contactMode').val(mode);
-        $('#contactModalTitle').text(mode === 'edit' ? '' : 'Add Contact');
+        $('#contactModalTitle').text(mode === 'edit' ? 'Edit Record' : 'Add Record');
         $('#btnAdd').text(mode === 'edit' ? 'Update' : 'Save');
     }
 

@@ -225,7 +225,7 @@
 
         $('#cityOffId').val('');
         $('#cityOffMode').val('add');
-        $('#cityOffModalTitle').text('Add City Official');
+        $('#cityOffModalTitle').text('Add Record');
         $('#btnCityOffSave').text('Save');
         $('#offimg').prop('required', true);
         $('#offimgRequiredMark').removeClass('d-none');
@@ -297,7 +297,7 @@
 
         $('#cityOffId').val(cityOffState.recordId);
         $('#cityOffMode').val(mode);
-        $('#cityOffModalTitle').text(isEdit ? 'Edit City Official' : 'Add City Official');
+        $('#cityOffModalTitle').text(isEdit ? 'Edit Record' : 'Add Record');
         $('#btnCityOffSave').text(isEdit ? 'Update' : 'Save');
         $('#offimg').prop('required', !isEdit);
         $('#offimgRequiredMark').toggleClass('d-none', isEdit);
@@ -700,7 +700,7 @@
         columns: [
             { title: 'City Official ID', data: 'ID', visible: false },
             {
-                title: "Title",
+                title: "City Officials",
                 data: "off_name",
                 className: "align-middle",
                 render: function (data) {
@@ -786,6 +786,7 @@
                 title: 'Actions',
                 data: 'ID',
                 className: 'dt-center align-middle',
+                width: "10%",
                 render: function (data, type, row) {
                     var recordId = row.ID || row.id;
 

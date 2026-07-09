@@ -127,7 +127,7 @@
     function resetAboutModal() {
         $('#recordMode').val('add');
         $('#recordId').val('');
-        $('#recordModalTitle').text('Add Content');
+        $('#recordModalTitle').text('Add Record');
         $('#btnAddLabel').text('Save');
         $('#addForm')[0].reset();
         $('#DescGroup, #AboutImgGrp').hide();
@@ -146,10 +146,10 @@
         $('#recordMode').val(mode);
 
         if (mode === 'add') {
-            $('#recordModalTitle').text('Add Content');
+            $('#recordModalTitle').text('Add Record');
             $('#btnAddLabel').text('Save');
         } else {
-            $('#recordModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Content');
+            $('#recordModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Record');
             $('#btnAddLabel').text('Update');
             $('#recordId').val(record.ID || record.id);
             $('#content_category').val(record.section).trigger('change');
@@ -435,7 +435,7 @@
             {
                 title: 'Description',
                 data: 'description',
-                className: 'dt-head-center dt-body-justify align-middle',
+                className: 'align-middle',
                 width: '30%',
                 render: function (data) {
                     return data ? data : '-';

@@ -113,13 +113,14 @@
     </div>
 </section>
 
-<div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true" style="overflow-y: auto;">
+<div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true"
+    style="overflow-y: auto;">
     <div class="modal-dialog modal-xl custom-wide-modal my-3">
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <input type="hidden" id="brgyId" name="id">
             <input type="hidden" id="brgyMode" name="mode" value="add">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;" id="brgyModalTitle">Add Barangay Details</h5>
+                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;" id="brgyModalTitle">Add Record</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>

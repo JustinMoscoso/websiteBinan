@@ -108,7 +108,7 @@
 
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <span id="recordModalTitle">Add Post</span>
+                    <span id="recordModalTitle">Add Record</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>

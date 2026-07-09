@@ -115,7 +115,7 @@
         $('#addForm')[0].reset();
         $('#brgyId').val('');
         $('#brgyMode').val('add');
-        $('#brgyModalTitle').text('Add Barangay Details');
+        $('#brgyModalTitle').text('Add Record');
         $('#btnBrgySave').text('Save');
         $('#brgyImg').prop('required', true);
         $('#addBrgyLogoPreview').html('');
@@ -146,7 +146,7 @@
         initBarangayEditors();
 
         if (mode === 'edit' && record) {
-            $('#brgyModalTitle').text('Edit Barangay Details');
+            $('#brgyModalTitle').text('Edit Record');
             $('#btnBrgySave').text('Update');
             $('#brgyId').val(record.ID || record.id || '');
             $('#txtBrgy').val(record.brgy_name || '');
@@ -440,18 +440,14 @@
             },
             { "title": "Captain", "data": "brngy_capt", width: '15%', "className": "dt-body-left align-middle" },
             {
-                "title": "Barangay Staff", "data": "barangay_staff", width: '30%', 'className': 'dt-body-justify align-middle',
-                "render": function (data, type, row) {
-                    if (data && data.trim() !== '') {
-                        // Strip HTML tags and limit text length for table display
-                        var text = data.replace(/<[^>]*>?/gm, '');
-                        if (text.length > 80) {
-                            text = text.substring(0, 80) + '...';
-                        }
-                        return '<div class="text-muted small">' + text + '</div>';
-                    } else {
-                        return '<span class="text-muted small">No staff info</span>';
-                    }
+                "title": "Barangay Staff",
+                "data": "barangay_staff",
+                width: '30%',
+                'className': ' align-middle',
+                "render": function (data) {
+                    return data && data.trim() !== ''
+                        ? '<div class="text-muted small">' + data + '</div>'
+                        : '<span class="text-muted small">No staff info</span>';
                 }
             },
         // Captain image column - commented out as not needed
@@ -483,7 +479,7 @@
         "title": "Actions",
             "data": "ID",
                 "className": "dt-center align-middle",
-                    "width": '15%',
+                    "width": '10%',
                         "render": function (data, type, row) {
                             if (userLevel === 'VIEWER') {
                                 return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
