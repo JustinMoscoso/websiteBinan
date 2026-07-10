@@ -980,7 +980,10 @@ class Admin extends BaseController
                         $builder->groupStart()
                             ->like('username', $searchUser)
                             ->orLike('fname', $searchUser)
+                            ->orLike('mname', $searchUser)
                             ->orLike('lname', $searchUser)
+                            ->orLike('suffix', $searchUser)
+                            ->orLike('email', $searchUser)
                             ->groupEnd();
                     }
                     if (!empty($searchStatus)) {
@@ -1154,7 +1157,11 @@ class Admin extends BaseController
                     $position_filter = $this->request->getPost('position');
                     $status_filter  = $this->request->getPost('status');
 
-                    $co_builder = $co_m->orderBy('ranking', 'ASC');
+                    $co_builder = $co_m
+                        ->orderBy("CASE status WHEN 'ACTIVE' THEN 1 WHEN 'INACTIVE' THEN 2 WHEN 'ARCHIVED' THEN 3 ELSE 99 END", 'ASC', false)
+                        ->orderBy("CASE off_position WHEN 'CONGRESS' THEN 1 WHEN 'CITY MAYOR' THEN 2 WHEN 'CITY VICE MAYOR' THEN 3 WHEN 'CITY COUNCILOR' THEN 4 WHEN 'ABC PRESIDENT' THEN 5 WHEN 'SK FEDERATION PRESIDENT' THEN 6 ELSE 99 END", 'ASC', false)
+                        ->orderBy('ranking', 'ASC')
+                        ->orderBy('off_name', 'ASC');
                     // Non-privileged users cannot see archived city officials
                     if (!$canSeeArchived) {
                         $co_builder->where('status !=', 'ARCHIVED');
@@ -1258,7 +1265,8 @@ class Admin extends BaseController
                     ->orderBy('audit_trails.created_date', 'desc');
 
                 $searchAction = $this->request->getPost('searchAction');
-                $searchDate = $this->request->getPost('searchDate');
+                $searchDateFrom = $this->request->getPost('searchDateFrom');
+                $searchDateTo = $this->request->getPost('searchDateTo');
                 $isSearching = false;
 
                 if (!empty($searchAction)) {
@@ -1271,8 +1279,15 @@ class Admin extends BaseController
                     $isSearching = true;
                 }
 
-                if (!empty($searchDate)) {
-                    $query->where('DATE(audit_trails.created_date)', $searchDate);
+                if (!empty($searchDateFrom) && !empty($searchDateTo)) {
+                    $query->where('DATE(audit_trails.created_date) >=', $searchDateFrom)
+                        ->where('DATE(audit_trails.created_date) <=', $searchDateTo);
+                    $isSearching = true;
+                } elseif (!empty($searchDateFrom)) {
+                    $query->where('DATE(audit_trails.created_date) >=', $searchDateFrom);
+                    $isSearching = true;
+                } elseif (!empty($searchDateTo)) {
+                    $query->where('DATE(audit_trails.created_date) <=', $searchDateTo);
                     $isSearching = true;
                 }
 
@@ -1554,7 +1569,7 @@ class Admin extends BaseController
                         $message = 'Career not found';
                     }
                 } else {
-                    $search_kw    = $this->request->getPost('search_kw');
+                    $publication_date = trim((string) $this->request->getPost('publication_date'));
                     $level_filter = $this->request->getPost('level');
                     $status_filter = $this->request->getPost('status');
 
@@ -1565,21 +1580,10 @@ class Admin extends BaseController
                     if (!$canSeeArchived) {
                         $career_builder->where('status !=', 'ARCHIVED');
                     }
-                    // Date filter (supports YYYY, YYYY-MM, or YYYY-MM-DD)
-                    if (!empty($search_kw)) {
-                        $search_kw = trim((string) $search_kw);
-
-                        if (preg_match('/^\d{4}$/', $search_kw)) {
-                            $career_builder->where('YEAR(publication_date)', $search_kw);
-                        } elseif (preg_match('/^\d{4}-\d{2}$/', $search_kw)) {
-                            [$year, $month] = explode('-', $search_kw, 2);
-                            $career_builder->where('YEAR(publication_date)', $year)
-                                ->where('MONTH(publication_date)', $month);
-                        } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $search_kw)) {
-                            $career_builder->where('DATE(publication_date)', $search_kw);
-                        } else {
-                            $career_builder->like('publication_date', $search_kw);
-                        }
+                    if ($publication_date !== '' && preg_match('/^\d{4}-\d{2}$/', $publication_date)) {
+                        [$year, $month] = explode('-', $publication_date, 2);
+                        $career_builder->where('YEAR(publication_date)', $year)
+                            ->where('MONTH(publication_date)', $month);
                     }
                     // Level dropdown filter
                     if ($level_filter !== null && $level_filter !== '') {

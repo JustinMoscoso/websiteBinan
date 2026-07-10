@@ -262,7 +262,8 @@
             "type": "POST",
             "data": function (d) {
                 d.searchAction = $('#searchAction').val();
-                d.searchDate = $('#searchDate').val();
+                d.searchDateFrom = $('#searchDateFrom').val();
+                d.searchDateTo = $('#searchDateTo').val();
             },
             "dataSrc": function (json) {
                 return json.data || [];
@@ -354,8 +355,205 @@
         }
     });
 
-    // Set max date to today
-    document.getElementById('searchDate').max = new Date().toISOString().split('T')[0];
+    function pad2(n) {
+        return String(n).padStart(2, '0');
+    }
+
+    function monthLabel(monthNumber) {
+        var monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        var index = parseInt(monthNumber, 10) - 1;
+        return monthNames[index] || '';
+    }
+
+    var currentAuditYear = <?= (int) date('Y'); ?>;
+    var defaultAuditYearStart = getAuditYearWindowStart(currentAuditYear);
+
+    var auditPickerState = {
+        from: { yearStart: defaultAuditYearStart, selectedYear: '', selectedMonth: '' },
+        to: { yearStart: defaultAuditYearStart, selectedYear: '', selectedMonth: '' }
+    };
+
+    function getAuditYearWindowStart(year) {
+        var baseYear = 2011;
+        var numericYear = parseInt(year, 10);
+
+        if (isNaN(numericYear) || numericYear < baseYear) {
+            return baseYear;
+        }
+
+        return baseYear + (Math.floor((numericYear - baseYear) / 12) * 12);
+    }
+
+    function getYearWindow(state) {
+        var start = state.yearStart;
+        return [start, start + 11];
+    }
+
+    function getDefaultYearForTarget(target) {
+        var yearWindow = getYearWindow(auditPickerState[target]);
+
+        if (currentAuditYear >= yearWindow[0] && currentAuditYear <= yearWindow[1]) {
+            return String(currentAuditYear);
+        }
+
+        return String(yearWindow[0]);
+    }
+
+    function renderAuditMonthGrid(target) {
+        var html = '';
+        var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        for (var i = 1; i <= 12; i++) {
+            var active = auditPickerState[target].selectedMonth === pad2(i) ? ' active' : '';
+            html += '<button type="button" class="audit-range-month' + active + '" data-target="' + target + '" data-month="' + pad2(i) + '">' + monthNames[i - 1] + '</button>';
+        }
+
+        $('#monthGrid' + (target === 'from' ? 'From' : 'To')).html(html);
+    }
+
+    function renderAuditYearGrid(target) {
+        var state = auditPickerState[target];
+        var yearWindow = getYearWindow(state);
+        var html = '';
+
+        $('#rangeHeader' + (target === 'from' ? 'From' : 'To')).text(yearWindow[0] + '-' + yearWindow[1]);
+
+        for (var year = yearWindow[0]; year <= yearWindow[1]; year++) {
+            var active = String(year) === String(state.selectedYear) ? ' active' : '';
+            html += '<button type="button" class="audit-range-picker-cell' + active + '" data-target="' + target + '" data-year="' + year + '">' + year + '</button>';
+        }
+
+        $('#yearGrid' + (target === 'from' ? 'From' : 'To')).html(html);
+        renderAuditMonthGrid(target);
+    }
+
+    function renderAuditPickerDisplays() {
+        var fromLabel = auditPickerState.from.selectedMonth && auditPickerState.from.selectedYear
+            ? monthLabel(auditPickerState.from.selectedMonth) + ' ' + auditPickerState.from.selectedYear
+            : 'Month Year';
+        var toLabel = auditPickerState.to.selectedMonth && auditPickerState.to.selectedYear
+            ? monthLabel(auditPickerState.to.selectedMonth) + ' ' + auditPickerState.to.selectedYear
+            : 'Month Year';
+
+        $('#rangeDisplayFrom span').text(fromLabel === 'Custom Range' ? 'Month Year' : fromLabel);
+        $('#rangeDisplayTo span').text(toLabel === 'Custom Range' ? 'Month Year' : toLabel);
+    }
+
+    function syncAuditRange() {
+        var fromMonth = auditPickerState.from.selectedMonth;
+        var fromYear = auditPickerState.from.selectedYear;
+        var toMonth = auditPickerState.to.selectedMonth;
+        var toYear = auditPickerState.to.selectedYear;
+
+        if (fromMonth && fromYear) {
+            $('#searchDateFrom').val(startOfMonthIso(fromYear, fromMonth));
+        } else {
+            $('#searchDateFrom').val('');
+        }
+
+        if (toMonth && toYear) {
+            $('#searchDateTo').val(endOfMonthIso(toYear, toMonth));
+        } else {
+            $('#searchDateTo').val('');
+        }
+
+        if (fromMonth && fromYear && toMonth && toYear) {
+            $('#auditRangeLabel').text(monthLabel(fromMonth) + ' ' + fromYear + ' - ' + monthLabel(toMonth) + ' ' + toYear);
+        } else if (fromMonth && fromYear) {
+            $('#auditRangeLabel').text(monthLabel(fromMonth) + ' ' + fromYear);
+        } else if (toMonth && toYear) {
+            $('#auditRangeLabel').text(monthLabel(toMonth) + ' ' + toYear);
+        } else {
+            $('#auditRangeLabel').text('Select Range');
+        }
+    }
+
+    function startOfMonthIso(year, month) {
+        return year + '-' + pad2(month) + '-01';
+    }
+
+    function endOfMonthIso(year, month) {
+        var lastDay = new Date(year, month, 0).getDate();
+        return year + '-' + pad2(month) + '-' + pad2(lastDay);
+    }
+
+    function closeAuditRangePopover() {
+        $('#auditRangePopover').removeClass('is-open');
+        $('#auditRangeToggle').attr('aria-expanded', 'false');
+    }
+
+    renderAuditYearGrid('from');
+    renderAuditYearGrid('to');
+    renderAuditPickerDisplays();
+
+    $('#auditRangeToggle').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $('#auditRangePopover').toggleClass('is-open');
+        $('#auditRangeToggle').attr('aria-expanded', $('#auditRangePopover').hasClass('is-open') ? 'true' : 'false');
+    });
+
+    $('#auditRangePopover').on('click', function (e) {
+        e.stopPropagation();
+    });
+
+    $('#auditRangeCancel').on('click', function (e) {
+        e.stopPropagation();
+        closeAuditRangePopover();
+    });
+
+    $('#auditRangeApply').on('click', function (e) {
+        e.stopPropagation();
+        syncAuditRange();
+        closeAuditRangePopover();
+        tbl.ajax.reload();
+    });
+
+    $('#auditRangePopover').on('click', '.audit-range-picker-nav', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var target = $(this).data('target');
+        var nav = $(this).data('nav');
+        var state = auditPickerState[target];
+        state.yearStart += nav === 'prev' ? -12 : 12;
+        if (state.yearStart < 1900) {
+            state.yearStart = 1900;
+        }
+        renderAuditYearGrid(target);
+    });
+
+    $('#auditRangePopover').on('click', '.audit-range-picker-cell', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var target = $(this).data('target');
+        auditPickerState[target].selectedYear = String($(this).data('year'));
+        renderAuditYearGrid(target);
+        renderAuditPickerDisplays();
+        syncAuditRange();
+    });
+
+    $('#auditRangePopover').on('click', '.audit-range-month', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var target = $(this).data('target');
+        if (!auditPickerState[target].selectedYear) {
+            auditPickerState[target].selectedYear = getDefaultYearForTarget(target);
+        }
+        auditPickerState[target].selectedMonth = String($(this).data('month'));
+        renderAuditYearGrid(target);
+        renderAuditMonthGrid(target);
+        renderAuditPickerDisplays();
+        syncAuditRange();
+    });
+
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.audit-range-wrap').length) {
+            closeAuditRangePopover();
+        }
+    });
 
     // Prevent page reload on form submit (e.g. Enter key) and reload DataTable instead
     $('#auditLogSearchForm').submit(function (e) {
@@ -365,12 +563,27 @@
 
     // Search button click handler
     $('#searchBtn').click(function () {
+        syncAuditRange();
+        closeAuditRangePopover();
         tbl.ajax.reload();
     });
 
     // Clear filters handler using form reset
     $('#auditLogSearchForm').on('reset', function () {
         setTimeout(function () {
+            $('#searchAction').val('');
+            $('#searchDateFrom').val('');
+            $('#searchDateTo').val('');
+            auditPickerState.from.yearStart = defaultAuditYearStart;
+            auditPickerState.from.selectedYear = '';
+            auditPickerState.from.selectedMonth = '';
+            auditPickerState.to.yearStart = defaultAuditYearStart;
+            auditPickerState.to.selectedYear = '';
+            auditPickerState.to.selectedMonth = '';
+            renderAuditYearGrid('from');
+            renderAuditYearGrid('to');
+            renderAuditPickerDisplays();
+            $('#auditRangeLabel').text('Select Range');
             tbl.ajax.reload();
         }, 0);
     });

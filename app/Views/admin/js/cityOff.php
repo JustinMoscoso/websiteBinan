@@ -8,6 +8,19 @@
         currentImage: ''
     };
     var cityOffImageBaseUrl = '<?= base_url('admin/image/CITYOFFICIAL/') ?>';
+    var cityOffStatusOrder = {
+        ACTIVE: 1,
+        INACTIVE: 2,
+        ARCHIVED: 3
+    };
+    var cityOffPositionOrder = {
+        CONGRESS: 1,
+        'CITY MAYOR': 2,
+        'CITY VICE MAYOR': 3,
+        'CITY COUNCILOR': 4,
+        'ABC PRESIDENT': 5,
+        'SK FEDERATION PRESIDENT': 6
+    };
 
     if (userLevel === 'DEVELOPER' || userLevel === 'SUPERADMIN' || userLevel === 'ADMIN') {
         $('.button-32').show();
@@ -127,6 +140,19 @@
 
     function isEmptyEditorHtml(html) {
         return !html || html === '<p><br></p>' || html.replace(/<[^>]+>/g, '').trim() === '';
+    }
+
+    function getCityOffStatusSort(status) {
+        return cityOffStatusOrder[String(status || '').toUpperCase()] || 99;
+    }
+
+    function getCityOffPositionSort(position) {
+        return cityOffPositionOrder[String(position || '').toUpperCase()] || 99;
+    }
+
+    function getCityOffRankSort(rank) {
+        var rankNumber = parseInt(rank, 10);
+        return Number.isFinite(rankNumber) ? rankNumber : 999;
     }
 
     function setEditorHtml(editor, html) {
@@ -663,7 +689,7 @@
         select: false,
         searching: true,
         ordering: true,
-        order: [[3, 'asc']],
+        order: [[8, 'asc'], [2, 'asc'], [3, 'asc'], [1, 'asc']],
         pageLength: 10,
         processing: true,
         ajax: {
@@ -707,13 +733,27 @@
                     return '<div class="d-flex justify-content-start">' + data + '</div>';
                 }
             },
-            { title: 'Position', data: 'off_position', width: '15%', 'className': 'align-middle' },
+            {
+                title: 'Position',
+                data: 'off_position',
+                width: '15%',
+                className: 'align-middle',
+                render: function (data, type) {
+                    if (type === 'sort' || type === 'type') {
+                        return getCityOffPositionSort(data);
+                    }
+                    return data || '-';
+                }
+            },
             {
                 title: 'Rank',
                 data: 'ranking',
                 className: 'dt-center align-middle',
                 width: '5%',
-                render: function (data) {
+                render: function (data, type) {
+                    if (type === 'sort' || type === 'type') {
+                        return getCityOffRankSort(data);
+                    }
                     return data ? data : '-';
                 }
             },
@@ -773,7 +813,10 @@
                 data: 'status',
                 className: 'dt-center align-middle',
                 width: '10%',
-                render: function (data) {
+                render: function (data, type) {
+                    if (type === 'sort' || type === 'type') {
+                        return getCityOffStatusSort(data);
+                    }
                     if (data == 'ACTIVE') {
                         return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
                     } else if (data == 'INACTIVE') {
