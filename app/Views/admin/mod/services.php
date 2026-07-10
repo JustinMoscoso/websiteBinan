@@ -93,7 +93,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                                         </button>
                                     </div>
                                     <div class="col-12 col-md-4">
-                                        <button type="button" class="btn w-100 btn-success fw-semibold text-white shadow-sm"
+                                        <button type="button" class="btn w-100 btn-success fw-semibold text-white text-nowrap shadow-sm"
                                             data-bs-toggle="modal" data-bs-target="#addModal">
                                             <i class="bi bi-plus-circle me-1"></i>
                                             Add Record

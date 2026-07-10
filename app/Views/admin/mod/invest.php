@@ -51,7 +51,7 @@
           </div>
 
           <div class="col-xl-4 col-lg-4 col-md-12">
-            <div class="row g-2 w-100 admin-filter-actions">
+            <div class="row g-2 admin-filter-actions">
 
               <div class="col-12 col-md-4">
                 <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm" id="investSearchBtn"

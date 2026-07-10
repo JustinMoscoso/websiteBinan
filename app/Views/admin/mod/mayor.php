@@ -69,7 +69,7 @@
 
 
                             <div class="col-12 col-md-4">
-                                <button type="button" class="btn btn-success w-100 fw-semibold text-white shadow-sm"
+                                <button type="button" class="btn btn-success w-100 fw-semibold text-white text-nowrap shadow-sm"
                                     onclick="openMayorModal('add')" style="height: 38px;">
                                     <i class="bi bi-plus-circle me-1"></i>Add Record
                                 </button>
