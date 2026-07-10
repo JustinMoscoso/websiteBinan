@@ -96,14 +96,14 @@
     .table thead th,
     table.dataTable thead th,
     div.dataTables_wrapper table.dataTable thead th {
-        text-align: center !important;
+      text-align: center !important;
     }
 
     /* Centering all data table rows/cells for consistency */
     .table td,
     table.dataTable tbody td,
     div.dataTables_wrapper table.dataTable tbody td {
-        text-align: center !important;
+      text-align: center !important;
     }
   </style>
 </head>
@@ -170,7 +170,7 @@
       ?>
 
       <!-- Heading -->
-      <div class="sidebar-heading">
+      <div class="sidebar-heading text-muted">
         Content Management
       </div>
 
@@ -193,7 +193,7 @@
         <li class="nav-item <?= $mode == 'about' ? 'active' : '' ?>">
           <a class="nav-link" href="<?= site_url('admin/about') ?>">
             <i class="fas fa-fw fa-info-circle"></i>
-            <span>About / Homepage</span>
+            <span>About MVQ / Homepage</span>
           </a>
         </li>
       <?php endif; ?>

@@ -82,7 +82,7 @@
             <!-- SB Admin 2 Styled Card -->
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-                
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="tbljobs" class="table table-bordered table-hover align-middle w-100" cellspacing="0">
@@ -99,7 +99,7 @@
         <form id="addForm" class="modal-content border-0 shadow-lg">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
                 <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-                    <i class="bi bi-plus-circle me-2"></i><span id="jobModalTitle">Add Job</span>
+                    <i class="bi bi-plus-circle me-2"></i><span id="jobModalTitle">Add Record</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>

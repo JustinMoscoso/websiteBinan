@@ -115,7 +115,7 @@
             <input type="hidden" id="careerId" name="id">
             <input type="hidden" id="careerMode" name="mode" value="add">
             <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
-                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;" id="careerModalTitle">Add Career Entry</h5>
+                <h5 class="modal-title fw-bold" style="font-size: 1.1rem;" id="careerModalTitle">Add Record</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>

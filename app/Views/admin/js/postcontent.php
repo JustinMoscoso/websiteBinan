@@ -242,9 +242,9 @@
                     return '<div class="d-flex justify-content-start">' + data + '</div>';
                 }
             },
-            { "title": "Author Name", "data": "author", width: '15%' },
+            { "title": "Author Name", "data": "author", width: '15%', "className": "align-middle" },
             {
-                "title": "Date Created", "data": "created_date",
+                "title": "Date Created", "data": "created_date", "className": "dt-center align-middle", width: '15%',
                 "render": function (data, type, row) {
                     var date = new Date(data);
                     return formatDate(date);
@@ -253,7 +253,7 @@
             {
                 "title": "Status",
                 "data": "status",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 width: '10%',
                 "render": function (data, type, row) {
                     var status = data;
@@ -266,7 +266,7 @@
                     }
                 }
             },
-            { "title": "Category", "data": "category", "className": "dt-center" },
+            { "title": "Category", "data": "category", "className": "dt-center align-middle" },
             {
                 "title": "Image", "data": "file_loc", "className": "dt-center", width: '15%',
                 "render": function (data, type, row) {
@@ -276,7 +276,7 @@
             {
                 "title": "Actions",
                 "data": "ID",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 "render": function (data, type, row) {
                     if (userLevel === 'VIEWER') {
                         return `<a class="btn btn-sm btn-outline-success d-inline-flex align-items-center justify-content-center" href="#" onclick="edit(${row.ID}); return false;" style="width: 32px; height: 32px; border-radius: 50%;" title="View Details">
@@ -332,7 +332,7 @@
             var quill = QuillManager.getQuillInstance('postcontentDesc');
             if (quill) quill.setContents([]);
         } else {
-            $('#recordModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Post');
+            $('#recordModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Record');
             $('#btnAddLabel').text('Update');
             $('#recordId').val(record.ID || record.id);
             $('#content_category').val(record.category);
@@ -359,7 +359,7 @@
     $('#addModal').on('hidden.bs.modal', function () {
         $('#recordMode').val('add');
         $('#recordId').val('');
-        $('#recordModalTitle').text('Add Post');
+        $('#recordModalTitle').text('Add Record');
         $('#btnAddLabel').text('Save');
         $('#addForm')[0].reset();
         $('.edit-only-field').addClass('d-none');

@@ -216,7 +216,7 @@
             quillPerData.root.innerHTML = '';
             syncMayorCategoryFields('');
         } else {
-            $('#mayorModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Modify Profile Configuration');
+            $('#mayorModalTitle').html('<i class="bi bi-pencil-square me-2"></i>Edit Record');
             $('#btnAdd').text('Update');
             $('#mayorRecordId').val(record.ID);
             $('#content_category').val(record.section);

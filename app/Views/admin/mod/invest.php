@@ -51,7 +51,7 @@
           </div>
 
           <div class="col-xl-4 col-lg-4 col-md-12">
-            <div class="row g-2 admin-filter-actions">
+            <div class="row g-2 w-100 admin-filter-actions">
 
               <div class="col-12 col-md-4">
                 <button type="submit" class="btn btn-primary w-100 flex-grow-1 fw-semibold shadow-sm" id="investSearchBtn"
@@ -85,7 +85,7 @@
     <div class="col-12">
       <!-- SB Admin 2 Styled Card -->
       <div class="card shadow mb-4 border-top border-4" style="border-top-color: var(--theme-mid-green) !important;">
-      
+
         <div class="card-body">
           <div class="table-responsive">
             <table id="tblinvest" class="table table-bordered table-hover align-middle w-100" cellspacing="0">
@@ -103,7 +103,7 @@
 
       <div class="modal-header text-white px-4 py-3" style="background-color: var(--theme-dark-green);">
         <h5 class="modal-title fw-bold" style="font-size: 1.1rem;">
-          <i class="bi bi-plus-circle me-2"></i><span id="investModalTitle">Add Investment Content</span>
+          <i class="bi bi-plus-circle me-2"></i><span id="investModalTitle">Add Record</span>
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -131,8 +131,8 @@
           </div>
 
           <div class="col-12">
-            <label for="investFile" id="investFileLabel" class="form-label small fw-bold text-secondary">Upload File Attachment <span
-                class="text-danger">*</span></label>
+            <label for="investFile" id="investFileLabel" class="form-label small fw-bold text-secondary">Upload File
+              Attachment <span class="text-danger">*</span></label>
             <input type="file" class="form-control shadow-sm" id="investFile" name="investFile" accept=".pdf,.xls,.xlsx"
               required>
             <div class="form-text text-muted small mt-1">Accepted formats: PDF, XLS, XLSX</div>

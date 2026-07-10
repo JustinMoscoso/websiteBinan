@@ -148,7 +148,7 @@
         $('#userMode').val(mode);
 
         if (mode === 'add') {
-            $('#userModalTitle').text('Add Account');
+            $('#userModalTitle').text('Add Record');
             $('#userModalIcon').attr('class', 'bi bi-person-plus');
             $('#btnAdd').text('Save');
             $('#userRecordId').val('');
@@ -184,7 +184,7 @@
 
         } else {
             // edit mode
-            $('#userModalTitle').text('Modify Account');
+            $('#userModalTitle').text('Add Record');
             $('#userModalIcon').attr('class', 'bi bi-pencil-square');
             $('#btnAdd').text('Update');
             $('#userRecordId').val(record.ID);
@@ -355,7 +355,7 @@
         $('#addForm')[0].reset();
         $('#userRecordId').val('');
         $('#userMode').val('add');
-        $('#userModalTitle').text('Add Account');
+        $('#userModalTitle').text('Add Record');
         $('#userModalIcon').attr('class', 'bi bi-person-plus');
         $('#btnAdd').text('Save');
         $('#passwordRequiredStar').show();
@@ -470,7 +470,7 @@
                 }
             },
             {
-                title: "Title",
+                title: "username",
                 data: "username",
                 className: "align-middle",
                 render: function (data) {
