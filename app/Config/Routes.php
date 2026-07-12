@@ -44,9 +44,6 @@ $routes->get('contact', 'Home::contact');
 
 $routes->post('contact/send', 'Home::send');
 $routes->get('/fulldisc', 'Home::fulldisc');
-// $routes->get('/jobs', 'Home::jobs');
-// $routes->get('/jobdetails/(:num)', 'Home::jobDetails/$1');
-// $routes->get('/getalljobs', 'Home::getAllJobs');
 $routes->get('/officials', 'Home::officials');
 $routes->get('/cityofficials', 'Home::cityofficials');
 $routes->get('/career', 'Home::career');
@@ -58,8 +55,6 @@ $routes->get('/newsevents/(:num)', 'Home::newsevents/$1');
 $routes->get('/newseventscontent/(:num)', 'Home::newseventscontent/$1');
 $routes->get('/announcements/(:num)', 'Home::announcements/$1');
 $routes->get('/announcementcontent/(:num)', 'Home::announcementcontent/$1');
-$route['announcements/(:num)'] = 'announcements_page/index/$1';
-
 $routes->get('/invest', 'Home::invest');
 $routes->get('/investmentopp', 'Home::investmentopp');
 $routes->get('/safetyseal', 'Home::safetyseal');
@@ -72,15 +67,8 @@ $routes->get('/hotlines', 'Home::hotlines');
 
 
 $routes->get('/map', 'MapController::index');
-$routes->get('/contact', 'ContactController::index');
-$routes->post('contact/send', 'ContactController::send');
-
 $routes->get('newsevents', 'Home::newsevents');
-$routes->get('/newsevents/(:num)', 'Home::newsevents/$1');
-$routes->get('/newseventscontent/(:num)', 'Home::newseventscontent/$1');
-$routes->get('/announcements/(:num)', 'Home::announcements/$1');
 $routes->get('announcements', 'Home::announcements');
-$routes->get('/announcementcontent/(:num)', 'Home::announcementcontent/$1');
 
 $routes->post('/process/(:any)', 'Home::process/$1');
 $routes->get('/process/(:any)', 'Home::process/$1');
@@ -89,7 +77,6 @@ $routes->get('jobpostings', 'Home::jobpostings');
 $routes->get('jobpostings/(:num)', 'Home::jobpostings/$1');
 
 $routes->get('/jobs', 'Home::jobs');
-$routes->get('/test-jobs', 'Home::test_jobs');
 
 // Email Queue Processor (internal / loopback only)
 $routes->get('email-queue/process', 'EmailQueueController::process');
@@ -99,7 +86,6 @@ $routes->group('admin', function ($routes) {
     $routes->get('dashboard', 'Admin::mode/dashboard');
     $routes->get('accounts_mgmt', 'Admin::mode/accounts_mgmt');
     $routes->get('postcontent', 'Admin::mode/postcontent');
-    $routes->get('announcements', 'Admin::mode/announcements');
     $routes->get('mayor', 'Admin::mode/mayor');
     $routes->get('brgy', 'Admin::mode/brgy');
     $routes->get('services', 'Admin::mode/services');
@@ -137,8 +123,6 @@ $routes->group('admin', function ($routes) {
     $routes->post('ajax/set_status_job', 'Admin::ajax/set_status_job');
     $routes->post('ajax/delete_job', 'Admin::ajax/delete_job');
 
-    $routes->get('image/(:segment)/(:segment)', 'Admin::image/$1/$2');
-    $routes->get('preview_file/(:segment)/(:segment)', 'Admin::preview_file/$1/$2');
 });
 
 $routes->get('auth/login', 'Auther::login');

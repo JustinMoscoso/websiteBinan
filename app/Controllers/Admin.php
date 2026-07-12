@@ -1835,34 +1835,6 @@ class Admin extends BaseController
                 }
                 break;
             }
-            case 'get_career': {
-                $careerId = $this->request->getPost('id');
-                $career_m = new \App\Models\FileTbl();
-
-                if ($careerId) {
-                    $c = $career_m->find($careerId);
-                    if ($c) {
-                        $data = $c;
-                        $status = 1;
-                    } else {
-                        $message = 'Career not found';
-                    }
-                } else {
-                    $career_builder2 = $career_m
-                        ->where('category', 'CAREER')
-                        ->orderBy('created_date', 'desc');
-                    // Non-privileged users cannot see archived career postings
-                    if (!$canSeeArchived) {
-                        $career_builder2->where('status !=', 'ARCHIVED');
-                    }
-                    $career_d = $career_builder2->findAll();
-                    foreach ($career_d as $car) {
-                        $data[] = $car;
-                    }
-                    $status = 1;
-                }
-                break;
-            }
             case 'get_about': {
                 $aboutId = $this->request->getPost('id');
                 $about_m = new \App\Models\About();
@@ -4673,6 +4645,47 @@ class Admin extends BaseController
                     }
                 } catch (\Throwable $e) {
                     $message = 'This user account cannot be deleted because it is linked to other records.';
+                    $status = 0;
+                }
+                break;
+            }
+
+            case 'delete_about': {
+                $aboutModel = new \App\Models\About();
+                $id = $this->request->getPost('id');
+
+                if (!$id || !is_numeric($id)) {
+                    $message = 'Invalid About content ID.';
+                    $status = 0;
+                    break;
+                }
+
+                $aboutRecord = $aboutModel->find($id);
+                if (!$aboutRecord) {
+                    $message = 'About content not found.';
+                    $status = 0;
+                    break;
+                }
+
+                try {
+                    if ($aboutModel->delete($id)) {
+                        $imageName = trim((string) ($aboutRecord->about_img ?? ''));
+                        if ($imageName !== '') {
+                            $imagePath = WRITEPATH . 'uploads/ABOUT/' . $imageName;
+                            if (is_file($imagePath)) {
+                                @unlink($imagePath);
+                            }
+                        }
+
+                        $message = 'About content deleted successfully.';
+                        $log_c['processDetails'] = 'ABOUT_ID: ' . $id . ' - DELETED';
+                        $status = 1;
+                    } else {
+                        $message = 'Failed to delete About content.';
+                        $status = 0;
+                    }
+                } catch (\Throwable $e) {
+                    $message = 'This About content cannot be deleted because it is linked to other records.';
                     $status = 0;
                 }
                 break;

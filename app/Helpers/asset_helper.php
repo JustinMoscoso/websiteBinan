@@ -72,14 +72,6 @@ function pre_scripts($mode = 'default')
             site_url("assets/js/main.js"),
             site_url("assets/js/contact_page.js?v=" . time()),
             site_url("assets/js/fulldisc_page.js?v=" . time()),
-            /*
-            site_url("assets/vendor/aos/aos.js"),
-            site_url("assets/vendor/glightbox/js/glightbox.min.js"),
-            site_url("assets/vendor/isotope-layout/isotope.pkgd.min.js"),
-            site_url("assets/vendor/swiper/swiper-bundle.min.js"),
-            site_url("assets/vendor/waypoints/noframework.waypoints.js"),
-            site_url("assets/vendor/php-email-form/validate.js"),
-            site_url("assets/js/home.js"),*/
         );
     } elseif ($mode == 'admin') {
         $js = array(

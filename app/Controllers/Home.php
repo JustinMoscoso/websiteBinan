@@ -608,47 +608,4 @@ class Home extends BaseController
         }
     }
 
-    public function test_jobs()
-    {
-        // Simple test to check if everything is working
-        try {
-            $jobModel = new \App\Models\Job();
-            $data['test_message'] = 'Job model loaded successfully';
-            $data['table_exists'] = 'Checking...';
-
-            // Try to get table info
-            $db = \Config\Database::connect();
-            $tables = $db->listTables();
-            $data['table_exists'] = in_array('jobs', $tables) ? 'Jobs table exists' : 'Jobs table does not exist';
-
-            return view('test_jobs', $data);
-        } catch (\Exception $e) {
-            $data['error'] = $e->getMessage();
-            return view('test_jobs', $data);
-
-        }
-
-    }
-    public function make_dev()
-    {
-        $user_m = new \App\Models\UserAccount();
-
-        $data = [
-            'fname' => 'Main',
-            'lname' => 'Developer',
-            'username' => 'superdev',
-            'pass' => password_hash('YourSecurePasswordHere!', PASSWORD_ARGON2ID), // Set your password here
-            'email' => 'admin@yourdomain.com',
-            'user_lvl' => 'DEVELOPER',
-            'dept' => 'IT',
-            'status' => 'ACTIVE',
-            'created_date' => date('Y-m-d H:i:s')
-        ];
-
-        if ($user_m->insert($data)) {
-            echo "Developer account created successfully!";
-        } else {
-            echo "Failed to create account.";
-        }
-    }
 }

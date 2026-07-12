@@ -28,6 +28,7 @@ Remove the `renderDeleteAction(...)` line from:
 
 - `app/Views/admin/js/careers.php`
 - `app/Views/admin/js/accounts_mgmt.php`
+- `app/Views/admin/js/about.php`
 - `app/Views/admin/js/brgy.php`
 - `app/Views/admin/js/cityOff.php`
 - `app/Views/admin/js/contacts.php`

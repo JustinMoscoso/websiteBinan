@@ -788,7 +788,6 @@
     <?php endif; ?>
 </div> <!-- End Tab Content -->
 
-<?php /* Modals editLinkedBarangayModal and editLinkedDepartmentModal removed — forms are inline */ ?>
 
 <!-- Change Password Modal -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
