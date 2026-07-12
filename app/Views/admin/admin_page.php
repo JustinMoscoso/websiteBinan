@@ -18,15 +18,16 @@
     /* SIDEBAR */
     #wrapper {
       display: flex;
+      min-width: 0;
     }
 
     .sidebar {
       position: sticky;
       top: 0;
       width: 310px !important;
+      flex: 0 0 310px;
       height: 100vh;
-      overflow-y: scroll;
-      /* always show scrollbar */
+      overflow-y: auto;
       overflow-x: hidden;
       overscroll-behavior: contain;
 
@@ -55,24 +56,101 @@
 
     /* Mobile drawer style for sidebar */
     @media (max-width: 767.98px) {
+      body.sidebar-toggled {
+        overflow: hidden;
+      }
+
+      #content-wrapper {
+        width: 100%;
+        min-width: 0;
+      }
+
       .sidebar {
         position: fixed !important;
         top: 0;
-        bottom: 0;
-        left: -224px;
-        width: 224px !important;
+        left: 0;
+        bottom: auto;
+        width: min(280px, calc(100vw - 56px)) !important;
+        max-width: calc(100vw - 56px);
+        flex-basis: auto;
         height: 100vh !important;
-        z-index: 1050;
-        transition: left 0.25s ease-in-out;
+        height: 100dvh !important;
+        z-index: 1051;
+        transform: translate3d(-100%, 0, 0);
+        visibility: hidden;
+        pointer-events: none;
+        transition: transform 0.25s ease, visibility 0.25s ease;
         display: flex !important;
         flex-direction: column;
-        overflow-y: scroll !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        box-shadow: 0 0 24px rgba(0, 0, 0, 0.28);
       }
 
       .sidebar.toggled {
-        left: 0 !important;
-        width: 224px !important;
-        overflow-y: scroll !important;
+        width: min(280px, calc(100vw - 56px)) !important;
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .sidebar .navbar-brand {
+        min-height: 76px;
+        padding-right: 3.25rem !important;
+      }
+
+      .sidebar .nav-item .nav-link {
+        display: flex !important;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100% !important;
+        padding: 0.7rem 1rem !important;
+        text-align: left !important;
+        white-space: normal;
+      }
+
+      .sidebar .nav-item .nav-link i {
+        width: 1.5rem;
+        margin: 0 !important;
+        font-size: 1rem !important;
+        text-align: center;
+        flex: 0 0 1.5rem;
+      }
+
+      .sidebar .nav-item .nav-link span {
+        display: inline !important;
+        min-width: 0;
+        font-size: 0.84rem !important;
+        line-height: 1.3;
+      }
+
+      .sidebar .sidebar-heading {
+        padding: 0 1rem;
+        text-align: left;
+      }
+
+      .sidebar-close {
+        position: absolute;
+        top: 0.9rem;
+        right: 0.75rem;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        padding: 0;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.12);
+        border: 0;
+        border-radius: 50%;
+      }
+
+      .sidebar-close:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
       }
 
       .sidebar-backdrop {
@@ -83,11 +161,23 @@
         height: 100vh;
         background: rgba(0, 0, 0, 0.4);
         z-index: 1040;
-        display: none;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
       }
 
       body.sidebar-toggled .sidebar-backdrop {
-        display: block;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sidebar,
+      .sidebar-backdrop {
+        transition: none !important;
       }
     }
 
@@ -116,13 +206,16 @@
     <!-- Sidebar -->
     <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: #1B4332;">
 
-      <!-- Sidebar - Brand -->
+      <button type="button" class="sidebar-close d-md-none" id="sidebarClose" aria-label="Close navigation menu">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+
       <!-- Sidebar - Brand -->
       <a class="navbar-brand d-flex align-items-center px-3 py-3" href="<?= base_url('admin/dashboard') ?>"
         style="gap: 10px;">
         <img src="<?= base_url('assets/img/binanlogo.png') ?>" alt="Logo" width="45" height="45"
           class="img-fluid flex-shrink-0">
-        <div class="d-none d-sm-flex flex-column align-items-start style=" width: 100%; max-width: 180px;">
+        <div class="d-flex flex-column align-items-start" style="width: 100%; max-width: 180px;">
           <span
             style="font-size: 9px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; line-height: 1.2;">
             REPUBLIC OF THE PHILIPPINES
@@ -322,7 +415,8 @@
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow-sm">
 
           <!-- Sidebar Toggle (Topbar) -->
-          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" type="button"
+            aria-controls="accordionSidebar" aria-expanded="false" aria-label="Open navigation menu">
             <i class="fa fa-bars"></i>
           </button>
 
@@ -429,33 +523,64 @@
         e.preventDefault();
       });
 
-      var sidebarOpen = false;
+      var mobileSidebarQuery = window.matchMedia('(max-width: 767.98px)');
+      var mobileSidebarOpen = false;
 
-      // Track explicit user clicks on toggle buttons
-      $(document).on('click', '#sidebarToggle, #sidebarToggleTop', function () {
-        sidebarOpen = !sidebarOpen;
-      });
-
-      // Track clicks on backdrop to dismiss sidebar
-      $('#sidebarBackdrop').on('click', function () {
+      function closeMobileSidebar() {
         $('body').removeClass('sidebar-toggled');
         $('.sidebar').removeClass('toggled');
-        sidebarOpen = false;
+        mobileSidebarOpen = false;
+        $('#sidebarToggleTop').attr('aria-expanded', 'false').attr('aria-label', 'Open navigation menu');
+      }
+
+      function syncMobileSidebarState() {
+        if (!mobileSidebarQuery.matches) {
+          $('body').removeClass('sidebar-toggled');
+          $('#sidebarToggleTop').attr('aria-expanded', 'false').attr('aria-label', 'Open navigation menu');
+          return;
+        }
+
+        var isOpen = $('.sidebar').hasClass('toggled');
+        mobileSidebarOpen = isOpen;
+        $('body').toggleClass('sidebar-toggled', isOpen);
+        $('#sidebarToggleTop')
+          .attr('aria-expanded', isOpen ? 'true' : 'false')
+          .attr('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+      }
+
+      // SB Admin toggles the classes first; synchronize accessibility and backdrop state.
+      $(document).on('click', '#sidebarToggle, #sidebarToggleTop', function () {
+        syncMobileSidebarState();
       });
 
-      // Prevent SB Admin 2 from forcing the sidebar open on small screens / window resizes
-      $(window).on('resize', function () {
-        if ($(window).width() < 768 && !sidebarOpen) {
-          $('body').removeClass('sidebar-toggled');
-          $('.sidebar').removeClass('toggled');
+      $('#sidebarBackdrop, #sidebarClose').on('click', closeMobileSidebar);
+
+      $(document).on('keydown', function (event) {
+        if (event.key === 'Escape' && mobileSidebarQuery.matches && $('.sidebar').hasClass('toggled')) {
+          closeMobileSidebar();
+          $('#sidebarToggleTop').trigger('focus');
         }
       });
 
-      // Initialize closed state on initial mobile load
-      if ($(window).width() < 768) {
-        $('body').removeClass('sidebar-toggled');
-        $('.sidebar').removeClass('toggled');
-        sidebarOpen = false;
+      $('.sidebar').on('click', 'a.nav-link', function () {
+        if (mobileSidebarQuery.matches) {
+          closeMobileSidebar();
+        }
+      });
+
+      $(window).on('resize', function () {
+        if (!mobileSidebarQuery.matches) {
+          closeMobileSidebar();
+        } else if (!mobileSidebarOpen) {
+          // Override SB Admin's built-in behavior that opens the menu below 480px.
+          closeMobileSidebar();
+        } else {
+          syncMobileSidebarState();
+        }
+      });
+
+      if (mobileSidebarQuery.matches) {
+        closeMobileSidebar();
       }
     });
   </script>
