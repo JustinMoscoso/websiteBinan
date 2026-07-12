@@ -391,6 +391,43 @@
         });
     }
 
+    function deleteBrgy(id) {
+        Swal.fire({
+            heightAuto: false,
+            title: 'Delete Barangay',
+            text: 'Are you sure you want to permanently delete this barangay? This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#c0392b',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Delete'
+        }).then(function (result) {
+            if (!result.isConfirmed) {
+                return;
+            }
+
+            Swal.fire({
+                title: 'Deleting...',
+                showConfirmButton: false,
+                allowEscapeKey: function () { return !Swal.isLoading(); },
+                allowOutsideClick: function () { return !Swal.isLoading(); },
+                willOpen: function () { Swal.showLoading(); }
+            });
+
+            $.post("<?php echo site_url('admin/ajax/delete_barangay') ?>", { id: id }, function (response) {
+                if (response.status == 1) {
+                    tbl.ajax.reload(null, false);
+                    Swal.fire({ icon: 'success', title: 'Deleted', text: response.message || 'Barangay deleted successfully.' });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Delete Failed', text: response.message || response.msg || 'Unable to delete the barangay.' });
+                }
+            }).fail(function (xhr) {
+                var response = xhr.responseJSON || {};
+                Swal.fire({ icon: 'error', title: 'Delete Failed', text: response.message || 'The server could not process the delete request.' });
+            });
+        });
+    }
+
     var tbl = $('#tblbrgy').DataTable({
         select: false,
         searching: true,
@@ -495,6 +532,7 @@
                 <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                             actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
+                            actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteBrgy');
 
                             actionHtml += `</ul></div>`;
                             return actionHtml;

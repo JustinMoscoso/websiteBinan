@@ -300,7 +300,7 @@
         select: false,
         searching: true,
         ordering: true,
-        "order": [],
+        "order": [[4, "asc"]],
         pageLength: 10,
         processing: true,
         ajax: {
@@ -353,6 +353,15 @@
                 width: '10%',
                 "render": function (data, type, row) {
                     var status = data;
+                    var statusLabel = status == 'ACTIVE'
+                        ? 'Active'
+                        : (status == 'INACTIVE' ? 'Inactive' : 'Archived');
+
+                    // Use the visible label for sorting/filtering, not the badge HTML.
+                    if (type !== 'display') {
+                        return statusLabel;
+                    }
+
                     if (status == 'ACTIVE') {
                         return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
                     } else if (status == 'INACTIVE') {
@@ -382,6 +391,7 @@
                             <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
+                    actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteInvest');
                     actionHtml += `</ul></div>`;
                     return actionHtml;
                 }

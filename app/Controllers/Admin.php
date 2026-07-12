@@ -529,12 +529,14 @@ class Admin extends BaseController
         }
 
         if (str_starts_with($mode, 'delete_')) {
-            echo json_encode([
-                'status' => 0,
-                'data' => [],
-                'message' => 'Delete actions have been removed from the system.',
-            ]);
-            return;
+            if (($user->user_lvl ?? '') !== 'DEVELOPER') {
+                echo json_encode([
+                    'status' => 0,
+                    'data' => [],
+                    'message' => 'Unauthorized: permanent deletion is restricted to developers.',
+                ]);
+                return;
+            }
         }
 
         switch ($mode) {
@@ -1046,7 +1048,7 @@ class Admin extends BaseController
                         $builder->where('status', $status);
                     }
 
-                    $brgy_d = $builder->findAll(10);
+                    $brgy_d = $builder->findAll();
 
                     foreach ($brgy_d as $brgy) {
                         $data[] = $brgy;
@@ -1131,7 +1133,7 @@ class Admin extends BaseController
                         $builder->where('status', $status);
                     }
 
-                    $deptData = $builder->findAll(10);
+                    $deptData = $builder->findAll();
 
                     foreach ($deptData as $dept) {
                         $data[] = $dept;
@@ -1620,6 +1622,7 @@ class Admin extends BaseController
 
                     $invest_builder = $invest_m
                         ->where('category', 'INVEST')
+                        ->orderBy('status', 'asc')
                         ->orderBy('created_date', 'desc');
                     // Non-privileged users cannot see archived invest content
                     if (!$canSeeArchived) {
@@ -2389,17 +2392,19 @@ class Admin extends BaseController
                 if (empty($ranking)) {
                     $ranking = null;
                 } else {
-                    // Check if the ranking already exists
-                    if ($co_m->where('ranking', $ranking)->countAllResults() > 0) {
+                    // Historical inactive officials may reuse a rank; only active
+                    // officials must have unique ranking numbers.
+                    if ($this->cityOfficialRankingHasActiveEntry($co_m, $ranking)) {
                         $status = 0;
-                        $message = 'Ranking number already exists. Please choose a different ranking.';
+                        $message = 'Only one active City Official can use this ranking number.';
                         break;
                     }
                 }
-                // Check if the position is unique unless it is 'City Councilor'
-                if ($off_position !== 'CITY COUNCILOR' && $co_m->where('off_position', $off_position)->countAllResults() > 0) {
+                // Keep historical inactive records, but allow only one active official per
+                // position. City Councilor is intentionally repeatable.
+                if ($this->cityOfficialPositionHasActiveEntry($co_m, $off_position)) {
                     $status = 0;
-                    $message = 'The position already exists. Only "City Councilor" can repeat.';
+                    $message = 'Only one active City Official can exist for this position.';
                     break;
                 }
                 $logoName = $img_loc->getRandomName();
@@ -2860,21 +2865,10 @@ class Admin extends BaseController
                     break;
                 }
 
-                if ($section === 'History') {
-                    $existingHistoryYear = $about_m
-                        ->where('section', 'History')
-                        ->where('title', $title)
-                        ->first();
-
-                    if ($existingHistoryYear) {
-                        $message = 'History year already exists.';
-                        break;
-                    }
-                }
-
-                $existing = $about_m->where('section', $section)->first();
-                if ($existing && $section === 'Home Page') {
-                    $message = 'Home Page content cannot be repeated.';
+                if ($this->aboutSlotHasActiveEntry($about_m, $section, $title)) {
+                    $message = $section === 'Home Page'
+                        ? 'Only one active Home Page entry can exist.'
+                        : 'Only one active entry with this category and title can exist.';
                 } else {
                     $logoName = null;
                     if ($about_img && $about_img->isValid() && !$about_img->hasMoved()) {
@@ -3251,17 +3245,18 @@ class Admin extends BaseController
                     if (empty($ranking)) {
                         $ranking = null;
                     } else {
-                        $existingRanking = $cityofficialmodel->where('ranking', $ranking)->where('id !=', $id)->first();
-                        if ($existingRanking) {
+                        $currentStatus = strtoupper(trim((string) ($cityofficial->status ?? '')));
+                        if ($currentStatus === 'ACTIVE' && $this->cityOfficialRankingHasActiveEntry($cityofficialmodel, $ranking, (int) $id)) {
                             $status = 0;
-                            $message = 'Ranking number already exists. Please choose a different ranking.';
+                            $message = 'Only one active City Official can use this ranking number.';
                             break;
                         }
                     }
 
-                    if ($off_position !== 'CITY COUNCILOR' && $cityofficialmodel->where('off_position', $off_position)->where('id !=', $id)->countAllResults() > 0) {
+                    $currentStatus = strtoupper(trim((string) ($cityofficial->status ?? '')));
+                    if ($currentStatus === 'ACTIVE' && $this->cityOfficialPositionHasActiveEntry($cityofficialmodel, $off_position, (int) $id)) {
                         $status = 0;
-                        $message = 'The position already exists. Only "City Councilor" can repeat.';
+                        $message = 'Only one active City Official can exist for this position.';
                         break;
                     }
 
@@ -4141,17 +4136,12 @@ class Admin extends BaseController
                     break;
                 }
 
-                if ($section === 'History') {
-                    $existingHistoryYear = $about_m
-                        ->where('section', 'History')
-                        ->where('title', $title)
-                        ->where('ID !=', $id)
-                        ->first();
-
-                    if ($existingHistoryYear) {
-                        $message = 'History year already exists.';
-                        break;
-                    }
+                $currentStatus = strtoupper(trim((string) ($about->status ?? '')));
+                if ($currentStatus === 'ACTIVE' && $this->aboutSlotHasActiveEntry($about_m, $section, $title, (int) $id)) {
+                    $message = $section === 'Home Page'
+                        ? 'Only one active Home Page entry can exist.'
+                        : 'Only one active entry with this category and title can exist.';
+                    break;
                 }
 
                 $data = [
@@ -4305,14 +4295,42 @@ class Admin extends BaseController
             case 'set_status_cityoff': {
                 $cityofficialmodel = new \App\Models\CityOfficial();
                 $id = $this->request->getPost('id');
-                $status = $this->request->getPost('status');
+                $statusVal = strtoupper(trim((string) $this->request->getPost('status')));
+                $cityOfficial = $cityofficialmodel->find($id);
+
+                if (!$cityOfficial) {
+                    $message = 'City Official not found.';
+                    $status = 0;
+                    break;
+                }
+
+                if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'], true)) {
+                    $message = 'Invalid status value.';
+                    $status = 0;
+                    break;
+                }
+
+                $position = $cityOfficial->off_position ?? '';
+                if ($statusVal === 'ACTIVE' && $this->cityOfficialPositionHasActiveEntry($cityofficialmodel, $position, (int) $id)) {
+                    $message = 'Only one active City Official can exist for this position.';
+                    $status = 0;
+                    break;
+                }
+
+                $ranking = $cityOfficial->ranking ?? null;
+                if ($statusVal === 'ACTIVE' && $ranking !== null && $ranking !== '' && $this->cityOfficialRankingHasActiveEntry($cityofficialmodel, $ranking, (int) $id)) {
+                    $message = 'Only one active City Official can use this ranking number.';
+                    $status = 0;
+                    break;
+                }
+
                 $data = [
-                    'status' => $status,
+                    'status' => $statusVal,
                     'updated_date' => date('Y-m-d H:i:s')
                 ];
                 $cityofficialmodel->update($id, $data);
                 $message = 'Content status updated successfully.';
-                $log_c['processDetails'] = 'CITYOFFICIAL_ID: ' . $id . ' - ' . $status;
+                $log_c['processDetails'] = 'CITYOFFICIAL_ID: ' . $id . ' POSITION: ' . $position . ' - ' . $statusVal;
                 $status = 1;
                 break;
             }
@@ -4579,6 +4597,39 @@ class Admin extends BaseController
                 break;
             }
 
+            case 'delete_barangay': {
+                $barangayModel = new \App\Models\Barangay();
+                $id = $this->request->getPost('id');
+
+                if (!$id || !is_numeric($id)) {
+                    $message = 'Invalid barangay ID.';
+                    $status = 0;
+                    break;
+                }
+
+                $barangay = $barangayModel->find($id);
+                if (!$barangay) {
+                    $message = 'Barangay not found.';
+                    $status = 0;
+                    break;
+                }
+
+                try {
+                    if ($barangayModel->delete($id)) {
+                        $message = 'Barangay deleted successfully.';
+                        $log_c['processDetails'] = 'BRGY_ID: ' . $id . ' - DELETED';
+                        $status = 1;
+                    } else {
+                        $message = 'Failed to delete barangay.';
+                        $status = 0;
+                    }
+                } catch (\Throwable $e) {
+                    $message = 'This barangay cannot be deleted because it is linked to other records.';
+                    $status = 0;
+                }
+                break;
+            }
+
             case 'delete_mayor': {
                 if ($isSpecialDeptAdmin) {
                     $message = 'Unauthorized access. Department accounts cannot delete records.';
@@ -4784,10 +4835,25 @@ class Admin extends BaseController
                 }
                 $about_m = new \App\Models\About();
                 $id = $this->request->getPost('id');
-                $statusVal = $this->request->getPost('status');
+                $statusVal = strtoupper(trim((string) $this->request->getPost('status')));
                 $aboutRecord = $about_m->find($id);
                 if ($aboutRecord) {
+                    if (!in_array($statusVal, ['ACTIVE', 'INACTIVE'], true)) {
+                        $message = 'Invalid status value.';
+                        $status = 0;
+                        break;
+                    }
+
+                    $section = $aboutRecord->section ?? '';
                     $title = $aboutRecord->title ?? '';
+                    if ($statusVal === 'ACTIVE' && $this->aboutSlotHasActiveEntry($about_m, $section, $title, (int) $id)) {
+                        $message = $section === 'Home Page'
+                            ? 'Only one active Home Page entry can exist.'
+                            : 'Only one active entry with this category and title can exist.';
+                        $status = 0;
+                        break;
+                    }
+
                     $data = [
                         'status' => $statusVal,
                         'updated_date' => date('Y-m-d H:i:s')
@@ -5190,6 +5256,74 @@ class Admin extends BaseController
         }
 
         return false;
+    }
+
+    private function cityOfficialPositionHasActiveEntry($cityOfficialModel, ?string $position, ?int $excludeId = null): bool
+    {
+        $needle = strtoupper(trim((string) $position));
+        if ($needle === '' || $needle === 'CITY COUNCILOR') {
+            return false;
+        }
+
+        $rows = $cityOfficialModel->select('ID, off_position')
+            ->where('status', 'ACTIVE')
+            ->findAll();
+
+        foreach ($rows as $row) {
+            $rowId = is_object($row) ? (int) ($row->ID ?? 0) : (int) ($row['ID'] ?? 0);
+            if ($excludeId !== null && $rowId === (int) $excludeId) {
+                continue;
+            }
+
+            $rowPosition = strtoupper(trim((string) (is_object($row) ? ($row->off_position ?? '') : ($row['off_position'] ?? ''))));
+            if ($rowPosition === $needle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function cityOfficialRankingHasActiveEntry($cityOfficialModel, $ranking, ?int $excludeId = null): bool
+    {
+        if ($ranking === null || trim((string) $ranking) === '') {
+            return false;
+        }
+
+        $builder = $cityOfficialModel
+            ->where('status', 'ACTIVE')
+            ->where('ranking', $ranking);
+
+        if ($excludeId !== null) {
+            $builder->where('ID !=', $excludeId);
+        }
+
+        return $builder->countAllResults() > 0;
+    }
+
+    private function aboutSlotHasActiveEntry($aboutModel, ?string $section, ?string $title, ?int $excludeId = null): bool
+    {
+        $section = trim((string) $section);
+        $title = trim((string) $title);
+        if ($section === '') {
+            return false;
+        }
+
+        $builder = $aboutModel
+            ->where('status', 'ACTIVE')
+            ->where('section', $section);
+
+        // The Home Page has one slot. Other categories can contain multiple
+        // distinct items, identified by their title or History year.
+        if ($section !== 'Home Page') {
+            $builder->where('title', $title);
+        }
+
+        if ($excludeId !== null) {
+            $builder->where('ID !=', $excludeId);
+        }
+
+        return $builder->countAllResults() > 0;
     }
 
     private function fullDisclosurePolicyExists($policyModel, ?string $fileCategory, ?string $year, string $quarter, ?int $excludeId = null): bool

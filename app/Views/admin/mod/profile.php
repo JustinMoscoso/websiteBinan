@@ -788,11 +788,6 @@
     <?php endif; ?>
 </div> <!-- End Tab Content -->
 
-<?php if (!empty($profile_department) || !empty($profile_barangay)): ?>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<?php endif; ?>
-
 <?php /* Modals editLinkedBarangayModal and editLinkedDepartmentModal removed — forms are inline */ ?>
 
 <!-- Change Password Modal -->

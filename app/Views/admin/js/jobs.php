@@ -246,6 +246,8 @@
                             }
                         }
 
+                        actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteJob');
+
                         actionHtml += `
                           </ul>
                         </div>
@@ -389,6 +391,34 @@
         });
 
         // Toggle Status
+        window.deleteJob = function (id) {
+            Swal.fire({
+                title: 'Delete Job',
+                text: 'Are you sure you want to permanently delete this job? This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#c0392b',
+                cancelButtonColor: '#7f8c8d',
+                confirmButtonText: 'Yes, Delete'
+            }).then(function (result) {
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                $.post('<?php echo site_url('admin/ajax/delete_job'); ?>', { id: id }, function (response) {
+                    if (response.status == 1) {
+                        table.ajax.reload(null, false);
+                        Swal.fire({ icon: 'success', title: 'Deleted', text: response.message || 'Job deleted successfully.' });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Delete Failed', text: response.message || 'Unable to delete the job.' });
+                    }
+                }).fail(function (xhr) {
+                    var response = xhr.responseJSON || {};
+                    Swal.fire({ icon: 'error', title: 'Delete Failed', text: response.message || 'The server could not process the delete request.' });
+                });
+            });
+        };
+
         $(document).on('click', '.toggle-status', function () {
             var jobId = $(this).data('id');
             var currentStatus = $(this).data('status');

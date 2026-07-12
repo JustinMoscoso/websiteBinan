@@ -644,6 +644,7 @@
                             <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
+                    actionHtml += renderDeleteAction(userLevel, row.ID, 'deleteMayor');
                     actionHtml += `</ul></div>`;
                     return actionHtml;
                 }

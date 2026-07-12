@@ -45,7 +45,7 @@
 
     function renderDeleteAction(level, id, deleteFnName) {
         const normalizedLevel = (level || '').toUpperCase();
-        if (!['DEVELOPER', 'SUPERADMIN', 'ADMIN'].includes(normalizedLevel)) {
+        if (normalizedLevel !== 'DEVELOPER') {
             return '';
         }
 

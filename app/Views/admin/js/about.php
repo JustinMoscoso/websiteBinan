@@ -376,12 +376,21 @@
                         } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Error',
-                                text: result.msg,
+                                title: newStatus === 'ACTIVE'
+                                    ? 'Unable to Activate Content'
+                                    : 'Unable to Deactivate Content',
+                                text: result.message || result.msg || 'The content status could not be updated. Please try again.',
                             });
                         }
                     }
-                );
+                ).fail(function (xhr) {
+                    var response = xhr.responseJSON || {};
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Status Update Failed',
+                        text: response.message || response.msg || 'The server could not process the status update. Please try again.'
+                    });
+                });
             }
         });
     }

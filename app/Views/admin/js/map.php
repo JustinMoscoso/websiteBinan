@@ -489,6 +489,7 @@
                             var statusFunc = row.status === 'ACTIVE' ? 'deactivate' : 'activate';
                             actions += `<li><a class="dropdown-item" href="#" onclick="${statusFunc}(${row.ID})"><i class="bi ${statusIcon} me-1"></i> ${statusText}</a></li>`;
                         }
+                        actions += renderDeleteAction(userLevel, row.ID, 'deleteMap');
                         actions += '</ul></div>';
                         return actions;
                     }

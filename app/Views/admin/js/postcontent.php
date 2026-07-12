@@ -233,7 +233,16 @@
             });
         },
         columns: [
-
+            {
+                "title": "Date Created", "data": "created_date", "className": "dt-center align-middle", width: '15%',
+                "render": function (data, type, row) {
+                    if (type !== 'display') {
+                        return data;
+                    }
+                    var date = new Date(data);
+                    return formatDate(date);
+                }
+            },
             {
                 title: "Title",
                 data: "title",
@@ -242,14 +251,8 @@
                     return '<div class="d-flex justify-content-start">' + data + '</div>';
                 }
             },
+            { "title": "Category", "data": "category", "className": "dt-center align-middle" },
             { "title": "Author Name", "data": "author", width: '15%', "className": "align-middle" },
-            {
-                "title": "Date Created", "data": "created_date", "className": "dt-center align-middle", width: '15%',
-                "render": function (data, type, row) {
-                    var date = new Date(data);
-                    return formatDate(date);
-                }
-            },
             {
                 "title": "Status",
                 "data": "status",
@@ -266,9 +269,8 @@
                     }
                 }
             },
-            { "title": "Category", "data": "category", "className": "dt-center align-middle" },
             {
-                "title": "Image", "data": "file_loc", "className": "dt-center", width: '15%',
+                "title": "Image", "data": "file_loc", "className": "dt-center", width: '15%', "visible": false,
                 "render": function (data, type, row) {
                     return '<img id="img_loc" class="img-fluid mt-3" src="<?php echo base_url('admin/image/POSTCONTENT/') ?>' + data + '">';
                 }
@@ -292,6 +294,7 @@
                             <li><a class="dropdown-item" href="#" onclick="edit(${row.ID}); return false;"><i class="bi bi-pencil me-1"></i> Edit</a></li>`;
 
                     actionHtml += renderStatusToggleAction(userLevel, row, 'toggleStatus');
+                    actionHtml += renderDeleteAction(userLevel, row.ID, 'deletePostContent');
                     actionHtml += `</ul></div>`;
                     return actionHtml;
                 }
