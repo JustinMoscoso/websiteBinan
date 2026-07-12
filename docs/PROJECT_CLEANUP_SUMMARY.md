@@ -149,6 +149,23 @@ vendor-pruning operation.
 - Framework and third-party vendor packages were not individually pruned.
 - `public/assets/js/careers.js` was retained because it is loaded by the Careers page.
 
+## Root artifact cleanup
+
+Removed non-runtime files from the project root so they are not exposed or executed by
+the web server:
+
+- Database and AJAX scratch scripts: `scratch_db.php`, `scratch_dept.php`, and
+  `test_ajax.php`.
+- Practicum deliverables: the progress-report presentation, presentation script,
+  Weekly Journal Markdown/HTML/PDF files.
+- Stale project notes: `checklist.txt` and `patchnotes.txt`.
+- Superseded implementation and audit documents covering asset localization, barangay
+  staff, emergency hotlines, Smart/Globe hotlines, modal reuse, archive permissions,
+  and the earlier cleanup audit/guide.
+
+The framework `README.md`, application bootstrap files, license, Composer files, and
+the current documents under `docs/` were retained.
+
 ## Verification performed
 
 - Ran PHP syntax validation across every PHP file under `app`.
