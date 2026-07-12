@@ -1277,6 +1277,9 @@ class Admin extends BaseController
                         ->orLike('audit_trails.processDetails', $searchAction)
                         ->orLike('audit_trails.device', $searchAction)
                         ->orLike('audit_trails.browser', $searchAction)
+                        ->orLike('useradmin.username', $searchAction)
+                        ->orLike('useradmin.fname', $searchAction)
+                        ->orLike('useradmin.lname', $searchAction)
                         ->groupEnd();
                     $isSearching = true;
                 }
@@ -1313,7 +1316,7 @@ class Admin extends BaseController
                     // Dynamically resolve target entity name from database if ID is present
                     $resolvedDetails = $logs->processDetails;
                     try {
-                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|ABOUT|MAYOR|POSTCONTENT|INVEST|FULLDISC)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
+                    if (!empty($resolvedDetails) && preg_match('/(ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|BRGY|DEPT|PROFILE_DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|ABOUT|MAYOR|POSTCONTENT|CAREER|INVEST|FULLDISC|MAP)_ID:\s*(\d+)/i', $resolvedDetails, $matches)) {
                         $prefix = strtoupper($matches[1]);
                         $targetId = (int) $matches[2];
                         $name = '';
@@ -1366,6 +1369,21 @@ class Admin extends BaseController
                             $serviceRow = $db->table('service_content')->select('serv_name')->where('ID', $targetId)->get()->getRow();
                             if ($serviceRow) {
                                 $name = $serviceRow->serv_name;
+                            }
+                        } elseif ($prefix === 'CAREER') {
+                            $careerRow = $db->table('file_tbl')->select('level, publication_date')->where('ID', $targetId)->get()->getRow();
+                            if ($careerRow) {
+                                $level = trim((string) ($careerRow->level ?? ''));
+                                $publicationDate = trim((string) ($careerRow->publication_date ?? ''));
+                                $name = $level;
+                                if ($publicationDate !== '') {
+                                    $name .= ($name !== '' ? ' — ' : '') . $publicationDate;
+                                }
+                            }
+                        } elseif ($prefix === 'MAP') {
+                            $mapRow = $db->table('map')->select('brgy_name')->where('ID', $targetId)->get()->getRow();
+                            if ($mapRow) {
+                                $name = $mapRow->brgy_name;
                             }
                         } elseif ($prefix === 'INVEST') {
                             $investRow = $db->table('file_tbl')->select('file_category')->where('ID', $targetId)->get()->getRow();

@@ -1,6 +1,141 @@
 <script>
+    var auditModuleLabels = {
+        account: 'User Account',
+        user: 'User Account',
+        profile: 'User Profile',
+        profile_department: 'Linked Department Profile',
+        barangay: 'Barangay',
+        brgy: 'Barangay',
+        dept: 'Department',
+        cityoff: 'City Official',
+        postcontent: 'Post Content',
+        news: 'News Article',
+        anns: 'Announcement',
+        announcement: 'Announcement',
+        mayor: "Mayor's Corner",
+        fulldiscpol: 'Full Disclosure Policy',
+        fulldisc: 'Full Disclosure Policy',
+        career: 'Career Document',
+        careers: 'Career Document',
+        invest: 'Investment Content',
+        service: 'Service',
+        services: 'Service',
+        contact: 'Contact / Hotline',
+        contacts: 'Contact / Hotline',
+        hotline: 'Contact / Hotline',
+        about: 'About / Homepage Content',
+        map: 'Map Location',
+        map_record: 'Map Location',
+        job: 'Job Posting'
+    };
+
+    function escapeAuditHtml(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function getAuditModuleLabel(module) {
+        var key = String(module || '').toLowerCase().trim();
+        return auditModuleLabels[key] || key
+            .split('_')
+            .filter(Boolean)
+            .map(function (word) { return word.charAt(0).toUpperCase() + word.slice(1); })
+            .join(' ') || 'System Record';
+    }
+
+    function getAuditActionInfo(action) {
+        var raw = String(action || '').toLowerCase().trim();
+        var info = { raw: raw, operation: 'other', module: '', verb: 'Performed', badgeClass: 'bg-secondary text-white' };
+
+        var exactActions = {
+            update_profile: ['update', 'profile', 'Updated'],
+            change_profile_password: ['password', 'profile', 'Password Changed'],
+            update_profile_picture: ['photo', 'profile', 'Photo Updated'],
+            update_profile_department: ['update', 'profile_department', 'Updated'],
+            reset_password: ['reset', 'account', 'Password Reset'],
+            reset_pass_account: ['reset', 'account', 'Password Reset'],
+            update_map_record: ['update', 'map', 'Updated']
+        };
+
+        if (exactActions[raw]) {
+            info.operation = exactActions[raw][0];
+            info.module = exactActions[raw][1];
+            info.verb = exactActions[raw][2];
+        } else if (raw.indexOf('set_status_') === 0) {
+            info.operation = 'status';
+            info.module = raw.replace('set_status_', '');
+            info.verb = 'Status Changed';
+        } else if (raw.indexOf('create_') === 0) {
+            info.operation = 'create';
+            info.module = raw.replace('create_', '');
+            info.verb = 'Created';
+        } else if (raw.indexOf('update_') === 0) {
+            info.operation = 'update';
+            info.module = raw.replace('update_', '');
+            info.verb = 'Updated';
+        } else if (raw.indexOf('delete_') === 0) {
+            info.operation = 'delete';
+            info.module = raw.replace('delete_', '');
+            info.verb = 'Permanently Deleted';
+        } else {
+            info.module = raw;
+        }
+
+        if (info.operation === 'create') info.badgeClass = 'bg-success text-white';
+        if (info.operation === 'update' || info.operation === 'photo') info.badgeClass = 'bg-primary text-white';
+        if (info.operation === 'status') info.badgeClass = 'bg-warning text-dark';
+        if (info.operation === 'delete') info.badgeClass = 'bg-danger text-white';
+        if (info.operation === 'password' || info.operation === 'reset') info.badgeClass = 'bg-info text-dark';
+
+        info.moduleLabel = getAuditModuleLabel(info.module);
+        return info;
+    }
+
+    function formatAuditAction(action, type) {
+        var info = getAuditActionInfo(action);
+        var searchable = info.verb + ' ' + info.moduleLabel + ' ' + info.raw.replace(/_/g, ' ');
+        if (type !== 'display') return searchable;
+
+        return '<div class="audit-action-cell">' +
+            '<span class="badge ' + info.badgeClass + '">' + escapeAuditHtml(info.verb) + '</span>' +
+            '<span class="audit-action-module">' + escapeAuditHtml(info.moduleLabel) + '</span>' +
+            '</div>';
+    }
+
+    function formatAuditStatus(statusText) {
+        var normalized = String(statusText || '').toUpperCase();
+        var labels = {
+            ACTIVE: ['Active', 'bg-success text-white'],
+            INACTIVE: ['Inactive', 'bg-secondary text-white'],
+            ARCHIVED: ['Archived', 'bg-warning text-dark'],
+            DELETED: ['Deleted', 'bg-danger text-white'],
+            'NOT FOUND': ['Not Found', 'bg-dark text-white']
+        };
+        var config = labels[normalized] || [normalized || 'Updated', 'bg-secondary text-white'];
+        return '<span class="badge ' + config[1] + '">' + config[0] + '</span>';
+    }
+
+    function genericAuditDetails(action, formattedId, status) {
+        var info = getAuditActionInfo(action);
+        var moduleLabel = '<strong>' + escapeAuditHtml(info.moduleLabel) + '</strong>';
+
+        if (info.operation === 'create') return 'Created a new ' + moduleLabel + ' record' + formattedId + '.';
+        if (info.operation === 'update') return 'Updated the ' + moduleLabel + ' record' + formattedId + '.';
+        if (info.operation === 'status') return 'Changed the ' + moduleLabel + ' status to ' + (status || 'a new status') + formattedId + '.';
+        if (info.operation === 'delete') return 'Permanently deleted the ' + moduleLabel + ' record' + formattedId + '.';
+        if (info.operation === 'password') return 'Changed the login password for the ' + moduleLabel + formattedId + '.';
+        if (info.operation === 'reset') return 'Reset the password and queued a notification for the ' + moduleLabel + formattedId + '.';
+        if (info.operation === 'photo') return 'Updated the profile photo for the ' + moduleLabel + formattedId + '.';
+
+        return 'Performed a system action for ' + moduleLabel + formattedId + '.';
+    }
+
     function formatDetails(details, action) {
-        if (!details) return '<span class="text-muted">No details provided</span>';
+        if (!details) return genericAuditDetails(action, '', null);
 
         var str = details.trim();
         var actionLower = action ? action.toLowerCase() : '';
@@ -12,17 +147,19 @@
         // Check status
         var status = null;
         if (str.toUpperCase().indexOf('INACTIVE') !== -1) {
-            status = '<strong style="color: #858796;">Inactive</strong>';
+            status = formatAuditStatus('INACTIVE');
         } else if (str.toUpperCase().indexOf('ACTIVE') !== -1) {
-            status = '<strong style="color: #858796;">Active</strong>';
+            status = formatAuditStatus('ACTIVE');
         } else if (str.toUpperCase().indexOf('ARCHIVED') !== -1) {
-            status = '<strong style="color: #858796;">Archived</strong>';
+            status = formatAuditStatus('ARCHIVED');
         } else if (str.toUpperCase().indexOf('DELETED') !== -1) {
-            status = '<strong style="color: #858796;">Deleted</strong>';
+            status = formatAuditStatus('DELETED');
+        } else if (str.toUpperCase().indexOf('NOT FOUND') !== -1) {
+            status = formatAuditStatus('NOT FOUND');
         }
 
         // Title matching
-        var titleMatch = str.match(/TITLE:\s*(.+)$/i) || str.match(/TITLE\s*:\s*(.+)$/i);
+        var titleMatch = str.match(/TITLE\s*:\s*(.+?)(?=\s+-\s+(?:ACTIVE|INACTIVE|ARCHIVED|DELETED|NOT FOUND)\s*$|$)/i);
         var title = titleMatch ? titleMatch[1].trim() : null;
 
         // Year and Qtr matching
@@ -32,6 +169,12 @@
 
         // Helper to format ID
         var formattedId = id ? ' <span class="text-secondary small">(ID: ' + id + ')</span>' : '';
+        var entityMatch = str.match(/(?:ACCOUNT|PROFILE|PROFILE_PASSWORD|PROFILE_IMAGE|PROFILE_DEPT|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|ABOUT|MAYOR|POSTCONTENT|CAREER|INVEST|FULLDISC|MAP)_ID:\s*\d+\s+(.+?)(?=\s+-\s+(?:ACTIVE|INACTIVE|ARCHIVED|DELETED|NOT FOUND)\s*$|$)/i);
+        var genericEntity = entityMatch ? entityMatch[1].trim() : '';
+        genericEntity = genericEntity.replace(/^(?:TITLE|SECTION|POSITION):\s*/i, '').trim();
+        if (/^(?:ACTIVE|INACTIVE|ARCHIVED|DELETED|NOT FOUND)$/i.test(genericEntity)) {
+            genericEntity = '';
+        }
 
         try {
             if (actionLower.startsWith('create_')) {
@@ -82,7 +225,9 @@
                     var category = categoryMatch ? categoryMatch[1].trim() : '';
                     return 'Created new investment content' + (category ? ': "<strong>' + category + '</strong>"' : '') + formattedId;
                 }
-                return 'Created new ' + module.replace('_', ' ') + ' record' + formattedId;
+                return 'Created a new <strong>' + getAuditModuleLabel(module) + '</strong> record' +
+                    (title ? ': "<strong>' + escapeAuditHtml(title) + '</strong>"' :
+                        (genericEntity ? ': "<strong>' + escapeAuditHtml(genericEntity) + '</strong>"' : '')) + formattedId + '.';
             }
 
             if (actionLower.startsWith('update_')) {
@@ -149,14 +294,14 @@
                     var category = categoryMatch ? categoryMatch[1].trim() : '';
                     return 'Updated investment content' + (category ? ' "<strong>' + category + '</strong>"' : '') + formattedId;
                 }
-                return 'Updated ' + module.replace('_', ' ') + ' record' + formattedId;
+                return 'Updated the <strong>' + getAuditModuleLabel(module) + '</strong> record' +
+                    (title ? ': "<strong>' + escapeAuditHtml(title) + '</strong>"' :
+                        (genericEntity ? ': "<strong>' + escapeAuditHtml(genericEntity) + '</strong>"' : '')) + formattedId + '.';
             }
 
             if (actionLower.startsWith('set_status_')) {
                 var module = actionLower.replace('set_status_', '');
-                var label = module.replace('_', ' ');
-                if (module === 'anns') label = 'announcement';
-                if (module === 'fulldiscpol') label = 'Full Disclosure Policy';
+                var label = getAuditModuleLabel(module);
 
                 var entityName = '';
                 var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|INVEST|FULLDISC)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
@@ -168,14 +313,12 @@
                 }
 
                 var nameDisplay = entityName ? ': "<strong>' + entityName + '</strong>"' : '';
-                return 'Changed ' + label + nameDisplay + ' status to ' + (status || 'updated status') + formattedId;
+                return 'Changed the <strong>' + label + '</strong>' + nameDisplay + ' status to ' + (status || 'a new status') + formattedId + '.';
             }
 
             if (actionLower.startsWith('delete_')) {
                 var module = actionLower.replace('delete_', '');
-                var label = module.replace('_', ' ');
-                if (module === 'anns') label = 'announcement';
-                if (module === 'fulldiscpol') label = 'Full Disclosure Policy';
+                var label = getAuditModuleLabel(module);
 
                 var entityName = '';
                 var regex = new RegExp('(?:' + module.toUpperCase() + '|ACCOUNT|PROFILE|BRGY|DEPT|JOB|NEWS|ANNOUNCEMENT|ANNNOUNCEMENT|CITYOFFICIAL|SERVICE|CONTACT|HOTLINE|INVEST|FULLDISC)_ID:\\s*\\d+\\s+([^\\-\\[]+)', 'i');
@@ -187,7 +330,7 @@
                 }
 
                 var nameDisplay = entityName ? ': "<strong>' + entityName + '</strong>"' : '';
-                return 'Deleted ' + label + nameDisplay + ' record' + formattedId;
+                return 'Permanently deleted the <strong>' + label + '</strong>' + nameDisplay + ' record' + formattedId + '.';
             }
 
             if (actionLower === 'change_profile_password') {
@@ -244,8 +387,7 @@
             return 'Full Disclosure Policy' + (category ? ': "<strong>' + category + '</strong>"' : '') + period + formattedId + (status ? ' (' + status + ')' : '');
         }
 
-        var cleanStr = str.replace(/_/g, ' ');
-        return cleanStr;
+        return genericAuditDetails(action, formattedId, status);
     }
 
     var tbl = $('#tblaudit').DataTable({
@@ -285,15 +427,26 @@
                     return formatDate(date); // Only format for display
                 }
             },
-            { "title": "Action", "data": "action", "className": "dt-center" },
+            {
+                "title": "Action",
+                "data": "action",
+                "className": "dt-center align-middle",
+                width: '16%',
+                "render": function (data, type) {
+                    return formatAuditAction(data, type);
+                }
+            },
             {
                 "title": "Details",
                 "data": "processDetails",
-                "className": "dt-center align-middle",
+                "className": "audit-details-cell align-middle",
                 "render": function (data, type, row) {
                     var humanDetails = formatDetails(data, row.action);
-                    var escapedData = data ? data.replace(/"/g, '&quot;') : '';
-                    return '<span title="Raw Log Data: ' + escapedData + '" style="cursor: help; color: #858796;">' + humanDetails + '</span>';
+                    if (type !== 'display') {
+                        return $('<div>').html(humanDetails).text() + ' ' + (data || '');
+                    }
+                    var escapedData = escapeAuditHtml(data || 'No raw details');
+                    return '<span class="audit-detail-text" title="Raw Log Data: ' + escapedData + '">' + humanDetails + '</span>';
                 }
             },
             {
@@ -325,7 +478,7 @@
             },
             { "title": "IP Address", "data": "ipaddress", "className": "dt-center" },
             {
-                "title": "Username", "data": "userID", "className": "dt-center"
+                "title": "Performed By", "data": "userID", "className": "dt-center"
             },
         ],
         initComplete: function () {
