@@ -4630,6 +4630,54 @@ class Admin extends BaseController
                 break;
             }
 
+            case 'delete_user': {
+                $userModel = new \App\Models\UserAccount();
+                $id = $this->request->getPost('id');
+
+                if (!$id || !is_numeric($id)) {
+                    $message = 'Invalid user account ID.';
+                    $status = 0;
+                    break;
+                }
+
+                if ((int) $id === (int) ($user->ID ?? 0)) {
+                    $message = 'You cannot delete the account currently signed in.';
+                    $status = 0;
+                    break;
+                }
+
+                $targetUser = $userModel->find($id);
+                if (!$targetUser) {
+                    $message = 'User account not found.';
+                    $status = 0;
+                    break;
+                }
+
+                if (strtoupper(trim((string) ($targetUser->user_lvl ?? ''))) === 'DEVELOPER') {
+                    $developerCount = $userModel->where('user_lvl', 'DEVELOPER')->countAllResults();
+                    if ($developerCount <= 1) {
+                        $message = 'The last developer account cannot be deleted.';
+                        $status = 0;
+                        break;
+                    }
+                }
+
+                try {
+                    if ($userModel->delete($id)) {
+                        $message = 'User account deleted successfully.';
+                        $log_c['processDetails'] = 'ACCOUNT_ID: ' . $id . ' - DELETED';
+                        $status = 1;
+                    } else {
+                        $message = 'Failed to delete the user account.';
+                        $status = 0;
+                    }
+                } catch (\Throwable $e) {
+                    $message = 'This user account cannot be deleted because it is linked to other records.';
+                    $status = 0;
+                }
+                break;
+            }
+
             case 'delete_mayor': {
                 if ($isSpecialDeptAdmin) {
                     $message = 'Unauthorized access. Department accounts cannot delete records.';

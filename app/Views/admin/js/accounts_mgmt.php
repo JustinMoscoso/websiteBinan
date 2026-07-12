@@ -2,6 +2,7 @@
 <script>
     const userLevel = "<?= $user->user_lvl ?>".toUpperCase();
     const phpAccType = "<?= $user->account_type ?? '' ?>".toUpperCase();
+    const currentUserId = <?= (int) ($user->ID ?? 0) ?>;
 
     // ── Name formatting helpers ────────────────────────────────────────────
     function toTitleCase(str) {
@@ -402,6 +403,43 @@
         });
     }
 
+    function deleteUser(id) {
+        Swal.fire({
+            heightAuto: false,
+            title: 'Delete User Account',
+            text: 'Permanently delete this user account? This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#c0392b',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Delete'
+        }).then(function (result) {
+            if (!result.isConfirmed) {
+                return;
+            }
+
+            Swal.fire({
+                title: 'Deleting...',
+                showConfirmButton: false,
+                allowEscapeKey: function () { return !Swal.isLoading(); },
+                allowOutsideClick: function () { return !Swal.isLoading(); },
+                willOpen: function () { Swal.showLoading(); }
+            });
+
+            $.post("<?= site_url('admin/ajax/delete_user') ?>", { id: id }, function (response) {
+                if (response.status == 1) {
+                    tbl.ajax.reload(null, false);
+                    Swal.fire({ icon: 'success', title: 'Deleted', text: response.message || 'User account deleted successfully.' });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Delete Failed', text: response.message || response.msg || 'Unable to delete the user account.' });
+                }
+            }).fail(function (xhr) {
+                var response = xhr.responseJSON || {};
+                Swal.fire({ icon: 'error', title: 'Delete Failed', text: response.message || 'The server could not process the delete request.' });
+            });
+        });
+    }
+
     // ── reset_password ────────────────────────────────────────────────────
     function reset_password(userId, fullName) {
         Swal.fire({
@@ -537,6 +575,10 @@
                                     <i class="bi bi-shield-lock me-1"></i> Reset Password
                                 </a>
                             </li>`;
+                    }
+
+                    if (userLevel === 'DEVELOPER' && Number(row.ID) !== currentUserId) {
+                        html += `<li><a class="dropdown-item text-danger" href="#" onclick="deleteUser(${row.ID}); return false;"><i class="bi bi-trash me-1"></i>Delete</a></li>`;
                     }
 
                     html += `</ul></div>`;

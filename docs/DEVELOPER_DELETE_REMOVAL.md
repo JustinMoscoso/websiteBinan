@@ -27,6 +27,7 @@ listed below have been removed.
 Remove the `renderDeleteAction(...)` line from:
 
 - `app/Views/admin/js/careers.php`
+- `app/Views/admin/js/accounts_mgmt.php`
 - `app/Views/admin/js/brgy.php`
 - `app/Views/admin/js/cityOff.php`
 - `app/Views/admin/js/contacts.php`
@@ -40,9 +41,10 @@ Remove the `renderDeleteAction(...)` line from:
 - `app/Views/admin/js/services.php`
 
 Jobs also contains `window.deleteJob`; remove that function when removing the Jobs
-button. The other modules already had dormant delete functions before the buttons
-were enabled. Those functions may also be removed as dead code after the UI calls are
-gone.
+button. Account Management contains `deleteUser`, and Barangays contains `deleteBrgy`;
+remove those functions with their buttons. The other modules already had dormant
+delete functions before the buttons were enabled. Those functions may also be removed
+as dead code after the UI calls are gone.
 
 ## Optional backend cleanup
 
