@@ -272,182 +272,25 @@
 		</div>
 	</section>
 
-
-	<!--Barangays and Dept -->
-	<section data-aos="fade-up" id="brgydept" class="my-5">
-		<div class="container">
-			<div class="row g-3">
-				<div class="col-12 col-sm-6 col-lg-3 mb-4">
-					<div class="info-card d-flex position-relative overflow-hidden h-100"
-						style="background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%); box-shadow: 0 8px 25px rgba(56, 142, 60, 0.3); border-radius: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 180px;">
-
-						<!-- Background Icon -->
-						<div class="position-absolute"
-							style="top: -20px; right: -20px; opacity: 0.1; font-size: clamp(4rem, 10vw, 6rem);">
-							<i class="fas fa-home"></i>
-						</div>
-
-						<div
-							class="w-100 p-3 p-md-5 d-flex align-items-center flex-column justify-content-center text-center position-relative z-index-1">
-							<!-- Icon -->
-							<div class="mb-2 mb-md-4"
-								style="font-size: clamp(3rem, 8vw, 2.5rem); color: rgba(255,255,255,0.9);">
-								<i class="fas fa-map-marked-alt"></i>
-							</div>
-
-							<div class="d-flex align-items-center flex-column text-white info-card-title">
-								<h1 class="mb-2 mb-md-4 fw-bold"
-									style="font-size: clamp(2rem, 5vw, 2rem); line-height: 1.2;">Barangays</h1>
-								<p class="mb-3 mb-md-4 text-center px-2"
-									style="font-size: clamp(1.2rem, 3.5vw, 1.1rem); opacity: 0.9; line-height: 1.4;">
-									Explore all <strong>24 barangays</strong> of Biñan City
-								</p>
-							</div>
-
-							<div class="home-btn text-uppercase mx-auto d-block mt-auto">
-								<a href="<?= base_url('/barangays') ?>" class="btn btn-orange px-5 py-2 py-md-3 fw-bold"
-									style="border-radius: 25px; transition: all 0.3s ease; font-size: clamp(1.2rem, 3vw, 1.1rem);">
-									<i class="fas fa-arrow-right me-1"></i>VIEW
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-12 col-sm-6 col-lg-3 mb-4">
-					<div class="info-card d-flex position-relative overflow-hidden h-100"
-						style="background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3); border-radius: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 180px;">
-
-						<!-- Background Icon -->
-						<div class="position-absolute"
-							style="top: -20px; right: -20px; opacity: 0.1; font-size: clamp(4rem, 10vw, 6rem);">
-							<i class="fas fa-building"></i>
-						</div>
-
-						<div
-							class="w-100 p-3 p-md-5 d-flex align-items-center flex-column justify-content-center text-center position-relative z-index-1">
-							<!-- Icon -->
-							<div class="mb-2 mb-md-4"
-								style="font-size: clamp(3rem, 8vw, 2.5rem); color: rgba(255,255,255,0.9);">
-								<i class="fas fa-users-cog"></i>
-							</div>
-
-							<div class="d-flex align-items-center flex-column text-white info-card-title">
-								<h1 class="mb-2 mb-md-4 fw-bold"
-									style="font-size: clamp(2rem, 5vw, 2rem); line-height: 1.2;">Departments</h1>
-								<p class="mb-3 mb-md-4 text-center px-2"
-									style="font-size: clamp(1.2rem, 3.5vw, 1.1rem); opacity: 0.9; line-height: 1.4;">
-									Connect with the city government offices & services
-								</p>
-							</div>
-
-							<div class="home-btn text-uppercase mx-auto d-block mt-auto">
-								<a href="<?= base_url('/department') ?>" class="btn btn-light px-5 py-2 py-md-3 fw-bold"
-									style="border-radius: 25px; transition: all 0.3s ease; font-size: clamp(1.2rem, 3vw, 1.1rem);">
-									<i class="fas fa-arrow-right me-1"></i>VIEW
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-12 col-sm-6 col-lg-3 mb-4">
-					<div class="info-card d-flex position-relative overflow-hidden h-100"
-						style="background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%); box-shadow: 0 8px 25px rgba(56, 142, 60, 0.3); border-radius: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 180px;">
-
-						<!-- Background Icon -->
-						<div class="position-absolute"
-							style="top: -20px; right: -20px; opacity: 0.1; font-size: clamp(4rem, 10vw, 6rem);">
-							<i class="fas fa-cogs"></i>
-						</div>
-
-						<div
-							class="w-100 p-3 p-md-5 d-flex align-items-center flex-column justify-content-center text-center position-relative z-index-1">
-							<!-- Icon -->
-							<div class="mb-2 mb-md-4"
-								style="font-size: clamp(3rem, 8vw, 2.5rem); color: rgba(255,255,255,0.9);">
-								<i class="fas fa-hands-helping"></i>
-							</div>
-
-							<div class="d-flex align-items-center flex-column text-white info-card-title">
-								<h1 class="mb-2 mb-md-4 fw-bold"
-									style="font-size: clamp(2rem, 5vw, 2rem); line-height: 1.2;">eServices</h1>
-								<p class="mb-3 mb-md-4 text-center px-2"
-									style="font-size: clamp(1.2rem, 3.5vw, 1.1rem); opacity: 0.9; line-height: 1.4;">
-									Access the city online transactions
-								</p>
-							</div>
-
-							<div class="home-btn text-uppercase mx-auto d-block mt-auto">
-								<a href="<?= base_url('/services') ?>" class="btn btn-orange px-5 py-2 py-md-3 fw-bold"
-									style="border-radius: 25px; transition: all 0.3s ease; font-size: clamp(1.2rem, 3vw, 1.1rem);">
-									<i class="fas fa-arrow-right me-1"></i>VIEW
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-12 col-sm-6 col-lg-3 mb-4">
-					<div class="info-card d-flex position-relative overflow-hidden h-100"
-						style="background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); box-shadow: 0 8px 25px rgba(156, 39, 176, 0.3); border-radius: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 180px;">
-
-						<!-- Background Icon -->
-						<div class="position-absolute"
-							style="top: -20px; right: -20px; opacity: 0.1; font-size: clamp(4rem, 10vw, 6rem);">
-							<i class="fas fa-briefcase"></i>
-						</div>
-
-						<div
-							class="w-100 p-3 p-md-5 d-flex align-items-center flex-column justify-content-center text-center position-relative z-index-1">
-							<!-- Icon -->
-							<div class="mb-2 mb-md-4"
-								style="font-size: clamp(3rem, 8vw, 2.5rem); color: rgba(255,255,255,0.9);">
-								<i class="fas fa-user-tie"></i>
-							</div>
-
-							<div class="d-flex align-items-center flex-column text-white info-card-title">
-								<h1 class="mb-2 mb-md-4 fw-bold"
-									style="font-size: clamp(2rem, 5vw, 2rem); line-height: 1.2;">Jobs</h1>
-								<p class="mb-3 mb-md-4 text-center px-2"
-									style="font-size: clamp(1.2rem, 3.5vw, 1.1rem); opacity: 0.9; line-height: 1.4;">
-									Find job opportunities & career openings
-								</p>
-							</div>
-
-							<div class="home-btn text-uppercase mx-auto d-block mt-auto">
-								<a href="<?= base_url('/jobs') ?>" class="btn btn-light px-5 py-2 py-md-3 fw-bold"
-									style="border-radius: 25px; transition: all 0.3s ease; font-size: clamp(1.2rem, 3vw, 1.1rem);">
-									<i class="fas fa-arrow-right me-1"></i>VIEW
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- =========================================
+<!-- =========================================
 	EMERGENCY HOTLINES
 ========================================= -->
 
-	<section class="py-5 hotline-section"
-		style="background-image: url('<?= base_url('assets/img/Emergency_Hotline/emergencyBack.png') ?>');">>
+	<section class="hotline-section" aria-labelledby="emergency-hotlines-title">
 
 		<div class="container hotline-container">
 
-			<div class="text-center hotline-header">
-				<span class="badge rounded-pill hotline-top-label">
-					24/7 PUBLIC SAFETY SERVICES
-				</span>
-				<h2 class="fw-bold text-white hotline-main-title">
+			<div class="hotline-header">
+				<div class="hotline-heading-copy">
+				<h2 id="emergency-hotlines-title" class="fw-bold hotline-main-title">
 					Emergency Hotlines
 				</h2>
-				<p class="text-light hotline-subtitle">
+				<p class="hotline-subtitle">
 					Quick access to emergency response and public safety services
-					within the City of Biñan.
+					within the City of Biñan
 				</p>
+				</div>
+
 			</div>
 
 			<div class="row g-3 hotline-grid-wrapper">
@@ -457,7 +300,7 @@
 				<?php foreach ($emergency_hotlines as $hotline): ?>
 					<?php
 						$icon = 'fas fa-phone-alt';
-						$image = 'assets/img/default.png';
+						$image = 'assets/img/binanlogo.png';
 
 						if (!empty($hotline->about_img)) {
 							$image = 'admin/image/ABOUT/' . $hotline->about_img;
@@ -477,42 +320,31 @@
 						?>
 
 						<div class="col-lg-6 col-12">
-
-							<div class="row mx-0 hotline-row h-100">
-
-								<div class="col-3 d-flex align-items-center justify-content-center hotline-col">
-									<div class="hotline-logo-box">
-										<img src="<?= base_url($image) ?>" alt="Hotline Image" class="hotline-logo">
-									</div>
+							<article class="hotline-card h-100">
+								<div class="hotline-logo-box">
+									<img src="<?= base_url($image) ?>" alt="<?= esc($hotline->title) ?> logo" class="hotline-logo">
 								</div>
-
-								<div class="col-5 d-flex align-items-center hotline-col">
-									<div class="hotline-title-wrapper w-100">
-										<h6 class="fw-bold text-dark mb-0 hotline-title">
-											<?= htmlspecialchars($hotline->title) ?>
-										</h6>
-									</div>
+								<div class="hotline-card-content hotline-card-title">
+									<h3 class="hotline-title"><?= esc($hotline->title) ?></h3>
 								</div>
-
-								<div class="col-4 d-flex align-items-center hotline-desc-col">
-									<div class="w-100 hotline-description-wrapper">
-										<div class="hotline-description">
-											<?= $hotline->description ?>
-										</div>
-									</div>
+								<div class="hotline-card-content hotline-card-numbers">
+									<div class="hotline-description"><?= $hotline->description ?></div>
 								</div>
-
-							</div>
+							</article>
 
 						</div>
 
 					<?php endforeach; ?>
+				<?php else: ?>
+					<div class="col-12">
+						<div class="hotline-empty-state">Emergency hotline information is currently unavailable.</div>
+					</div>
 				<?php endif; ?>
 
 			</div>
 
 			<div class="text-center hotline-button-wrapper">
-				<a href="<?= base_url('/hotlines') ?>" class="btn btn-outline-light hotline-btn fw-semibold">
+				<a href="<?= base_url('/hotlines') ?>" class="btn hotline-btn fw-semibold">
 					<i class="fas fa-phone-alt me-2"></i>
 					View Complete Hotline Directory
 				</a>
@@ -737,7 +569,406 @@
 				margin: auto;
 			}
 		}
+
+		/* Emergency hotline redesign: clean civic-service presentation */
+		.hotline-section {
+			padding: 72px 0 !important;
+			background:
+				linear-gradient(to bottom, rgba(34, 70, 34, 0.92), rgba(18, 55, 42, 0.82)),
+				url('<?= base_url("assets/img/hero3.jpg") ?>') center / cover no-repeat !important;
+			border-top: 1px solid #214d3d;
+			border-bottom: 1px solid #0b291f;
+			color: #1f2933;
+		}
+
+		.hotline-section::before {
+			display: none;
+		}
+
+		.hotline-container {
+			max-width: 1140px;
+		}
+
+		.hotline-header {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 32px;
+			margin-bottom: 32px;
+			padding-bottom: 20px;
+			border-bottom: 3px solid #67b86c;
+			text-align: center;
+		}
+
+		.hotline-heading-copy {
+			max-width: none;
+			width: 100%;
+		}
+
+		.hotline-top-label {
+			display: block;
+			margin: 0 0 8px;
+			padding: 0;
+			background: transparent;
+			color: #ffb4aa;
+			font-size: 0.75rem;
+			font-weight: 800;
+			letter-spacing: 0.11em;
+		}
+
+		.hotline-main-title {
+			margin: 0 0 8px;
+			color: #ffffff;
+			font-size: clamp(1.75rem, 4vw, 2.25rem);
+			line-height: 1.2;
+		}
+
+		.hotline-subtitle {
+			max-width: none;
+			margin: 0 auto;
+			color: #d6e2da;
+			font-size: 0.98rem;
+			line-height: 1.65;
+			white-space: nowrap;
+		}
+
+		.hotline-availability {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			flex: 0 0 auto;
+			padding: 9px 14px;
+			border: 1px solid rgba(255, 255, 255, 0.22);
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.1);
+			color: #ffffff;
+			font-size: 0.82rem;
+			font-weight: 700;
+		}
+
+		.hotline-availability-dot {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: #2eaf45;
+			box-shadow: 0 0 0 4px rgba(46, 175, 69, 0.14);
+		}
+
+		.hotline-card {
+			display: grid;
+			grid-template-columns: 96px minmax(0, 1.15fr) minmax(140px, 0.9fr);
+			align-items: center;
+			gap: 0;
+			min-height: 104px;
+			padding: 10px 12px;
+			border: 1px solid #d9dfe3;
+			border-radius: 8px;
+			background: #ffffff;
+			box-shadow: 0 5px 14px rgba(0, 0, 0, 0.16);
+			transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+		}
+
+		.hotline-card:hover {
+			transform: translateY(-2px);
+			border-color: #bfc9c1;
+			background: #ffffff;
+			box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+		}
+
+		.hotline-logo-box {
+			width: 84px;
+			height: 84px;
+			margin: 0;
+			padding: 2px 10px 2px 0;
+			border: 0;
+			border-radius: 0;
+			background: transparent;
+		}
+
+		.hotline-logo {
+			width: 100% !important;
+			height: 100% !important;
+			max-width: none !important;
+			object-fit: contain;
+		}
+
+		.hotline-card-content {
+			min-width: 0;
+			display: flex;
+			align-items: center;
+			align-self: stretch;
+			padding: 6px 12px;
+			border-left: 1px solid #4e5651;
+		}
+
+		.hotline-card-title {
+			padding-left: 14px;
+		}
+
+		.hotline-card-numbers {
+			justify-content: center;
+		}
+
+		.hotline-title {
+			margin: 0 0 7px;
+			color: #202823;
+			font-size: 0.82rem;
+			font-weight: 750;
+			line-height: 1.35;
+		}
+
+		.hotline-description,
+		.hotline-description p {
+			margin: 0 0 3px;
+			color: #303a34;
+			font-size: 0.72rem;
+			font-weight: 500;
+			line-height: 1.45;
+			text-align: left !important;
+		}
+
+		.hotline-description p:last-child {
+			margin-bottom: 0;
+		}
+
+		.hotline-phone-icon {
+			display: grid;
+			width: 40px;
+			height: 40px;
+			place-items: center;
+			flex: 0 0 auto;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.14);
+			color: #c8edcb;
+			font-size: 0.95rem;
+		}
+
+		.hotline-button-wrapper {
+			margin-top: 32px;
+		}
+
+		.hotline-btn {
+			padding: 11px 22px !important;
+			border: 1px solid #2e7d32;
+			border-radius: 7px;
+			background: #2e7d32;
+			color: #fff;
+			font-size: 0.9rem;
+			letter-spacing: 0;
+		}
+
+		.hotline-btn:hover,
+		.hotline-btn:focus {
+			border-color: #246428;
+			background: #246428;
+			color: #fff;
+		}
+
+		.hotline-empty-state {
+			padding: 28px;
+			border: 1px dashed #b9c7bb;
+			border-radius: 10px;
+			background: #fff;
+			color: #657168;
+			text-align: center;
+		}
+
+		@media (max-width: 767px) {
+			.hotline-section {
+				padding: 52px 0 !important;
+			}
+
+			.hotline-header {
+				align-items: center;
+				gap: 16px;
+			}
+
+			.hotline-subtitle {
+				white-space: normal;
+			}
+
+			.hotline-card {
+				grid-template-columns: 76px minmax(0, 1fr);
+				align-items: center;
+				gap: 0;
+				min-height: 0;
+				padding: 11px;
+			}
+
+			.hotline-logo-box {
+				width: 66px;
+				height: 68px;
+			}
+
+			.hotline-card-title {
+				padding: 6px 12px;
+			}
+
+			.hotline-card-numbers {
+				grid-column: 1 / -1;
+				justify-content: flex-start;
+				margin-top: 10px;
+				padding: 10px 0 0;
+				border-top: 1px solid #d8ded9;
+				border-left: 0;
+			}
+		}
 	</style>
+	<!--Barangays and Dept -->
+	<section data-aos="fade-up" id="brgydept" class="my-5">
+		<div class="container">
+			<div class="row g-3">
+				<div class="col-12 col-sm-6 col-lg-3 mb-4">
+					<div class="info-card d-flex position-relative overflow-hidden h-100"
+						style="background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%); box-shadow: 0 8px 25px rgba(56, 142, 60, 0.3); border-radius: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 180px;">
+
+						<!-- Background Icon -->
+						<div class="position-absolute"
+							style="top: -20px; right: -20px; opacity: 0.1; font-size: clamp(4rem, 10vw, 6rem);">
+							<i class="fas fa-home"></i>
+						</div>
+
+						<div
+							class="w-100 p-3 p-md-5 d-flex align-items-center flex-column justify-content-center text-center position-relative z-index-1">
+							<!-- Icon -->
+							<div class="mb-2 mb-md-4"
+								style="font-size: clamp(3rem, 8vw, 2.5rem); color: rgba(255,255,255,0.9);">
+								<i class="fas fa-map-marked-alt"></i>
+							</div>
+
+							<div class="d-flex align-items-center flex-column text-white info-card-title">
+								<h1 class="mb-2 mb-md-4 fw-bold"
+									style="font-size: clamp(2rem, 5vw, 2rem); line-height: 1.2;">Barangays</h1>
+								<p class="mb-3 mb-md-4 text-center px-2"
+									style="font-size: clamp(1.2rem, 3.5vw, 1.1rem); opacity: 0.9; line-height: 1.4;">
+									Explore all <strong>24 barangays</strong> of Biñan City
+								</p>
+							</div>
+
+							<div class="home-btn text-uppercase mx-auto d-block mt-auto">
+								<a href="<?= base_url('/barangays') ?>" class="btn btn-orange px-5 py-2 py-md-3 fw-bold"
+									style="border-radius: 25px; transition: all 0.3s ease; font-size: clamp(1.2rem, 3vw, 1.1rem);">
+									<i class="fas fa-arrow-right me-1"></i>VIEW
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-sm-6 col-lg-3 mb-4">
+					<div class="info-card d-flex position-relative overflow-hidden h-100"
+						style="background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3); border-radius: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 180px;">
+
+						<!-- Background Icon -->
+						<div class="position-absolute"
+							style="top: -20px; right: -20px; opacity: 0.1; font-size: clamp(4rem, 10vw, 6rem);">
+							<i class="fas fa-building"></i>
+						</div>
+
+						<div
+							class="w-100 p-3 p-md-5 d-flex align-items-center flex-column justify-content-center text-center position-relative z-index-1">
+							<!-- Icon -->
+							<div class="mb-2 mb-md-4"
+								style="font-size: clamp(3rem, 8vw, 2.5rem); color: rgba(255,255,255,0.9);">
+								<i class="fas fa-users-cog"></i>
+							</div>
+
+							<div class="d-flex align-items-center flex-column text-white info-card-title">
+								<h1 class="mb-2 mb-md-4 fw-bold"
+									style="font-size: clamp(2rem, 5vw, 2rem); line-height: 1.2;">Departments</h1>
+								<p class="mb-3 mb-md-4 text-center px-2"
+									style="font-size: clamp(1.2rem, 3.5vw, 1.1rem); opacity: 0.9; line-height: 1.4;">
+									Connect with the city government offices & services
+								</p>
+							</div>
+
+							<div class="home-btn text-uppercase mx-auto d-block mt-auto">
+								<a href="<?= base_url('/department') ?>" class="btn btn-light px-5 py-2 py-md-3 fw-bold"
+									style="border-radius: 25px; transition: all 0.3s ease; font-size: clamp(1.2rem, 3vw, 1.1rem);">
+									<i class="fas fa-arrow-right me-1"></i>VIEW
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-sm-6 col-lg-3 mb-4">
+					<div class="info-card d-flex position-relative overflow-hidden h-100"
+						style="background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%); box-shadow: 0 8px 25px rgba(56, 142, 60, 0.3); border-radius: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 180px;">
+
+						<!-- Background Icon -->
+						<div class="position-absolute"
+							style="top: -20px; right: -20px; opacity: 0.1; font-size: clamp(4rem, 10vw, 6rem);">
+							<i class="fas fa-cogs"></i>
+						</div>
+
+						<div
+							class="w-100 p-3 p-md-5 d-flex align-items-center flex-column justify-content-center text-center position-relative z-index-1">
+							<!-- Icon -->
+							<div class="mb-2 mb-md-4"
+								style="font-size: clamp(3rem, 8vw, 2.5rem); color: rgba(255,255,255,0.9);">
+								<i class="fas fa-hands-helping"></i>
+							</div>
+
+							<div class="d-flex align-items-center flex-column text-white info-card-title">
+								<h1 class="mb-2 mb-md-4 fw-bold"
+									style="font-size: clamp(2rem, 5vw, 2rem); line-height: 1.2;">eServices</h1>
+								<p class="mb-3 mb-md-4 text-center px-2"
+									style="font-size: clamp(1.2rem, 3.5vw, 1.1rem); opacity: 0.9; line-height: 1.4;">
+									Access the city online transactions
+								</p>
+							</div>
+
+							<div class="home-btn text-uppercase mx-auto d-block mt-auto">
+								<a href="<?= base_url('/services') ?>" class="btn btn-orange px-5 py-2 py-md-3 fw-bold"
+									style="border-radius: 25px; transition: all 0.3s ease; font-size: clamp(1.2rem, 3vw, 1.1rem);">
+									<i class="fas fa-arrow-right me-1"></i>VIEW
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-sm-6 col-lg-3 mb-4">
+					<div class="info-card d-flex position-relative overflow-hidden h-100"
+						style="background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); box-shadow: 0 8px 25px rgba(156, 39, 176, 0.3); border-radius: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; min-height: 180px;">
+
+						<!-- Background Icon -->
+						<div class="position-absolute"
+							style="top: -20px; right: -20px; opacity: 0.1; font-size: clamp(4rem, 10vw, 6rem);">
+							<i class="fas fa-briefcase"></i>
+						</div>
+
+						<div
+							class="w-100 p-3 p-md-5 d-flex align-items-center flex-column justify-content-center text-center position-relative z-index-1">
+							<!-- Icon -->
+							<div class="mb-2 mb-md-4"
+								style="font-size: clamp(3rem, 8vw, 2.5rem); color: rgba(255,255,255,0.9);">
+								<i class="fas fa-user-tie"></i>
+							</div>
+
+							<div class="d-flex align-items-center flex-column text-white info-card-title">
+								<h1 class="mb-2 mb-md-4 fw-bold"
+									style="font-size: clamp(2rem, 5vw, 2rem); line-height: 1.2;">Jobs</h1>
+								<p class="mb-3 mb-md-4 text-center px-2"
+									style="font-size: clamp(1.2rem, 3.5vw, 1.1rem); opacity: 0.9; line-height: 1.4;">
+									Find job opportunities & career openings
+								</p>
+							</div>
+
+							<div class="home-btn text-uppercase mx-auto d-block mt-auto">
+								<a href="<?= base_url('/jobs') ?>" class="btn btn-light px-5 py-2 py-md-3 fw-bold"
+									style="border-radius: 25px; transition: all 0.3s ease; font-size: clamp(1.2rem, 3vw, 1.1rem);">
+									<i class="fas fa-arrow-right me-1"></i>VIEW
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
 	</div>
 
 	<?php include "footer.php"; ?>
