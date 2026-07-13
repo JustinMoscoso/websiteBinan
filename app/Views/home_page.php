@@ -660,7 +660,7 @@
 
 		.hotline-card {
 			position: relative;
-			overflow: hidden;
+			overflow: hidden !important;
 			display: grid;
 			grid-template-columns: 82px minmax(0, 1fr);
 			grid-template-rows: 52px minmax(0, 1fr);
@@ -670,7 +670,7 @@
 			padding: 16px;
 			border: 1px solid rgba(198, 226, 198, 0.9);
 			border-left: 5px solid #4f9b60;
-			border-radius: 12px 30px 12px 30px;
+			border-radius: 30px !important;
 			background-color: rgba(244, 249, 242, 0.96) !important;
 			background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(222, 239, 219, 0.96)) !important;
 			box-shadow: 0 10px 24px rgba(4, 35, 23, 0.22);
@@ -685,7 +685,7 @@
 			right: 0;
 			width: 54px;
 			height: 54px;
-			border-radius: 0 28px 0 54px;
+			border-radius: 0 999px 0 100%;
 			background: linear-gradient(135deg, rgba(240, 180, 41, 0.82), rgba(240, 180, 41, 0.18));
 			content: '';
 			pointer-events: none;
@@ -746,10 +746,11 @@
 			align-self: start;
 			justify-content: center;
 			margin-top: 4px;
-			padding: 7px 10px;
-			border: 1px solid rgba(81, 143, 91, 0.2);
-			border-radius: 8px 14px 8px 14px;
-			background-color: rgba(207, 231, 204, 0.55) !important;
+			min-height: 0;
+			padding: 4px 0 0;
+			border: 0;
+			border-radius: 0;
+			background: transparent !important;
 		}
 
 		.hotline-title {
@@ -857,7 +858,7 @@
 				grid-column: 1 / -1;
 				justify-content: center;
 				margin-top: 10px;
-				padding: 10px 12px;
+				padding: 4px 0 0;
 				border: 0;
 			}
 		}
