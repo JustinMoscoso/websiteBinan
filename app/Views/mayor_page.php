@@ -46,7 +46,8 @@
             <div class="img">
                 <?php 
                 $personal_data_content = '';
-                $personal_data_img = 'assets/img/mayor.jpg'; // Default image
+                $personal_data_img = base_url('assets/img/mayor-silhouette.svg');
+                $personal_data_img_alt = 'Mayor silhouette placeholder';
 
                 if (isset($mayor)) {
                     foreach ($mayor as $data) {
@@ -57,13 +58,14 @@
                             // Check if the array is valid and not empty
                             if (!empty($mayor_imgs) && is_array($mayor_imgs)) {
                                 $personal_data_img = base_url('admin/image/MAYOR/') . $mayor_imgs[0];
+                                $personal_data_img_alt = 'Mayor Image';
                             }
                             break;
                         }
                     }
                 }
                 ?>
-                <img src="<?= $personal_data_img ?>" alt="Mayor Image" class="img-thumbnail img-responsive">
+                <img src="<?= esc($personal_data_img) ?>" alt="<?= esc($personal_data_img_alt) ?>" class="img-thumbnail img-responsive<?= $personal_data_img_alt === 'Mayor silhouette placeholder' ? ' mayor-personal-placeholder' : '' ?>">
             </div>
         </div>
         <div class="col-lg-6 pt-4 pt-lg-0">
@@ -107,10 +109,7 @@
             <?php endforeach; ?>
         <?php else: ?>
             <div class="carousel-item active">
-                <img src="assets/img/mayor.jpg" class="d-block w-100 img-carousel mayor-carousel-img" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="assets/img/newsimage.png" class="d-block w-100 img-carousel mayor-carousel-img" alt="...">
+                <img src="<?= base_url('assets/img/mayor-silhouette.svg') ?>" class="d-block w-100 img-carousel mayor-carousel-img mayor-carousel-placeholder" alt="Mayor silhouette placeholder">
             </div>
         <?php endif; ?>
     </div>
@@ -134,6 +133,18 @@
     width: 100%;
     background: #fff;
     box-shadow: 0 2px 8px rgba(56,142,60,0.08);
+}
+.mayor-carousel-placeholder {
+    object-fit: contain;
+    padding: 2rem;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+.mayor-personal-placeholder {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
 }
 </style>
 
