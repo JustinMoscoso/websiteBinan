@@ -428,27 +428,46 @@
             var _origPicSrc = $('#profilePicturePreview').attr('src') || '';
             var _origPicHasFallback = $('#profilePictureFallback').length && !$('#profilePictureFallback').hasClass('d-none');
             var _picPending = false;
+            var _hasUnsavedPicture = false;
 
-            $('#profilePictureWrapper').on('click', function () {
+            function rememberOriginalPicture() {
+                if (_hasUnsavedPicture) {
+                    return;
+                }
                 _origPicSrc = $('#profilePicturePreview').attr('src') || '';
                 _origPicHasFallback = $('#profilePictureFallback').length && !$('#profilePictureFallback').hasClass('d-none');
+            }
+
+            function restoreOriginalPicture() {
+                $('#profileImage').val('');
+                $('#profilePictureClearBtn').removeClass('active');
+
+                if (_origPicHasFallback) {
+                    $('#profilePictureFallback').removeClass('d-none').addClass('d-inline-flex');
+                    $('#profilePicturePreview').addClass('d-none').attr('src', '');
+                } else if (_origPicSrc) {
+                    $('#profilePictureFallback').addClass('d-none').removeClass('d-inline-flex');
+                    $('#profilePicturePreview').attr('src', _origPicSrc).removeClass('d-none');
+                }
+                _hasUnsavedPicture = false;
+            }
+
+            $('#profilePictureWrapper').on('click', function () {
+                rememberOriginalPicture();
                 _picPending = true;
                 $('#profileImage').trigger('click');
                 $(window).one('focus.picRevert', function () {
                     setTimeout(function () {
                         if (_picPending && (!$('#profileImage')[0].files || $('#profileImage')[0].files.length === 0)) {
-                            // User cancelled — revert preview
-                            if (_origPicHasFallback) {
-                                $('#profilePictureFallback').removeClass('d-none');
-                                $('#profilePicturePreview').addClass('d-none').attr('src', '');
-                            } else if (_origPicSrc) {
-                                $('#profilePicturePreview').attr('src', _origPicSrc).removeClass('d-none');
-                            }
-                            $('#profilePictureClearBtn').removeClass('active');
+                            restoreOriginalPicture();
                         }
                         _picPending = false;
                     }, 300);
                 });
+            });
+
+            $('#profileImage').on('click', function () {
+                rememberOriginalPicture();
             });
 
             $('#profileImage').on('change', function () {
@@ -456,29 +475,35 @@
                 $(window).off('focus.picRevert');
                 const file = this.files && this.files[0] ? this.files[0] : null;
                 if (!file) {
-                    $('#profilePictureClearBtn').removeClass('active');
+                    restoreOriginalPicture();
                     return;
                 }
-                const previewUrl = URL.createObjectURL(file);
-                $('#profilePictureFallback').addClass('d-none');
-                $('#profilePicturePreview')
-                    .attr('src', previewUrl)
-                    .removeClass('d-none')
-                    .one('load', function () { URL.revokeObjectURL(previewUrl); });
-                $('#profilePictureClearBtn').addClass('active');
+
+                if (!file.type || !file.type.match(/^image\/(png|jpeg|webp)$/)) {
+                    restoreOriginalPicture();
+                    showProfileMessage(false, 'Please choose a PNG, JPG, JPEG, or WEBP image.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    $('#profilePictureFallback').addClass('d-none').removeClass('d-inline-flex');
+                    $('#profilePicturePreview').attr('src', event.target.result).removeClass('d-none');
+                    $('#profilePictureClearBtn').addClass('active');
+                    _hasUnsavedPicture = true;
+                };
+                reader.readAsDataURL(file);
             });
 
             $('#profilePictureClearBtn').on('click', function (e) {
                 e.stopPropagation();
-                $('#profileImage').val('');
-                $('#profilePictureClearBtn').removeClass('active');
-                if (_origPicHasFallback) {
-                    $('#profilePictureFallback').removeClass('d-none');
-                    $('#profilePicturePreview').addClass('d-none').attr('src', '');
-                } else if (_origPicSrc) {
-                    $('#profilePicturePreview').attr('src', _origPicSrc).removeClass('d-none');
-                    $('#profilePictureFallback').addClass('d-none');
-                }
+                restoreOriginalPicture();
+            });
+
+            $(document).on('profilePictureSaved', function () {
+                _origPicSrc = $('#profilePicturePreview').attr('src') || '';
+                _origPicHasFallback = $('#profilePictureFallback').length && !$('#profilePictureFallback').hasClass('d-none');
+                _hasUnsavedPicture = false;
             });
         }());
 
@@ -586,7 +611,7 @@
                     showProfileMessage(saved, response.message || 'Profile picture saved.');
                     if (response.status == 1 && response.data && response.data.profileImageUrl) {
                         const freshImageUrl = response.data.profileImageUrl + '?v=' + Date.now();
-                        $('#profilePictureFallback').addClass('d-none');
+                        $('#profilePictureFallback').addClass('d-none').removeClass('d-inline-flex');
                         $('#profilePicturePreview')
                             .attr('src', freshImageUrl)
                             .removeClass('d-none');
@@ -595,6 +620,7 @@
                         );
                         $('#profileImage').val('');
                         $('#profilePictureClearBtn').removeClass('active');
+                        $(document).trigger('profilePictureSaved');
                     }
                 },
                 error: function () {

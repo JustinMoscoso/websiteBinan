@@ -8,6 +8,16 @@
 
 <link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
 <style>
+    /* Keep descriptive Barangay fields aligned from the left; logo, status, and actions stay centered. */
+    #tblbrgy tbody td:nth-child(1),
+    #tblbrgy tbody td:nth-child(1) *,
+    #tblbrgy tbody td:nth-child(3),
+    #tblbrgy tbody td:nth-child(3) *,
+    #tblbrgy tbody td:nth-child(4),
+    #tblbrgy tbody td:nth-child(4) * {
+        text-align: left !important;
+    }
+
     .brgy-logo-thumb {
         width: 100%;
         height: 96px;

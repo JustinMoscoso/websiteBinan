@@ -2783,7 +2783,8 @@ class Admin extends BaseController
                 }
 
                 // Dept/brgy-scoped ADMIN: force their own entity
-                if ($isDeptScopedAdmin) {
+                // CIO can manage citywide / "Others" contacts, so preserve the submitted section.
+                if ($isDeptScopedAdmin && !$isCIO) {
                     $dept_cont_ID = $user->entity_ref_id;
                     $brngy_cont_ID = null;
                     $others_cont_ID = null;
@@ -4059,8 +4060,8 @@ class Admin extends BaseController
                         break;
                     }
 
-                    // Scoped ADMIN: force their own entity reference
-                    if ($isDeptScopedAdmin) {
+                    // CIO can manage citywide / "Others" contacts, so preserve the submitted section.
+                    if ($isDeptScopedAdmin && !$isCIO) {
                         $dept_cont_ID = $user->entity_ref_id;
                         $brngy_cont_ID = null;
                         $others_cont_ID = null;

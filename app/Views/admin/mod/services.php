@@ -12,6 +12,18 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
 
 <link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
 
+<style>
+    /* Service details are easier to scan when aligned from a common left edge. */
+    #tblservice tbody td:nth-child(-n+2),
+    #tblservice tbody td:nth-child(-n+2) * {
+        text-align: left !important;
+    }
+
+    #tblservice tbody td:nth-child(-n+2) .d-flex {
+        justify-content: flex-start !important;
+    }
+</style>
+
 <?php if ($user->user_lvl !== 'VIEWER'): ?>
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
