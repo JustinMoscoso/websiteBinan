@@ -505,17 +505,17 @@
             { title: 'ID', data: 'ID', visible: false },
             {
                 title: 'Name', data: 'fname',
-                className: ' d-flex justify-content-start', width: '15%',
+                className: 'align-middle', width: '20%',
                 render: function (data, type, row) {
-                    return toPascalName(row.fname, row.mname, row.lname, row.suffix);
+                    return '<div class="d-flex justify-content-start">' + toPascalName(row.fname, row.mname, row.lname, row.suffix) + '</div>';
                 }
             },
             {
-                title: "username",
+                title: "Username",
                 data: "username",
                 className: "align-middle",
                 render: function (data) {
-                    return '<div class="d-flex justify-content-start">' + data + '</div>';
+                    return '<div class="d-flex justify-content-center">' + data + '</div>';
                 }
             },
             { title: 'Account Level', data: 'user_lvl', 'className': 'align-middle' },
@@ -523,12 +523,12 @@
                 title: 'Account Type', data: 'account_type', className: 'dt-center align-middle', defaultContent: 'System',
                 render: function (data) {
                     if (data === 'DEPARTMENT') {
-                        return '<span class="status-badge acctype-badge-dept"><span class="status-dot acctype-dot-dept"></span>Department</span>';
+                        return '<span>Department</span>';
                     }
                     if (data === 'BARANGAY') {
-                        return '<span class="status-badge acctype-badge-brgy"><span class="status-dot acctype-dot-brgy"></span>Barangay</span>';
+                        return '</span>Barangay</span>';
                     }
-                    return '<span class="status-badge acctype-badge-system"><span class="status-dot acctype-dot-system"></span>System</span>';
+                    return '</span>System</span>';
                 }
             },
             { title: 'Email', data: 'email', visible: false },

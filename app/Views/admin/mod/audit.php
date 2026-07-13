@@ -454,16 +454,12 @@ $auditDefaultYearLabel = $auditDefaultYearStart . '-' . $auditDefaultYearEnd;
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-12">
-
-            <!-- SB Admin 2 Styled Card -->
+        <div class="col-12">
             <div class="card shadow mb-4 border-top border-4"
                 style="border-top-color: var(--theme-mid-green) !important;">
-               
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="tblaudit" class="table table-bordered table-hover align-middle mb-0" cellspacing="0"
-                            width="100%">
+                        <table id="tblaudit" class="table table-bordered table-hover align-middle w-100" cellspacing="0">
                         </table>
                     </div>
                 </div>

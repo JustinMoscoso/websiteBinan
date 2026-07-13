@@ -49,7 +49,7 @@
 
     function getAuditActionInfo(action) {
         var raw = String(action || '').toLowerCase().trim();
-        var info = { raw: raw, operation: 'other', module: '', verb: 'Performed', badgeClass: 'bg-secondary text-white' };
+        var info = { raw: raw, operation: 'other', module: '', verb: 'Performed' };
 
         var exactActions = {
             update_profile: ['update', 'profile', 'Updated'],
@@ -85,12 +85,6 @@
             info.module = raw;
         }
 
-        if (info.operation === 'create') info.badgeClass = 'bg-success text-white';
-        if (info.operation === 'update' || info.operation === 'photo') info.badgeClass = 'bg-primary text-white';
-        if (info.operation === 'status') info.badgeClass = 'bg-warning text-dark';
-        if (info.operation === 'delete') info.badgeClass = 'bg-danger text-white';
-        if (info.operation === 'password' || info.operation === 'reset') info.badgeClass = 'bg-info text-dark';
-
         info.moduleLabel = getAuditModuleLabel(info.module);
         return info;
     }
@@ -101,7 +95,7 @@
         if (type !== 'display') return searchable;
 
         return '<div class="audit-action-cell">' +
-            '<span class="badge ' + info.badgeClass + '">' + escapeAuditHtml(info.verb) + '</span>' +
+            '<span class="audit-action-verb">' + escapeAuditHtml(info.verb) + '</span> ' +
             '<span class="audit-action-module">' + escapeAuditHtml(info.moduleLabel) + '</span>' +
             '</div>';
     }
@@ -109,14 +103,13 @@
     function formatAuditStatus(statusText) {
         var normalized = String(statusText || '').toUpperCase();
         var labels = {
-            ACTIVE: ['Active', 'bg-success text-white'],
-            INACTIVE: ['Inactive', 'bg-secondary text-white'],
-            ARCHIVED: ['Archived', 'bg-warning text-dark'],
-            DELETED: ['Deleted', 'bg-danger text-white'],
-            'NOT FOUND': ['Not Found', 'bg-dark text-white']
+            ACTIVE: 'Active',
+            INACTIVE: 'Inactive',
+            ARCHIVED: 'Archived',
+            DELETED: 'Deleted',
+            'NOT FOUND': 'Not Found'
         };
-        var config = labels[normalized] || [normalized || 'Updated', 'bg-secondary text-white'];
-        return '<span class="badge ' + config[1] + '">' + config[0] + '</span>';
+        return escapeAuditHtml(labels[normalized] || normalized || 'Updated');
     }
 
     function genericAuditDetails(action, formattedId, status) {
@@ -373,7 +366,7 @@
             var typeMatch = str.match(/\[([A-Z_]+)\]/i);
             var name = nameMatch ? nameMatch[1].trim() : '';
             var type = typeMatch ? typeMatch[1] : '';
-            return 'User Account' + formattedId + (name ? ': "<strong>' + name + '</strong>"' : '') + (type ? ' <span class="badge bg-light text-dark">' + type + '</span>' : '') + (status ? ' (' + status + ')' : '');
+                            return 'User Account' + formattedId + (name ? ': "<strong>' + name + '</strong>"' : '') + (type ? ' (' + escapeAuditHtml(type) + ')' : '') + (status ? ' (' + status + ')' : '');
         }
         if (str.match(/^INVEST_ID:/i)) {
             var categoryMatch = str.match(/INVEST_ID:\s*\d+\s+([^\-\[#]+)/i) || str.match(/INVEST_ID:\s*\d+\s*(.+)$/i);
@@ -416,7 +409,7 @@
             {
                 "title": "Time and Date",
                 "data": "created_date",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 width: '25%',
                 "type": "date", // Tell DataTables this is a date column
                 "render": function (data, type, row) {
@@ -452,33 +445,24 @@
             {
                 "title": "Device",
                 "data": "device",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 "render": function (data, type, row) {
                     if (!data || data === 'Unknown') return '<span class="text-muted">Unknown</span>';
-                    var icon = '<i class="bi bi-laptop"></i>';
-                    var badgeClass = 'bg-secondary text-white';
-                    if (data.toLowerCase().indexOf('mobile') !== -1) {
-                        icon = '<i class="bi bi-phone"></i>';
-                        badgeClass = 'bg-info text-dark';
-                    } else if (data.toLowerCase().indexOf('bot') !== -1 || data.toLowerCase().indexOf('robot') !== -1) {
-                        icon = '<i class="bi bi-robot"></i>';
-                        badgeClass = 'bg-warning text-dark';
-                    }
-                    return '<span class="badge ' + badgeClass + ' d-inline-flex align-items-center gap-1">' + icon + ' ' + data + '</span>';
+                    return escapeAuditHtml(data);
                 }
             },
             {
                 "title": "Browser",
                 "data": "browser",
-                "className": "dt-center",
+                "className": "dt-center align-middle",
                 "render": function (data, type, row) {
                     if (!data || data === 'Unknown') return '<span class="text-muted">Unknown</span>';
-                    return '<span class="d-inline-flex align-items-center gap-1"><i class="bi bi-globe text-success"></i> ' + data + '</span>';
+                    return escapeAuditHtml(data);
                 }
             },
-            { "title": "IP Address", "data": "ipaddress", "className": "dt-center" },
+            { "title": "IP Address", "data": "ipaddress", "className": "dt-center align-middle" },
             {
-                "title": "Performed By", "data": "userID", "className": "dt-center"
+                "title": "Performed By", "data": "userID", "className": "dt-center align-middle"
             },
         ],
         initComplete: function () {

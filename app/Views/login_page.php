@@ -166,7 +166,7 @@
         style="background-color: #1B4332;">
 
         <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="brand-logo mb-4 img-fluid"
-          style="max-height: 140px; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.3));" alt="Biñan Logo">
+          style="width: 170px; max-height: 170px; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.3));" alt="Biñan Logo">
 
         <div class="text-center d-flex flex-column align-items-center w-100" style="max-width: 280px;">
           <span
@@ -192,8 +192,8 @@
             <!-- Mobile View Header -->
             <div class="d-lg-none text-center mb-4">
               <div class="d-flex align-items-center justify-content-center mb-3" style="gap: 12px;">
-                <img src="<?= site_url('assets/img/binanlogo.png'); ?>" class="img-fluid flex-shrink-0"
-                  style="max-height: 400px;" alt="Biñan Logo">
+                <img src="<?= site_url('assets/img/binanlogo.png'); ?>" 
+                  style="width: 100px; max-height: 100px; object-fit: contain;" alt="Biñan Logo">
                 <div class="text-start d-flex flex-column align-items-start" style="max-width: 200px;">
                   <span
                     style="font-size: 9px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: #1B4332; letter-spacing: 0.5px; line-height: 1.2;">
