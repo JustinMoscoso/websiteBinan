@@ -62,7 +62,7 @@
                                 <button type="button"
                                     class="btn btn-success w-100 shadow-sm fw-semibold text-nowrap flex-grow-1"
                                     onclick="openUserModal('add')" style="height: 38px;">
-                                    <i class="bi bi-person-plus-fill me-1"></i>Add Record
+                                    Add Record
                                 </button>
                             </div>
                         </div>

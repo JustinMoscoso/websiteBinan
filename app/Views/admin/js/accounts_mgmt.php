@@ -149,7 +149,11 @@
         $('#userMode').val(mode);
 
         if (mode === 'add') {
-            $('#userModalTitle').text('Add Record');
+            $('#userModalTitle')
+    .text('Add Record')
+    .removeClass('text-success')
+    .addClass('text-white');
+
             $('#userModalIcon').attr('class', 'bi bi-person-plus');
             $('#btnAdd').text('Save');
             $('#userRecordId').val('');
@@ -185,7 +189,7 @@
 
         } else {
             // edit mode
-            $('#userModalTitle').text('Add Record');
+            $('#userModalTitle').text('Edit Record').removeClass('text-success').addClass('text-white');;
             $('#userModalIcon').attr('class', 'bi bi-pencil-square');
             $('#btnAdd').text('Update');
             $('#userRecordId').val(record.ID);
@@ -260,7 +264,6 @@
         // Validation
         var basicFields = [
             { name: 'txtFirstName', label: 'First Name' },
-            { name: 'txtMiddleName', label: 'Middle Name' },
             { name: 'txtLastName', label: 'Last Name' },
             { name: 'txtUsername', label: 'Username' },
             { name: 'txtEmail', label: 'Email' },
@@ -502,7 +505,7 @@
             { title: 'ID', data: 'ID', visible: false },
             {
                 title: 'Name', data: 'fname',
-                className: 'dt-head-center dt-body-justify d-flex justify-content-start', width: '15%',
+                className: ' d-flex justify-content-start', width: '15%',
                 render: function (data, type, row) {
                     return toPascalName(row.fname, row.mname, row.lname, row.suffix);
                 }
