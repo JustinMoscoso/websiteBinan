@@ -510,6 +510,10 @@
 			margin-bottom: 0;
 		}
 
+		.hotline-description * {
+			color: inherit !important;
+		}
+
 		/* FOOTER DIRECTORY BUTTON */
 		.hotline-button-wrapper {
 			margin-top: 45px;
@@ -655,34 +659,63 @@
 		}
 
 		.hotline-card {
+			position: relative;
+			overflow: hidden;
 			display: grid;
-			grid-template-columns: 96px minmax(0, 1.15fr) minmax(140px, 0.9fr);
+			grid-template-columns: 82px minmax(0, 1fr);
+			grid-template-rows: 52px minmax(0, 1fr);
 			align-items: center;
-			gap: 0;
-			min-height: 104px;
-			padding: 10px 12px;
-			border: 1px solid #d9dfe3;
-			border-radius: 8px;
-			background: #ffffff;
-			box-shadow: 0 5px 14px rgba(0, 0, 0, 0.16);
-			transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+			column-gap: 16px;
+			min-height: 126px;
+			padding: 16px;
+			border: 1px solid rgba(198, 226, 198, 0.9);
+			border-left: 5px solid #4f9b60;
+			border-radius: 12px 30px 12px 30px;
+			background-color: rgba(244, 249, 242, 0.96) !important;
+			background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(222, 239, 219, 0.96)) !important;
+			box-shadow: 0 10px 24px rgba(4, 35, 23, 0.22);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+		}
+
+		.hotline-card::after {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 54px;
+			height: 54px;
+			border-radius: 0 28px 0 54px;
+			background: linear-gradient(135deg, rgba(240, 180, 41, 0.82), rgba(240, 180, 41, 0.18));
+			content: '';
+			pointer-events: none;
 		}
 
 		.hotline-card:hover {
 			transform: translateY(-2px);
-			border-color: #bfc9c1;
-			background: #ffffff;
-			box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+			border-color: #80b98a;
+			border-left-color: #f0b429;
+			background-color: #ffffff !important;
+			background-image: linear-gradient(135deg, #ffffff, #e7f3e4) !important;
+			box-shadow: 0 16px 32px rgba(1, 31, 19, 0.3);
+		}
+
+		.hotline-card:hover::after {
+			background: linear-gradient(135deg, rgba(240, 180, 41, 0.96), rgba(240, 180, 41, 0.28));
 		}
 
 		.hotline-logo-box {
-			width: 84px;
-			height: 84px;
+			position: relative;
+			z-index: 1;
+			grid-row: 1 / 3;
+			width: 76px;
+			height: 76px;
 			margin: 0;
-			padding: 2px 10px 2px 0;
-			border: 0;
-			border-radius: 0;
-			background: transparent;
+			padding: 10px;
+			border: 2px solid rgba(71, 137, 82, 0.3);
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.92);
+			box-shadow: 0 5px 14px rgba(18, 73, 45, 0.16);
 		}
 
 		.hotline-logo {
@@ -693,38 +726,49 @@
 		}
 
 		.hotline-card-content {
+			position: relative;
+			z-index: 1;
 			min-width: 0;
 			display: flex;
 			align-items: center;
-			align-self: stretch;
-			padding: 6px 12px;
-			border-left: 1px solid #4e5651;
+			justify-content: center;
+			padding: 0;
+			border: 0;
 		}
 
 		.hotline-card-title {
-			padding-left: 14px;
+			align-self: center;
+			padding: 0;
+			border-bottom: 0;
 		}
 
 		.hotline-card-numbers {
+			align-self: start;
 			justify-content: center;
+			margin-top: 4px;
+			padding: 7px 10px;
+			border: 1px solid rgba(81, 143, 91, 0.2);
+			border-radius: 8px 14px 8px 14px;
+			background-color: rgba(207, 231, 204, 0.55) !important;
 		}
 
 		.hotline-title {
-			margin: 0 0 7px;
-			color: #202823;
-			font-size: 0.82rem;
+			margin: 0;
+			color: #163f2b !important;
+			font-size: 0.92rem;
 			font-weight: 750;
 			line-height: 1.35;
+			text-align: center;
 		}
 
 		.hotline-description,
 		.hotline-description p {
 			margin: 0 0 3px;
-			color: #303a34;
-			font-size: 0.72rem;
-			font-weight: 500;
+			color: #294d38 !important;
+			font-size: 0.76rem;
+			font-weight: 550;
 			line-height: 1.45;
-			text-align: left !important;
+			text-align: center !important;
 		}
 
 		.hotline-description p:last-child {
@@ -788,29 +832,33 @@
 			}
 
 			.hotline-card {
-				grid-template-columns: 76px minmax(0, 1fr);
+				grid-template-columns: 72px minmax(0, 1fr);
+				grid-template-rows: auto;
 				align-items: center;
-				gap: 0;
+				column-gap: 12px;
 				min-height: 0;
-				padding: 11px;
+				padding: 14px;
 			}
 
 			.hotline-logo-box {
-				width: 66px;
-				height: 68px;
+				grid-row: auto;
+				width: 68px;
+				height: 72px;
+				padding: 8px;
 			}
 
 			.hotline-card-title {
-				padding: 6px 12px;
+				align-self: center;
+				padding: 0;
+				border-bottom: 0;
 			}
 
 			.hotline-card-numbers {
 				grid-column: 1 / -1;
-				justify-content: flex-start;
+				justify-content: center;
 				margin-top: 10px;
-				padding: 10px 0 0;
-				border-top: 1px solid #d8ded9;
-				border-left: 0;
+				padding: 10px 12px;
+				border: 0;
 			}
 		}
 	</style>
