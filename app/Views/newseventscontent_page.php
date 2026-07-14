@@ -30,7 +30,7 @@
 
 <div class="container" style="max-width: 800px;">
     <div class="post-title">
-        <h6 class="text-muted"><?= date('F d, Y', strtotime($news_event->created_date)) ?></h6>
+        <h6 class="text-muted"><?= date('F d, Y', strtotime($news_event->publish_at ?? $news_event->created_date)) ?></h6>
     </div>
 </div>
 
@@ -71,7 +71,7 @@
                                 <div class="card h-100 shadow-sm d-flex flex-column">
                                     <img src="<?= base_url('admin/image/POSTCONTENT/' . $news->file_loc) ?>" alt="News Image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0;">
                                     <div class="card-body d-flex flex-column">
-                                        <div class="small text-muted mb-2"><?= htmlspecialchars($news->category) ?> | <?= date('M d, Y', strtotime($news->created_date)) ?></div>
+                                        <div class="small text-muted mb-2"><?= htmlspecialchars($news->category) ?> | <?= date('M d, Y', strtotime($news->publish_at ?? $news->created_date)) ?></div>
                                         <h6 class="card-title fw-bold"><?= htmlspecialchars($news->title) ?></h6>
                                         <p class="card-text flex-grow-1" style="font-size: 0.9rem;"><?= htmlspecialchars(substr(strip_tags($news->description), 0, 100)) ?>...</p>
                                         <a href="<?= base_url('/newseventscontent/' . $news->ID) ?>" class="btn btn-outline-primary btn-sm mt-auto">Read More</a>

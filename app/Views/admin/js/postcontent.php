@@ -192,6 +192,15 @@
             pad(date.getSeconds());
     }
 
+    function formatPostContentDateTimeLocal(value) {
+        if (!value) {
+            return '';
+        }
+
+        var match = String(value).trim().match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})/);
+        return match ? match[1] + 'T' + match[2] : '';
+    }
+
     // Datatable
     var tbl = $('#tblnews').DataTable({
         select: false,
@@ -244,6 +253,16 @@
                 }
             },
             {
+                "title": "Publish At", "data": "publish_at", "className": "dt-center align-middle", width: '15%',
+                "render": function (data, type, row) {
+                    var value = data || row.created_date;
+                    if (type !== 'display') {
+                        return value;
+                    }
+                    return formatDate(new Date(String(value).replace(' ', 'T')));
+                }
+            },
+            {
                 title: "Title",
                 data: "title",
                 render: function (data) {
@@ -259,6 +278,12 @@
                 width: '10%',
                 "render": function (data, type, row) {
                     var status = data;
+                    var publishAt = row.publish_at
+                        ? new Date(String(row.publish_at).replace(' ', 'T'))
+                        : null;
+                    if (status == 'ACTIVE' && publishAt && publishAt.getTime() > Date.now()) {
+return '<span class="status-badge bg-primary text-white"><span class="status-dot bg-white"></span>Scheduled</span>';
+                    }
                     if (status == 'ACTIVE') {
                         return '<span class="status-badge status-badge-active"><span class="status-dot status-dot-active"></span>Active</span>';
                     } else if (status == 'INACTIVE') {
@@ -330,6 +355,7 @@
             $('#btnAddLabel').text('Save');
             $('#recordId').val('');
             $('#addForm')[0].reset();
+            $('#publishAt').val('');
             $('.edit-only-field').addClass('d-none');
             var quill = QuillManager.getQuillInstance('postcontentDesc');
             if (quill) quill.setContents([]);
@@ -340,6 +366,7 @@
             $('#content_category').val(record.category);
             $('#title').val(record.title);
             $('#addDescHidden').val(record.description || '');
+            $('#publishAt').val(formatPostContentDateTimeLocal(record.publish_at));
             $('#editCreatedDate').val(formatPostContentDateTime(record.created_date));
             $('#editUpdatedDate').val(formatPostContentDateTime(record.updated_date));
 

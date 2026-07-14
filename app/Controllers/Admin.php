@@ -2462,6 +2462,23 @@ class Admin extends BaseController
                 $desc = $this->request->getPost('desc');
                 $imgLogo = $this->request->getFile('newsImg');
                 $category = $this->request->getPost('content_category');
+                $publishAtInput = trim((string) $this->request->getPost('publish_at'));
+                $publishAt = date('Y-m-d H:i:s');
+
+                if ($publishAtInput !== '') {
+                    $publishDate = \DateTime::createFromFormat(
+                        'Y-m-d\TH:i',
+                        $publishAtInput,
+                        new \DateTimeZone(config('App')->appTimezone)
+                    );
+
+                    if (! $publishDate || $publishDate->format('Y-m-d\TH:i') !== $publishAtInput) {
+                        $message = 'Please select a valid publish date and time.';
+                        break;
+                    }
+
+                    $publishAt = $publishDate->format('Y-m-d H:i:s');
+                }
 
                 $logoName = $imgLogo->getRandomName();
                 $file_category = 'POSTCONTENT';
@@ -2475,6 +2492,7 @@ class Admin extends BaseController
                         'description' => $desc,
                         'file_loc' => $logoName,
                         'category' => $category,
+                        'publish_at' => $publishAt,
                         'status' => 'ACTIVE',
                         'created_date' => date('Y-m-d H:i:s')
                     ];
@@ -3451,12 +3469,30 @@ class Admin extends BaseController
                     $author = trim(($user->fname ?? '') . ' ' . ($user->lname ?? '')); // Automatically set author from session
                     $desc = $this->request->getPost('editDesc');
                     $category = $this->request->getPost('edit_content_category');
+                    $publishAtInput = trim((string) $this->request->getPost('publish_at'));
+                    $publishAt = date('Y-m-d H:i:s');
+
+                    if ($publishAtInput !== '') {
+                        $publishDate = \DateTime::createFromFormat(
+                            'Y-m-d\TH:i',
+                            $publishAtInput,
+                            new \DateTimeZone(config('App')->appTimezone)
+                        );
+
+                        if (! $publishDate || $publishDate->format('Y-m-d\TH:i') !== $publishAtInput) {
+                            $message = 'Please select a valid publish date and time.';
+                            break;
+                        }
+
+                        $publishAt = $publishDate->format('Y-m-d H:i:s');
+                    }
 
                     $data = [
                         'title' => $title,
                         'author' => $author,
                         'description' => $desc,
                         'category' => $category,
+                        'publish_at' => $publishAt,
                         'updated_date' => date('Y-m-d H:i:s')
                     ];
 

@@ -50,7 +50,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-control form-select bg-light border-secondary-subtle filter-input" name="deptStatus"
-                            style="height: 38px; cursor: pointer;">
+                            style="width:200px; cursor: pointer;">
                             <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>

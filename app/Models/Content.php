@@ -28,6 +28,15 @@ class Content extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
+    /** Restrict public queries to content whose scheduled time has arrived. */
+    public function published(): self
+    {
+        return $this->groupStart()
+            ->where('publish_at', null)
+            ->orWhere('publish_at <=', date('Y-m-d H:i:s'))
+            ->groupEnd();
+    }
+
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];

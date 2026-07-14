@@ -132,7 +132,7 @@
                             <div class="news-content">
                                 <div class="news-meta">
                                     <span class="date">
-                                        <?= date('M d \'y', strtotime($news->created_date)) ?> |
+                                        <?= date('M d \'y', strtotime($news->publish_at ?? $news->created_date)) ?> |
                                         <span class="text-primary fw-medium">By <?= htmlspecialchars($news->author) ?></span>
                                     </span>
                                 </div>

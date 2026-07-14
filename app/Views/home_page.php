@@ -196,7 +196,7 @@
 										</div>
 										<div class="card-body d-flex flex-column p-3">
 											<div class="small text-muted mb-2">
-												<?= date('M d, Y', strtotime($news->created_date)) ?>
+												<?= date('M d, Y', strtotime($news->publish_at ?? $news->created_date)) ?>
 											</div>
 											<h5 class="card-title fw-bold mb-2"
 												style="color: black; font-size: clamp(16px, 3vw, 18px); line-height: 1.3;">
@@ -240,7 +240,7 @@
 										</div>
 										<div class="card-body d-flex flex-column p-3">
 											<div class="small text-muted mb-2">
-												<?= date('M d, Y', strtotime($announcement->created_date)) ?>
+												<?= date('M d, Y', strtotime($announcement->publish_at ?? $announcement->created_date)) ?>
 											</div>
 											<h5 class="card-title fw-bold mb-2"
 												style="color: black; font-size: clamp(16px, 3vw, 18px); line-height: 1.3;">

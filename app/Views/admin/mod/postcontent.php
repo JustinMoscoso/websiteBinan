@@ -149,6 +149,12 @@
                         <input type="file" class="form-control" id="newsImg" name="newsImg" accept="image/*">
                     </div>
 
+                    <div class="col-md-6">
+                        <label for="publishAt" class="form-label small fw-bold text-secondary">Publish Date and Time</label>
+                        <input type="datetime-local" class="form-control" id="publishAt" name="publish_at">
+                        <div class="form-text">Leave blank to publish immediately, or choose a future time to schedule.</div>
+                    </div>
+
                     <div class="col-12">
                         <label for="title" class="form-label small fw-bold text-secondary">Title
                             <span class="text-danger">*</span></label>

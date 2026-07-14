@@ -23,13 +23,15 @@ class Home extends BaseController
         $data['announcements'] = $contentModel
             ->where('status', 'ACTIVE')
             ->where('category', 'anns')
-            ->orderBy('created_date', 'DESC')
+            ->published()
+            ->orderBy('COALESCE(publish_at, created_date)', 'DESC', false)
             ->findAll(3);
 
         $data['news_events'] = $contentModel
             ->where('status', 'ACTIVE')
             ->where('category', 'news')
-            ->orderBy('created_date', 'DESC')
+            ->published()
+            ->orderBy('COALESCE(publish_at, created_date)', 'DESC', false)
             ->findAll(3);
 
         $data['mayor_content'] = $mayor_m
@@ -69,13 +71,15 @@ class Home extends BaseController
         $data['announcements'] = $contentModel
             ->where('status', 'ACTIVE')
             ->where('category', 'anns')
-            ->orderBy('created_date', 'DESC')
+            ->published()
+            ->orderBy('COALESCE(publish_at, created_date)', 'DESC', false)
             ->findAll(3);
 
         $data['news_events'] = $contentModel
             ->where('status', 'ACTIVE')
             ->where('category', 'news')
-            ->orderBy('created_date', 'DESC')
+            ->published()
+            ->orderBy('COALESCE(publish_at, created_date)', 'DESC', false)
             ->findAll(3);
 
         $data['mayor_content'] = $mayor_m
@@ -381,7 +385,7 @@ class Home extends BaseController
         $offset = ($page - 1) * $perPage;
 
         $search = $this->request->getGet('search');
-        $builder = $contentModel->where('status', 'ACTIVE')->where('category', 'news')->limit(5);
+        $builder = $contentModel->where('status', 'ACTIVE')->where('category', 'news')->published()->limit(5);
         if ($search) {
             $builder = $builder->groupStart()
                 ->like('title', $search)
@@ -390,7 +394,7 @@ class Home extends BaseController
                 ->groupEnd();
         }
         $totalRecords = $builder->countAllResults(false);
-        $news_events = $builder->orderBy('created_date', 'DESC')->findAll($perPage, $offset);
+        $news_events = $builder->orderBy('COALESCE(publish_at, created_date)', 'DESC', false)->findAll($perPage, $offset);
 
         $data['news_events'] = $news_events;
         $data['currentPage'] = $page;
@@ -406,7 +410,7 @@ class Home extends BaseController
         $offset = ($page - 1) * $perPage;
 
         $search = $this->request->getGet('search');
-        $builder = $contentModel->where('status', 'ACTIVE')->where('category', 'anns');
+        $builder = $contentModel->where('status', 'ACTIVE')->where('category', 'anns')->published();
         if ($search) {
             $builder = $builder->groupStart()
 
@@ -417,7 +421,7 @@ class Home extends BaseController
         }
 
         $totalRecords = $builder->countAllResults(false);
-        $anns_cont = $builder->orderBy('created_date', 'DESC')->findAll($perPage, $offset);
+        $anns_cont = $builder->orderBy('COALESCE(publish_at, created_date)', 'DESC', false)->findAll($perPage, $offset);
 
         $data['anns_cont'] = $anns_cont;
         $data['currentPage'] = $page;
@@ -429,7 +433,12 @@ class Home extends BaseController
     public function newseventscontent($id)
     {
         $contentModel = new \App\Models\Content();
-        $news_event = $contentModel->find($id);
+        $news_event = $contentModel
+            ->where('ID', $id)
+            ->where('status', 'ACTIVE')
+            ->where('category', 'news')
+            ->published()
+            ->first();
 
         $data = [];
 
@@ -441,10 +450,13 @@ class Home extends BaseController
                 ->where('ID !=', $id)
                 ->where('status', 'ACTIVE')
                 ->where('category', 'news')
-                ->orderBy('created_date', 'DESC')
+                ->published()
+                ->orderBy('COALESCE(publish_at, created_date)', 'DESC', false)
                 ->findAll();
 
             $data['news_events'] = $news_events;
+        } else {
+            return redirect()->to(base_url('newsevents'));
         }
 
         return view('newseventscontent_page', $data);
@@ -454,7 +466,16 @@ class Home extends BaseController
     public function announcementcontent($id)
     {
         $contentModel = new \App\Models\Content();
-        $announcement = $contentModel->find($id);
+        $announcement = $contentModel
+            ->where('ID', $id)
+            ->where('status', 'ACTIVE')
+            ->where('category', 'anns')
+            ->published()
+            ->first();
+
+        if (! $announcement) {
+            return redirect()->to(base_url('announcements'));
+        }
 
         $data = [
             'anns' => $announcement,
@@ -462,7 +483,8 @@ class Home extends BaseController
                 ->where('status', 'ACTIVE')
                 ->where('ID !=', $id)
                 ->where('category', 'anns')
-                ->orderBy('created_date', 'DESC')
+                ->published()
+                ->orderBy('COALESCE(publish_at, created_date)', 'DESC', false)
                 ->findAll(3)
         ];
 

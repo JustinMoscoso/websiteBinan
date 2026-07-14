@@ -131,7 +131,7 @@
                             <div class="announcement-content">
                                 <div class="announcement-meta">
                                     <span class="date">
-                                        <?= date('M d \'y', strtotime($ann->created_date)) ?> |
+                                        <?= date('M d \'y', strtotime($ann->publish_at ?? $ann->created_date)) ?> |
                                         <span class="text-primary fw-medium">By <?= htmlspecialchars($ann->author) ?></span>
                                     </span>
                                 </div>

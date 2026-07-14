@@ -479,12 +479,10 @@
                     return '<div class="brgy-logo-thumb"><img id="img_logo" src="<?php echo base_url('admin/image/BARANGAY/') ?>' + data + '" alt="Barangay logo"></div>';
                 }
             },
-            { "title": "Captain", "data": "brngy_capt", width: '15%', "className": "dt-body-left align-middle" },
+            { "title": "Captain", "data": "brngy_capt", width: '15%', "className": "text-center align-middle brgy-captain-cell" },
             {
-                "title": "Barangay Staff",
+                "title": "Barangay Staff", visible:false,
                 "data": "barangay_staff",
-                width: '30%',
-                'className': ' align-middle',
                 "render": function (data) {
                     return data && data.trim() !== ''
                         ? '<div class="text-muted small">' + data + '</div>'
@@ -503,7 +501,7 @@
     {
         "title": "Status",
             "data": "status",
-                "className": "dt-center align-middle",
+                "className": "dt-center text-center align-middle brgy-status-cell",
                     width: '10%',
                         "render": function (data, type, row) {
                             var status = data;

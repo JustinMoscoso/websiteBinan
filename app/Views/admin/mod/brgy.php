@@ -8,14 +8,21 @@
 
 <link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
 <style>
-    /* Keep descriptive Barangay fields aligned from the left; logo, status, and actions stay centered. */
+    /* Keep the barangay name left-aligned. */
     #tblbrgy tbody td:nth-child(1),
-    #tblbrgy tbody td:nth-child(1) *,
-    #tblbrgy tbody td:nth-child(3),
-    #tblbrgy tbody td:nth-child(3) *,
-    #tblbrgy tbody td:nth-child(4),
-    #tblbrgy tbody td:nth-child(4) * {
+    #tblbrgy tbody td:nth-child(1) * {
         text-align: left !important;
+    }
+
+    /* Center Captain and Status, including their rendered child elements. */
+    #tblbrgy th.brgy-captain-cell,
+    #tblbrgy td.brgy-captain-cell,
+    #tblbrgy td.brgy-captain-cell *,
+    #tblbrgy th.brgy-status-cell,
+    #tblbrgy td.brgy-status-cell,
+    #tblbrgy td.brgy-status-cell * {
+        text-align: center !important;
+        vertical-align: middle !important;
     }
 
     .brgy-logo-thumb {
@@ -48,19 +55,19 @@
             <form id="barangaySearchForm" onsubmit="return runBarangayAdvancedSearch(event);">
                 <div class="row g-3 align-items-end">
 
-                    <div class="col-xl-4 col-lg-4 col-md-12">
+                    <div class="col-xl-4">
                         <label class="form-label small fw-bold text-secondary">Search Query</label>
                         <div class="input-group">
 
-                            <input type="text" class="form-control border-start-0 filter-input" id="searchBrgy"
-                                placeholder="Search Barangay / Captain" style="height: 38px;">
+                            <input type="text"  class="form-control" id="searchBrgy"
+                                placeholder="Search Barangay / Captain">
                         </div>
                     </div>
 
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <label class="form-label small fw-bold text-secondary">Status</label>
                         <select class="form-select bg-light border-secondary-subtle filter-input" name="status"
-                            style="height: 38px; cursor: pointer;">
+                            style="height: 38px; cursor: pointer; width: 200px;">
                             <option selected value="">Select Status</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>

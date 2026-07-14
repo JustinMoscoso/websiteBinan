@@ -29,7 +29,7 @@
 
 <div class="container">
     <div class="post-title">
-        <h2><?= date('F d, Y', strtotime($anns->created_date)) ?></h2>
+        <h2><?= date('F d, Y', strtotime($anns->publish_at ?? $anns->created_date)) ?></h2>
     </div>
 </div>
 

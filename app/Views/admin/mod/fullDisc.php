@@ -7,13 +7,23 @@
 </div>
 
 <link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
+<style>
+    #tblfdp th.fdp-year-cell,
+    #tblfdp td.fdp-year-cell,
+    #tblfdp th.fdp-status-cell,
+    #tblfdp td.fdp-status-cell {
+        white-space: nowrap;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
 
 <?php if ($user->user_lvl !== 'VIEWER'): ?>
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
             <form id="docSearchForm">
 
-                <div class="row g-3">
+                <div class="row g-3 align-items-end">
 
                     <!-- Category -->
                     <div class="col-xl-4 col-lg-6">
@@ -74,7 +84,7 @@
                     </div>
 
                     <!-- Year -->
-                    <div class="col-xl-2 col-lg-3">
+                    <div class="col-xl-1 col-lg-3 col-md-6">
                         <label class="form-label small fw-bold text-secondary">
                             Year
                         </label>
@@ -84,7 +94,7 @@
                     </div>
 
                     <!-- Status -->
-                    <div class="col-xl-2 col-lg-3">
+                    <div class="col-xl-2 col-lg-3 col-md-6">
                         <label class="form-label small fw-bold text-secondary">
                             Status
                         </label>
@@ -97,37 +107,30 @@
                         </select>
                     </div>
 
-                    <!-- Buttons Row -->
-                    <div class="col-12 mt-2">
-                        <hr class="my-2" style="border-color: #adb5bd; opacity: 1;">
-
-                        <div class="row justify-content-end pt-2">
-                            <div class="col-xl-4 col-lg-4 col-md-12">
-                                <div class="row g-2 admin-filter-actions">
-                                    <div class="col-12 col-md-4">
-                                        <button type="submit" id="searchBtn"
-                                            class="btn btn-primary w-100 fw-semibold shadow-sm" style="height: 38px;">
-                                            <i class="bi bi-search me-1"></i>
-                                            Search
-                                        </button>
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <button type="reset" class="btn btn-danger w-100 fw-semibold" style="height: 38px;">
-                                            <i class="bi bi-arrow-counterclockwise me-1"></i>
-                                            Clear
-                                        </button>
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <button type="button" class="btn btn-success w-100 fw-semibold text-white text-nowrap shadow-sm"
-                                            data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
-                                            <i class="bi bi-plus-circle me-1"></i>
-                                            Add Record
-                                        </button>
-                                    </div>
-                                </div>
+                    <!-- Actions share the same desktop row as the filters. -->
+                    <div class="col-xl-5 col-lg-12">
+                        <div class="row g-2 admin-filter-actions">
+                            <div class="col-4">
+                                <button type="submit" id="searchBtn"
+                                    class="btn btn-primary w-100 fw-semibold shadow-sm text-nowrap" style="height: 38px;">
+                                    <i class="bi bi-search me-1"></i>Search
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button type="reset" class="btn btn-danger w-100 fw-semibold text-nowrap" style="height: 38px;">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Clear
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-success w-100 fw-semibold text-white text-nowrap shadow-sm"
+                                    data-bs-toggle="modal" data-bs-target="#addModal" style="height: 38px;">
+                                    <i class="bi bi-plus-circle me-1"></i>Add Record
+                                </button>
                             </div>
                         </div>
                     </div>
+
+                </div>
 
             </form>
         </div>

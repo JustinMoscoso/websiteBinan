@@ -383,6 +383,7 @@
         "order": [[5, 'asc'], [2, 'desc'], [3, 'desc'], [1, 'asc']],
         pageLength: 10,
         processing: true,
+        autoWidth: false,
         ajax: {
             "url": "<?php echo base_url('admin/ajax/get_fulldiscpol'); ?>",
             "type": "POST",
@@ -424,7 +425,7 @@
                     td.style.setProperty('text-align', 'left', 'important');
                 }
             },
-            { "title": "Year", "data": "year" },
+            { "title": "Year", "data": "year", "className": "fdp-year-cell", width: '8%' },
             { "title": "Quarter", "data": "quarter" },
             {
                 "title": "File", "data": "file_name",
@@ -436,8 +437,8 @@
             {
                 "title": "Status",
                 "data": "status",
-                "className": "dt-center",
-                width: '10%',
+                "className": "dt-center fdp-status-cell",
+                width: '9%',
                 "render": function (data, type, row) {
                     var status = data;
                     if (status == 'ACTIVE') {
