@@ -440,6 +440,10 @@
         ajax: {
             url: "<?php echo base_url('admin/ajax/get_barangay'); ?>",
             type: "POST",
+            data: function (request) {
+                request.searchQuery = $('#searchBrgy').val() || '';
+                request.status = $('#barangaySearchForm select[name="status"]').val() || '';
+            },
             dataSrc: function (json) {
                 return json.data || [];
             }
@@ -547,54 +551,60 @@
         sltdRow = tbl.row(this).data();
     });
 
-    // Handle Search Form Submission (Enables Enter key support)
-    $('#barangaySearchForm').on('submit', function (e) {
-        e.preventDefault();
+    // Called directly by both the form's Enter submit and the Search button.
+    window.runBarangayAdvancedSearch = function (event) {
+        if (event) {
+            event.preventDefault();
+        }
         applyFilters();
-    });
+        return false;
+    };
 
-    // Enhanced filtering with combined search
+    // Reload from the database so filtering is not restricted to the ten rows
+    // currently loaded in DataTables.
     function applyFilters() {
-        var searchTerm = $('#searchBrgy').val().trim().toLowerCase();
-        var statusFilter = $('select[name="status"]').val();
+        tbl.search('').columns().search('');
+        var barangayFilterQuery = $.param({
+            searchQuery: $('#searchBrgy').val() || '',
+            status: $('#barangaySearchForm select[name="status"]').val() || ''
+        });
 
-        // Clear previous filters
-        tbl.search('').columns().search('').draw();
-
-        // Apply new filters
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                var row = tbl.row(dataIndex).data();
-                var matches = true;
-
-                // Combined search for both barangay name and captain (case-insensitive)
-                if (searchTerm) {
-                    var brgyName = row.brgy_name.toLowerCase();
-                    var captainName = row.brngy_capt.toLowerCase();
-
-                    // Check if search term matches either barangay name or captain name
-                    if (!brgyName.includes(searchTerm) && !captainName.includes(searchTerm)) {
-                        matches = false;
-                    }
+        $.ajax({
+            url: "<?php echo base_url('admin/ajax/get_barangay'); ?>?" + barangayFilterQuery,
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            success: function (response) {
+                if (response.status == 1) {
+                    tbl.clear();
+                    tbl.rows.add(response.data || []);
+                    tbl.draw();
+                    return;
                 }
 
-                // Status exact match
-                if (statusFilter && row.status !== statusFilter) {
-                    matches = false;
-                }
-
-                return matches;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Search Failed',
+                    text: response.message || 'Unable to search barangays.'
+                });
+            },
+            error: function (xhr) {
+                var response = xhr.responseJSON || {};
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Search Failed',
+                    text: response.message || 'The barangay search request could not be completed.'
+                });
             }
-        );
-
-        tbl.draw();
-        $.fn.dataTable.ext.search.pop();
+        });
     }
 
     // Clear filters
     $('#barangaySearchForm button[type="reset"]').click(function () {
-        $('#barangaySearchForm')[0].reset();
-        tbl.search('').columns().search('').draw();
+        // Wait until the browser has reset the form before building AJAX data.
+        setTimeout(function () {
+            applyFilters();
+        }, 0);
     });
 
 </script>

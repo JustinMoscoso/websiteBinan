@@ -27,10 +27,10 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Category</label>
+                        <label class="form-label small fw-bold text-secondary">Section</label>
                         <select class="form-select bg-light border-secondary-subtle" name="category"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">Select Categories</option>
+                            <option selected value="">Select Section</option>
                             <option value="Personal Data">Personal Data</option>
                             <option value="Awards">Awards</option>
                             <option value="Years Service">Years Service</option>
@@ -126,9 +126,9 @@
 
                     <div class="col-md-6">
                         <label for="content_category" class="form-label small fw-bold text-secondary">
-                            Category <span class="text-danger">*</span></label>
+                            Section <span class="text-danger">*</span></label>
                         <select class="form-select" id="content_category" name="content_category" required>
-                            <option selected disabled value="">Select Category
+                            <option selected disabled value="">Select Section
                             </option>
                             <option value="Personal Data">Personal Data</option>
                             <option value="Awards">Awards</option>

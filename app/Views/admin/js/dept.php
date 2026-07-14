@@ -526,6 +526,10 @@
         ajax: {
             url: "<?php echo base_url('admin/ajax/get_departments'); ?>",
             type: "POST",
+            data: function (request) {
+                request.searchQuery = $('#searchDept').val() || '';
+                request.status = $('#departmentSearchForm select[name="deptStatus"]').val() || '';
+            },
             dataSrc: function (json) {
                 return json.data || [];
             }
@@ -549,7 +553,7 @@
         columns: [
             { "title": "Department ID", "data": "ID", "visible": false },
             {
-                title: "Dpertment Name",
+                title: "Department Name",
                 data: "dept_name",
                 className: "align-middle",
                 render: function (data) {
@@ -624,57 +628,57 @@
         sltdRow = deptTable.row(this).data();
     });
 
-    // Attach a submit handler to the form
-    $('#departmentSearchForm').on('submit', function (e) {
-        e.preventDefault(); // stop page reload
-        applyDeptFilters(); // run your search logic
-    });
-
-    // Optional: Clear Filters button
-    $('#departmentSearchForm button[type="reset"]').on('click', function () {
-        // reset form fields
-        $('#departmentSearchForm')[0].reset();
-    });
-
+    // Called directly by both the form's Enter submit and the Search button.
+    window.runDepartmentAdvancedSearch = function (event) {
+        if (event) {
+            event.preventDefault();
+        }
+        applyDeptFilters();
+        return false;
+    };
 
     function applyDeptFilters() {
-        var searchTerm = $('#searchDept').val().trim().toLowerCase();
-        var statusFilter = $('select[name="deptStatus"]').val();
+        deptTable.search('').columns().search('');
+        var departmentFilterQuery = $.param({
+            searchQuery: $('#searchDept').val() || '',
+            status: $('#departmentSearchForm select[name="deptStatus"]').val() || ''
+        });
 
-        // Custom filtering function for combined search
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                var row = deptTable.row(dataIndex).data();
-                var searchMatch = true;
-                var statusMatch = true;
-
-                // Combined search for both department name and officer (case-insensitive)
-                if (searchTerm) {
-                    var deptName = row.dept_name.toLowerCase();
-                    var officerName = row.head.toLowerCase();
-
-                    // Check if search term matches either department name or officer name
-                    if (!deptName.includes(searchTerm) && !officerName.includes(searchTerm)) {
-                        searchMatch = false;
-                    }
+        $.ajax({
+            url: "<?php echo base_url('admin/ajax/get_departments'); ?>?" + departmentFilterQuery,
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            success: function (response) {
+                if (response.status == 1) {
+                    deptTable.clear();
+                    deptTable.rows.add(response.data || []);
+                    deptTable.draw();
+                    return;
                 }
 
-                // Exact match for status
-                if (statusFilter) {
-                    statusMatch = row.status === statusFilter;
-                }
-
-                return searchMatch && statusMatch;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Search Failed',
+                    text: response.message || 'Unable to search departments.'
+                });
+            },
+            error: function (xhr) {
+                var response = xhr.responseJSON || {};
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Search Failed',
+                    text: response.message || 'The department search request could not be completed.'
+                });
             }
-        );
-
-        deptTable.draw();
-        $.fn.dataTable.ext.search.pop(); // Remove filter after applying
+        });
     }
 
     // Clear filters button
     $('#departmentSearchForm button[type="reset"]').click(function () {
-        $('#departmentSearchForm')[0].reset();
-        deptTable.search('').columns().search('').draw();
+        // Wait until the browser has reset the form before building AJAX data.
+        setTimeout(function () {
+            applyDeptFilters();
+        }, 0);
     });
 </script>

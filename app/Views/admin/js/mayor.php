@@ -586,13 +586,13 @@
             { "title": "ID", "data": "ID", "className": "dt-center", width: '20%', "visible": false },
             { "title": "Section", "data": "section", "className": "dt-body-justify align-middle", width: '10%' },
             {
-                "title": "Content", "data": "content", "className": "dt-body-justify align-middle ", width: '50%',
+                "title": "Content", "data": "content", width: '50%',
                 "render": function (data, type, row) {
                     var text = data.replace(/<[^>]*>?/gm, '');
                     if (typeof text === 'string' && text.length > 500) {
                         text = text.substring(0, 500) + '...';
                     }
-                    return '<div class="quill-editor-default" style="height: auto;">' + text + '</div>';
+                    return '<div class="d-flex justify-content-start" style="text-align: justify;">' + text + '</div>';
                 }
             },
             {

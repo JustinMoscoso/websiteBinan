@@ -511,9 +511,16 @@
                 "visible": false
             },
             {
+                "title": "Office / Barangay", "data": "service_entity_name", width: '24%', 'className': 'dt-body-justify align-middle',
+                "render": function (data, type, row) {
+                    return data || '—';
+                }
+            },
+            {
                 title: "Service Title",
                 data: "serv_name",
                 className: "align-middle",
+                width: "23%",
                 render: function (data) {
                     return '<div class="d-flex justify-content-start">' + data + '</div>';
                 }
@@ -539,12 +546,6 @@
                         return 2;
                     }
                     return data || 'Unknown';
-                }
-            },
-            {
-                "title": "Office / Barangay", "data": "service_entity_name", width: '24%', 'className': 'dt-body-justify align-middle',
-                "render": function (data, type, row) {
-                    return data || '—';
                 }
             },
             {

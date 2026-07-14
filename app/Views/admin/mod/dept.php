@@ -35,7 +35,7 @@
 <?php if (!in_array($user->user_lvl, ['VIEWER', 'ENCODER'])): ?>
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
-            <form id="departmentSearchForm">
+            <form id="departmentSearchForm" onsubmit="return runDepartmentAdvancedSearch(event);">
                 <div class="row g-3 align-items-end">
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
@@ -61,7 +61,8 @@
                         <div class="row g-2 admin-filter-actions">
 
                             <div class="col-12 col-md-4">
-                                <button type="submit" class="btn btn-primary w-100  fw-semibold shadow-sm" id="searchBtn"
+                                <button type="button" class="btn btn-primary w-100  fw-semibold shadow-sm"
+                                    id="departmentSearchBtn" onclick="return runDepartmentAdvancedSearch(event);"
                                     style="height: 38px;">
                                     Search
                                 </button>

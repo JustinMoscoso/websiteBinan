@@ -37,10 +37,10 @@
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold text-secondary">Category</label>
+                        <label class="form-label small fw-bold text-secondary">Level</label>
                         <select class="form-select bg-light border-secondary-subtle" name="level"
                             style="height: 38px; cursor: pointer;">
-                            <option selected value="">Select Categories</option>
+                            <option selected value="">Select Level</option>
                             <option value="1">Level 1</option>
                             <option value="2">Level 2</option>
                             <option value="3">Level 1 &amp; 2</option>

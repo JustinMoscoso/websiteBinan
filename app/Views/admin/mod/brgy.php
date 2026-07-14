@@ -45,7 +45,7 @@
 <?php if ($user->user_lvl !== 'VIEWER'): ?>
     <div class="card card-premium mb-4">
         <div class="card-body p-4">
-            <form id="barangaySearchForm">
+            <form id="barangaySearchForm" onsubmit="return runBarangayAdvancedSearch(event);">
                 <div class="row g-3 align-items-end">
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
@@ -75,7 +75,8 @@
 
                             <!-- Search -->
                             <div class="col-12 col-md-4">
-                                <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm" id="searchBtn"
+                                <button type="button" class="btn btn-primary w-100 fw-semibold shadow-sm"
+                                    id="barangaySearchBtn" onclick="return runBarangayAdvancedSearch(event);"
                                     style="height: 38px;">
                                     Search
                                 </button>

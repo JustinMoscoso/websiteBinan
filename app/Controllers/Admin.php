@@ -1011,10 +1011,11 @@ class Admin extends BaseController
             }
 
             case 'get_barangay': {
-                $brgyId = $this->request->getPost('id');
-                $searchBrgy = $this->request->getPost('searchBrgy');
-                $searchCapt = $this->request->getPost('searchCapt');
-                $status = $this->request->getPost('status');
+                $brgyId = $this->request->getGetPost('id');
+                $searchQuery = trim((string) $this->request->getGetPost('searchQuery'));
+                $searchBrgy = $this->request->getGetPost('searchBrgy');
+                $searchCapt = $this->request->getGetPost('searchCapt');
+                $status = $this->request->getGetPost('status');
 
                 $brgy_m = new \App\Models\Barangay();
 
@@ -1037,11 +1038,15 @@ class Admin extends BaseController
                         $builder->where('status !=', 'ARCHIVED');
                     }
 
-                    // Add partial match filters if provided
-                    if (!empty($searchBrgy)) {
+                    if ($searchQuery !== '') {
+                        $builder->groupStart()
+                            ->like('LOWER(brgy_name)', strtolower($searchQuery))
+                            ->orLike('LOWER(brngy_capt)', strtolower($searchQuery))
+                            ->groupEnd();
+                    } elseif (!empty($searchBrgy)) {
                         $builder->like('LOWER(brgy_name)', strtolower($searchBrgy));
                     }
-                    if (!empty($searchCapt)) {
+                    if ($searchQuery === '' && !empty($searchCapt)) {
                         $builder->like('LOWER(brngy_capt)', strtolower($searchCapt));
                     }
                     if (!empty($status)) {
@@ -1094,10 +1099,11 @@ class Admin extends BaseController
                 break;
             }
             case 'get_departments': {
-                $deptId = $this->request->getPost('id');
-                $searchDept = $this->request->getPost('searchDept');
-                $searchOfficer = $this->request->getPost('searchOfficer');
-                $status = $this->request->getPost('status');
+                $deptId = $this->request->getGetPost('id');
+                $searchQuery = trim((string) $this->request->getGetPost('searchQuery'));
+                $searchDept = $this->request->getGetPost('searchDept');
+                $searchOfficer = $this->request->getGetPost('searchOfficer');
+                $status = $this->request->getGetPost('status');
 
                 $dept_m = new \App\Models\Department();
 
@@ -1122,12 +1128,16 @@ class Admin extends BaseController
                         $builder->where('status !=', 'ARCHIVED');
                     }
 
-                    // Add partial match filters if provided
-                    if (!empty($searchDept)) {
+                    if ($searchQuery !== '') {
+                        $builder->groupStart()
+                            ->like('LOWER(dept_name)', strtolower($searchQuery))
+                            ->orLike('LOWER(head)', strtolower($searchQuery))
+                            ->groupEnd();
+                    } elseif (!empty($searchDept)) {
                         $builder->like('LOWER(dept_name)', strtolower($searchDept));
                     }
-                    if (!empty($searchOfficer)) {
-                        $builder->like('LOWER(officer_in_charge)', strtolower($searchOfficer));
+                    if ($searchQuery === '' && !empty($searchOfficer)) {
+                        $builder->like('LOWER(head)', strtolower($searchOfficer));
                     }
                     if (!empty($status)) {
                         $builder->where('status', $status);
@@ -1641,7 +1651,7 @@ class Admin extends BaseController
                     $invest_builder = $invest_m
                         ->where('category', 'INVEST')
                         ->orderBy('status', 'asc')
-                        ->orderBy('created_date', 'desc');
+                        ->orderBy('file_category', 'asc');
                     // Non-privileged users cannot see archived invest content
                     if (!$canSeeArchived) {
                         $invest_builder->where('status !=', 'ARCHIVED');

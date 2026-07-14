@@ -505,9 +505,9 @@
             { title: 'ID', data: 'ID', visible: false },
             {
                 title: 'Name', data: 'fname',
-                className: 'align-middle', width: '20%',
+                width: '20%',
                 render: function (data, type, row) {
-                    return '<div class="d-flex justify-content-start">' + toPascalName(row.fname, row.mname, row.lname, row.suffix) + '</div>';
+                    return '<div class="text-left">' + toPascalName(row.fname, row.mname, row.lname, row.suffix) + '</div>';
                 }
             },
             {

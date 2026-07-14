@@ -330,7 +330,13 @@
         },
         columns: [
             { "title": "ID", "data": "ID", "visible": false },
-            { "title": "File Category", "data": "file_category", width: '30%', 'className': 'align-middle' },
+           {
+                title: 'File Category', data: 'file_category',
+                
+                render: function (data, type, row) {
+                    return '<div class="text-left">' +(row.file_category) + '</div>';
+                }
+            },
             {
                 "title": "Date Created", "data": "created_date",
                 "render": function (data, type, row) {

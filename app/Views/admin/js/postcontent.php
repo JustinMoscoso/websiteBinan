@@ -246,9 +246,8 @@
             {
                 title: "Title",
                 data: "title",
-                className: "align-middle",
                 render: function (data) {
-                    return '<div class="d-flex justify-content-start">' + data + '</div>';
+                    return '<div class="text-left">' + data + '</div>';
                 }
             },
             { "title": "Category", "data": "category", "className": "dt-center align-middle" },
