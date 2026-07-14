@@ -55,7 +55,7 @@
             </div>
           <?php endforeach; ?>
         <?php else: ?>
-            <p>Empty!</p>
+            <p class="text-center mb-0">No records found.</p>
         <?php endif; ?>
       </div>
     </div>
