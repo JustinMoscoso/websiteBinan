@@ -318,9 +318,10 @@
 							$label = trim($matches[1]);
 							$number = preg_replace('/[^0-9]+$/u', '', trim($matches[2]));
 							$digits = preg_replace('/\D+/', '', $number);
+							$tel = (str_starts_with(trim($number), '+') ? '+' : '') . $digits;
 
 							if ($label !== '' && strlen($digits) >= 7) {
-								$numbers[] = compact('label', 'number');
+								$numbers[] = compact('label', 'number', 'tel');
 							}
 						}
 
@@ -330,46 +331,34 @@
 
 				<?php foreach ($emergency_hotlines as $hotline): ?>
 					<?php
-						$icon = 'fas fa-phone-alt';
 						$image = 'assets/img/binanlogo.png';
 						$phoneNumbers = $parseHotlineNumbers($hotline->description);
-						$agencyType = 'civic';
 
 						if (!empty($hotline->about_img)) {
 							$image = 'admin/image/ABOUT/' . $hotline->about_img;
 						}
 
 						if (stripos($hotline->title, 'Police') !== false || stripos($hotline->title, 'PNP') !== false) {
-							$icon = 'fas fa-shield-alt';
-							$agencyType = 'police';
 							if (empty($hotline->about_img)) {
 								$image = 'assets/img/Emergency_Hotline/PNP.png';
 							}
 						} elseif (stripos($hotline->title, 'Fire') !== false || stripos($hotline->title, 'BFP') !== false) {
-							$icon = 'fas fa-fire-extinguisher';
-							$agencyType = 'fire';
 							if (empty($hotline->about_img)) {
 								$image = 'assets/img/Emergency_Hotline/BFP.png';
 							}
 						} elseif (stripos($hotline->title, 'Hospital') !== false || stripos($hotline->title, 'BCH') !== false) {
-							$icon = 'fas fa-hospital';
-							$agencyType = 'health';
 							if (empty($hotline->about_img)) {
 								$image = 'assets/img/Emergency_Hotline/BCH.png';
 							}
 						} elseif (stripos($hotline->title, 'Disaster') !== false || stripos($hotline->title, 'CDRRMO') !== false) {
-							$icon = 'fas fa-exclamation-triangle';
-							$agencyType = 'disaster';
 							if (empty($hotline->about_img)) {
 								$image = 'assets/img/Emergency_Hotline/BCDRRM.png';
 							}
-						} elseif (stripos($hotline->title, 'Social Welfare') !== false || stripos($hotline->title, 'CSWD') !== false) {
-							$agencyType = 'welfare';
 						}
 						?>
 
 						<div class="hotline-card-slot">
-							<article class="hotline-card hotline-card--<?= esc($agencyType) ?> h-100">
+							<article class="hotline-card h-100">
 								<header class="hotline-card-header">
 									<div class="hotline-logo-box">
 										<img src="<?= base_url($image) ?>" alt="Official seal of <?= esc($hotline->title) ?>" class="hotline-logo">
@@ -384,7 +373,12 @@
 											<?php foreach ($phoneNumbers as $phone): ?>
 												<tr>
 													<th scope="row" class="hotline-carrier"><span class="hotline-carrier-badge"><?= esc($phone['label']) ?></span></th>
-													<td class="hotline-number"><?= esc($phone['number']) ?></td>
+													<td class="hotline-number-cell">
+														<a class="hotline-number-link" href="tel:<?= esc($phone['tel']) ?>" aria-label="Call <?= esc($hotline->title) ?> using <?= esc($phone['label']) ?> at <?= esc($phone['number']) ?>">
+															<span class="hotline-phone-icon" aria-hidden="true"><i class="fas fa-phone-alt"></i></span>
+															<span class="hotline-number"><?= esc($phone['number']) ?></span>
+														</a>
+													</td>
 												</tr>
 											<?php endforeach; ?>
 											</tbody>
@@ -482,40 +476,6 @@
 			margin-bottom: 0;
 		}
 
-		/* CARD CONTAINER ROW */
-		.hotline-row {
-			background: white;
-			/* Cream background color */
-			border: 1px solid #dcdfe3;
-			border-radius: 8px;
-			overflow: hidden;
-			padding-top: 14px;
-			padding-bottom: 14px;
-			transition: all 0.25s ease;
-		}
-
-		.hotline-row:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-			border-color: #c9ced6;
-		}
-
-		/* COLUMNS */
-		.hotline-col {
-			position: relative;
-		}
-
-		/* VERTICAL SEPARATOR LINE */
-		.hotline-col::after {
-			content: "";
-			position: absolute;
-			top: 4px;
-			bottom: 4px;
-			right: 2px;
-			width: 1px;
-			background: #000000ff;
-		}
-
 		/* LOGO BOX */
 		.hotline-logo-box {
 			width: 85px;
@@ -534,26 +494,12 @@
 			object-fit: contain;
 		}
 
-		.hotline-title-wrapper {
-			display: flex;
-			align-items: center;
-			padding-left: 8px;
-			padding-right: 4px;
-		}
-
 		.hotline-title {
 			margin: 0;
 			font-size: 0.88rem;
 			/* Scaled down slightly to fit 2-column layouts beautifully */
 			line-height: 1.4;
 			color: #212529;
-		}
-
-		/* DESCRIPTION / PHONE NUMBERS */
-		.hotline-description-wrapper {
-			padding-left: 0;
-			padding-right: 0;
-			text-align: center;
 		}
 
 		.hotline-description {
@@ -598,42 +544,6 @@
 
 			.hotline-description {
 				font-size: 12px;
-			}
-		}
-
-		@media (max-width: 575px) {
-			.hotline-col::after {
-				display: none;
-			}
-
-			.hotline-title-wrapper {
-				padding-left: 0;
-			}
-
-			.hotline-description-wrapper {
-				padding: 8px 0 0 0;
-			}
-
-			.hotline-row {
-				padding: 12px;
-			}
-
-			/* Stack sections vertically only on extra small mobile screens */
-			.hotline-row>div {
-				width: 100% !important;
-				max-width: 100% !important;
-				flex: 0 0 100% !important;
-				text-align: center;
-				justify-content: center !important;
-			}
-
-			.hotline-title-wrapper {
-				justify-content: center;
-				margin: 8px 0;
-			}
-
-			.hotline-logo-box {
-				margin: auto;
 			}
 		}
 
@@ -699,28 +609,6 @@
 			white-space: nowrap;
 		}
 
-		.hotline-availability {
-			display: inline-flex;
-			align-items: center;
-			gap: 8px;
-			flex: 0 0 auto;
-			padding: 9px 14px;
-			border: 1px solid rgba(255, 255, 255, 0.22);
-			border-radius: 999px;
-			background: rgba(255, 255, 255, 0.1);
-			color: #ffffff;
-			font-size: 0.82rem;
-			font-weight: 700;
-		}
-
-		.hotline-availability-dot {
-			width: 8px;
-			height: 8px;
-			border-radius: 50%;
-			background: #2eaf45;
-			box-shadow: 0 0 0 4px rgba(46, 175, 69, 0.14);
-		}
-
 		.hotline-grid-wrapper {
 			display: grid;
 			grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -735,7 +623,6 @@
 		}
 
 		.hotline-card {
-			--hotline-accent: #2f7d4a;
 			position: relative;
 			overflow: hidden !important;
 			display: flex;
@@ -745,45 +632,12 @@
 			min-height: 0 !important;
 			padding: 20px 22px !important;
 			border: 1px solid rgba(198, 226, 198, 0.9);
-			border-top: 5px solid var(--hotline-accent);
 			border-radius: 18px !important;
 			background-color: rgba(244, 249, 242, 0.96) !important;
 			background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(226, 241, 223, 0.97)) !important;
 			box-shadow: 0 10px 24px rgba(4, 35, 23, 0.22);
 			backdrop-filter: blur(10px);
 			-webkit-backdrop-filter: blur(10px);
-		}
-
-		.hotline-card--disaster {
-			--hotline-accent: #d97706;
-		}
-
-		.hotline-card--health {
-			--hotline-accent: #0f8a6a;
-		}
-
-		.hotline-card--police {
-			--hotline-accent: #2563a6;
-		}
-
-		.hotline-card--fire {
-			--hotline-accent: #c2413b;
-		}
-
-		.hotline-card--welfare {
-			--hotline-accent: #7a5aa6;
-		}
-
-		.hotline-card::after {
-			display: none;
-		}
-
-		.hotline-card:hover {
-			transform: none;
-		}
-
-		.hotline-card:hover::after {
-			background: linear-gradient(135deg, rgba(240, 180, 41, 0.96), rgba(240, 180, 41, 0.28));
 		}
 
 		.hotline-logo-box {
@@ -917,18 +771,40 @@
 			font-weight: 800;
 			line-height: 1.25;
 			text-align: left;
+			text-decoration: underline;
+			text-decoration-thickness: 1px;
+			text-underline-offset: 3px;
 			white-space: nowrap;
+		}
+
+		.hotline-number-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			min-height: 44px;
+			border-radius: 8px;
+			color: #0b5631;
+			text-decoration: none;
+		}
+
+		.hotline-number-link:hover .hotline-number {
+			color: #073d23;
+			text-decoration-thickness: 2px;
+		}
+
+		.hotline-number-link:focus-visible {
+			outline: 3px solid #b45309;
+			outline-offset: 2px;
 		}
 
 		.hotline-phone-icon {
 			display: grid;
-			width: 40px;
-			height: 40px;
+			width: 24px;
+			height: 44px;
 			place-items: center;
 			flex: 0 0 auto;
-			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.14);
-			color: #c8edcb;
+			background: transparent;
+			color: #0b5631;
 			font-size: 0.95rem;
 		}
 
