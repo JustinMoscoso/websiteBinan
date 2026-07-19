@@ -99,8 +99,25 @@
       z-index: 1000;
     }
 
+    html,
     body {
+      min-height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       overflow-x: hidden;
+    }
+
+    .detail-page-main {
+      flex: 1 0 auto;
+      width: 100%;
+    }
+
+    #footer {
+      margin-top: auto;
     }
     
     .content-section {
@@ -121,10 +138,6 @@
       padding-top: 0;
     }
 
-    #contact.content-tab .contact {
-      text-align: center;
-    }
-    
     #about.content-tab {
       padding-top: 15px;
       margin-top: 0;
@@ -157,6 +170,21 @@
       color: #1b5e20;
       font-weight: 700;
     }
+
+	.service-card-heading {
+		margin: -4px 0 18px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid #dbe8dd;
+		text-align: center;
+	}
+
+	.service-card-heading h5 {
+		margin: 0;
+	}
+
+	.service-card-content {
+		line-height: 1.7;
+	}
 
     .dept-logo {
       width: 150px;
@@ -211,7 +239,7 @@ include_header(htmlspecialchars($dept->dept_name), $breadcrumbs, [
 ?>
 
 
-<div class="container mt-0 mb-5 pt-0">
+<main class="container detail-page-main mt-0 mb-5 pt-0">
   <div class="row flex-column flex-md-row">
     <!-- Sidebar Navigation -->
     <div class="col-md-3 sidebar mb-4 mt-0 pt-0">
@@ -258,21 +286,36 @@ include_header(htmlspecialchars($dept->dept_name), $breadcrumbs, [
       </div>
       <div id="missionvision" class="content-tab content-section">
         <div class="row">
-          <div class="col-12 mb-4">
-            <h5 class="text-dark text-center">Mission</h5>
-            <hr />
-            <p><?= ($dept->mission) ?></p>
+          <div class="col-12">
+            <div class="service-card">
+			  <div class="service-card-heading">
+				<h5>Mission</h5>
+			  </div>
+              <div class="service-card-content text-muted small">
+                <?= $dept->mission ?>
+              </div>
+            </div>
           </div>
-          <div class="col-12 mb-4">
-            <h5 class="text-dark text-center">Vision</h5>
-            <hr />
-            <p><?= ($dept->vision) ?></p>
+          <div class="col-12">
+            <div class="service-card">
+			  <div class="service-card-heading">
+				<h5>Vision</h5>
+			  </div>
+              <div class="service-card-content text-muted small">
+                <?= $dept->vision ?>
+              </div>
+            </div>
           </div>
           <?php if (!empty($dept->quality_policy)): ?>
-          <div class="col-12 mb-4">
-            <h5 class="text-dark text-center">Quality Objectives</h5>
-            <hr />
-            <div><?= $dept->quality_policy ?></div>
+          <div class="col-12">
+            <div class="service-card">
+			  <div class="service-card-heading">
+				<h5>Quality Objectives</h5>
+			  </div>
+              <div class="service-card-content text-muted small">
+                <?= $dept->quality_policy ?>
+              </div>
+            </div>
           </div>
           <?php endif; ?>
         </div>
@@ -297,13 +340,16 @@ include_header(htmlspecialchars($dept->dept_name), $breadcrumbs, [
       <div id="contact" class="content-tab content-section">
         <h4 class="text-center">Contact Information</h4>
         <hr />
-         <div class="contact text-center">
-            <?= $dept->contact ?>
-         </div>
+        <?= view('components/contact_information', [
+          'phoneNumber' => $dept->phone_number ?? '',
+          'landline' => $dept->landline ?? '',
+          'emailAddress' => $dept->email_address ?? '',
+          'officeAddress' => $dept->office_address ?? '',
+        ]) ?>
       </div>
     </div>
   </div>
-</div>
+</main>
 
 <?php include "footer.php"; ?>
 <?php pre_scripts('home'); ?>

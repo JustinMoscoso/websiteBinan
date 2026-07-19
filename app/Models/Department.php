@@ -12,7 +12,7 @@ class Department extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = false;
-    protected $allowedFields    = ['dept_name', 'head', 'post_title', 'mission', 'vision', 'img_logo', 'org_chart_img', 'quality_policy', 'about', 'contact', 'created_date', 'updated_date', 'status'];
+    protected $allowedFields    = ['dept_name', 'head', 'post_title', 'mission', 'vision', 'img_logo', 'org_chart_img', 'quality_policy', 'about', 'contact', 'phone_number', 'landline', 'email_address', 'office_address', 'created_date', 'updated_date', 'status'];
 
     protected bool $allowEmptyInserts = false;
 

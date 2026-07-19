@@ -1,3 +1,5 @@
+<?= view('admin/js/philippine_contact_inputs') ?>
+
 <div class="pagetitle d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
     <div>
         <h1 class="h3 fw-bold mb-1" style="color: #1b4d3e;">Barangay Management</h1>
@@ -176,15 +178,32 @@
                     </div>
 
                     <div class="col-12 mt-2">
-                        <label class="form-label small fw-bold text-secondary">Contact Information</label>
-                        <div id="txtContact" style="height: 150px;"></div>
-                        <input type="hidden" name="txtContact">
-                    </div>
-
-                    <div class="col-12 mt-2">
-                        <label class="form-label small fw-bold text-secondary">Barangay Staff</label>
-                        <div id="txtStaff" style="height: 150px;"></div>
-                        <input type="hidden" name="txtStaff">
+                        <fieldset class="border rounded p-3 bg-light">
+                            <legend class="float-none w-auto px-2 mb-2 fs-6 fw-bold text-secondary">Contact Information</legend>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="txtPhoneNumber" class="form-label small fw-bold text-secondary">Phone Number</label>
+                                    <input type="tel" class="form-control shadow-sm" id="txtPhoneNumber" name="txtPhoneNumber"
+                                        inputmode="tel" maxlength="16" placeholder="+63 9XX XXX XXXX">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="txtLandline" class="form-label small fw-bold text-secondary">Landline</label>
+                                    <input type="tel" class="form-control shadow-sm" id="txtLandline" name="txtLandline"
+                                        inputmode="tel" maxlength="15" placeholder="(049) 123-4567 or (02) 1234-5678">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="txtEmailAddress" class="form-label small fw-bold text-secondary">Email Address</label>
+                                    <input type="email" class="form-control shadow-sm" id="txtEmailAddress" name="txtEmailAddress"
+                                        maxlength="255" placeholder="e.g. barangay@binan.gov.ph">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="txtOfficeAddress" class="form-label small fw-bold text-secondary">Office Address</label>
+                                    <textarea class="form-control shadow-sm" id="txtOfficeAddress" name="txtOfficeAddress"
+                                        rows="2" maxlength="500" placeholder="Enter the complete barangay office address"></textarea>
+                                </div>
+                            </div>
+                            <small class="form-text text-muted mt-2">Provide at least one contact method.</small>
+                        </fieldset>
                     </div>
 
                     <div class="col-md-6 mt-2">
@@ -193,6 +212,14 @@
                             required>
                         <div id="addBrgyLogoPreview" class="mt-2"></div>
                     </div>
+
+					<div class="col-md-6 mt-2">
+						<label for="brgyOrgChart" class="form-label small fw-bold text-secondary">Organizational Chart</label>
+						<input type="file" class="form-control shadow-sm" id="brgyOrgChart" name="brgyOrgChart"
+							accept="image/png,image/jpeg,image/gif,image/webp">
+						<div class="form-text text-muted">Accepted formats: PNG, JPG, JPEG, GIF, or WEBP. Maximum 4 MB.</div>
+						<div id="addBrgyOrgChartPreview" class="mt-2"></div>
+					</div>
                 </div>
             </div>
 

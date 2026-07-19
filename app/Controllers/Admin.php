@@ -744,10 +744,20 @@ class Admin extends BaseController
                 $head = trim((string) $this->request->getPost('head'));
                 $deptStatus = trim((string) $this->request->getPost('status'));
                 $about = (string) $this->request->getPost('about');
-                $contact = (string) $this->request->getPost('contact');
                 $mission = (string) $this->request->getPost('mission');
                 $vision = (string) $this->request->getPost('vision');
                 $qualityPolicy = (string) $this->request->getPost('qualityPolicy');
+                $contactData = $this->getStructuredContactData([
+                    'phone_number' => ['phoneNumber'],
+                    'landline' => ['landline'],
+                    'email_address' => ['emailAddress'],
+                    'office_address' => ['officeAddress'],
+                ]);
+                $contactError = $this->validateStructuredContactData($contactData);
+                if ($contactError !== null) {
+                    $message = $contactError;
+                    break;
+                }
 
                 if ($deptName === '' || $deptStatus === '') {
                     $message = 'Department name and status are required.';
@@ -772,13 +782,12 @@ class Admin extends BaseController
                     'dept_name' => $deptName,
                     'head' => $head,
                     'about' => $about,
-                    'contact' => $contact,
                     'mission' => $mission,
                     'vision' => $vision,
                     'quality_policy' => $qualityPolicy,
                     'status' => $deptStatus,
                     'updated_date' => date('Y-m-d H:i:s'),
-                ];
+                ] + $contactData;
 
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
                 $uploadPath = WRITEPATH . 'uploads' . DIRECTORY_SEPARATOR . 'DEPT';
@@ -829,7 +838,10 @@ class Admin extends BaseController
                         'head' => $updatedDepartment->head,
                         'status' => $updatedDepartment->status,
                         'about' => $updatedDepartment->about,
-                        'contact' => $updatedDepartment->contact,
+                        'phone_number' => $updatedDepartment->phone_number,
+                        'landline' => $updatedDepartment->landline,
+                        'email_address' => $updatedDepartment->email_address,
+                        'office_address' => $updatedDepartment->office_address,
                         'mission' => $updatedDepartment->mission,
                         'vision' => $updatedDepartment->vision,
                         'quality_policy' => $updatedDepartment->quality_policy,
@@ -2261,9 +2273,19 @@ class Admin extends BaseController
                 $mission = $this->request->getPost('txtMission');
                 $vision = $this->request->getPost('txtVision');
                 $about = $this->request->getPost('createAbout');
-                $contact = $this->request->getPost('txtContact');
-                $barangay_staff = $this->request->getPost('txtStaff');
+                $contactData = $this->getStructuredContactData([
+                    'phone_number' => ['txtPhoneNumber'],
+                    'landline' => ['txtLandline'],
+                    'email_address' => ['txtEmailAddress'],
+                    'office_address' => ['txtOfficeAddress'],
+                ]);
+                $contactError = $this->validateStructuredContactData($contactData);
+                if ($contactError !== null) {
+                    $message = $contactError;
+                    break;
+                }
                 $imgLogo = $this->request->getFile('brgyImg');
+				$imgOrgChart = $this->request->getFile('brgyOrgChart');
                 // $imgCapt = $this->request->getFile('brgyImgCapt'); // Captain image - commented out as not needed
 
                 // Check if the department name already exists
@@ -2273,12 +2295,29 @@ class Admin extends BaseController
                     $message = 'Barangay name already exists.';
                 } else {
                     $logoName = $imgLogo->getRandomName();
+					$orgChartName = ($imgOrgChart && $imgOrgChart->isValid()) ? $imgOrgChart->getRandomName() : null;
                     // $captName = $imgCapt->getRandomName(); // Captain image - commented out as not needed
 
                     $file_category = 'BARANGAY';
                     $path = WRITEPATH . 'uploads/' . $file_category;
+					$allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+					if ($imgOrgChart && $imgOrgChart->isValid()) {
+						if ($imgOrgChart->getSize() > (4 * 1024 * 1024)) {
+							$message = 'Organizational chart must not exceed 4 MB.';
+							break;
+						}
+						if (!in_array(strtolower((string) $imgOrgChart->getMimeType()), $allowedImageTypes, true)) {
+							$message = 'Organizational chart must be a valid image file.';
+							break;
+						}
+					}
 
                     if ($imgLogo->move($path, $logoName)) { // Removed captain image upload requirement
+						if ($orgChartName && !$imgOrgChart->hasMoved() && !$imgOrgChart->move($path, $orgChartName)) {
+							$message = 'Failed to upload the organizational chart.';
+							break;
+						}
                         // Save other form data to the database
                         $data = [
                             'brgy_name' => $brgy_name,
@@ -2286,13 +2325,12 @@ class Admin extends BaseController
                             'mission' => $mission,
                             'vision' => $vision,
                             'about' => $about,
-                            'contact' => $contact,
-                            'barangay_staff' => $barangay_staff,
                             'img_logo' => $logoName,
+							'org_chart_img' => $orgChartName,
                             // 'img_capt' => $captName, // Captain image - commented out as not needed
                             'status' => 'ACTIVE',
                             'created_date' => date('Y-m-d H:i:s')
-                        ];
+                        ] + $contactData;
 
                         if ($brgy_m->insert($data)) {
                             $status = 1;
@@ -2327,7 +2365,17 @@ class Admin extends BaseController
                 $imgLogo = $this->request->getFile('deptImg');
                 $imgOrgChart = $this->request->getFile('deptOrgChart');
                 $about = $this->request->getPost('txtAbout');
-                $contact = $this->request->getPost('txtContact');
+                $contactData = $this->getStructuredContactData([
+                    'phone_number' => ['txtPhoneNumber'],
+                    'landline' => ['txtLandline'],
+                    'email_address' => ['txtEmailAddress'],
+                    'office_address' => ['txtOfficeAddress'],
+                ]);
+                $contactError = $this->validateStructuredContactData($contactData);
+                if ($contactError !== null) {
+                    $message = $contactError;
+                    break;
+                }
 
                 // Check if the department name already exists
                 $existing_dept = $dept_m->where('dept_name', $dept_name)->first();
@@ -2356,10 +2404,9 @@ class Admin extends BaseController
                             'org_chart_img' => $orgChartName,
                             'quality_policy' => $quality_policy,
                             'about' => $about,
-                            'contact' => $contact,
                             'status' => 'ACTIVE',
                             'created_date' => date('Y-m-d H:i:s')
-                        ];
+                        ] + $contactData;
 
                         if ($dept_m->insert($data)) {
                             $status = 1;
@@ -3096,13 +3143,22 @@ class Admin extends BaseController
                 }
 
                 // Form uses the same field names for add and edit: txt* prefix
-                $brgy_contact = $this->request->getPost('txtContact') ?? $this->request->getPost('editContact');
                 $brgy_about = $this->request->getPost('createAbout') ?? $this->request->getPost('editAbout');
                 $brgy_name = $this->request->getPost('txtBrgy') ?? $this->request->getPost('editBrgy');
                 $brngy_capt = $this->request->getPost('txtCapt') ?? $this->request->getPost('editCapt');
                 $mission = $this->request->getPost('txtMission') ?? $this->request->getPost('editMission');
                 $vision = $this->request->getPost('txtVision') ?? $this->request->getPost('editVision');
-                $barangay_staff = $this->request->getPost('txtStaff') ?? $this->request->getPost('editStaff');
+                $contactData = $this->getStructuredContactData([
+                    'phone_number' => ['txtPhoneNumber', 'editPhoneNumber'],
+                    'landline' => ['txtLandline', 'editLandline'],
+                    'email_address' => ['txtEmailAddress', 'editEmailAddress'],
+                    'office_address' => ['txtOfficeAddress', 'editOfficeAddress'],
+                ]);
+                $contactError = $this->validateStructuredContactData($contactData);
+                if ($contactError !== null) {
+                    $message = $contactError;
+                    break;
+                }
 
                 // Check if the barangay name already exists for other records
                 $existing_brgy = $brgy_m->where('brgy_name', $brgy_name)->where('id !=', $id)->first();
@@ -3113,22 +3169,25 @@ class Admin extends BaseController
                 }
 
                 $data = [
-                    'contact' => $brgy_contact,
                     'about' => $brgy_about,
                     'brgy_name' => $brgy_name,
                     'brngy_capt' => $brngy_capt,
                     'mission' => $mission,
                     'vision' => $vision,
-                    'barangay_staff' => $barangay_staff,
                     'updated_date' => date('Y-m-d H:i:s'),
-                ];
+                ] + $contactData;
 
                 $maxmb = 4;
                 $file_category = 'BARANGAY';
+				$allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
                 // Handle file uploads for barangay logo (form sends 'brgyImg' for both add and edit)
                 $imgLogo = $this->request->getFile('brgyImg') ?: $this->request->getFile('editbrgyImg');
                 if ($imgLogo && $imgLogo->isValid() && $imgLogo->getSize() < ($maxmb * 1024 * 1024)) {
+					if (!in_array(strtolower((string) $imgLogo->getMimeType()), $allowedImageTypes, true)) {
+						$message = 'Barangay logo must be a valid image file.';
+						break;
+					}
                     $logoName = $imgLogo->getRandomName();
                     $path = WRITEPATH . 'uploads/' . $file_category;
 
@@ -3136,6 +3195,24 @@ class Admin extends BaseController
                         $data['img_logo'] = $logoName;
                     }
                 }
+
+				$imgOrgChart = $this->request->getFile('brgyOrgChart') ?: $this->request->getFile('editbrgyOrgChart');
+				if ($imgOrgChart && $imgOrgChart->isValid()) {
+					if ($imgOrgChart->getSize() > ($maxmb * 1024 * 1024)) {
+						$message = 'Organizational chart must not exceed 4 MB.';
+						break;
+					}
+					if (!in_array(strtolower((string) $imgOrgChart->getMimeType()), $allowedImageTypes, true)) {
+						$message = 'Organizational chart must be a valid image file.';
+						break;
+					}
+
+					$orgChartName = $imgOrgChart->getRandomName();
+					$path = WRITEPATH . 'uploads/' . $file_category;
+					if (!$imgOrgChart->hasMoved() && $imgOrgChart->move($path, $orgChartName)) {
+						$data['org_chart_img'] = $orgChartName;
+					}
+				}
 
                 // Captain image upload handling - commented out as not needed
                 /*
@@ -3194,7 +3271,17 @@ class Admin extends BaseController
                     $vision = $this->request->getPost('txtVision') ?? $this->request->getPost('editVision');
                     $quality_policy = $this->request->getPost('txtPolicy') ?? $this->request->getPost('editPolicy');
                     $about = $this->request->getPost('txtAbout') ?? $this->request->getPost('editAbout');
-                    $contact = $this->request->getPost('txtContact') ?? $this->request->getPost('editContact');
+                    $contactData = $this->getStructuredContactData([
+                        'phone_number' => ['txtPhoneNumber', 'editPhoneNumber'],
+                        'landline' => ['txtLandline', 'editLandline'],
+                        'email_address' => ['txtEmailAddress', 'editEmailAddress'],
+                        'office_address' => ['txtOfficeAddress', 'editOfficeAddress'],
+                    ]);
+                    $contactError = $this->validateStructuredContactData($contactData);
+                    if ($contactError !== null) {
+                        $message = $contactError;
+                        break;
+                    }
 
                     // Check if the department name already exists, excluding the current department
                     $existing_dept = $dept_m->where('dept_name', $dept_name)->where('id !=', $id)->first();
@@ -3211,9 +3298,8 @@ class Admin extends BaseController
                             'vision' => $vision,
                             'quality_policy' => $quality_policy,
                             'about' => $about,
-                            'contact' => $contact,
                             'updated_date' => date('Y-m-d H:i:s')
-                        ];
+                        ] + $contactData;
 
                         $maxmb = 4;
                         $file_category = 'DEPT';
@@ -5508,7 +5594,57 @@ class Admin extends BaseController
 		];
 	}
 
-    private function aboutSlotHasActiveEntry($aboutModel, ?string $section, ?string $title, ?int $excludeId = null): bool
+    private function getStructuredContactData(array $fieldNames): array
+    {
+        $data = [];
+
+        foreach ($fieldNames as $databaseField => $requestFields) {
+            $value = null;
+            foreach ((array) $requestFields as $requestField) {
+                $postedValue = $this->request->getPost($requestField);
+                if ($postedValue !== null) {
+                    $value = trim((string) $postedValue);
+                    break;
+                }
+            }
+            $data[$databaseField] = $value ?? '';
+        }
+
+        $data['phone_number'] = $this->normalizePhilippineMobileNumber($data['phone_number'] ?? '');
+        $data['landline'] = $this->normalizePhilippineLandlineNumber($data['landline'] ?? '');
+
+        return $data;
+    }
+
+    private function validateStructuredContactData(array $contactData): ?string
+    {
+        if (!array_filter($contactData, static fn ($value): bool => trim((string) $value) !== '')) {
+            return 'Please provide at least one contact method.';
+        }
+
+        $mobile = (string) ($contactData['phone_number'] ?? '');
+        if ($mobile !== '' && !$this->isValidPhilippineMobileNumber($mobile)) {
+            return 'Phone Number must use the format +63 9XX XXX XXXX.';
+        }
+
+        $landline = (string) ($contactData['landline'] ?? '');
+        if ($landline !== '' && !$this->isValidPhilippineLandlineNumber($landline)) {
+            return 'Landline must use (049) 123-4567 or (02) 1234-5678.';
+        }
+
+        $email = (string) ($contactData['email_address'] ?? '');
+        if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            return 'Please enter a valid email address.';
+        }
+
+        if (mb_strlen((string) ($contactData['office_address'] ?? '')) > 500) {
+            return 'Office address must not exceed 500 characters.';
+        }
+
+        return null;
+    }
+
+	private function aboutSlotHasActiveEntry($aboutModel, ?string $section, ?string $title, ?int $excludeId = null): bool
     {
         $section = trim((string) $section);
         $title = trim((string) $title);

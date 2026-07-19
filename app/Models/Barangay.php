@@ -12,7 +12,7 @@ class Barangay extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = false;
-    protected $allowedFields    = ['brgy_name', 'brngy_capt', 'img_logo', 'img_capt', 'mission', 'vision','about','contact', 'barangay_staff', 'status', 'created_date', 'updated_date'];
+    protected $allowedFields    = ['brgy_name', 'brngy_capt', 'img_logo', 'org_chart_img', 'img_capt', 'mission', 'vision', 'about', 'contact', 'phone_number', 'landline', 'email_address', 'office_address', 'status', 'created_date', 'updated_date'];
     protected bool $allowEmptyInserts = false;
 
     // Dates

@@ -203,6 +203,13 @@
         ];
         const profileDeptEditors = {};
         const profileBrgyEditors = {};
+        const profileContactInputs = window.PhilippineContactInputs;
+        if (profileContactInputs) {
+            profileContactInputs.bind(
+                '#profileDeptPhoneNumber, #profileBrgyPhoneNumber',
+                '#profileDeptLandline, #profileBrgyLandline'
+            );
+        }
 
         function initProfileDepartmentEditors() {
             if (typeof Quill === 'undefined') {
@@ -211,7 +218,6 @@
 
             const editors = [
                 { key: 'about', editor: '#profileDeptAboutEditor', input: '#profileDeptAbout' },
-                { key: 'contact', editor: '#profileDeptContactEditor', input: '#profileDeptContact' },
                 { key: 'mission', editor: '#profileDeptMissionEditor', input: '#profileDeptMission' },
                 { key: 'vision', editor: '#profileDeptVisionEditor', input: '#profileDeptVision' },
                 { key: 'policy', editor: '#profileDeptPolicyEditor', input: '#profileDeptPolicy' }
@@ -233,7 +239,6 @@
         function syncProfileDepartmentEditors() {
             const fieldMap = {
                 about: '#profileDeptAbout',
-                contact: '#profileDeptContact',
                 mission: '#profileDeptMission',
                 vision: '#profileDeptVision',
                 policy: '#profileDeptPolicy'
@@ -254,9 +259,7 @@
             const editors = [
                 { key: 'about', editor: '#profileBrgyAboutEditor', input: '#profileBrgyAbout' },
                 { key: 'mission', editor: '#profileBrgyMissionEditor', input: '#profileBrgyMission' },
-                { key: 'vision', editor: '#profileBrgyVisionEditor', input: '#profileBrgyVision' },
-                { key: 'contact', editor: '#profileBrgyContactEditor', input: '#profileBrgyContact' },
-                { key: 'staff', editor: '#profileBrgyStaffEditor', input: '#profileBrgyStaff' }
+                { key: 'vision', editor: '#profileBrgyVisionEditor', input: '#profileBrgyVision' }
             ];
 
             editors.forEach(function (config) {
@@ -276,9 +279,7 @@
             const fieldMap = {
                 about: '#profileBrgyAbout',
                 mission: '#profileBrgyMission',
-                vision: '#profileBrgyVision',
-                contact: '#profileBrgyContact',
-                staff: '#profileBrgyStaff'
+                vision: '#profileBrgyVision'
             };
 
             Object.keys(fieldMap).forEach(function (key) {
@@ -321,6 +322,10 @@
         function buildProfileBarangayFormData(extraData) {
             syncProfileBarangayEditors();
 
+            if (profileContactInputs) {
+                profileContactInputs.prepare('#profileBrgyPhoneNumber', '#profileBrgyLandline');
+            }
+
             const formData = new FormData();
             formData.set('id', $('#profileBrgyId').val() || '');
             formData.set('editBrgy', $('#profileBrgyName').val() || '');
@@ -328,8 +333,15 @@
             formData.set('editAbout', $('#profileBrgyAbout').val() || '');
             formData.set('editMission', $('#profileBrgyMission').val() || '');
             formData.set('editVision', $('#profileBrgyVision').val() || '');
-            formData.set('editContact', $('#profileBrgyContact').val() || '');
-            formData.set('editStaff', $('#profileBrgyStaff').val() || '');
+            formData.set('editPhoneNumber', $('#profileBrgyPhoneNumber').val() || '');
+            formData.set('editLandline', $('#profileBrgyLandline').val() || '');
+            formData.set('editEmailAddress', $('#profileBrgyEmailAddress').val() || '');
+            formData.set('editOfficeAddress', $('#profileBrgyOfficeAddress').val() || '');
+
+            const orgChartInput = $('#profileBrgyOrgChart')[0];
+            if (orgChartInput && orgChartInput.files && orgChartInput.files[0]) {
+                formData.set('editbrgyOrgChart', orgChartInput.files[0]);
+            }
 
             if (extraData) {
                 Object.keys(extraData).forEach(function (key) {
@@ -359,6 +371,7 @@
 
             $('#profileBrgyLogo').val('');
             $('#profileBrgyCardLogoInput').val('');
+            $('#profileBrgyOrgChart').val('');
             $('#profileBrgyLogoClearBtn').removeClass('active');
         }
 
@@ -759,19 +772,52 @@
             });
         }());
 
+        $('#profileBrgyOrgChart').on('change', function () {
+            const file = this.files && this.files[0] ? this.files[0] : null;
+            if (!file) { return; }
+
+            const previewUrl = URL.createObjectURL(file);
+            $('#profileBrgyOrgChartPreview').html(
+                '<img src="' + previewUrl + '" alt="Organizational chart preview" style="max-width: 160px; max-height: 160px; object-fit: contain;">'
+            );
+        });
+
         $('#profileBarangayForm').on('submit', function (e) {
             e.preventDefault();
             initProfileBarangayEditors();
             syncProfileBarangayEditors();
 
+            if (profileContactInputs) {
+                profileContactInputs.prepare('#profileBrgyPhoneNumber', '#profileBrgyLandline');
+            }
+
             const formData = new FormData(this);
             const imageFile = formData.get('editbrgyImg');
+            const orgChartFile = formData.get('editbrgyOrgChart');
             const maxImageSizeMB = 4;
             const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
             if (!formData.get('editBrgy') || !formData.get('editCapt') || !formData.get('editAbout') ||
-                !formData.get('editMission') || !formData.get('editVision') || !formData.get('editContact')) {
+                !formData.get('editMission') || !formData.get('editVision')) {
                 showProfileMessage(false, 'Please fill in all required fields.');
+                return;
+            }
+
+            if (!formData.get('editPhoneNumber') && !formData.get('editLandline') &&
+                !formData.get('editEmailAddress') && !formData.get('editOfficeAddress')) {
+                showProfileMessage(false, 'Please provide at least one contact method.');
+                return;
+            }
+
+            if (formData.get('editPhoneNumber') && profileContactInputs &&
+                !profileContactInputs.isValidMobile(formData.get('editPhoneNumber'))) {
+                showProfileMessage(false, 'Phone Number must use the format +63 9XX XXX XXXX.');
+                return;
+            }
+
+            if (formData.get('editLandline') && profileContactInputs &&
+                !profileContactInputs.isValidLandline(formData.get('editLandline'))) {
+                showProfileMessage(false, 'Landline must use (049) 123-4567 or (02) 1234-5678.');
                 return;
             }
 
@@ -783,6 +829,18 @@
 
                 if (!validImageTypes.includes(imageFile.type)) {
                     showProfileMessage(false, 'Please upload a valid logo image file.');
+                    return;
+                }
+            }
+
+            if (orgChartFile && orgChartFile.size > 0) {
+                if (orgChartFile.size > maxImageSizeMB * 1024 * 1024) {
+                    showProfileMessage(false, 'Organizational chart size should not exceed 4 MB.');
+                    return;
+                }
+
+                if (!validImageTypes.includes(orgChartFile.type)) {
+                    showProfileMessage(false, 'Please upload a valid organizational chart image.');
                     return;
                 }
             }
@@ -825,12 +883,19 @@
         function buildProfileDepartmentFormData(extraData) {
             syncProfileDepartmentEditors();
 
+            if (profileContactInputs) {
+                profileContactInputs.prepare('#profileDeptPhoneNumber', '#profileDeptLandline');
+            }
+
             const formData = new FormData();
             formData.set('deptName', $('#profileDeptName').val() || '');
             formData.set('head', $('#profileDeptHead').val() || '');
             formData.set('status', $('#profileDeptStatus').val() || 'ACTIVE');
             formData.set('about', $('#profileDeptAbout').val() || '');
-            formData.set('contact', $('#profileDeptContact').val() || '');
+            formData.set('phoneNumber', $('#profileDeptPhoneNumber').val() || '');
+            formData.set('landline', $('#profileDeptLandline').val() || '');
+            formData.set('emailAddress', $('#profileDeptEmailAddress').val() || '');
+            formData.set('officeAddress', $('#profileDeptOfficeAddress').val() || '');
             formData.set('mission', $('#profileDeptMission').val() || '');
             formData.set('vision', $('#profileDeptVision').val() || '');
             formData.set('qualityPolicy', $('#profileDeptPolicy').val() || '');
@@ -862,7 +927,10 @@
             $('#profileDeptHead').val(response.data.head || '');
             $('#profileDeptStatus').val(response.data.status || '');
             $('#profileDeptAbout').val(response.data.about || '');
-            $('#profileDeptContact').val(response.data.contact || '');
+            $('#profileDeptPhoneNumber').val(response.data.phone_number || '');
+            $('#profileDeptLandline').val(response.data.landline || '');
+            $('#profileDeptEmailAddress').val(response.data.email_address || '');
+            $('#profileDeptOfficeAddress').val(response.data.office_address || '');
             $('#profileDeptMission').val(response.data.mission || '');
             $('#profileDeptVision').val(response.data.vision || '');
             $('#profileDeptPolicy').val(response.data.quality_policy || '');
@@ -928,13 +996,34 @@
         $('#profileDepartmentForm').on('submit', function (e) {
             e.preventDefault();
 
+            if (profileContactInputs) {
+                profileContactInputs.prepare('#profileDeptPhoneNumber', '#profileDeptLandline');
+            }
+
             const formData = new FormData(this);
             syncProfileDepartmentEditors();
             formData.set('about', $('#profileDeptAbout').val() || '');
-            formData.set('contact', $('#profileDeptContact').val() || '');
             formData.set('mission', $('#profileDeptMission').val() || '');
             formData.set('vision', $('#profileDeptVision').val() || '');
             formData.set('qualityPolicy', $('#profileDeptPolicy').val() || '');
+
+            if (!formData.get('phoneNumber') && !formData.get('landline') &&
+                !formData.get('emailAddress') && !formData.get('officeAddress')) {
+                showProfileMessage(false, 'Please provide at least one contact method.');
+                return;
+            }
+
+            if (formData.get('phoneNumber') && profileContactInputs &&
+                !profileContactInputs.isValidMobile(formData.get('phoneNumber'))) {
+                showProfileMessage(false, 'Phone Number must use the format +63 9XX XXX XXXX.');
+                return;
+            }
+
+            if (formData.get('landline') && profileContactInputs &&
+                !profileContactInputs.isValidLandline(formData.get('landline'))) {
+                showProfileMessage(false, 'Landline must use (049) 123-4567 or (02) 1234-5678.');
+                return;
+            }
 
             submitProfileDepartmentUpdate(formData, {
                 $button: $(this).find('button[type="submit"]')

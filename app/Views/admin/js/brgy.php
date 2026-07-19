@@ -47,7 +47,11 @@
         record: null
     };
 
-    var quillCreateAbout, quillCreateMission, quillCreateVision, quillCreateContact, quillCreateStaff;
+    var quillCreateAbout, quillCreateMission, quillCreateVision;
+    var barangayContactInputs = window.PhilippineContactInputs;
+    if (barangayContactInputs) {
+        barangayContactInputs.bind('#txtPhoneNumber', '#txtLandline');
+    }
 
     function initBarangayEditors() {
         if (!quillCreateAbout) {
@@ -75,18 +79,6 @@
                 modules: { toolbar: true }
             });
         }
-        if (!quillCreateContact) {
-            quillCreateContact = new Quill('#txtContact', {
-                theme: 'snow',
-                modules: { toolbar: true }
-            });
-        }
-        if (!quillCreateStaff) {
-            quillCreateStaff = new Quill('#txtStaff', {
-                theme: 'snow',
-                modules: { toolbar: true }
-            });
-        }
     }
 
     function syncBarangayEditors() {
@@ -94,21 +86,16 @@
         // Use name selector for hidden inputs (Quill replaces the containers, so IDs target the Quill div)
         if (quillCreateMission) $('input[name="txtMission"]').val(quillCreateMission.root.innerHTML);
         if (quillCreateVision) $('input[name="txtVision"]').val(quillCreateVision.root.innerHTML);
-        if (quillCreateContact) $('input[name="txtContact"]').val(quillCreateContact.root.innerHTML);
-        if (quillCreateStaff) $('input[name="txtStaff"]').val(quillCreateStaff.root.innerHTML);
     }
 
     function clearBarangayEditors() {
         if (quillCreateAbout) quillCreateAbout.setContents([]);
         if (quillCreateMission) quillCreateMission.setContents([]);
         if (quillCreateVision) quillCreateVision.setContents([]);
-        if (quillCreateContact) quillCreateContact.setContents([]);
-        if (quillCreateStaff) quillCreateStaff.setContents([]);
         $('#createAbout').val('');
         $('input[name="txtMission"]').val('');
         $('input[name="txtVision"]').val('');
-        $('input[name="txtContact"]').val('');
-        $('input[name="txtStaff"]').val('');
+        $('#txtPhoneNumber, #txtLandline, #txtEmailAddress, #txtOfficeAddress').val('');
     }
 
     function resetBarangayModalState() {
@@ -118,14 +105,16 @@
         $('#brgyModalTitle').text('Add Record');
         $('#btnBrgySave').text('Save');
         $('#brgyImg').prop('required', true);
+		$('#brgyOrgChart').prop('required', false);
         $('#addBrgyLogoPreview').html('');
+		$('#addBrgyOrgChartPreview').html('');
         barangayState.mode = 'add';
         barangayState.record = null;
         clearBarangayEditors();
+        $('#txtPhoneNumber').val('+63 9');
     }
 
-    function renderBarangayLogoPreview(file, fallbackHtml) {
-        const preview = $('#addBrgyLogoPreview');
+    function renderBarangayImagePreview(preview, file, fallbackHtml) {
         if (file) {
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -155,10 +144,16 @@
             if (quillCreateAbout) quillCreateAbout.root.innerHTML = record.about || '';
             if (quillCreateMission) quillCreateMission.root.innerHTML = record.mission || '';
             if (quillCreateVision) quillCreateVision.root.innerHTML = record.vision || '';
-            if (quillCreateContact) quillCreateContact.root.innerHTML = record.contact || '';
-            if (quillCreateStaff) quillCreateStaff.root.innerHTML = record.barangay_staff || '';
             // Also sync hidden inputs
             $('#createAbout').val(record.about || '');
+            $('#txtPhoneNumber').val(record.phone_number && barangayContactInputs
+                ? barangayContactInputs.formatMobile(record.phone_number)
+                : (record.phone_number || '+63 9'));
+            $('#txtLandline').val(record.landline && barangayContactInputs
+                ? barangayContactInputs.formatLandline(record.landline)
+                : (record.landline || ''));
+            $('#txtEmailAddress').val(record.email_address || '');
+            $('#txtOfficeAddress').val(record.office_address || '');
             $('#brgyImg').prop('required', false);
         }
 
@@ -171,7 +166,7 @@
         }
 
         const maxImageSizeMB = 4;
-        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
         if (file.size > maxImageSizeMB * 1024 * 1024) {
             return 'size';
@@ -189,15 +184,19 @@
             quillCreateAbout.root.innerHTML = barangayState.record.about || '';
             quillCreateMission.root.innerHTML = barangayState.record.mission || '';
             quillCreateVision.root.innerHTML = barangayState.record.vision || '';
-            quillCreateContact.root.innerHTML = barangayState.record.contact || '';
-            quillCreateStaff.root.innerHTML = barangayState.record.barangay_staff || '';
         }
 
         $('#brgyImg').off('change').on('change', function () {
-            renderBarangayLogoPreview(this.files[0], barangayState.mode === 'edit' && barangayState.record && barangayState.record.img_logo
+			renderBarangayImagePreview($('#addBrgyLogoPreview'), this.files[0], barangayState.mode === 'edit' && barangayState.record && barangayState.record.img_logo
                 ? `<img src="<?php echo base_url('admin/image/BARANGAY/') ?>${barangayState.record.img_logo}" alt="Current Barangay Logo" style="max-width: 120px; margin-top: 5px;">`
                 : '');
         });
+
+		$('#brgyOrgChart').off('change').on('change', function () {
+			renderBarangayImagePreview($('#addBrgyOrgChartPreview'), this.files[0], barangayState.mode === 'edit' && barangayState.record && barangayState.record.org_chart_img
+				? `<img src="<?php echo base_url('admin/image/BARANGAY/') ?>${barangayState.record.org_chart_img}" alt="Current Organizational Chart" style="max-width: 160px; max-height: 160px; object-fit: contain; margin-top: 5px;">`
+				: '');
+		});
     });
 
     $('#addModal').on('hidden.bs.modal', function () {
@@ -208,24 +207,49 @@
         initBarangayEditors();
         syncBarangayEditors();
 
+        if (barangayContactInputs) {
+            barangayContactInputs.prepare('#txtPhoneNumber', '#txtLandline');
+        }
+
         const mode = ($('#brgyMode').val() || 'add').toLowerCase();
         const form = $('#addForm')[0];
         const formData = new FormData(form);
         const imageFile = formData.get('brgyImg');
+		const orgChartFile = formData.get('brgyOrgChart');
 
         formData.set('id', $('#brgyId').val());
         formData.set('createAbout', quillCreateAbout ? quillCreateAbout.root.innerHTML : '');
         formData.set('txtMission', quillCreateMission ? quillCreateMission.root.innerHTML : '');
         formData.set('txtVision', quillCreateVision ? quillCreateVision.root.innerHTML : '');
-        formData.set('txtContact', quillCreateContact ? quillCreateContact.root.innerHTML : '');
-        formData.set('txtStaff', quillCreateStaff ? quillCreateStaff.root.innerHTML : '');
 
-        if (!formData.get('txtBrgy') || !formData.get('txtCapt') || !formData.get('createAbout') || !formData.get('txtMission') || !formData.get('txtVision') || !formData.get('txtContact') || !formData.get('txtStaff')) {
+        if (!formData.get('txtBrgy') || !formData.get('txtCapt') || !formData.get('createAbout') || !formData.get('txtMission') || !formData.get('txtVision')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
             });
+            return;
+        }
+
+        if (!formData.get('txtPhoneNumber') && !formData.get('txtLandline') &&
+            !formData.get('txtEmailAddress') && !formData.get('txtOfficeAddress')) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'Please provide at least one contact method.'
+            });
+            return;
+        }
+
+        if (formData.get('txtPhoneNumber') && barangayContactInputs &&
+            !barangayContactInputs.isValidMobile(formData.get('txtPhoneNumber'))) {
+            Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Phone Number must use the format +63 9XX XXX XXXX.' });
+            return;
+        }
+
+        if (formData.get('txtLandline') && barangayContactInputs &&
+            !barangayContactInputs.isValidLandline(formData.get('txtLandline'))) {
+            Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Landline must use (049) 123-4567 or (02) 1234-5678.' });
             return;
         }
 
@@ -252,11 +276,23 @@
                 Swal.fire({
                     icon: 'warning',
                     title: 'Validation Error',
-                    text: 'Please upload a valid barangay logo (jpg, png, gif).'
+                    text: 'Please upload a valid barangay logo (jpg, png, gif, webp).'
                 });
                 return;
             }
         }
+
+		if (orgChartFile && orgChartFile.size > 0) {
+			const orgChartValidation = isValidBarangayImage(orgChartFile);
+			if (orgChartValidation === 'size') {
+				Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Organizational chart size should not exceed 4 MB.' });
+				return;
+			}
+			if (orgChartValidation === 'type') {
+				Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please upload a valid organizational chart (jpg, png, gif, webp).' });
+				return;
+			}
+		}
 
         const url = mode === 'edit'
             ? '<?php echo site_url('admin/ajax/update_barangay'); ?>'
@@ -322,6 +358,12 @@
                             : '<small>No logo available.</small>'
                     );
                     $('#brgyImg').val('');
+					$('#addBrgyOrgChartPreview').html(
+						barangay.org_chart_img
+							? `<img src="<?php echo base_url('admin/image/BARANGAY/') ?>${barangay.org_chart_img}" alt="Current Organizational Chart" style="max-width: 160px; max-height: 160px; object-fit: contain; margin-top: 5px;">`
+							: '<small>No organizational chart available.</small>'
+					);
+					$('#brgyOrgChart').val('');
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -480,15 +522,6 @@
                 }
             },
             { "title": "Captain", "data": "brngy_capt", width: '15%', "className": "text-center align-middle brgy-captain-cell" },
-            {
-                "title": "Barangay Staff", visible:false,
-                "data": "barangay_staff",
-                "render": function (data) {
-                    return data && data.trim() !== ''
-                        ? '<div class="text-muted small">' + data + '</div>'
-                        : '<span class="text-muted small">No staff info</span>';
-                }
-            },
         // Captain image column - commented out as not needed
         /*
         {

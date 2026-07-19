@@ -158,9 +158,13 @@
         about: null,
         mission: null,
         vision: null,
-        policy: null,
-        contact: null
+        policy: null
     };
+
+    var departmentContactInputs = window.PhilippineContactInputs;
+    if (departmentContactInputs) {
+        departmentContactInputs.bind('#txtPhoneNumber', '#txtLandline');
+    }
 
     function initDeptQuills() {
         if (!deptQuills.about) {
@@ -175,9 +179,6 @@
         if (!deptQuills.policy) {
             deptQuills.policy = new Quill('#quillPolicy', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
         }
-        if (!deptQuills.contact) {
-            deptQuills.contact = new Quill('#quillContact', { theme: 'snow', modules: { toolbar: quillToolbarOptions } });
-        }
     }
 
     function setDeptQuillContents(record) {
@@ -188,7 +189,6 @@
         if (deptQuills.mission) deptQuills.mission.root.innerHTML = record.mission || '';
         if (deptQuills.vision) deptQuills.vision.root.innerHTML = record.vision || '';
         if (deptQuills.policy) deptQuills.policy.root.innerHTML = record.quality_policy || '';
-        if (deptQuills.contact) deptQuills.contact.root.innerHTML = record.contact || '';
     }
 
     function clearDeptQuillContents() {
@@ -196,21 +196,19 @@
         if (deptQuills.mission) deptQuills.mission.setContents([]);
         if (deptQuills.vision) deptQuills.vision.setContents([]);
         if (deptQuills.policy) deptQuills.policy.setContents([]);
-        if (deptQuills.contact) deptQuills.contact.setContents([]);
         $('#txtAbout').val('');
         $('#txtMission').val('');
         $('#txtVision').val('');
         $('#txtPolicy').val('');
-        $('#txtContact').val('');
+        $('#txtPhoneNumber, #txtLandline, #txtEmailAddress, #txtOfficeAddress').val('');
     }
 
     function syncDeptHiddenFields() {
-        if (deptQuills.about && deptQuills.mission && deptQuills.vision && deptQuills.policy && deptQuills.contact) {
+        if (deptQuills.about && deptQuills.mission && deptQuills.vision && deptQuills.policy) {
             $('#txtAbout').val(deptQuills.about.root.innerHTML);
             $('#txtMission').val(deptQuills.mission.root.innerHTML);
             $('#txtVision').val(deptQuills.vision.root.innerHTML);
             $('#txtPolicy').val(deptQuills.policy.root.innerHTML);
-            $('#txtContact').val(deptQuills.contact.root.innerHTML);
         }
     }
 
@@ -227,6 +225,7 @@
         deptState.mode = 'add';
         deptState.record = null;
         clearDeptQuillContents();
+        $('#txtPhoneNumber').val('+63 9');
     }
 
     function renderDeptImagePreview($preview, file, fallbackHtml) {
@@ -289,7 +288,14 @@
             $('#txtHead').val(record.head || '');
             // Set hidden inputs (used for validation checks)
             $('#txtAbout').val(record.about || '');
-            $('#txtContact').val(record.contact || '');
+            $('#txtPhoneNumber').val(record.phone_number && departmentContactInputs
+                ? departmentContactInputs.formatMobile(record.phone_number)
+                : (record.phone_number || '+63 9'));
+            $('#txtLandline').val(record.landline && departmentContactInputs
+                ? departmentContactInputs.formatLandline(record.landline)
+                : (record.landline || ''));
+            $('#txtEmailAddress').val(record.email_address || '');
+            $('#txtOfficeAddress').val(record.office_address || '');
             $('#txtMission').val(record.mission || '');
             $('#txtVision').val(record.vision || '');
             $('#txtPolicy').val(record.quality_policy || '');
@@ -341,6 +347,10 @@
         initDeptQuills();
         syncDeptHiddenFields();
 
+        if (departmentContactInputs) {
+            departmentContactInputs.prepare('#txtPhoneNumber', '#txtLandline');
+        }
+
         const mode = ($('#deptMode').val() || 'add').toLowerCase();
         const form = $('#addForm')[0];
         const formData = new FormData(form);
@@ -349,7 +359,7 @@
 
         formData.set('id', $('#deptId').val());
 
-        if (!formData.get('txtDept') || !formData.get('txtHead') || !formData.get('txtMission') || !formData.get('txtVision') || !formData.get('txtPolicy') || !formData.get('txtContact')) {
+        if (!formData.get('txtDept') || !formData.get('txtHead') || !formData.get('txtMission') || !formData.get('txtVision') || !formData.get('txtPolicy')) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
@@ -361,13 +371,34 @@
         if (!deptQuills.about.root.innerHTML || deptQuills.about.root.innerHTML.trim() === '' || deptQuills.about.root.innerHTML === '<p><br></p>' ||
             !deptQuills.mission.root.innerHTML || deptQuills.mission.root.innerHTML.trim() === '' || deptQuills.mission.root.innerHTML === '<p><br></p>' ||
             !deptQuills.vision.root.innerHTML || deptQuills.vision.root.innerHTML.trim() === '' || deptQuills.vision.root.innerHTML === '<p><br></p>' ||
-            !deptQuills.policy.root.innerHTML || deptQuills.policy.root.innerHTML.trim() === '' || deptQuills.policy.root.innerHTML === '<p><br></p>' ||
-            !deptQuills.contact.root.innerHTML || deptQuills.contact.root.innerHTML.trim() === '' || deptQuills.contact.root.innerHTML === '<p><br></p>') {
+            !deptQuills.policy.root.innerHTML || deptQuills.policy.root.innerHTML.trim() === '' || deptQuills.policy.root.innerHTML === '<p><br></p>') {
             Swal.fire({
                 icon: 'warning',
                 title: 'Validation Error',
                 text: 'Please fill in all required fields.'
             });
+            return;
+        }
+
+        if (!formData.get('txtPhoneNumber') && !formData.get('txtLandline') &&
+            !formData.get('txtEmailAddress') && !formData.get('txtOfficeAddress')) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'Please provide at least one contact method.'
+            });
+            return;
+        }
+
+        if (formData.get('txtPhoneNumber') && departmentContactInputs &&
+            !departmentContactInputs.isValidMobile(formData.get('txtPhoneNumber'))) {
+            Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Phone Number must use the format +63 9XX XXX XXXX.' });
+            return;
+        }
+
+        if (formData.get('txtLandline') && departmentContactInputs &&
+            !departmentContactInputs.isValidLandline(formData.get('txtLandline'))) {
+            Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Landline must use (049) 123-4567 or (02) 1234-5678.' });
             return;
         }
 

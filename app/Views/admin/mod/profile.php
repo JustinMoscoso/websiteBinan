@@ -1,3 +1,5 @@
+<?= view('admin/js/philippine_contact_inputs') ?>
+
 <style>
     /* Responsive height for profile picture card */
     @media (min-width: 992px) {
@@ -576,10 +578,36 @@
 
                             <div class="col-12"><hr class="quill-divider"></div>
 
-                            <div class="col-12 quill-editor-wrapper">
-                                <label for="profileDeptContactEditor" class="form-label font-weight-bold">Contact Information</label>
-                                <div id="profileDeptContactEditor" style="height: 150px;"><?= $profile_department->contact ?? '' ?></div>
-                                <input type="hidden" id="profileDeptContact" name="contact" value="<?= esc($profile_department->contact ?? '') ?>">
+                            <div class="col-12 mb-4">
+                                <fieldset class="border rounded p-3 bg-light">
+                                    <legend class="float-none w-auto px-2 mb-2 h6 font-weight-bold">Contact Information</legend>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileDeptPhoneNumber" class="form-label font-weight-bold">Phone Number</label>
+                                            <input type="tel" class="form-control" id="profileDeptPhoneNumber" name="phoneNumber"
+                                                value="<?= esc($profile_department->phone_number ?? '') ?>" inputmode="tel"
+                                                maxlength="16" placeholder="+63 9XX XXX XXXX" <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileDeptLandline" class="form-label font-weight-bold">Landline</label>
+                                            <input type="tel" class="form-control" id="profileDeptLandline" name="landline"
+                                                value="<?= esc($profile_department->landline ?? '') ?>" inputmode="tel"
+                                                maxlength="15" placeholder="(049) 123-4567 or (02) 1234-5678" <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileDeptEmailAddress" class="form-label font-weight-bold">Email Address</label>
+                                            <input type="email" class="form-control" id="profileDeptEmailAddress" name="emailAddress"
+                                                value="<?= esc($profile_department->email_address ?? '') ?>" maxlength="255"
+                                                <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileDeptOfficeAddress" class="form-label font-weight-bold">Office Address</label>
+                                            <textarea class="form-control" id="profileDeptOfficeAddress" name="officeAddress" rows="2"
+                                                maxlength="500" <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>><?= esc($profile_department->office_address ?? '') ?></textarea>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted">Provide at least one contact method.</small>
+                                </fieldset>
                             </div>
 
                             <div class="col-12"><hr class="quill-divider"></div>
@@ -719,7 +747,7 @@
                             </div>
                         </div>
 
-                        <!-- Rich Text Editors for About, Mission, Vision, Contact, Staff -->
+                        <!-- Rich Text Editors for About, Mission, Vision, and Contact -->
                         <div class="row">
                             <div class="col-12"><hr class="quill-divider mt-2 mb-4"></div>
                             
@@ -756,24 +784,56 @@
 
                             <div class="col-12"><hr class="quill-divider"></div>
 
-                            <div class="col-12 quill-editor-wrapper">
-                                <label class="form-label font-weight-bold">Contact Information</label>
-                                <div id="profileBrgyContactEditor" style="height: 150px;">
-                                    <?= $profile_barangay->contact ?? '' ?>
-                                </div>
-                                <input type="hidden" id="profileBrgyContact" name="editContact"
-                                    value="<?= esc($profile_barangay->contact ?? '') ?>">
+                            <div class="col-12 mb-4">
+                                <fieldset class="border rounded p-3 bg-light">
+                                    <legend class="float-none w-auto px-2 mb-2 h6 font-weight-bold">Contact Information</legend>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileBrgyPhoneNumber" class="form-label font-weight-bold">Phone Number</label>
+                                            <input type="tel" class="form-control" id="profileBrgyPhoneNumber" name="editPhoneNumber"
+                                                value="<?= esc($profile_barangay->phone_number ?? '') ?>" inputmode="tel"
+                                                maxlength="16" placeholder="+63 9XX XXX XXXX" <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileBrgyLandline" class="form-label font-weight-bold">Landline</label>
+                                            <input type="tel" class="form-control" id="profileBrgyLandline" name="editLandline"
+                                                value="<?= esc($profile_barangay->landline ?? '') ?>" inputmode="tel"
+                                                maxlength="15" placeholder="(049) 123-4567 or (02) 1234-5678" <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileBrgyEmailAddress" class="form-label font-weight-bold">Email Address</label>
+                                            <input type="email" class="form-control" id="profileBrgyEmailAddress" name="editEmailAddress"
+                                                value="<?= esc($profile_barangay->email_address ?? '') ?>" maxlength="255"
+                                                <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileBrgyOfficeAddress" class="form-label font-weight-bold">Office Address</label>
+                                            <textarea class="form-control" id="profileBrgyOfficeAddress" name="editOfficeAddress" rows="2"
+                                                maxlength="500" <?= (($user->user_lvl ?? '') === 'VIEWER') ? 'disabled' : '' ?>><?= esc($profile_barangay->office_address ?? '') ?></textarea>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted">Provide at least one contact method.</small>
+                                </fieldset>
                             </div>
 
                             <div class="col-12"><hr class="quill-divider"></div>
 
                             <div class="col-12 quill-editor-wrapper mb-4">
-                                <label class="form-label font-weight-bold">Barangay Staff</label>
-                                <div id="profileBrgyStaffEditor" style="height: 180px;">
-                                    <?= $profile_barangay->barangay_staff ?? '' ?>
+                                <label for="profileBrgyOrgChart" class="form-label font-weight-bold">Organizational Chart</label>
+                                <?php if (($user->user_lvl ?? '') !== 'VIEWER'): ?>
+                                    <input type="file" class="form-control mb-2" id="profileBrgyOrgChart"
+                                        name="editbrgyOrgChart" accept="image/png,image/jpeg,image/gif,image/webp">
+                                    <small class="form-text text-muted mb-3">Accepted formats: PNG, JPG, JPEG, GIF, or WEBP. Maximum 4 MB.</small>
+                                <?php endif; ?>
+                                <div id="profileBrgyOrgChartPreview" class="border rounded p-3 bg-light text-center d-inline-block">
+                                    <?php if (!empty($profile_barangay->org_chart_img)): ?>
+                                        <img src="<?= site_url('admin/image/BARANGAY/' . $profile_barangay->org_chart_img) ?>"
+                                            alt="<?= esc($profile_barangay->brgy_name ?? 'Barangay') ?> organizational chart"
+                                            class="img-fluid" style="max-height: 250px;">
+                                    <?php else: ?>
+                                        <small class="text-muted d-block py-3">No organizational chart uploaded.</small>
+                                    <?php endif; ?>
                                 </div>
-                                <input type="hidden" id="profileBrgyStaff" name="editStaff"
-                                    value="<?= esc($profile_barangay->barangay_staff ?? '') ?>">
                             </div>
                         </div>
                         
