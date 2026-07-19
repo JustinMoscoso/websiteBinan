@@ -38,6 +38,38 @@
 			overflow-wrap: anywhere;
 		}
 
+		.newsevents .btn-readmore,
+		.newsevents #seeAllBtnNews,
+		.newsevents #seeAllBtnAnnouncements {
+			border-color: #388e3c !important;
+			background-color: transparent !important;
+			color: #2e7d32 !important;
+		}
+
+		.newsevents .btn-readmore:hover,
+		.newsevents .btn-readmore:focus,
+		.newsevents .btn-readmore:focus-visible,
+		.newsevents .btn-readmore:active,
+		.newsevents #seeAllBtnNews:hover,
+		.newsevents #seeAllBtnNews:focus,
+		.newsevents #seeAllBtnNews:focus-visible,
+		.newsevents #seeAllBtnNews:active,
+		.newsevents #seeAllBtnAnnouncements:hover,
+		.newsevents #seeAllBtnAnnouncements:focus,
+		.newsevents #seeAllBtnAnnouncements:focus-visible,
+		.newsevents #seeAllBtnAnnouncements:active {
+			border-color: #2e7d32 !important;
+			background-color: #2e7d32 !important;
+			color: #ffffff !important;
+		}
+
+		.newsevents .btn-readmore:focus-visible,
+		.newsevents #seeAllBtnNews:focus-visible,
+		.newsevents #seeAllBtnAnnouncements:focus-visible {
+			outline: 3px solid rgba(46, 125, 50, 0.32);
+			outline-offset: 2px;
+		}
+
 		@media (max-width: 767.98px) {
 			.mayor-fixed-row {
 				display: block;
