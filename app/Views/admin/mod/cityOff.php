@@ -17,7 +17,7 @@
                 <div class="row g-3 align-items-end">
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <label class="form-label small fw-bold text-secondary">Search Keyword</label>
+                        <label class="form-label small fw-bold text-secondary">Search Name / Postion</label>
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0" name="search"

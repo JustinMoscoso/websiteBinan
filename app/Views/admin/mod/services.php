@@ -31,7 +31,7 @@ $isEntityScopedAdmin = $isDeptScopedAdmin || $isBrgyScopedAdmin;
                 <div class="row g-3">
 
                     <div class="<?= !$isEntityScopedAdmin ? 'col-xl-4' : 'col-xl-9' ?> col-lg-6 col-md-12">
-                        <label for="service_name" class="form-label small fw-bold text-secondary">Title</label>
+                        <label for="service_name" class="form-label small fw-bold text-secondary">Search Title</label>
                         <div class="input-group">
                             <input type="text" class="form-control border-start-0" name="service_name" id="service_name"
                                 placeholder="Search Title" style="height: 38px;">

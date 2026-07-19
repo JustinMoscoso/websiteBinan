@@ -18,18 +18,18 @@
                 <div class="row g-3 align-items-end">
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <label class="form-label small fw-bold text-secondary">Publication Date</label>
+                        <label class="form-label small fw-bold text-secondary">Search Publication Date</label>
                         <div class="row g-2">
                             <div class="col-6">
                                 <select class="form-select bg-light border-secondary-subtle" id="careerSearchMonth"
                                     aria-label="Publication month">
-                                    <option value="">Month</option>
+                                    <option value="">Select Month</option>
                                 </select>
                             </div>
                             <div class="col-6">
                                 <select class="form-select bg-light border-secondary-subtle" id="careerSearchYear"
                                     aria-label="Publication year">
-                                    <option value="">Year</option>
+                                    <option value="">Select Year</option>
                                 </select>
                             </div>
                         </div>

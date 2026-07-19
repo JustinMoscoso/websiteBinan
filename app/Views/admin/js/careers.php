@@ -151,8 +151,8 @@
 
     function populateCareerDateSearchPicker() {
         var currentYear = new Date().getFullYear();
-        var monthOptions = '<option value="">Month</option>';
-        var yearOptions = '<option value="">Year</option>';
+        var monthOptions = '<option value="">Select Month</option>';
+        var yearOptions = '<option value="">Select Year</option>';
         var monthNames = [
             'January',
             'February',

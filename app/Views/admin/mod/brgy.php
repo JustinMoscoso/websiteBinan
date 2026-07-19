@@ -58,7 +58,7 @@
                 <div class="row g-3 align-items-end">
 
                     <div class="col-xl-4">
-                        <label class="form-label small fw-bold text-secondary">Search Query</label>
+                        <label class="form-label small fw-bold text-secondary">Search Barangay</label>
                         <div class="input-group">
 
                             <input type="text"  class="form-control" id="searchBrgy"

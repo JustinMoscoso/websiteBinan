@@ -16,7 +16,7 @@
                 <div class="row g-3 align-items-end">
 
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <label class="form-label small fw-bold text-secondary">Search Keyword</label>
+                        <label class="form-label small fw-bold text-secondary">Search Title</label>
                         <div class="input-group">
 
                             <input type="text" class="form-control border-start-0" name="search"
@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="TxtTitle" id="TxtTitleLabel" class="form-label small fw-bold text-secondary">Title <span
+                        <label for="TxtTitle" id="TxtTitleLabel" class="form-label small fw-bold text-secondary">Search Title <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="TxtTitle" name="TxtTitle"
                             placeholder="Enter headline/header title" required>

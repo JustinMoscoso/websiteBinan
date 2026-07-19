@@ -28,7 +28,7 @@
                     <!-- Category -->
                     <div class="col-xl-4 col-lg-6">
                         <label class="form-label small fw-bold text-secondary">
-                            Category
+                            Search Category
                         </label>
 
                         <select class="form-control form-select bg-light border-secondary-subtle" name="file_category"
