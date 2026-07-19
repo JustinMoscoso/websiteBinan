@@ -153,6 +153,52 @@
                     </div>
 
                     <div class="col-12">
+                        <div id="HotlineFieldsGroup" class="row g-3" style="display: none;">
+                            <div class="col-12 mt-2 mb-0">
+                                <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-0">
+                                    Hotline Numbers
+                                </h6>
+                                <div class="form-text">Enter at least one contact number.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="HotlineSmart" class="form-label small fw-bold text-secondary">SMART</label>
+                                <input type="text" class="form-control shadow-sm hotline-phone-input"
+                                    id="HotlineSmart" name="hotline_smart" placeholder="+63 9XX XXX XXXX"
+                                    inputmode="tel" maxlength="16" autocomplete="tel">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="HotlineGlobe" class="form-label small fw-bold text-secondary">GLOBE</label>
+                                <input type="text" class="form-control shadow-sm hotline-phone-input"
+                                    id="HotlineGlobe" name="hotline_globe" placeholder="+63 9XX XXX XXXX"
+                                    inputmode="tel" maxlength="16" autocomplete="tel">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="HotlineIntelco" class="form-label small fw-bold text-secondary">INTELCO</label>
+                                <input type="text" class="form-control shadow-sm hotline-phone-input"
+                                    id="HotlineIntelco" name="hotline_intelco" placeholder="(049) 123-4567"
+                                    inputmode="tel" maxlength="15" autocomplete="tel">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="HotlinePldt" class="form-label small fw-bold text-secondary">PLDT</label>
+                                <input type="text" class="form-control shadow-sm hotline-phone-input"
+                                    id="HotlinePldt" name="hotline_pldt" placeholder="(049) 123-4567"
+                                    inputmode="tel" maxlength="15" autocomplete="tel">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="HotlineDito" class="form-label small fw-bold text-secondary">DITO</label>
+                                <input type="text" class="form-control shadow-sm hotline-phone-input"
+                                    id="HotlineDito" name="hotline_dito" placeholder="+63 9XX XXX XXXX"
+                                    inputmode="tel" maxlength="16" autocomplete="tel">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
                         <div id="AboutImgGrp" style="display: none;">
                             <label for="AboutImg" class="form-label small fw-bold text-secondary"
                                 id="AboutImgLabel">Feature Illustration /

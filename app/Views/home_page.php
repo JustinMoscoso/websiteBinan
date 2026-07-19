@@ -293,42 +293,105 @@
 
 			</div>
 
-			<div class="row g-3 hotline-grid-wrapper">
+			<div class="hotline-grid-wrapper">
 
 				<?php if (!empty($emergency_hotlines)): ?>
+
+				<?php
+					$parseHotlineNumbers = static function ($description): array {
+						$blocks = preg_split(
+							'/(?:<\/p>|<br\s*\/?>|<\/div>|<\/li>)/i',
+							(string) $description,
+							-1,
+							PREG_SPLIT_NO_EMPTY
+						);
+						$numbers = [];
+
+						foreach ($blocks as $block) {
+							$text = trim(html_entity_decode(strip_tags($block), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+							$text = preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $text);
+
+							if (!preg_match('/^([^:]{1,24}):\s*(.+)$/u', $text, $matches)) {
+								continue;
+							}
+
+							$label = trim($matches[1]);
+							$number = preg_replace('/[^0-9]+$/u', '', trim($matches[2]));
+							$digits = preg_replace('/\D+/', '', $number);
+
+							if ($label !== '' && strlen($digits) >= 7) {
+								$numbers[] = compact('label', 'number');
+							}
+						}
+
+						return $numbers;
+					};
+				?>
 
 				<?php foreach ($emergency_hotlines as $hotline): ?>
 					<?php
 						$icon = 'fas fa-phone-alt';
 						$image = 'assets/img/binanlogo.png';
+						$phoneNumbers = $parseHotlineNumbers($hotline->description);
+						$agencyType = 'civic';
 
 						if (!empty($hotline->about_img)) {
 							$image = 'admin/image/ABOUT/' . $hotline->about_img;
-						} elseif (stripos($hotline->title, 'Police') !== false) {
+						}
+
+						if (stripos($hotline->title, 'Police') !== false || stripos($hotline->title, 'PNP') !== false) {
 							$icon = 'fas fa-shield-alt';
-							$image = 'assets/img/Emergency_Hotline/PNP.png';
-						} elseif (stripos($hotline->title, 'Fire') !== false) {
+							$agencyType = 'police';
+							if (empty($hotline->about_img)) {
+								$image = 'assets/img/Emergency_Hotline/PNP.png';
+							}
+						} elseif (stripos($hotline->title, 'Fire') !== false || stripos($hotline->title, 'BFP') !== false) {
 							$icon = 'fas fa-fire-extinguisher';
-							$image = 'assets/img/Emergency_Hotline/BFP.png';
-						} elseif (stripos($hotline->title, 'Hospital') !== false) {
+							$agencyType = 'fire';
+							if (empty($hotline->about_img)) {
+								$image = 'assets/img/Emergency_Hotline/BFP.png';
+							}
+						} elseif (stripos($hotline->title, 'Hospital') !== false || stripos($hotline->title, 'BCH') !== false) {
 							$icon = 'fas fa-hospital';
-							$image = 'assets/img/Emergency_Hotline/BCH.png';
-						} elseif (stripos($hotline->title, 'Disaster') !== false) {
+							$agencyType = 'health';
+							if (empty($hotline->about_img)) {
+								$image = 'assets/img/Emergency_Hotline/BCH.png';
+							}
+						} elseif (stripos($hotline->title, 'Disaster') !== false || stripos($hotline->title, 'CDRRMO') !== false) {
 							$icon = 'fas fa-exclamation-triangle';
-							$image = 'assets/img/Emergency_Hotline/BCDRRM.png';
+							$agencyType = 'disaster';
+							if (empty($hotline->about_img)) {
+								$image = 'assets/img/Emergency_Hotline/BCDRRM.png';
+							}
+						} elseif (stripos($hotline->title, 'Social Welfare') !== false || stripos($hotline->title, 'CSWD') !== false) {
+							$agencyType = 'welfare';
 						}
 						?>
 
-						<div class="col-lg-6 col-12">
-							<article class="hotline-card h-100">
-								<div class="hotline-logo-box">
-									<img src="<?= base_url($image) ?>" alt="<?= esc($hotline->title) ?> logo" class="hotline-logo">
-								</div>
-								<div class="hotline-card-content hotline-card-title">
+						<div class="hotline-card-slot">
+							<article class="hotline-card hotline-card--<?= esc($agencyType) ?> h-100">
+								<header class="hotline-card-header">
+									<div class="hotline-logo-box">
+										<img src="<?= base_url($image) ?>" alt="Official seal of <?= esc($hotline->title) ?>" class="hotline-logo">
+									</div>
 									<h3 class="hotline-title"><?= esc($hotline->title) ?></h3>
-								</div>
+								</header>
 								<div class="hotline-card-content hotline-card-numbers">
-									<div class="hotline-description"><?= $hotline->description ?></div>
+									<?php if (!empty($phoneNumbers)): ?>
+										<table class="hotline-number-table">
+											<caption class="visually-hidden">Phone numbers for <?= esc($hotline->title) ?></caption>
+											<tbody>
+											<?php foreach ($phoneNumbers as $phone): ?>
+												<tr>
+													<th scope="row" class="hotline-carrier"><span class="hotline-carrier-badge"><?= esc($phone['label']) ?></span></th>
+													<td class="hotline-number"><?= esc($phone['number']) ?></td>
+												</tr>
+											<?php endforeach; ?>
+											</tbody>
+										</table>
+									<?php else: ?>
+										<div class="hotline-description"><?= esc(strip_tags($hotline->description)) ?></div>
+									<?php endif; ?>
 								</div>
 							</article>
 
@@ -578,7 +641,7 @@
 		.hotline-section {
 			padding: 72px 0 !important;
 			background:
-				linear-gradient(to bottom, rgba(34, 70, 34, 0.92), rgba(18, 55, 42, 0.82)),
+				linear-gradient(to bottom, rgba(27, 63, 35, 0.96), rgba(13, 45, 34, 0.91)),
 				url('<?= base_url("assets/img/hero3.jpg") ?>') center / cover no-repeat !important;
 			border-top: 1px solid #214d3d;
 			border-bottom: 1px solid #0b291f;
@@ -658,24 +721,57 @@
 			box-shadow: 0 0 0 4px rgba(46, 175, 69, 0.14);
 		}
 
+		.hotline-grid-wrapper {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 18px;
+			align-items: stretch;
+			justify-content: start;
+		}
+
+		.hotline-card-slot {
+			grid-column: auto;
+			min-width: 0;
+		}
+
 		.hotline-card {
+			--hotline-accent: #2f7d4a;
 			position: relative;
 			overflow: hidden !important;
-			display: grid;
-			grid-template-columns: 82px minmax(0, 1fr);
-			grid-template-rows: 52px minmax(0, 1fr);
-			align-items: center;
-			column-gap: 16px;
-			min-height: 176px !important;
-			padding: 18px 26px !important;
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			justify-content: flex-start;
+			min-height: 0 !important;
+			padding: 20px 22px !important;
 			border: 1px solid rgba(198, 226, 198, 0.9);
-			border-radius: 30px !important;
+			border-top: 5px solid var(--hotline-accent);
+			border-radius: 18px !important;
 			background-color: rgba(244, 249, 242, 0.96) !important;
-			background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(222, 239, 219, 0.96)) !important;
+			background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(226, 241, 223, 0.97)) !important;
 			box-shadow: 0 10px 24px rgba(4, 35, 23, 0.22);
 			backdrop-filter: blur(10px);
 			-webkit-backdrop-filter: blur(10px);
-			transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+		}
+
+		.hotline-card--disaster {
+			--hotline-accent: #d97706;
+		}
+
+		.hotline-card--health {
+			--hotline-accent: #0f8a6a;
+		}
+
+		.hotline-card--police {
+			--hotline-accent: #2563a6;
+		}
+
+		.hotline-card--fire {
+			--hotline-accent: #c2413b;
+		}
+
+		.hotline-card--welfare {
+			--hotline-accent: #7a5aa6;
 		}
 
 		.hotline-card::after {
@@ -683,12 +779,7 @@
 		}
 
 		.hotline-card:hover {
-			transform: translateY(-2px);
-			border-color: #80b98a;
-			border-left-color: #f0b429;
-			background-color: #ffffff !important;
-			background-image: linear-gradient(135deg, #ffffff, #e7f3e4) !important;
-			box-shadow: 0 16px 32px rgba(1, 31, 19, 0.3);
+			transform: none;
 		}
 
 		.hotline-card:hover::after {
@@ -698,15 +789,15 @@
 		.hotline-logo-box {
 			position: relative;
 			z-index: 1;
-			grid-row: 1 / 3;
-			width: 80px;
-			height: 80px;
+			width: 64px;
+			height: 64px;
 			margin: 0;
-			padding: 10px;
+			padding: 8px;
 			border: 2px solid rgba(71, 137, 82, 0.3);
 			border-radius: 50%;
 			background: rgba(255, 255, 255, 0.92);
 			box-shadow: 0 5px 14px rgba(18, 73, 45, 0.16);
+			flex: 0 0 64px;
 		}
 
 		.hotline-logo {
@@ -722,23 +813,30 @@
 			min-width: 0;
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-start;
 			padding: 0;
 			border: 0;
 		}
 
-		.hotline-card-title {
-			align-self: center;
-			padding: 0;
-			border-bottom: 0;
+		.hotline-card-header {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			min-height: 78px;
+			margin: 0;
+			padding-bottom: 14px;
+			border-bottom: 1px solid rgba(64, 91, 72, 0.2);
 		}
 
 		.hotline-card-numbers {
-			align-self: start;
-			justify-content: center;
-			margin-top: 4px;
+			align-self: stretch;
+			align-items: stretch;
+			flex-direction: column;
+			justify-content: flex-start;
+			margin-top: 14px;
 			min-height: 0;
-			padding: 4px 0 0;
+			width: 100%;
+			padding: 0;
 			border: 0;
 			border-radius: 0;
 			background: transparent !important;
@@ -747,10 +845,10 @@
 		.hotline-title {
 			margin: 0;
 			color: #163f2b !important;
-			font-size: 0.92rem;
+			font-size: 0.86rem;
 			font-weight: 750;
 			line-height: 1.35;
-			text-align: center;
+			text-align: left;
 		}
 
 		.hotline-description,
@@ -769,6 +867,57 @@
 
 		.hotline-description p:last-child {
 			margin-bottom: 0;
+		}
+
+		.hotline-number-table {
+			width: 100%;
+			margin: 0;
+			border-collapse: collapse;
+			table-layout: fixed;
+		}
+
+		.hotline-number-table th,
+		.hotline-number-table td {
+			height: 31px;
+			padding: 4px 0;
+			vertical-align: middle;
+		}
+
+		.hotline-btn:focus-visible {
+			outline: 3px solid #b45309;
+			outline-offset: 2px;
+		}
+
+		.hotline-carrier {
+			width: 76px;
+			padding-right: 12px !important;
+			text-align: left;
+		}
+
+		.hotline-carrier-badge {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 54px;
+			padding: 4px 8px;
+			border: 1px solid rgba(55, 83, 64, 0.12);
+			border-radius: 999px;
+			background: rgba(43, 69, 51, 0.09);
+			color: #405748;
+			font-size: 0.62rem;
+			font-weight: 750;
+			letter-spacing: 0.045em;
+			line-height: 1;
+			text-transform: uppercase;
+		}
+
+		.hotline-number {
+			color: #0b5631;
+			font-size: 0.98rem;
+			font-weight: 800;
+			line-height: 1.25;
+			text-align: left;
+			white-space: nowrap;
 		}
 
 		.hotline-phone-icon {
@@ -813,6 +962,16 @@
 			text-align: center;
 		}
 
+		@media (max-width: 991px) {
+			.hotline-grid-wrapper {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+
+			.hotline-card-slot {
+				grid-column: auto;
+			}
+		}
+
 		@media (max-width: 767px) {
 			.hotline-section {
 				padding: 52px 0 !important;
@@ -827,34 +986,38 @@
 				white-space: normal;
 			}
 
+			.hotline-grid-wrapper {
+				grid-template-columns: 1fr;
+				gap: 14px;
+			}
+
+			.hotline-card-slot {
+				grid-column: 1;
+				width: 100%;
+			}
+
 			.hotline-card {
-				grid-template-columns: 72px minmax(0, 1fr);
-				grid-template-rows: auto;
-				align-items: center;
-				column-gap: 12px;
-				min-height: 0;
-				padding: 14px;
+				min-height: 0 !important;
+				padding: 16px 18px !important;
+			}
+
+			.hotline-card-header {
+				min-height: 64px;
+				gap: 12px;
 			}
 
 			.hotline-logo-box {
-				grid-row: auto;
-				width: 68px;
-				height: 72px;
-				padding: 8px;
-			}
-
-			.hotline-card-title {
-				align-self: center;
-				padding: 0;
-				border-bottom: 0;
+				width: 56px;
+				height: 56px;
+				flex-basis: 56px;
 			}
 
 			.hotline-card-numbers {
-				grid-column: 1 / -1;
-				justify-content: center;
-				margin-top: 10px;
-				padding: 4px 0 0;
-				border: 0;
+				margin-top: 12px;
+			}
+
+			.hotline-carrier {
+				width: 82px;
 			}
 		}
 	</style>

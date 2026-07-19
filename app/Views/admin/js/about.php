@@ -105,6 +105,188 @@
         }
     }
 
+	function formatHotlineMobile(value) {
+		var raw = String(value || '').trim();
+		if (!raw) {
+			return '';
+		}
+
+		var digits = raw.replace(/\D/g, '');
+		if (!digits) {
+			return raw;
+		}
+
+		if (digits.startsWith('63')) {
+			digits = digits.slice(2);
+		} else if (digits.startsWith('0')) {
+			digits = digits.slice(1);
+		}
+
+		digits = digits.slice(0, 10);
+		if (!digits) {
+			return '+63';
+		}
+
+		var formatted = '+63 ' + digits.slice(0, 3);
+		if (digits.length > 3) {
+			formatted += ' ' + digits.slice(3, 6);
+		}
+		if (digits.length > 6) {
+			formatted += ' ' + digits.slice(6, 10);
+		}
+
+		return formatted;
+	}
+
+	function formatHotlineLandline(value) {
+		var raw = String(value || '').trim();
+		if (!raw) {
+			return '';
+		}
+
+		var digits = raw.replace(/\D/g, '');
+		if (!digits) {
+			return '';
+		}
+
+		if (digits.startsWith('63') && digits.length > 2) {
+			digits = digits.slice(2);
+		}
+
+		if (digits.startsWith('049')) {
+			var provincialSubscriber = digits.slice(3, 10);
+			if (digits.length <= 3) {
+				return '(049)';
+			}
+			if (provincialSubscriber.length <= 3) {
+				return '(049) ' + provincialSubscriber;
+			}
+			return '(049) ' + provincialSubscriber.slice(0, 3) + '-' + provincialSubscriber.slice(3);
+		}
+
+		if (digits.startsWith('02')) {
+			var metroSubscriber = digits.slice(2, 10);
+			if (digits.length <= 2) {
+				return '(02)';
+			}
+			if (metroSubscriber.length <= 4) {
+				return '(02) ' + metroSubscriber;
+			}
+			return '(02) ' + metroSubscriber.slice(0, 4) + '-' + metroSubscriber.slice(4);
+		}
+
+		return raw;
+	}
+
+	function isValidHotlineMobile(value) {
+		return /^\+63\s9\d{2}\s\d{3}\s\d{4}$/.test(String(value || '').trim());
+	}
+
+	function isValidHotlineLandline(value) {
+		var normalized = String(value || '').trim();
+		return /^\(049\)\s\d{3}-\d{4}$/.test(normalized)
+			|| /^\(02\)\s\d{4}-\d{4}$/.test(normalized);
+	}
+
+	function setHotlineMobilePrefixes() {
+		$('#HotlineSmart, #HotlineGlobe, #HotlineDito').each(function () {
+			if (!this.value) {
+				this.value = '+63 9';
+			}
+		});
+	}
+
+	$(document).on('input blur', '#HotlineSmart, #HotlineGlobe, #HotlineDito', function () {
+		this.value = formatHotlineMobile(this.value);
+	});
+
+	$(document).on('keydown', '#HotlineIntelco, #HotlinePldt', function (event) {
+		var allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+		if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey || /^\d$/.test(event.key)) {
+			return;
+		}
+		event.preventDefault();
+	});
+
+	$(document).on('input blur', '#HotlineIntelco, #HotlinePldt', function () {
+		this.value = formatHotlineLandline(this.value);
+	});
+
+    var hotlineFieldMap = {
+        SMART: '#HotlineSmart',
+        GLOBE: '#HotlineGlobe',
+        INTELCO: '#HotlineIntelco',
+        PLDT: '#HotlinePldt',
+        DITO: '#HotlineDito'
+    };
+
+    function escapeHotlineHtml(value) {
+        return $('<div>').text(String(value || '')).html();
+    }
+
+    function buildHotlineDescription() {
+        var lines = [];
+
+        Object.keys(hotlineFieldMap).forEach(function (label) {
+            var value = $(hotlineFieldMap[label]).val().trim();
+			if ((label === 'SMART' || label === 'GLOBE' || label === 'DITO') && value === '+63 9') {
+				return;
+			}
+            if (value) {
+                lines.push('<p><strong>' + label + ':</strong> ' + escapeHotlineHtml(value) + '</p>');
+            }
+        });
+
+        return lines.join('');
+    }
+
+    function populateHotlineFields(description) {
+        $('.hotline-phone-input').val('');
+
+        var container = document.createElement('div');
+        container.innerHTML = description || '';
+        var blocks = container.querySelectorAll('p, div, li');
+
+        if (!blocks.length && container.textContent.trim()) {
+            blocks = [container];
+        }
+
+        Array.prototype.forEach.call(blocks, function (block) {
+            var text = (block.textContent || '').replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+            var match = text.match(/^([^:]{1,24}):\s*(.+)$/);
+            if (!match) {
+                return;
+            }
+
+            var label = match[1].trim().toUpperCase();
+            if (hotlineFieldMap[label]) {
+				var value = match[2].trim().replace(/[^0-9]+$/, '');
+				var isMobile = label === 'SMART' || label === 'GLOBE' || label === 'DITO';
+				$(hotlineFieldMap[label]).val(isMobile
+					? formatHotlineMobile(value)
+					: formatHotlineLandline(value));
+            }
+        });
+    }
+
+    function syncDescriptionUI(selectedCategory) {
+        var isEmergencyHotline = selectedCategory === 'Emergency Hotlines';
+        var usesQuill = selectedCategory === 'Content'
+            || selectedCategory === 'Home Page'
+            || selectedCategory === 'History';
+
+        $('#HotlineFieldsGroup').css('display', isEmergencyHotline ? 'flex' : 'none');
+        $('#DescGroup').toggle(usesQuill);
+
+		if (isEmergencyHotline) {
+			setHotlineMobilePrefixes();
+		}
+
+        if (usesQuill && !QuillManager.getQuillInstance('aboutDesc')) {
+            QuillManager.initQuillEditor('quillDesc', 'aboutDesc');
+        }
+    }
+
     $('#HistoryYearPicker').on('change', function () {
         $('#TxtTitle').val($(this).val());
     });
@@ -113,15 +295,7 @@
         var selectedCategory = $(this).val();
         syncTitleFieldUI(selectedCategory);
         syncAboutImageUI(selectedCategory);
-
-        if (selectedCategory === 'Content' || selectedCategory === 'Home Page' || selectedCategory === 'Emergency Hotlines' || selectedCategory === 'History') {
-            $('#DescGroup').show();
-            if (!QuillManager.getQuillInstance('aboutDesc')) {
-                QuillManager.initQuillEditor('quillDesc', 'aboutDesc');
-            }
-        } else {
-            $('#DescGroup').hide();
-        }
+        syncDescriptionUI(selectedCategory);
     });
 
     function resetAboutModal() {
@@ -130,7 +304,7 @@
         $('#recordModalTitle').text('Add Record');
         $('#btnAddLabel').text('Save');
         $('#addForm')[0].reset();
-        $('#DescGroup, #AboutImgGrp').hide();
+        $('#DescGroup, #AboutImgGrp, #HotlineFieldsGroup').hide();
         $('#AboutImgLabel').text('Feature Illustration / Banner Image');
         $('#edit_img_preview').addClass('d-none').html('');
         syncTitleFieldUI('');
@@ -160,7 +334,14 @@
             }
             $('#addTxtDesc').val(record.description || '');
 
+            if (record.section === 'Emergency Hotlines') {
+                populateHotlineFields(record.description || '');
+            }
+
             $('#addModal').one('shown.bs.modal', function () {
+				if (record.section === 'Emergency Hotlines') {
+					return;
+				}
                 if (!QuillManager.getQuillInstance('aboutDesc')) {
                     QuillManager.initQuillEditor('quillDesc', 'aboutDesc');
                 }
@@ -187,10 +368,15 @@
         event.preventDefault();
         QuillManager.updateQuillFormContent();
 
+		var selectedCategory = $('#content_category').val();
+		if (selectedCategory === 'Emergency Hotlines') {
+			$('#addTxtDesc').val(buildHotlineDescription());
+		}
+
         var mode = $('#recordMode').val();
         var form = $('#addForm')[0];
         var formData = new FormData(form);
-        var selectedCategory = formData.get('content_category');
+		selectedCategory = formData.get('content_category');
 
         if (selectedCategory === 'History') {
             $('#TxtTitle').val($('#HistoryYearPicker').val());
@@ -234,9 +420,36 @@
             }
         } else if (selectedCategory === 'Emergency Hotlines') {
             if (!description) {
-                Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter a description.' });
+				Swal.fire({ icon: 'warning', title: 'Validation Error', text: 'Please enter at least one hotline number.' });
                 return;
             }
+
+			var mobileFields = [
+				{ selector: '#HotlineSmart', label: 'SMART' },
+				{ selector: '#HotlineGlobe', label: 'GLOBE' },
+				{ selector: '#HotlineDito', label: 'DITO' }
+			];
+			for (var mobileIndex = 0; mobileIndex < mobileFields.length; mobileIndex++) {
+				var mobileField = mobileFields[mobileIndex];
+				var mobileValue = $(mobileField.selector).val().trim();
+				if (mobileValue && mobileValue !== '+63 9' && !isValidHotlineMobile(mobileValue)) {
+					Swal.fire({ icon: 'warning', title: 'Validation Error', text: mobileField.label + ' must be in the format +63 9XX XXX XXXX.' });
+					return;
+				}
+			}
+
+			var landlineFields = [
+				{ selector: '#HotlineIntelco', label: 'INTELCO' },
+				{ selector: '#HotlinePldt', label: 'PLDT' }
+			];
+			for (var landlineIndex = 0; landlineIndex < landlineFields.length; landlineIndex++) {
+				var landlineField = landlineFields[landlineIndex];
+				var landlineValue = $(landlineField.selector).val().trim();
+				if (landlineValue && !isValidHotlineLandline(landlineValue)) {
+					Swal.fire({ icon: 'warning', title: 'Validation Error', text: landlineField.label + ' must be in the format (049) 123-4567 or (02) 1234-5678.' });
+					return;
+				}
+			}
             if (imageFile && imageFile.size > 0) {
                 const maxImageSizeMB = 4;
                 if (imageFile.size > maxImageSizeMB * 1024 * 1024) {

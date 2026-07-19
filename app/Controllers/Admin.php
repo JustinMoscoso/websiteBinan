@@ -2879,6 +2879,17 @@ class Admin extends BaseController
                 $maxmb = 4;
                 $allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
+				if ($section === 'Emergency Hotlines') {
+					$hotlineDescription = $this->buildEmergencyHotlineDescription();
+					if ($hotlineDescription['provided']) {
+						if ($hotlineDescription['error'] !== null) {
+							$message = $hotlineDescription['error'];
+							break;
+						}
+						$description = $hotlineDescription['description'];
+					}
+				}
+
                 if ($section === 'History' && !preg_match('/^\d{4}$/', (string) $title)) {
                     $message = 'Please select a valid history year.';
                     break;
@@ -4168,6 +4179,17 @@ class Admin extends BaseController
                 $title = $this->request->getPost('EditTxtTitle');
                 $description = $this->request->getPost('EditTxtDesc');
 
+				if ($section === 'Emergency Hotlines') {
+					$hotlineDescription = $this->buildEmergencyHotlineDescription();
+					if ($hotlineDescription['provided']) {
+						if ($hotlineDescription['error'] !== null) {
+							$message = $hotlineDescription['error'];
+							break;
+						}
+						$description = $hotlineDescription['description'];
+					}
+				}
+
                 if ($section === 'History' && !preg_match('/^\d{4}$/', (string) $title)) {
                     $message = 'Please select a valid history year.';
                     break;
@@ -5426,6 +5448,65 @@ class Admin extends BaseController
 
         return $builder->countAllResults() > 0;
     }
+
+	private function buildEmergencyHotlineDescription(): array
+	{
+		$fields = [
+			'hotline_smart' => ['label' => 'SMART', 'type' => 'mobile'],
+			'hotline_globe' => ['label' => 'GLOBE', 'type' => 'mobile'],
+			'hotline_intelco' => ['label' => 'INTELCO', 'type' => 'landline'],
+			'hotline_pldt' => ['label' => 'PLDT', 'type' => 'landline'],
+			'hotline_dito' => ['label' => 'DITO', 'type' => 'mobile'],
+		];
+		$provided = false;
+		$lines = [];
+
+		foreach ($fields as $field => $config) {
+			$label = $config['label'];
+			$value = $this->request->getPost($field);
+			if ($value !== null) {
+				$provided = true;
+			}
+
+			$value = trim((string) $value);
+			if ($value === '' || ($config['type'] === 'mobile' && $value === '+63 9')) {
+				continue;
+			}
+
+			$isValid = $config['type'] === 'mobile'
+				? (bool) preg_match('/^\+63\s9\d{2}\s\d{3}\s\d{4}$/', $value)
+				: ((bool) preg_match('/^\(049\)\s\d{3}-\d{4}$/', $value)
+					|| (bool) preg_match('/^\(02\)\s\d{4}-\d{4}$/', $value));
+
+			if (!$isValid) {
+				$format = $config['type'] === 'mobile'
+					? '+63 9XX XXX XXXX'
+					: '(049) 123-4567 or (02) 1234-5678';
+				return [
+					'provided' => true,
+					'description' => '',
+					'error' => $label . ' must be in the format ' . $format . '.',
+				];
+			}
+
+			$escapedValue = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+			$lines[] = '<p><strong>' . $label . ':</strong> ' . $escapedValue . '</p>';
+		}
+
+		if ($provided && $lines === []) {
+			return [
+				'provided' => true,
+				'description' => '',
+				'error' => 'Please enter at least one hotline number.',
+			];
+		}
+
+		return [
+			'provided' => $provided,
+			'description' => implode('', $lines),
+			'error' => null,
+		];
+	}
 
     private function aboutSlotHasActiveEntry($aboutModel, ?string $section, ?string $title, ?int $excludeId = null): bool
     {
