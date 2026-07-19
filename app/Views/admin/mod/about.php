@@ -158,7 +158,7 @@
                                 <h6 class="small text-uppercase fw-bold text-muted border-bottom pb-2 mb-0">
                                     Hotline Numbers
                                 </h6>
-                                <div class="form-text">Enter at least one contact number.</div>
+                                <div class="form-text"></div>
                             </div>
 
                             <div class="col-md-6">
