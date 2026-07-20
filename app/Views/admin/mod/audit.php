@@ -366,7 +366,7 @@ $auditDefaultYearLabel = $auditDefaultYearStart . '-' . $auditDefaultYearEnd;
         <div class="card-body p-4">
             <h6 class="fw-bold mb-3 small text-uppercase tracking-wider text-secondary">
                 <i class="bi bi-terminal-split me-2" style="color: var(--theme-mid-green);"></i>
-                Filter Audit Logs
+                
             </h6>
             <form id="auditLogSearchForm">
                 <div class="row g-3 align-items-center">
