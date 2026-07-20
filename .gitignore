@@ -2,7 +2,6 @@
 /writable/debugbar/
 /writable/session/
 /writable/logs/
-/writable/uploads/
 /writable/cache/
 
 # Environment files
