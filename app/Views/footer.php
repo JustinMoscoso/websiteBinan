@@ -92,7 +92,7 @@
                             $gov_links = [
                                 'Office of the President' => 'https://op-proper.gov.ph/',
                                 'Office of the Vice President' => 'https://www.ovp.gov.ph/',
-                                'Senate of the Philippines' => 'https://legacy.senate.gov.ph/',
+                                'Senate of the Philippines' => 'https://senate.gov.ph/',
                                 'House of Representatives' => 'https://www.congress.gov.ph/',
                                 'Supreme Court' => 'https://sc.judiciary.gov.ph/',
                                 'Court of Appeals' => 'https://ca.judiciary.gov.ph/',

@@ -359,12 +359,26 @@
 
 						return $numbers;
 					};
+
+					$splitHotlineTitle = static function ($fullTitle): array {
+						$fullTitle = trim((string) $fullTitle);
+
+						if (preg_match('/^(.*?)\s*\((.*)\)\s*$/u', $fullTitle, $matches)) {
+							return [
+								'acronym' => trim($matches[1]),
+								'full' => trim($matches[2]),
+							];
+						}
+
+						return ['acronym' => $fullTitle, 'full' => null];
+					};
 				?>
 
 				<?php foreach ($emergency_hotlines as $hotline): ?>
 					<?php
 						$image = 'assets/img/binanlogo.png';
 						$phoneNumbers = $parseHotlineNumbers($hotline->description);
+						$titleParts = $splitHotlineTitle($hotline->title);
 
 						if (!empty($hotline->about_img)) {
 							$image = 'admin/image/ABOUT/' . $hotline->about_img;
@@ -395,7 +409,12 @@
 									<div class="hotline-logo-box">
 										<img src="<?= base_url($image) ?>" alt="Official seal of <?= esc($hotline->title) ?>" class="hotline-logo">
 									</div>
-									<h3 class="hotline-title"><?= esc($hotline->title) ?></h3>
+									<h3 class="hotline-title">
+										<span class="hotline-acronym"><?= esc($titleParts['acronym']) ?></span>
+										<?php if ($titleParts['full'] !== null && $titleParts['full'] !== ''): ?>
+											<span class="hotline-full-name"><?= esc($titleParts['full']) ?></span>
+										<?php endif; ?>
+									</h3>
 								</header>
 								<div class="hotline-card-content hotline-card-numbers">
 									<?php if (!empty($phoneNumbers)): ?>
@@ -731,10 +750,24 @@
 		.hotline-title {
 			margin: 0;
 			color: #163f2b !important;
-			font-size: 0.86rem;
-			font-weight: 750;
 			line-height: 1.35;
 			text-align: left;
+		}
+
+		.hotline-acronym {
+			display: block;
+			font-size: 1rem;
+			font-weight: 700;
+		}
+
+		.hotline-full-name {
+			display: block;
+			margin-top: 2px;
+			color: #5b6f63;
+			font-size: 0.85rem;
+			font-weight: 400;
+			line-height: 1.35;
+			opacity: 0.75;
 		}
 
 		.hotline-description,

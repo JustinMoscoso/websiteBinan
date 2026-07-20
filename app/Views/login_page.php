@@ -169,17 +169,12 @@
           style="width: 170px; max-height: 170px; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.3));" alt="Biñan Logo">
 
         <div class="text-center d-flex flex-column align-items-center w-100" style="max-width: 280px;">
-          <span
-            style="font-size: 15px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: rgba(255, 255, 255, 0.8); letter-spacing: 1px; line-height: 1.2;">
-            REPUBLIC OF THE PHILIPPINES
-          </span>
-
-          <hr style="width: 100%; margin: 6px 0; border: none; border-top: 2px solid rgba(255, 255, 255, 0.4);">
-
-          <span
-            style="font-size: 15px; font-family: 'Gill Sans', sans-serif; font-weight: 900; color: rgba(255, 255, 255, 0.8); letter-spacing: 0.5px; line-height: 1.2;">
-            CITY GOVERNMENT OF BIÑAN
-          </span>
+            <span style="font-size: 12px; font-family: 'Gill Sans'; font-weight: 900; color: #ffffffff;">REPUBLIC OF THE
+          PHILIPPINES</span>
+        <hr style="width: 100%; margin: 1px 0; border: none; border-top: 2px solid #ffffffff;">
+        <!-- Adjust the margin and border-top color as needed -->
+        <span style="font-size: 14px; font-family: 'Gill Sans'; font-weight: 900; color: #ffffffff;">CITY GOVERNMENT OF
+          BIÑAN</span>
 
 
         </div>
@@ -221,9 +216,7 @@
             <div class="mb-3">
               <label for="txtUser" class="form-label small fw-bold text-secondary mb-2">Username</label>
               <div class="input-group custom-input-group">
-                <span class="input-group-text">
-                  <i class='bx bxs-user fs-5'></i>
-                </span>
+             
                 <input type="text" class="form-control" name="username" id="txtUser" placeholder="Enter username"
                   required>
               </div>
@@ -232,9 +225,7 @@
             <div class="mb-4">
               <label for="txtPass" class="form-label small fw-bold text-secondary mb-2">Password</label>
               <div class="input-group custom-input-group">
-                <span class="input-group-text">
-                  <i class='bx bxs-lock-alt fs-5'></i>
-                </span>
+               
                 <input type="password" class="form-control" name="password" id="txtPass" placeholder="Enter password"
                   required>
               </div>

@@ -337,7 +337,7 @@ include_header(htmlspecialchars($dept->dept_name), $breadcrumbs, [
           <?php endforeach; ?>
         </div>
       </div>
-      <div id="contact" class="content-tab content-section">
+      <div id="contact" class="content-tab content-section p-3">
         <h4 class="text-center">Contact Information</h4>
         <hr />
         <?= view('components/contact_information', [
