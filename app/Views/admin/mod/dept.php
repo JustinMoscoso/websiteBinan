@@ -140,6 +140,24 @@
                     </div>
 
                     <div class="col-12 mt-3">
+                        <label for="quillMission" class="form-label small fw-bold text-secondary">Mission</label>
+                        <div id="quillMission" style="height: 150px;"></div>
+                        <input type="hidden" id="txtMission" name="txtMission" required>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <label for="quillVision" class="form-label small fw-bold text-secondary">Vision</label>
+                        <div id="quillVision" style="height: 150px;"></div>
+                        <input type="hidden" id="txtVision" name="txtVision" required>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <label for="quillPolicy" class="form-label small fw-bold text-secondary">Policy Objectives</label>
+                        <div id="quillPolicy" style="height: 150px;"></div>
+                        <input type="hidden" id="txtPolicy" name="txtPolicy" required>
+                    </div>
+
+                    <div class="col-12 mt-3">
                         <fieldset class="border rounded p-3 bg-light">
                             <legend class="float-none w-auto px-2 mb-2 fs-6 fw-bold text-secondary">Contact Information</legend>
                             <div class="row g-3">
@@ -166,24 +184,6 @@
                             </div>
                             <small class="form-text text-muted mt-2">Provide at least one contact method.</small>
                         </fieldset>
-                    </div>
-
-                    <div class="col-12 mt-3">
-                        <label for="quillMission" class="form-label small fw-bold text-secondary">Mission</label>
-                        <div id="quillMission" style="height: 150px;"></div>
-                        <input type="hidden" id="txtMission" name="txtMission" required>
-                    </div>
-
-                    <div class="col-12 mt-3">
-                        <label for="quillVision" class="form-label small fw-bold text-secondary">Vision</label>
-                        <div id="quillVision" style="height: 150px;"></div>
-                        <input type="hidden" id="txtVision" name="txtVision" required>
-                    </div>
-
-                    <div class="col-12 mt-3">
-                        <label for="quillPolicy" class="form-label small fw-bold text-secondary">Policy Objectives</label>
-                        <div id="quillPolicy" style="height: 150px;"></div>
-                        <input type="hidden" id="txtPolicy" name="txtPolicy" required>
                     </div>
 
                     <div class="col-md-6 mt-3">
