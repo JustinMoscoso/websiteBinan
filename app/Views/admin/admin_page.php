@@ -218,7 +218,7 @@
         <div class="d-flex flex-column align-items-start" style="width: 100%; max-width: 180px;">
            <span style="font-size: 12px; font-family: 'Gill Sans'; font-weight: 900; color: #ffffffff;">REPUBLIC OF THE
           PHILIPPINES</span>
-        <hr style="width: 100%; margin: 1px 0; border: none; border-top: 2px solid #ffffffff;">
+        <hr style="width: 220px; margin: 1px 0; border: none; border-top: 2px solid #ffffffff;">
         <!-- Adjust the margin and border-top color as needed -->
         <span style="font-size: 14px; font-family: 'Gill Sans'; font-weight: 900; color: #ffffffff;">CITY GOVERNMENT OF
           BIÑAN</span>

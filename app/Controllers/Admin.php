@@ -2513,14 +2513,27 @@ class Admin extends BaseController
                 $publishAt = date('Y-m-d H:i:s');
 
                 if ($publishAtInput !== '') {
+                    $publishTimezone = new \DateTimeZone(config('App')->appTimezone);
                     $publishDate = \DateTime::createFromFormat(
                         'Y-m-d\TH:i',
                         $publishAtInput,
-                        new \DateTimeZone(config('App')->appTimezone)
+                        $publishTimezone
                     );
 
                     if (! $publishDate || $publishDate->format('Y-m-d\TH:i') !== $publishAtInput) {
                         $message = 'Please select a valid publish date and time.';
+                        break;
+                    }
+
+                    $currentMinute = new \DateTime('now', $publishTimezone);
+                    $currentMinute->setTime(
+                        (int) $currentMinute->format('H'),
+                        (int) $currentMinute->format('i'),
+                        0
+                    );
+
+                    if ($publishDate < $currentMinute) {
+                        $message = 'Publish date and time cannot be in the past.';
                         break;
                     }
 
@@ -3570,14 +3583,27 @@ class Admin extends BaseController
                     $publishAt = date('Y-m-d H:i:s');
 
                     if ($publishAtInput !== '') {
+                        $publishTimezone = new \DateTimeZone(config('App')->appTimezone);
                         $publishDate = \DateTime::createFromFormat(
                             'Y-m-d\TH:i',
                             $publishAtInput,
-                            new \DateTimeZone(config('App')->appTimezone)
+                            $publishTimezone
                         );
 
                         if (! $publishDate || $publishDate->format('Y-m-d\TH:i') !== $publishAtInput) {
                             $message = 'Please select a valid publish date and time.';
+                            break;
+                        }
+
+                        $currentMinute = new \DateTime('now', $publishTimezone);
+                        $currentMinute->setTime(
+                            (int) $currentMinute->format('H'),
+                            (int) $currentMinute->format('i'),
+                            0
+                        );
+
+                        if ($publishDate < $currentMinute) {
+                            $message = 'Publish date and time cannot be in the past.';
                             break;
                         }
 

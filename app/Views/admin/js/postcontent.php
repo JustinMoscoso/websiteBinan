@@ -201,6 +201,35 @@
         return match ? match[1] + 'T' + match[2] : '';
     }
 
+    function getCurrentPostContentDateTimeLocal() {
+        var now = new Date();
+        var pad = function (num) {
+            return String(num).padStart(2, '0');
+        };
+
+        return now.getFullYear() + '-' +
+            pad(now.getMonth() + 1) + '-' +
+            pad(now.getDate()) + 'T' +
+            pad(now.getHours()) + ':' +
+            pad(now.getMinutes());
+    }
+
+    function refreshPublishAtMinimum() {
+        $('#publishAt').attr('min', getCurrentPostContentDateTimeLocal());
+    }
+
+    function isPastPostContentDateTime(value) {
+        if (!value) {
+            return false;
+        }
+
+        var selected = new Date(value);
+        var currentMinute = new Date();
+        currentMinute.setSeconds(0, 0);
+
+        return isNaN(selected.getTime()) || selected.getTime() < currentMinute.getTime();
+    }
+
     // Datatable
     var tbl = $('#tblnews').DataTable({
         select: false,
@@ -349,6 +378,7 @@ return '<span class="status-badge bg-primary text-white"><span class="status-dot
     // ── openPostModal helper ──────────────────────────────────────────────────
     function openPostModal(mode, record) {
         $('#recordMode').val(mode);
+        refreshPublishAtMinimum();
 
         if (mode === 'add') {
             $('#recordModalTitle').text('Add Post');
@@ -366,7 +396,8 @@ return '<span class="status-badge bg-primary text-white"><span class="status-dot
             $('#content_category').val(record.category);
             $('#title').val(record.title);
             $('#addDescHidden').val(record.description || '');
-            $('#publishAt').val(formatPostContentDateTimeLocal(record.publish_at));
+            var publishAt = formatPostContentDateTimeLocal(record.publish_at);
+            $('#publishAt').val(isPastPostContentDateTime(publishAt) ? '' : publishAt);
             $('#editCreatedDate').val(formatPostContentDateTime(record.created_date));
             $('#editUpdatedDate').val(formatPostContentDateTime(record.updated_date));
 
@@ -404,6 +435,17 @@ return '<span class="status-badge bg-primary text-white"><span class="status-dot
         var mode = $('#recordMode').val();
         let form = $('#addForm')[0];
         let formData = new FormData(form);
+
+        refreshPublishAtMinimum();
+
+        if (isPastPostContentDateTime(formData.get('publish_at'))) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Invalid Schedule',
+                text: 'Publish date and time cannot be in the past.'
+            });
+            return;
+        }
 
         // Form validation
         if (!formData.get('title') || !formData.get('desc') || !formData.get('content_category')) {
