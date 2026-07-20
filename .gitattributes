@@ -1,2 +1,16 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Public binary assets
+public/assets/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.png filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.gif filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.webp filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.ico filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.woff filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.woff2 filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.ttf filter=lfs diff=lfs merge=lfs -text
+public/assets/**/*.eot filter=lfs diff=lfs merge=lfs -text

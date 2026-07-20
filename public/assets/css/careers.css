@@ -1,0 +1,432 @@
+/* Careers Page Styles */
+.careers-container {
+    background: #f8f9fa;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.search-section {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.search-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #388e3c;
+    font-weight: 600;
+}
+
+.search-wrapper {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border: 2px solid #e9ecef;
+    border-radius: 50px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #388e3c;
+    box-shadow: 0 0 0 4px rgba(56, 142, 60, 0.1);
+    background: white;
+}
+
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.table-stats {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.table-responsive {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+#careersTable {
+    margin: 0;
+    width: 100%;
+}
+
+#careersTable thead {
+    background: linear-gradient(135deg, #2e7d32, #388e3c);
+    color: white;
+}
+
+#careersTable thead th {
+    padding: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+    border: none;
+    position: relative;
+    text-align: center;
+}
+
+#careersTable thead th:first-child {
+    border-radius: 0;
+}
+
+#careersTable thead th:last-child {
+    border-radius: 0;
+}
+
+#careersTable tbody tr {
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+#careersTable tbody tr:hover {
+    background: linear-gradient(135deg, #f8f9fa, #e8f5e8);
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+#careersTable tbody td {
+    padding: 25px 20px;
+    vertical-align: middle;
+    border: none;
+    position: relative;
+    text-align: center;
+}
+
+.date-cell {
+    font-weight: 600;
+    color: #2e7d32;
+    font-size: 1.1rem;
+    position: relative;
+    text-align: center;
+}
+
+.date-cell::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 30px;
+    background: linear-gradient(135deg, #388e3c, #4caf50);
+    border-radius: 2px;
+    z-index: -1;
+}
+
+.date-cell .date-main {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+
+.date-cell .date-sub {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: normal;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.btn-preview {
+    background: linear-gradient(135deg, #388e3c, #4caf50);
+    color: white;
+    border: 2px solid #388e3c;
+}
+
+.btn-preview:hover {
+    background: linear-gradient(135deg, #2e7d32, #388e3c);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+}
+
+.btn-download {
+    background: linear-gradient(135deg, #388e3c, #4caf50);
+    color: white;
+    border: 2px solid #388e3c;
+}
+
+.btn-download:hover {
+    background: linear-gradient(135deg, #2e7d32, #388e3c);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+}
+
+.no-careers {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #6c757d;
+}
+
+.no-careers i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #dee2e6;
+}
+
+.no-careers h4 {
+    margin-bottom: 1rem;
+    color: #495057;
+}
+
+/* DataTables Customization */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dt-layout-cell.dt-layout-end,
+.dt-search {
+    display: none !important;
+}
+
+.dataTables_wrapper .dataTables_info {
+    padding: 1rem 2rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+    padding-left: 2rem !important;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 8px 16px;
+    margin: 0 4px;
+    border-radius: 20px;
+    border: 1px solid #dee2e6;
+    background: white;
+    color: #495057;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #388e3c;
+    color: white;
+    border-color: #388e3c;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: linear-gradient(135deg, #388e3c, #4caf50);
+    color: white;
+    border-color: #388e3c;
+}
+
+@media (max-width: 768px) {
+    .careers-header {
+        padding: 1.5rem;
+    }
+    .search-section {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .search-title {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    .search-input {
+        padding: 12px 15px 12px 45px;
+        font-size: 0.9rem;
+    }
+    .search-icon {
+        left: 15px;
+    }
+    .table-stats {
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.85rem;
+    }
+    .table-responsive {
+        border-radius: 10px;
+    }
+    #careersTable {
+        font-size: 0.85rem;
+    }
+    #careersTable thead {
+        display: none;
+    }
+    #careersTable tbody tr {
+        display: block;
+        background: white;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e9ecef;
+        padding: 0;
+    }
+    #careersTable tbody tr:hover {
+        transform: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    #careersTable tbody td {
+        display: block;
+        padding: 15px 20px;
+        border: none;
+        text-align: left;
+        position: relative;
+        border-bottom: 1px solid #f1f3f4;
+    }
+    #careersTable tbody td:last-child {
+        border-bottom: none;
+    }
+    #careersTable tbody td:before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #388e3c;
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .date-cell {
+        padding-left: 20px !important;
+    }
+    .date-cell::before {
+        display: none;
+    }
+    .date-cell .date-main {
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .date-cell .date-sub {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    .action-buttons {
+        flex-direction: row;
+        gap: 10px;
+        justify-content: center;
+    }
+    .action-btn {
+        flex: 1;
+        min-width: auto;
+        padding: 10px 15px;
+        font-size: 0.85rem;
+    }
+    .dataTables_wrapper .dataTables_paginate {
+        padding: 1rem;
+        text-align: center;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 6px 12px;
+        margin: 0 2px;
+        font-size: 0.85rem;
+    }
+    .dataTables_wrapper .dataTables_info {
+        padding: 1rem;
+        text-align: center;
+        font-size: 0.85rem;
+    }
+    .no-careers {
+        padding: 2rem 1rem;
+    }
+    .no-careers i {
+        font-size: 3rem;
+    }
+    .no-careers h4 {
+        font-size: 1.1rem;
+    }
+    .no-careers p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-section {
+        padding: 1rem;
+    }
+    .table-stats {
+        padding: 1rem;
+    }
+    #careersTable tbody td {
+        padding: 12px 15px;
+    }
+    .action-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .action-btn {
+        width: 100%;
+    }
+    .careers-container {
+        padding: 1rem 0;
+    }
+}
+
+/* Loading animation */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e9ecef;
+    border-top: 4px solid #388e3c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+} 
